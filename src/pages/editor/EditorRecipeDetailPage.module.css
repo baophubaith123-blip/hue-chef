@@ -1,0 +1,150 @@
+.back {
+  display: inline-block;
+  margin-bottom: 0.75rem;
+  color: var(--color-text-muted);
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.back:hover {
+  color: var(--color-primary);
+}
+
+.head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.title {
+  margin: 0;
+  color: var(--color-primary);
+}
+
+.rejected {
+  color: var(--color-danger);
+}
+
+.rejectedBanner {
+  margin-top: 1rem;
+  padding: 0.85rem 1rem;
+  background: var(--color-danger-soft);
+  color: var(--color-danger);
+  border-radius: var(--radius-md);
+  border-left: 4px solid var(--color-danger);
+}
+
+.rejectedReason {
+  margin: 0.35rem 0 0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.success {
+  margin-top: 1rem;
+  padding: 0.75rem 1rem;
+  color: var(--color-success);
+  background: var(--color-success-soft);
+  border-radius: var(--radius-md);
+  border-left: 4px solid var(--color-success);
+  font-weight: 600;
+}
+
+.sectionTitle {
+  margin: 1rem 0 0.35rem;
+  font-size: 1rem;
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+.heroWrap {
+  margin: 0.75rem 0 1rem;
+  display: flex;
+  justify-content: center;
+  padding: 0.5rem;
+  background: var(--color-surface-muted);
+  border-radius: var(--radius-lg);
+}
+
+.hero {
+  width: 100%;
+  max-height: 20rem;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.submitBtn {
+  background: var(--color-accent);
+  color: var(--color-accent-contrast);
+  border-color: var(--color-accent);
+}
+
+.submitBtn:hover:not(:disabled) {
+  background: var(--color-accent-hover);
+}
+
+.stepsList {
+  padding-left: 0;
+  margin: 0.5rem 0 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  counter-reset: stepCounter;
+}
+
+.stepItem {
+  counter-increment: stepCounter;
+  position: relative;
+  padding: 0.75rem 0.85rem 0.75rem 3rem;
+  background: var(--color-surface-muted);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+}
+
+.stepItem::before {
+  content: counter(stepCounter);
+  position: absolute;
+  left: 0.75rem;
+  top: 0.75rem;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 999px;
+  background: var(--color-accent);
+  color: var(--color-accent-contrast);
+  font-weight: 700;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stepTitle {
+  color: var(--color-primary);
+  font-size: 0.95rem;
+}
+
+.stepTime {
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.stepDesc {
+  margin: 0.25rem 0 0;
+  font-size: 0.9rem;
+  color: var(--color-text);
+  line-height: 1.5;
+}

@@ -1,0 +1,120 @@
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.table th,
+.table td {
+  padding: 0.75rem 0.85rem;
+  border-bottom: 1px solid var(--color-border);
+  text-align: left;
+  vertical-align: middle;
+}
+
+.table th {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-muted);
+  background: var(--color-surface-muted);
+  font-weight: 700;
+}
+
+.table th:first-child {
+  border-top-left-radius: var(--radius-lg);
+}
+
+.table th:last-child {
+  border-top-right-radius: var(--radius-lg);
+}
+
+.row:hover {
+  background: var(--color-primary-soft);
+}
+
+.row:last-child td {
+  border-bottom: 0;
+}
+
+.link {
+  color: var(--color-accent);
+  font-weight: 700;
+  text-decoration: none;
+  font-size: 0.85rem;
+  padding: 0.3rem 0.65rem;
+  border-radius: var(--radius-md);
+  transition: background 0.15s ease;
+}
+
+.link:hover {
+  background: var(--color-accent-soft);
+}
+
+.wrap {
+  overflow-x: auto;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.recipeCell {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.thumb {
+  width: 3rem;
+  height: 3rem;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+  background: var(--color-surface-muted);
+  flex-shrink: 0;
+}
+
+.recipeName {
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
+.recipeDifficulty {
+  font-size: 0.75rem;
+  color: var(--color-accent);
+  letter-spacing: 0.03em;
+  margin-top: 0.1rem;
+}
+
+.editorCell {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.avatar {
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 999px;
+  border: 2px solid var(--color-surface-muted);
+  object-fit: cover;
+}
+
+.categoryChip {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+  font-weight: 600;
+  font-size: 0.75rem;
+}
+
+.submittedDate {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+.muted {
+  color: var(--color-text-muted);
+}

@@ -1,10 +1,15 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom';
 
 import { ProtectedRoute } from '@/components/ProtectedRoute';
-import AdminHomePage from '@/pages/admin/AdminHomePage';
+import AdminDashboardPage from '@/pages/admin/AdminDashboardPage';
+import AdminReviewDetailPage from '@/pages/admin/AdminReviewDetailPage';
+import AdminReviewPage from '@/pages/admin/AdminReviewPage';
 import LoginPage from '@/pages/auth/LoginPage';
 import RegisterPage from '@/pages/auth/RegisterPage';
-import EditorHomePage from '@/pages/editor/EditorHomePage';
+import EditorDashboardPage from '@/pages/editor/EditorDashboardPage';
+import EditorMyRecipesPage from '@/pages/editor/EditorMyRecipesPage';
+import EditorRecipeDetailPage from '@/pages/editor/EditorRecipeDetailPage';
+import EditorRecipeFormPage from '@/pages/editor/EditorRecipeFormPage';
 import CookingPage from '@/pages/player/CookingPage';
 import HomePage from '@/pages/player/HomePage';
 import RecipeDetailPage from '@/pages/player/RecipeDetailPage';
@@ -55,7 +60,23 @@ export const router = createBrowserRouter([
     children: [
       {
         path: '/editor',
-        element: <EditorHomePage />,
+        element: <EditorDashboardPage />,
+      },
+      {
+        path: '/editor/recipes',
+        element: <EditorMyRecipesPage />,
+      },
+      {
+        path: '/editor/recipes/new',
+        element: <EditorRecipeFormPage />,
+      },
+      {
+        path: '/editor/recipes/:id',
+        element: <EditorRecipeDetailPage />,
+      },
+      {
+        path: '/editor/recipes/:id/edit',
+        element: <EditorRecipeFormPage />,
       },
     ],
   },
@@ -64,7 +85,15 @@ export const router = createBrowserRouter([
     children: [
       {
         path: '/admin',
-        element: <AdminHomePage />,
+        element: <AdminDashboardPage />,
+      },
+      {
+        path: '/admin/review',
+        element: <AdminReviewPage />,
+      },
+      {
+        path: '/admin/review/:id',
+        element: <AdminReviewDetailPage />,
       },
     ],
   },

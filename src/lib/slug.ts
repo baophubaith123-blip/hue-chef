@@ -9,3 +9,13 @@ export function removeDiacritics(value: string): string {
 export function normalizeSearchText(value: string): string {
   return removeDiacritics(value.trim().toLowerCase());
 }
+
+export function createRecipeSlugId(name: string): string {
+  const slug = normalizeSearchText(name)
+    .replace(/\s+/g, '-')
+    .replace(/[^a-z0-9-]/g, '')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '');
+  const suffix = crypto.randomUUID().slice(0, 8);
+  return `${slug || 'recipe'}-${suffix}`;
+}

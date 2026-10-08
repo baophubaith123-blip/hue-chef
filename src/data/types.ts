@@ -34,6 +34,9 @@ export interface Recipe {
   steps: CookingStep[];
   status?: RecipeStatus;
   editorId?: string;
+  rejectionReason?: string;
+  submittedAt?: string;
+  reviewedAt?: string;
 }
 
 export type AchievementCondition =
