@@ -1,0 +1,70 @@
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  max-height: 24rem;
+  overflow: auto;
+}
+
+.title {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.item {
+  display: flex;
+  gap: 0.75rem;
+  padding: 0.65rem;
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+}
+
+.pending {
+  opacity: 0.55;
+}
+
+.active {
+  border-color: var(--color-accent);
+  background: var(--color-primary-soft);
+}
+
+.done {
+  opacity: 0.85;
+}
+
+.order {
+  flex-shrink: 0;
+  width: 1.75rem;
+  height: 1.75rem;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: var(--color-bg-muted);
+  font-weight: 700;
+  font-size: 0.8rem;
+}
+
+.stepTitle {
+  margin: 0;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.stepDesc {
+  margin: 0.2rem 0 0;
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}

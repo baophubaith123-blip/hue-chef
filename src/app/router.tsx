@@ -5,7 +5,10 @@ import AdminHomePage from '@/pages/admin/AdminHomePage';
 import LoginPage from '@/pages/auth/LoginPage';
 import RegisterPage from '@/pages/auth/RegisterPage';
 import EditorHomePage from '@/pages/editor/EditorHomePage';
+import CookingPage from '@/pages/player/CookingPage';
 import HomePage from '@/pages/player/HomePage';
+import RecipeDetailPage from '@/pages/player/RecipeDetailPage';
+import RecipeListPage from '@/pages/player/RecipeListPage';
 import SupportHomePage from '@/pages/support/SupportHomePage';
 
 export const router = createBrowserRouter([
@@ -23,6 +26,18 @@ export const router = createBrowserRouter([
       {
         path: '/',
         element: <HomePage />,
+      },
+      {
+        path: '/recipes',
+        element: <RecipeListPage />,
+      },
+      {
+        path: '/recipes/:id',
+        element: <RecipeDetailPage />,
+      },
+      {
+        path: '/cooking/:id',
+        element: <CookingPage />,
       },
     ],
   },

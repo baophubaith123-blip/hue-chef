@@ -1,0 +1,11 @@
+export function removeDiacritics(value: string): string {
+  return value
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/đ/g, 'd')
+    .replace(/Đ/g, 'D');
+}
+
+export function normalizeSearchText(value: string): string {
+  return removeDiacritics(value.trim().toLowerCase());
+}

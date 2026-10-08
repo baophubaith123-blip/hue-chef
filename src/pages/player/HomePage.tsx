@@ -1,15 +1,21 @@
+import { Link } from 'react-router-dom';
+
 import { Button } from '@/components/Button';
 import { Card } from '@/components/Card';
 import { useAuth } from '@/contexts/AuthContext';
-import { SEED_RECIPES } from '@/data/recipes';
+import { useRecipes } from '@/contexts/RecipeContext';
+import { PlayerShell } from '@/pages/player/PlayerShell';
 
 import styles from '@/pages/player/HomePage.module.css';
 
 export default function HomePage() {
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
+  const { getApprovedRecipes } = useRecipes();
+
+  const recipeCount = getApprovedRecipes().length;
 
   return (
-    <div className={styles.layout}>
+    <PlayerShell>
       <header className={styles.header}>
         <div>
           <h1 className={styles.title}>Welcome, {user?.name ?? 'Chef'}</h1>
@@ -17,14 +23,11 @@ export default function HomePage() {
             {import.meta.env.VITE_APP_NAME} v{import.meta.env.VITE_APP_VERSION}
           </p>
         </div>
-        <Button variant="secondary" onClick={logout}>
-          Sign out
-        </Button>
       </header>
       <Card title="Player home">
         <p>
-          Hue cooking adventures start here. Phase 1 includes seed data for{' '}
-          {SEED_RECIPES.length} classic dishes — recipes and cooking gameplay arrive in Phase 2.
+          Browse {recipeCount} Hue dishes, learn each recipe, then drag ingredients into the pot
+          before time runs out.
         </p>
         <div className={styles.stats}>
           <div className={styles.stat}>
@@ -38,11 +41,16 @@ export default function HomePage() {
             </span>
           </div>
           <div className={styles.stat}>
-            <span className={styles.statLabel}>Role</span>
-            <span className={styles.statValue}>{user?.role ?? 'player'}</span>
+            <span className={styles.statLabel}>Recipes</span>
+            <span className={styles.statValue}>{recipeCount}</span>
           </div>
         </div>
+        <div className={styles.actions}>
+          <Link to="/recipes">
+            <Button>Browse recipes</Button>
+          </Link>
+        </div>
       </Card>
-    </div>
+    </PlayerShell>
   );
 }

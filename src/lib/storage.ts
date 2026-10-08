@@ -1,6 +1,7 @@
 export const STORAGE_KEYS = {
   users: 'hue-chef-users',
   auth: 'hue-chef-auth',
+  recipes: 'hue-chef-recipes',
 } as const;
 
 export function getStorageItem(key: string): string | null {

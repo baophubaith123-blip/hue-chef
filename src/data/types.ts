@@ -19,6 +19,8 @@ export interface CookingStep {
   durationSeconds: number;
 }
 
+export type RecipeStatus = 'draft' | 'pending' | 'approved' | 'rejected';
+
 export interface Recipe {
   id: string;
   name: string;
@@ -30,6 +32,8 @@ export interface Recipe {
   baseScore: number;
   ingredients: RecipeIngredientRef[];
   steps: CookingStep[];
+  status?: RecipeStatus;
+  editorId?: string;
 }
 
 export type AchievementCondition =

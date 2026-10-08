@@ -1,0 +1,69 @@
+.back {
+  display: inline-block;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  text-decoration: none;
+}
+
+.back:hover {
+  color: var(--color-primary);
+}
+
+.hero {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@media (min-width: 768px) {
+  .hero {
+    grid-template-columns: 1fr 1.2fr;
+  }
+}
+
+.image {
+  width: 100%;
+  max-height: 16rem;
+  object-fit: cover;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface-muted);
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin: 0.75rem 0 1rem;
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+}
+
+.description {
+  margin: 0 0 1.25rem;
+  line-height: 1.6;
+}
+
+.sectionTitle {
+  margin: 0 0 0.75rem;
+  font-size: 1.1rem;
+}
+
+.ingredientList,
+.stepList {
+  margin: 0;
+  padding-left: 1.25rem;
+}
+
+.ingredientList li,
+.stepList li {
+  margin-bottom: 0.35rem;
+}
+
+.actions {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}

@@ -50,3 +50,7 @@
   font-weight: 700;
   color: var(--color-primary);
 }
+
+.actions {
+  margin-top: 1.25rem;
+}

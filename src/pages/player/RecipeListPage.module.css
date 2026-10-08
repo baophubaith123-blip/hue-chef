@@ -1,0 +1,13 @@
+.head {
+  margin-bottom: 1.25rem;
+}
+
+.title {
+  margin: 0 0 0.35rem;
+  font-size: 1.75rem;
+}
+
+.subtitle {
+  margin: 0;
+  color: var(--color-text-muted);
+}

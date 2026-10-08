@@ -8,11 +8,15 @@
   --color-primary-hover: #a84a1a;
   --color-primary-contrast: #ffffff;
   --color-primary-soft: rgba(196, 92, 38, 0.25);
+  --color-accent: #c45c26;
+  --color-bg-muted: #f3ebe3;
   --color-border: #e8dcd3;
   --color-danger: #b42318;
   --color-danger-soft: #fdecea;
   --radius-md: 0.5rem;
   --radius-lg: 0.75rem;
   --shadow-sm: 0 1px 3px rgba(44, 24, 16, 0.08);
+  --shadow-md: 0 8px 24px rgba(44, 24, 16, 0.1);
+  --shadow-lg: 0 16px 40px rgba(44, 24, 16, 0.14);
   --font-sans: 'Segoe UI', system-ui, -apple-system, sans-serif;
 }
