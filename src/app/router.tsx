@@ -1,6 +1,7 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom';
 
 import { ProtectedRoute } from '@/components/ProtectedRoute';
+import AdminBroadcastPage from '@/pages/admin/AdminBroadcastPage';
 import AdminDashboardPage from '@/pages/admin/AdminDashboardPage';
 import AdminReviewDetailPage from '@/pages/admin/AdminReviewDetailPage';
 import AdminReviewPage from '@/pages/admin/AdminReviewPage';
@@ -12,9 +13,14 @@ import EditorRecipeDetailPage from '@/pages/editor/EditorRecipeDetailPage';
 import EditorRecipeFormPage from '@/pages/editor/EditorRecipeFormPage';
 import CookingPage from '@/pages/player/CookingPage';
 import HomePage from '@/pages/player/HomePage';
+import InboxPage from '@/pages/player/InboxPage';
+import PlayerMailDetailPage from '@/pages/player/PlayerMailDetailPage';
 import RecipeDetailPage from '@/pages/player/RecipeDetailPage';
 import RecipeListPage from '@/pages/player/RecipeListPage';
-import SupportHomePage from '@/pages/support/SupportHomePage';
+import SupportAppealDetailPage from '@/pages/support/SupportAppealDetailPage';
+import SupportAppealsPage from '@/pages/support/SupportAppealsPage';
+import SupportChatPage from '@/pages/support/SupportChatPage';
+import SupportDashboardPage from '@/pages/support/SupportDashboardPage';
 
 export const router = createBrowserRouter([
   {
@@ -44,6 +50,14 @@ export const router = createBrowserRouter([
         path: '/cooking/:id',
         element: <CookingPage />,
       },
+      {
+        path: '/inbox',
+        element: <InboxPage />,
+      },
+      {
+        path: '/inbox/:id',
+        element: <PlayerMailDetailPage />,
+      },
     ],
   },
   {
@@ -51,7 +65,24 @@ export const router = createBrowserRouter([
     children: [
       {
         path: '/support',
-        element: <SupportHomePage />,
+        element: <SupportDashboardPage />,
+      },
+      {
+        path: '/support/appeals',
+        element: <SupportAppealsPage />,
+      },
+      {
+        path: '/support/appeals/:id',
+        element: <SupportAppealDetailPage />,
+      },
+    ],
+  },
+  {
+    element: <ProtectedRoute allowedRoles={['player', 'support']} />,
+    children: [
+      {
+        path: '/support/chat',
+        element: <SupportChatPage />,
       },
     ],
   },
@@ -94,6 +125,10 @@ export const router = createBrowserRouter([
       {
         path: '/admin/review/:id',
         element: <AdminReviewDetailPage />,
+      },
+      {
+        path: '/admin/broadcast',
+        element: <AdminBroadcastPage />,
       },
     ],
   },

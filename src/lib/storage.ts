@@ -3,6 +3,12 @@ export const STORAGE_KEYS = {
   auth: 'hue-chef-auth',
   recipes: 'hue-chef-recipes',
   inbox: 'hue-chef-inbox',
+  chatThreads: 'hue-chef-chat-threads',
+  chatMessages: 'hue-chef-chat-messages',
+  appeals: 'hue-chef-appeals',
+  auditLog: 'hue-chef-audit-log',
+  broadcast: 'hue-chef-broadcast',
+  achievements: 'hue-chef-achievements',
 } as const;
 
 export function getStorageItem(key: string): string | null {

@@ -54,7 +54,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
     const users = loadUsers();
     const stored = findUserById(users, session.userId);
-    if (!stored || stored.status === 'banned') {
+    if (!stored) {
       removeStorageItem(STORAGE_KEYS.auth);
       setUser(null);
     } else {
@@ -76,9 +76,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
     if (found.password !== password) {
       throw new AppError('Incorrect password', 'INVALID_PASSWORD');
-    }
-    if (found.status === 'banned') {
-      throw new AppError('Account is banned', 'ACCOUNT_BANNED');
     }
     persistSession(found);
     return toPublicUser(found);

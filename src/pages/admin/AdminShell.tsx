@@ -50,6 +50,14 @@ export function AdminShell({ children }: AdminShellProps) {
               </span>
             ) : null}
           </NavLink>
+          <NavLink
+            className={({ isActive }) =>
+              [styles.navLink, isActive ? styles.navLinkActive : ''].filter(Boolean).join(' ')
+            }
+            to="/admin/broadcast"
+          >
+            📣 {t('nav.broadcast')}
+          </NavLink>
           <Button variant="secondary" onClick={logout}>
             {t('common.signOut')}
           </Button>

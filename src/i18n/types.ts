@@ -23,6 +23,16 @@ export interface I18nDictionary {
     reason: string;
     readMore: string;
     markRead: string;
+    send: string;
+    search: string;
+    filter: string;
+    all: string;
+    createdAt: string;
+    status: string;
+    description: string;
+    actions: string;
+    target: string;
+    preview: string;
   };
   auth: {
     loginTitle: string;
@@ -48,12 +58,27 @@ export interface I18nDictionary {
     support: string;
     editor: string;
     admin: string;
+    banned: string;
   };
   nav: {
     dashboard: string;
     myRecipes: string;
     newRecipe: string;
     reviewQueue: string;
+    inbox: string;
+    appeals: string;
+    chat: string;
+    broadcast: string;
+    users: string;
+    recipes: string;
+    achievements: string;
+    ingredients: string;
+    comments: string;
+    reports: string;
+    settings: string;
+    auditLog: string;
+    backup: string;
+    collection: string;
   };
   recipe: {
     name: string;
@@ -93,6 +118,17 @@ export interface I18nDictionary {
     onlyDraftSubmit: string;
     notPending: string;
     rejectionRequired: string;
+    fileTooLarge: string;
+    invalidFileType: string;
+    fileUploadEmpty: string;
+    appealNotFound: string;
+    threadNotFound: string;
+    cannotCloseThread: string;
+    broadcastEmpty: string;
+    cannotDeleteSelf: string;
+    cannotDeleteLastAdmin: string;
+    userNotFound: string;
+    notBanned: string;
   };
   editor: {
     dashboardTitle: string;
@@ -148,11 +184,107 @@ export interface I18nDictionary {
     invalidRecipeDesc: string;
     chartApproval: string;
     chartLast7Days: string;
+    broadcastTitle: string;
+    broadcastIntro: string;
+    broadcastSubject: string;
+    broadcastBody: string;
+    broadcastTarget: string;
+    broadcastPreview: string;
+    broadcastSent: string;
+    broadcastRecipients: string;
+    targetAllPlayers: string;
+    targetAllEditors: string;
+    targetAllSupports: string;
+    targetAll: string;
   };
   mail: {
     approvedSubject: string;
     approvedBody: (recipeName: string) => string;
     rejectedSubject: string;
     rejectedBody: (recipeName: string) => string;
+    broadcastSubjectPrefix: string;
+    banSubject: string;
+    banBody: (reason: string, until: string) => string;
+    warningSubject: (count: number) => string;
+    warningBody: (count: number) => string;
+    supportSubject: string;
+    supportReplyBody: string;
+    typeLabels: Record<'broadcast' | 'ban-notice' | 'warning' | 'support' | 'recipe-approved' | 'recipe-rejected', string>;
+    inboxTitle: string;
+    inboxEmpty: string;
+    inboxHint: string;
+    noSubject: string;
+  };
+  support: {
+    dashboardTitle: string;
+    dashboardIntro: string;
+    statActiveChats: string;
+    statOpenAppeals: string;
+    statResolvedAppeals: string;
+    recentChats: string;
+    recentAppeals: string;
+    appealsTitle: string;
+    appealsIntro: string;
+    appealsEmpty: string;
+    appealDetail: string;
+    noAppealsYet: string;
+    colAppellant: string;
+    colThread: string;
+    colType: string;
+    chatTitle: string;
+    chatHint: string;
+    chatEmpty: string;
+    chatPlaceholder: string;
+    typeLabels: Record<'ban' | 'warning' | 'account' | 'recipe' | 'other', string>;
+    createAppealFromThread: string;
+    appealCreated: string;
+    recommendToAdmin: string;
+    rejectAppeal: string;
+    resolutionPlaceholder: string;
+  };
+  appeal: {
+    statusLabels: Record<'open' | 'recommended' | 'rejected' | 'resolved', string>;
+    open: string;
+    recommended: string;
+    rejected: string;
+    resolved: string;
+    recommendNote: string;
+    rejectNote: string;
+    resolution: string;
+  };
+  ban: {
+    noticeTitle: string;
+    noticeBody: string;
+    contactSupport: string;
+    reasonLabel: string;
+    untilLabel: string;
+    permanent: string;
+  };
+  warning: {
+    popupTitle: (count: number) => string;
+    popupBody: (count: number) => string;
+    ackButton: string | ((count: number) => string);
+  };
+  inbox: {
+    title: string;
+    empty: string;
+    hint: string;
+    detail: string;
+    back: string;
+    unread: string;
+  };
+  fileUpload: {
+    label: string;
+    hint: string;
+    dropHere: string;
+    browse: string;
+    maxSize: (mb: number) => string;
+    selected: string;
+    remove: string;
+    preview: string;
+  };
+  broadcast: {
+    title: string;
+    intro: string;
   };
 }

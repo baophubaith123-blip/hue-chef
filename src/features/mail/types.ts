@@ -1,4 +1,10 @@
-export type MailType = 'recipe-approved' | 'recipe-rejected';
+export type MailType =
+  | 'broadcast'
+  | 'ban-notice'
+  | 'warning'
+  | 'support'
+  | 'recipe-approved'
+  | 'recipe-rejected';
 
 export interface MailMessage {
   id: string;
@@ -10,4 +16,11 @@ export interface MailMessage {
   read: boolean;
   recipeId?: string;
   rejectionReason?: string;
+  appealId?: string;
+  threadId?: string;
+  banReason?: string;
+  banUntil?: string;
+  warningCount?: number;
+  broadcastTarget?: string;
+  senderId?: string;
 }
