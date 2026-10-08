@@ -1,0 +1,88 @@
+import type { Achievement } from '@/data/types';
+
+export const SEED_ACHIEVEMENTS: Achievement[] = [
+  {
+    id: 'first-cook',
+    name: 'Đầu bếp tập sự',
+    description: 'Nấu món đầu tiên',
+    icon: '🍳',
+    condition: { type: 'cook_count', count: 1 },
+  },
+  {
+    id: 'bun-master',
+    name: 'Bún bò chuyên gia',
+    description: 'Nấu 5 món bún',
+    icon: '🍜',
+    condition: { type: 'cook_count', category: 'bun', count: 5 },
+  },
+  {
+    id: 'com-master',
+    name: 'Cơm hến thần thánh',
+    description: 'Nấu 3 món cơm',
+    icon: '🍚',
+    condition: { type: 'cook_count', category: 'com', count: 3 },
+  },
+  {
+    id: 'banh-master',
+    name: 'Bánh Huế chính gốc',
+    description: 'Nấu 5 món bánh',
+    icon: '🥟',
+    condition: { type: 'cook_count', category: 'banh', count: 5 },
+  },
+  {
+    id: 'che-master',
+    name: 'Chè ngọt ngào',
+    description: 'Nấu 3 món chè',
+    icon: '🍮',
+    condition: { type: 'cook_count', category: 'che', count: 3 },
+  },
+  {
+    id: 'nem-master',
+    name: 'Nem lụi thần sầu',
+    description: 'Nấu 3 món nem',
+    icon: '🥩',
+    condition: { type: 'cook_count', category: 'nem', count: 3 },
+  },
+  {
+    id: 'perfect-score',
+    name: 'Điểm tuyệt đối',
+    description: 'Đạt 5 sao món bất kỳ',
+    icon: '⭐',
+    condition: { type: 'perfect_score' },
+  },
+  {
+    id: 'no-mistake',
+    name: 'Không sai bước nào',
+    description: 'Nấu 1 món không lỗi',
+    icon: '💯',
+    condition: { type: 'no_mistakes', count: 1 },
+  },
+  {
+    id: 'all-categories',
+    name: 'Đa tài',
+    description: 'Nấu món thuộc cả 5 loại',
+    icon: '🏆',
+    condition: { type: 'all_categories' },
+  },
+  {
+    id: 'high-score',
+    name: 'Cao thủ',
+    description: 'Đạt tổng 5000 điểm',
+    icon: '🌟',
+    condition: { type: 'score_threshold', score: 5000 },
+  },
+  {
+    id: 'level-5',
+    name: 'Đầu bếp cấp 5',
+    description: 'Đạt level 5',
+    icon: '📈',
+    condition: { type: 'level', level: 5 },
+  },
+  {
+    id: 'all-recipes',
+    name: 'Bậc thầy ẩm thực',
+    description: 'Nấu tất cả 15 món',
+    icon: '👑',
+    condition: { type: 'cook_count', count: 15 },
+  },
+];

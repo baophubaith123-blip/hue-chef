@@ -1,0 +1,45 @@
+export const STORAGE_KEYS = {
+  users: 'hue-chef-users',
+  auth: 'hue-chef-auth',
+} as const;
+
+export function getStorageItem(key: string): string | null {
+  try {
+    return localStorage.getItem(key);
+  } catch {
+    return null;
+  }
+}
+
+export function setStorageItem(key: string, value: string): void {
+  try {
+    localStorage.setItem(key, value);
+  } catch {
+    // ignore quota / private mode
+  }
+}
+
+export function removeStorageItem(key: string): void {
+  try {
+    localStorage.removeItem(key);
+  } catch {
+    // ignore
+  }
+}
+
+export function getJsonStorage<T>(key: string): T | null {
+  const raw = getStorageItem(key);
+  if (raw === null) {
+    return null;
+  }
+  try {
+    return JSON.parse(raw) as T;
+  } catch {
+    removeStorageItem(key);
+    return null;
+  }
+}
+
+export function setJsonStorage<T>(key: string, value: T): void {
+  setStorageItem(key, JSON.stringify(value));
+}
