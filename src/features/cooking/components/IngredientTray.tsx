@@ -14,6 +14,7 @@ interface IngredientTrayProps {
     onDragStart?: (event: DragEvent<HTMLElement>) => void;
     onDragEnd?: () => void;
   };
+  onSelectIngredient?: (ingredientId: string) => void;
 }
 
 export function IngredientTray({
@@ -22,6 +23,7 @@ export function IngredientTray({
   placedIngredientIds,
   draggingId,
   getTrayItemProps,
+  onSelectIngredient,
 }: IngredientTrayProps) {
   const remainingCount = trayIngredientIds.filter(
     (id) => !placedIngredientIds.includes(id),
@@ -53,6 +55,11 @@ export function IngredientTray({
                   .filter(Boolean)
                   .join(' ')}
                 disabled={disabled || isUsed}
+                onClick={() => {
+                  if (!disabled && !isUsed) {
+                    onSelectIngredient?.(ingredientId);
+                  }
+                }}
                 {...dragProps}
               >
                 <div className={styles.chipHeader}>

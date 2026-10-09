@@ -81,21 +81,35 @@ function withDefaultStatus(recipe: Recipe): Recipe {
 
 
 function loadInitialRecipes(): Recipe[] {
-
   const stored = getJsonStorage<Recipe[]>(STORAGE_KEYS.recipes);
+  const seeded = SEED_RECIPES.map((recipe) => withDefaultStatus(recipe));
 
   if (!stored || !Array.isArray(stored) || stored.length === 0) {
-
-    const seeded = SEED_RECIPES.map((recipe) => withDefaultStatus(recipe));
-
     setJsonStorage(STORAGE_KEYS.recipes, seeded);
-
     return seeded;
-
   }
 
-  return stored.map((recipe) => withDefaultStatus(recipe));
+  const updatedSeedMap = new Map(seeded.map((r) => [r.id, r]));
 
+  const result = stored.map((r) => {
+    const seedVersion = updatedSeedMap.get(r.id);
+    if (seedVersion) {
+      return {
+        ...seedVersion,
+        status: r.status ?? seedVersion.status,
+      };
+    }
+    return withDefaultStatus(r);
+  });
+
+  for (const s of seeded) {
+    if (!result.some((r) => r.id === s.id)) {
+      result.push(s);
+    }
+  }
+
+  setJsonStorage(STORAGE_KEYS.recipes, result);
+  return result;
 }
 
 
