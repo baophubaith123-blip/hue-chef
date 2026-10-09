@@ -6,7 +6,9 @@ import { Card } from '@/components/Card';
 import { EmptyState } from '@/components/EmptyState';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRecipes } from '@/contexts/RecipeContext';
+import type { CookedRecipeEntry } from '@/features/auth/types';
 import { useTranslation } from '@/i18n/useTranslation';
+import { formatDuration } from '@/lib/format';
 import { PlayerShell } from '@/pages/player/PlayerShell';
 
 import styles from '@/pages/player/CollectionPage.module.css';
@@ -17,7 +19,9 @@ interface CollectionItem {
   image: string;
   timesCooked: number;
   bestScore: number;
-  stars: number;
+  bestStars: 1 | 2 | 3 | 4 | 5;
+  lastCookedAt: string;
+  bestTimeUsed: number;
 }
 
 export default function CollectionPage() {
@@ -28,29 +32,53 @@ export default function CollectionPage() {
 
   const items = useMemo<CollectionItem[]>(() => {
     if (!user) return [];
-    const cookedIds = user.cookedRecipes ?? [];
-    const counts = new Map<string, number>();
-    for (const id of cookedIds) {
-      counts.set(id, (counts.get(id) ?? 0) + 1);
+    const entries: CookedRecipeEntry[] = Array.isArray(user.cookedRecipes) ? user.cookedRecipes : [];
+
+    const grouped = new Map<string, CookedRecipeEntry[]>();
+    for (const entry of entries) {
+      if (!entry || !entry.recipeId) continue;
+      const list = grouped.get(entry.recipeId) ?? [];
+      list.push(entry);
+      grouped.set(entry.recipeId, list);
     }
-    const uniqueIds = Array.from(counts.keys());
-    return uniqueIds
-      .map((id) => {
-        const recipe = recipes.find((r) => r.id === id);
-        if (!recipe) return null;
-        const timesCooked = counts.get(id) ?? 0;
-        const bestScore = 0;
-        const stars = Math.min(5, Math.max(0, Math.round(bestScore / 200)));
-        return {
-          recipeId: recipe.id,
-          name: recipe.name,
-          image: recipe.image,
-          timesCooked,
-          bestScore,
-          stars,
-        };
-      })
-      .filter((x): x is CollectionItem => x !== null);
+
+    const recipeImageByName = new Map<string, string>();
+    for (const r of recipes) recipeImageByName.set(r.id, r.image);
+
+    const result: CollectionItem[] = [];
+    for (const [recipeId, list] of grouped.entries()) {
+      const first = list[0];
+      if (!first) continue;
+      let bestScore = 0;
+      let bestStars: 1 | 2 | 3 | 4 | 5 = 1;
+      let bestTimeUsed = 0;
+      let lastCookedAt = first.cookedAt;
+      for (const entry of list) {
+        if ((entry.score ?? 0) > bestScore) {
+          bestScore = entry.score ?? 0;
+          bestStars = entry.stars ?? 1;
+          bestTimeUsed = entry.timeUsed ?? 0;
+        }
+        if (entry.cookedAt && entry.cookedAt > lastCookedAt) {
+          lastCookedAt = entry.cookedAt;
+        }
+      }
+      const recipe = recipes.find((r) => r.id === recipeId);
+      const name = recipe?.name ?? first.recipeName ?? recipeId;
+      const image = first.image ?? recipe?.image ?? recipeImageByName.get(recipeId) ?? '';
+      result.push({
+        recipeId,
+        name,
+        image,
+        timesCooked: list.length,
+        bestScore,
+        bestStars,
+        bestTimeUsed,
+        lastCookedAt,
+      });
+    }
+    result.sort((a, b) => (a.lastCookedAt < b.lastCookedAt ? 1 : -1));
+    return result;
   }, [user, recipes]);
 
   return (
@@ -74,7 +102,13 @@ export default function CollectionPage() {
               >
                 <article className={styles.card}>
                   <div className={styles.imageWrap}>
-                    <img src={item.image} alt={item.name} className={styles.image} />
+                    {item.image ? (
+                      <img src={item.image} alt={item.name} className={styles.image} />
+                    ) : (
+                      <div className={styles.imageFallback} aria-hidden="true">
+                        {item.name.slice(0, 2)}
+                      </div>
+                    )}
                   </div>
                   <div className={styles.cardBody}>
                     <h3 className={styles.cardTitle}>{item.name}</h3>
@@ -87,10 +121,26 @@ export default function CollectionPage() {
                         <span className={styles.statLabel}>{t('collection.bestScore')}</span>
                         <span className={styles.statValue}>{item.bestScore}</span>
                       </div>
+                      <div className={styles.stat}>
+                        <span className={styles.statLabel}>{t('collection.timeUsed')}</span>
+                        <span className={styles.statValue}>{formatDuration(item.bestTimeUsed)}</span>
+                      </div>
+                      <div className={styles.stat}>
+                        <span className={styles.statLabel}>{t('collection.lastCooked')}</span>
+                        <span className={styles.statValue}>
+                          {new Date(item.lastCookedAt).toLocaleDateString()}
+                        </span>
+                      </div>
                     </div>
-                    <div className={styles.stars} aria-label={`${item.stars} ${t('collection.stars')}`}>
+                    <div
+                      className={styles.stars}
+                      aria-label={`${item.bestStars} ${t('collection.stars')}`}
+                    >
                       {Array.from({ length: 5 }).map((_, i) => (
-                        <span key={i} className={i < item.stars ? styles.starFilled : styles.starEmpty}>
+                        <span
+                          key={i}
+                          className={i < item.bestStars ? styles.starFilled : styles.starEmpty}
+                        >
                           ★
                         </span>
                       ))}

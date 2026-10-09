@@ -2,11 +2,22 @@ export type UserRole = 'player' | 'support' | 'editor' | 'admin';
 
 export type UserStatus = 'active' | 'banned';
 
+export interface CookedRecipeEntry {
+  recipeId: string;
+  recipeName: string;
+  score: number;
+  stars: 1 | 2 | 3 | 4 | 5;
+  timeUsed: number;
+  cookedAt: string;
+  image: string;
+  category?: string;
+}
+
 export interface PlayerProfile {
   level: number;
   exp: number;
   maxExp: number;
-  cookedRecipes: string[];
+  cookedRecipes: CookedRecipeEntry[];
   unlockedAchievements: string[];
   warningCount: number;
 }
@@ -28,11 +39,12 @@ export interface StoredUser {
   level?: number;
   exp?: number;
   maxExp?: number;
-  cookedRecipes?: string[];
+  cookedRecipes?: CookedRecipeEntry[];
   unlockedAchievements?: string[];
   warningCount?: number;
   bio?: string;
   recipeCount?: number;
+  equippedAchievementId?: string | null;
 }
 
 export interface AuthSession {
@@ -50,11 +62,12 @@ export interface PublicUser {
   level?: number;
   exp?: number;
   maxExp?: number;
-  cookedRecipes?: string[];
+  cookedRecipes?: CookedRecipeEntry[];
   unlockedAchievements?: string[];
   warningCount?: number;
   bio?: string;
   recipeCount?: number;
+  equippedAchievementId?: string | null;
 }
 
 export function toPublicUser(user: StoredUser): PublicUser {

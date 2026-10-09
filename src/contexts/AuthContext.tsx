@@ -13,11 +13,28 @@ import {
   findUserById,
   loadUsers,
   saveUsers,
+  updateStoredUserById,
 } from '@/features/auth/store';
-import type { AuthSession, PublicUser, StoredUser, UserRole } from '@/features/auth/types';
+import type {
+  AuthSession,
+  CookedRecipeEntry,
+  PublicUser,
+  StoredUser,
+  UserRole,
+} from '@/features/auth/types';
 import { toPublicUser } from '@/features/auth/types';
 import { AppError } from '@/lib/errors';
+import { calculateLevelProgress } from '@/lib/score';
 import { getJsonStorage, removeStorageItem, setJsonStorage, STORAGE_KEYS } from '@/lib/storage';
+
+export interface AddXpResult {
+  gainedXp: number;
+  level: number;
+  exp: number;
+  maxExp: number;
+  leveledUp: boolean;
+  gainedLevels: number;
+}
 
 interface AuthContextValue {
   user: PublicUser | null;
@@ -25,6 +42,9 @@ interface AuthContextValue {
   login: (email: string, password: string) => Promise<PublicUser>;
   register: (name: string, email: string, password: string) => Promise<PublicUser>;
   logout: () => void;
+  addXp: (xp: number) => AddXpResult | null;
+  addCookedRecipe: (entry: CookedRecipeEntry) => void;
+  updateProfile: (patch: Partial<Pick<StoredUser, 'name' | 'avatar' | 'password' | 'equippedAchievementId'>>) => PublicUser | null;
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -53,11 +73,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return;
     }
     const users = loadUsers();
-    const stored = findUserById(users, session.userId);
+    let stored = findUserById(users, session.userId);
     if (!stored) {
       removeStorageItem(STORAGE_KEYS.auth);
       setUser(null);
     } else {
+      const achStore = getJsonStorage<{ byUser?: Record<string, { id: string }[]> }>(STORAGE_KEYS.achievements);
+      const targetId = stored.id;
+      const storeIds = achStore?.byUser?.[targetId]?.map((e) => e.id) ?? [];
+      const userIds = stored.unlockedAchievements ?? [];
+      if (storeIds.length > userIds.length || storeIds.some((id) => !userIds.includes(id))) {
+        const merged = Array.from(new Set([...userIds, ...storeIds]));
+        const updated = updateStoredUserById(users, targetId, { unlockedAchievements: merged });
+        saveUsers(updated);
+        stored = updated.find((u) => u.id === targetId) ?? stored;
+      }
       setUser(toPublicUser(stored));
     }
     setIsLoading(false);
@@ -113,9 +143,62 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(null);
   }, []);
 
+  const persistStoredUser = useCallback((userId: string, patch: Partial<StoredUser>): StoredUser | null => {
+    const users = loadUsers();
+    const stored = findUserById(users, userId);
+    if (!stored) return null;
+    const next = updateStoredUserById(users, userId, patch);
+    saveUsers(next);
+    const updated = next.find((u) => u.id === userId) ?? null;
+    if (updated) setUser(toPublicUser(updated));
+    return updated;
+  }, []);
+
+  const addXp = useCallback(
+    (xp: number): AddXpResult | null => {
+      if (!user) return null;
+      const users = loadUsers();
+      const stored = findUserById(users, user.id);
+      if (!stored) return null;
+      const currentExp = stored.exp ?? 0;
+      const currentMaxExp = stored.maxExp ?? 1000;
+      const result = calculateLevelProgress(currentExp, currentMaxExp, xp);
+      const patch: Partial<StoredUser> = {
+        level: result.level,
+        exp: result.exp,
+        maxExp: result.maxExp,
+      };
+      persistStoredUser(user.id, patch);
+      return { gainedXp: xp, ...result };
+    },
+    [user, persistStoredUser],
+  );
+
+  const addCookedRecipe = useCallback(
+    (entry: CookedRecipeEntry): void => {
+      if (!user) return;
+      const users = loadUsers();
+      const stored = findUserById(users, user.id);
+      if (!stored) return;
+      const current = stored.cookedRecipes ?? [];
+      const nextEntries = [...current, entry];
+      persistStoredUser(user.id, { cookedRecipes: nextEntries });
+    },
+    [user, persistStoredUser],
+  );
+
+  const updateProfile = useCallback(
+    (patch: Partial<Pick<StoredUser, 'name' | 'avatar' | 'password' | 'equippedAchievementId'>>): PublicUser | null => {
+      if (!user) return null;
+      const updated = persistStoredUser(user.id, patch);
+      return updated ? toPublicUser(updated) : null;
+    },
+    [user, persistStoredUser],
+  );
+
   const value = useMemo(
-    () => ({ user, isLoading, login, register, logout }),
-    [user, isLoading, login, register, logout],
+    () => ({ user, isLoading, login, register, logout, addXp, addCookedRecipe, updateProfile }),
+    [user, isLoading, login, register, logout, addXp, addCookedRecipe, updateProfile],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

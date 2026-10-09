@@ -67,6 +67,46 @@ export function calculateScoreResult(input: ScoreInput, ingredientCount: number)
   return { totalScore, stars };
 }
 
+export function calculateXpFromStars(stars: 1 | 2 | 3 | 4 | 5): number {
+  switch (stars) {
+    case 5:
+      return 500;
+    case 4:
+      return 400;
+    case 3:
+      return 300;
+    case 2:
+      return 200;
+    case 1:
+    default:
+      return 100;
+  }
+}
+
+export function calculateLevelProgress(
+  currentExp: number,
+  currentMaxExp: number,
+  gainedXp: number,
+): { level: number; exp: number; maxExp: number; leveledUp: boolean; gainedLevels: number } {
+  const initialLevel =
+    currentMaxExp < 1000 ? 1 : 1 + Math.round((currentMaxExp - 1000) / 500);
+  let level = Math.max(1, initialLevel);
+  let exp = currentExp + gainedXp;
+  let maxExp = currentMaxExp;
+  let leveledUp = false;
+  let gainedLevels = 0;
+
+  while (exp >= maxExp && maxExp > 0) {
+    exp -= maxExp;
+    level += 1;
+    gainedLevels += 1;
+    maxExp = 1000 + (level - 1) * 500;
+    leveledUp = true;
+  }
+
+  return { level, exp, maxExp, leveledUp, gainedLevels };
+}
+
 export const SCORE_RULES = {
   correctPoints: CORRECT_POINTS,
   wrongPenalty: WRONG_PENALTY,

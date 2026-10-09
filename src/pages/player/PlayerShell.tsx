@@ -80,7 +80,7 @@ export function PlayerShell({ children }: PlayerShellProps) {
             }
             to="/inbox"
           >
-            📬 {t('mail.inbox')}
+            📬 {t('nav.inbox')}
             {unread > 0 ? (
               <span className={styles.badgeAccent} aria-label={`${unread} unread`}>
                 {unread}

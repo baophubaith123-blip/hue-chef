@@ -373,6 +373,9 @@ export interface I18nDictionary {
     locked: string;
     progress: (cur: number, total: number) => string;
     unlockedAt: string;
+    current: string;
+    target: string;
+    percent: string;
   };
   collection: {
     title: string;
@@ -381,6 +384,37 @@ export interface I18nDictionary {
     timesCooked: string;
     bestScore: string;
     stars: string;
+    timeUsed: string;
+    lastCooked: string;
+  };
+  home: {
+    welcome: (name: string) => string;
+    subtitle: string;
+    introTitle: string;
+    introBody: (appName: string, version: string) => string;
+    browseIntro: (count: number) => string;
+    level: string;
+    exp: string;
+    recipes: string;
+    browseRecipes: string;
+    playerHome: string;
+  };
+  cooking: {
+    result: {
+      successTitle: string;
+      failTitle: string;
+      score: string;
+      stars: string;
+      correctCount: string;
+      mistakeCount: string;
+      timeout: string;
+      unknownError: string;
+      retry: string;
+      backToRecipe: string;
+      gainedXp: (xp: number) => string;
+      levelUp: (lvl: number) => string;
+      achievementUnlockTitle: string;
+    };
   };
   notifications: {
     bellAria: string;

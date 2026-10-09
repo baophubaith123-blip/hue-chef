@@ -1,9 +1,15 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Link, Navigate, useParams } from 'react-router-dom';
 
+import type { Achievement } from '@/data/types';
 import { EmptyState } from '@/components/EmptyState';
 import { Loading } from '@/components/Loading';
+import { useAuth } from '@/contexts/AuthContext';
+import { useAchievements } from '@/contexts/AchievementContext';
+import { useNotification } from '@/contexts/NotificationContext';
 import { useRecipes } from '@/contexts/RecipeContext';
+import type { CookedRecipeEntry } from '@/features/auth/types';
+import type { CookingSession } from '@/features/cooking/types';
 import { CookingPot } from '@/features/cooking/components/CookingPot';
 import { CookingResultModal } from '@/features/cooking/components/CookingResultModal';
 import { CookingTimer } from '@/features/cooking/components/CookingTimer';
@@ -13,13 +19,19 @@ import { useCookingState } from '@/features/cooking/hooks/useCookingState';
 import { useDragDrop } from '@/features/cooking/hooks/useDragDrop';
 import { buildTrayIngredientIds } from '@/features/cooking/lib/tray-ingredients';
 import { shuffleArray } from '@/features/cooking/lib/shuffle';
+import { useTranslation } from '@/i18n/useTranslation';
+import { calculateXpFromStars } from '@/lib/score';
 import { PlayerShell } from '@/pages/player/PlayerShell';
 
 import styles from '@/pages/player/CookingPage.module.css';
 
 export default function CookingPage() {
   const { id } = useParams<{ id: string }>();
+  const { t } = useTranslation();
   const { isLoading, getRecipeById } = useRecipes();
+  const { user, addXp, addCookedRecipe } = useAuth();
+  const { checkAndUnlockForUser } = useAchievements();
+  const { push: pushNotification } = useNotification();
   const {
     session,
     isRunning,
@@ -31,6 +43,11 @@ export default function CookingPage() {
 
   const [shakePot, setShakePot] = useState(false);
   const [sparklePot, setSparklePot] = useState(false);
+  const [appliedResult, setAppliedResult] = useState<{
+    gainedXp: number;
+    newLevel?: number;
+    unlockedAchievements: Achievement[];
+  } | null>(null);
   const animationTimerRef = useRef<number | null>(null);
 
   const recipe = id ? getRecipeById(id) : undefined;
@@ -69,6 +86,84 @@ export default function CookingPage() {
     [clearAnimationTimer],
   );
 
+  const buildCookedEntry = useCallback(
+    (currentSession: CookingSession): CookedRecipeEntry => {
+      const { recipe: r, finalScore, stars, totalDurationSeconds, timeRemainingSeconds } = currentSession;
+      const timeUsed = Math.max(0, totalDurationSeconds - timeRemainingSeconds);
+      return {
+        recipeId: r.id,
+        recipeName: r.name,
+        score: finalScore,
+        stars,
+        timeUsed,
+        cookedAt: new Date().toISOString(),
+        image: r.image,
+        category: r.category,
+      };
+    },
+    [],
+  );
+
+  const handleApplyProgress = useCallback(() => {
+    if (!session || session.phase !== 'success' || !user) return;
+    if (appliedResult) return;
+
+    const xp = calculateXpFromStars(session.stars);
+    const xpResult = addXp(xp);
+    const entry = buildCookedEntry(session);
+    addCookedRecipe(entry);
+
+    const stored = {
+      level: xpResult?.level ?? user.level ?? 1,
+      exp: xpResult?.exp ?? (user.exp ?? 0) + xp,
+      maxExp: xpResult?.maxExp ?? user.maxExp ?? 1000,
+      cookedRecipes: [...(user.cookedRecipes ?? []), entry],
+    };
+
+    const achievementProgress = {
+      totalScore: entry.score,
+      perfectScoreCount: entry.stars === 5 ? 1 : 0,
+      noMistakeCookCount: session.wrongCount === 0 ? 1 : 0,
+    };
+
+    const enrichedUser = {
+      ...user,
+      level: stored.level,
+      exp: stored.exp,
+      maxExp: stored.maxExp,
+      cookedRecipes: stored.cookedRecipes,
+    };
+
+    const unlocked = checkAndUnlockForUser(enrichedUser, achievementProgress);
+
+    for (const achievement of unlocked) {
+      pushNotification({
+        userId: user.id,
+        type: 'achievement.unlocked',
+        title: t('cooking.result.achievementUnlockTitle'),
+        body: `${achievement.name} — ${achievement.description}`,
+        link: '/achievements',
+        relatedId: achievement.id,
+      });
+    }
+
+    setAppliedResult({
+      gainedXp: xp,
+      newLevel: xpResult?.leveledUp ? xpResult.level : undefined,
+      unlockedAchievements: unlocked,
+    });
+  }, [
+    session,
+    user,
+    appliedResult,
+    addXp,
+    addCookedRecipe,
+    buildCookedEntry,
+    checkAndUnlockForUser,
+    pushNotification,
+    t,
+  ]);
+
   useEffect(() => {
     if (isLoading || !id) {
       return undefined;
@@ -77,10 +172,12 @@ export default function CookingPage() {
     if (!current || (current.status ?? 'approved') !== 'approved') {
       return undefined;
     }
+    setAppliedResult(null);
     startCooking(current);
     return () => {
       clearAnimationTimer();
       resetCooking();
+      setAppliedResult(null);
     };
   }, [id, isLoading, getRecipeById, startCooking, resetCooking, clearAnimationTimer]);
 
@@ -200,6 +297,10 @@ export default function CookingPage() {
           session={session}
           onClose={resetCooking}
           onRetry={() => startCooking(recipe)}
+          onApplyProgress={handleApplyProgress}
+          gainedXp={appliedResult?.gainedXp}
+          newLevel={appliedResult?.newLevel}
+          unlockedAchievements={appliedResult?.unlockedAchievements}
         />
       ) : null}
     </PlayerShell>

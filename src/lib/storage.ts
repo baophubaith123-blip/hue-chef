@@ -14,6 +14,7 @@ export const STORAGE_KEYS = {
   reports: 'hue-chef-reports',
   ingredients: 'hue-chef-ingredients',
   adminSettings: 'hue-chef-admin-settings',
+  progress: 'hue-chef-progress',
 } as const;
 
 export function getStorageItem(key: string): string | null {

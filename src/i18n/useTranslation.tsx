@@ -74,19 +74,6 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
       setLocaleState(stored);
       return;
     }
-    try {
-      const nav = typeof navigator !== 'undefined' ? navigator.language?.toLowerCase() : '';
-      if (nav?.startsWith('vi')) {
-        setLocaleState('vi');
-        return;
-      }
-      if (nav?.startsWith('en')) {
-        setLocaleState('en');
-        return;
-      }
-    } catch {
-      // ignore
-    }
     setLocaleState(DEFAULT_LOCALE);
   }, []);
 

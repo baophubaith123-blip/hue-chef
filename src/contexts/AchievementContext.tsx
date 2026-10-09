@@ -8,8 +8,8 @@ import {
 
 import { SEED_ACHIEVEMENTS } from '@/data/achievements';
 import type { Achievement, RecipeCategory } from '@/data/types';
-import { findUserById, loadUsers, saveUsers } from '@/features/auth/store';
-import type { PublicUser } from '@/features/auth/types';
+import { findUserById, loadUsers, saveUsers, updateStoredUserById } from '@/features/auth/store';
+import type { CookedRecipeEntry, PublicUser } from '@/features/auth/types';
 import type {
   AchievementContextValue,
   PlayerAchievementProgress,
@@ -40,86 +40,108 @@ function saveStore(store: AchievementStore): void {
   setJsonStorage(STORAGE_KEYS.achievements, store);
 }
 
-function countByCategory(cookedIds: string[], recipesById: Map<string, Achievement>): Record<string, number> {
-  void recipesById;
-  void cookedIds;
-  return {};
+function getCookedEntries(user: PublicUser): CookedRecipeEntry[] {
+  if (!user || !Array.isArray(user.cookedRecipes)) return [];
+  return user.cookedRecipes;
+}
+
+function getRecipeIds(entries: CookedRecipeEntry[]): string[] {
+  return entries.map((e) => e.recipeId);
+}
+
+function countByCategoryFromEntries(entries: CookedRecipeEntry[], category?: RecipeCategory): number {
+  if (!category) return entries.length;
+  let count = 0;
+  for (const entry of entries) {
+    if (entry.category === category) count += 1;
+  }
+  return count;
+}
+
+function categoriesFromEntries(entries: CookedRecipeEntry[]): Set<RecipeCategory> {
+  const set = new Set<RecipeCategory>();
+  for (const entry of entries) {
+    if (entry.category) {
+      set.add(entry.category as RecipeCategory);
+    }
+  }
+  return set;
+}
+
+function sumTotalScore(entries: CookedRecipeEntry[]): number {
+  let total = 0;
+  for (const entry of entries) {
+    total += Number(entry.score) || 0;
+  }
+  return total;
+}
+
+function countPerfectScore(entries: CookedRecipeEntry[], extraPerfectCount?: number): number {
+  let count = 0;
+  for (const entry of entries) {
+    if (entry.stars === 5) count += 1;
+  }
+  return count + (extraPerfectCount ?? 0);
 }
 
 function evaluate(
   achievement: Achievement,
   user: PublicUser,
   progress: Partial<PlayerAchievementProgress>,
-  recipesCategoryById: Map<string, RecipeCategory | undefined>,
-): { unlocked: boolean; pct: number } {
+): { unlocked: boolean; pct: number; current: number; target: number } {
   const cond = achievement.condition;
-  const cookedIds = progress.allRecipesCooked
-    ? []
-    : (user.cookedRecipes ?? []);
-  const categoryCount = (cat?: RecipeCategory) => {
-    if (!cat) return cookedIds.length;
-    let count = 0;
-    for (const id of cookedIds) {
-      if (recipesCategoryById.get(id) === cat) count += 1;
-    }
-    return count;
-  };
+  const entries = getCookedEntries(user);
+  const recipeIds = getRecipeIds(entries);
 
   switch (cond.type) {
     case 'cook_count': {
-      const count = categoryCount(cond.category);
+      const count = cond.category
+        ? countByCategoryFromEntries(entries, cond.category)
+        : recipeIds.length;
       const target = cond.count;
-      if (target === 0) return { unlocked: true, pct: 100 };
+      if (target === 0) return { unlocked: true, pct: 100, current: count, target };
       const pct = Math.min(100, Math.round((count / target) * 100));
-      return { unlocked: count >= target, pct };
+      return { unlocked: count >= target, pct, current: count, target };
     }
     case 'perfect_score': {
-      const count = progress.perfectScoreCount ?? 0;
-      return { unlocked: count >= 1, pct: Math.min(100, count * 100) };
+      const count = countPerfectScore(entries, progress.perfectScoreCount ?? 0);
+      const target = 1;
+      const pct = Math.min(100, count * 100);
+      return { unlocked: count >= target, pct, current: count, target };
     }
     case 'no_mistakes': {
-      const count = progress.noMistakeCookCount ?? 0;
+      const progressCount = progress.noMistakeCookCount ?? 0;
       const target = cond.count || 1;
-      const pct = Math.min(100, Math.round((count / target) * 100));
-      return { unlocked: count >= target, pct };
+      const pct = Math.min(100, Math.round((progressCount / target) * 100));
+      return { unlocked: progressCount >= target, pct, current: progressCount, target };
     }
     case 'all_categories': {
-      const cooked = new Set<string>();
-      for (const id of cookedIds) {
-        const c = recipesCategoryById.get(id);
-        if (c) cooked.add(c);
-      }
+      const cookedCategories = categoriesFromEntries(entries);
       const categories: RecipeCategory[] = ['bun', 'com', 'banh', 'che', 'nem'];
       const total = categories.length;
-      const pct = Math.min(100, Math.round((cooked.size / total) * 100));
-      return { unlocked: cooked.size >= total, pct };
+      for (const c of categories) cookedCategories.has(c);
+      const current = cookedCategories.size;
+      const pct = Math.min(100, Math.round((current / total) * 100));
+      return { unlocked: current >= total, pct, current, target: total };
     }
     case 'score_threshold': {
-      const score = progress.totalScore ?? 0;
+      const storedTotal = sumTotalScore(entries);
+      const added = progress.totalScore ?? 0;
+      const score = storedTotal + added;
       const target = cond.score;
       const pct = Math.min(100, Math.round((score / target) * 100));
-      return { unlocked: score >= target, pct };
+      return { unlocked: score >= target, pct, current: score, target };
     }
     case 'level': {
       const lvl = user.level ?? 1;
       const target = cond.level;
       const pct = Math.min(100, Math.round((lvl / target) * 100));
-      return { unlocked: lvl >= target, pct };
+      return { unlocked: lvl >= target, pct, current: lvl, target };
     }
   }
-  void countByCategory;
 }
 
 export function AchievementProvider({ children }: { children: ReactNode }) {
-  const recipesCategoryById = useMemo(() => {
-    const map = new Map<string, RecipeCategory | undefined>();
-    const rStore = getJsonStorage<{ id: string; category: RecipeCategory }[]>(STORAGE_KEYS.recipes);
-    if (Array.isArray(rStore)) {
-      for (const r of rStore) map.set(r.id, r.category);
-    }
-    return map;
-  }, []);
-
   const unlockedForUser = useCallback((userId: string): UnlockedAchievement[] => {
     const store = loadStore();
     return store.byUser[userId] ?? [];
@@ -140,7 +162,7 @@ export function AchievementProvider({ children }: { children: ReactNode }) {
       const unlockedNow: Achievement[] = [];
       for (const achievement of SEED_ACHIEVEMENTS) {
         if (current.has(achievement.id)) continue;
-        const { unlocked } = evaluate(achievement, user, progress, recipesCategoryById);
+        const { unlocked } = evaluate(achievement, user, progress);
         if (unlocked) {
           unlockedNow.push(achievement);
           current.add(achievement.id);
@@ -160,22 +182,24 @@ export function AchievementProvider({ children }: { children: ReactNode }) {
         const users = loadUsers();
         const stored = findUserById(users, user.id);
         if (stored) {
-          stored.unlockedAchievements = entries.map((e) => e.id);
-          saveUsers(users);
+          const patched = updateStoredUserById(users, user.id, {
+            unlockedAchievements: entries.map((e) => e.id),
+          });
+          saveUsers(patched);
         }
       }
       return unlockedNow;
     },
-    [recipesCategoryById],
+    [],
   );
 
   const getProgressPct = useCallback(
     (user: PublicUser, achievementId: string, progress: Partial<PlayerAchievementProgress>): number => {
       const achievement = SEED_ACHIEVEMENTS.find((a) => a.id === achievementId);
       if (!achievement) return 0;
-      return evaluate(achievement, user, progress, recipesCategoryById).pct;
+      return evaluate(achievement, user, progress).pct;
     },
-    [recipesCategoryById],
+    [],
   );
 
   const value = useMemo<AchievementContextValue>(
