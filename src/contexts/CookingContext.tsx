@@ -15,13 +15,15 @@ import { calculateScoreResult, SCORE_RULES, type ScoreInput } from '@/lib/score'
 type CookingAction =
   | { type: 'START'; recipe: Recipe }
   | { type: 'DROP_INGREDIENT'; ingredientId: string }
+  | { type: 'EXECUTE_STEP_ACTION' }
   | { type: 'TICK' }
   | { type: 'RESET' };
 
 interface CookingContextValue {
   session: CookingSession | null;
   startCooking: (recipe: Recipe) => void;
-  dropIngredient: (ingredientId: string) => void;
+  dropIngredient: (ingredientId: string) => boolean; // returns true if correct drag, false if wrong drag
+  executeStepAction: () => void;
   tickTimer: () => void;
   resetCooking: () => void;
 }
@@ -31,8 +33,7 @@ const initialState: CookingState = { session: null };
 const CookingContext = createContext<CookingContextValue | null>(null);
 
 function buildScoreInput(session: CookingSession, timedOut: boolean): ScoreInput {
-  const totalIngredients = session.recipe.ingredients.length;
-  const allIngredientsAdded = session.nextIngredientIndex >= totalIngredients;
+  const allIngredientsAdded = session.currentStepIndex >= session.recipe.steps.length;
   return {
     baseScore: session.recipe.baseScore,
     correctCount: session.correctCount,
@@ -83,8 +84,10 @@ function cookingReducer(state: CookingState, action: CookingAction): CookingStat
         totalDurationSeconds,
         correctCount: 0,
         wrongCount: 0,
-        nextIngredientIndex: 0,
-        placedIngredientIds: [],
+        currentStepIndex: 0,
+        potIngredients: [],
+        actionButtonLabel: null,
+        completedStepIndexes: [],
         runningScoreDelta: 0,
         finalScore: 0,
         stars: 1,
@@ -110,25 +113,21 @@ function cookingReducer(state: CookingState, action: CookingAction): CookingStat
         return state;
       }
 
-      const expected = session.recipe.ingredients[session.nextIngredientIndex];
-      if (!expected) {
+      const currentStep = session.recipe.steps[session.currentStepIndex];
+      if (!currentStep) {
         return state;
       }
 
-      if (action.ingredientId === expected.ingredientId) {
-        const nextIndex = session.nextIngredientIndex + 1;
-        const updated: CookingSession = {
-          ...session,
-          correctCount: session.correctCount + 1,
-          nextIngredientIndex: nextIndex,
-          placedIngredientIds: [...session.placedIngredientIds, action.ingredientId],
-          runningScoreDelta: session.runningScoreDelta + SCORE_RULES.correctPoints,
-        };
+      const isRequired = currentStep.requiredIngredients.includes(action.ingredientId);
 
-        if (nextIndex >= session.recipe.ingredients.length) {
-          return { session: finalizeSession(updated, false) };
-        }
-        return { session: updated };
+      if (isRequired) {
+        return {
+          session: {
+            ...session,
+            potIngredients: [...session.potIngredients, action.ingredientId],
+            actionButtonLabel: currentStep.actionLabel,
+          },
+        };
       }
 
       return {
@@ -136,8 +135,31 @@ function cookingReducer(state: CookingState, action: CookingAction): CookingStat
           ...session,
           wrongCount: session.wrongCount + 1,
           runningScoreDelta: session.runningScoreDelta - SCORE_RULES.wrongPenalty,
+          actionButtonLabel: null,
         },
       };
+    }
+    case 'EXECUTE_STEP_ACTION': {
+      if (!session || session.phase !== 'running' || !session.actionButtonLabel) {
+        return state;
+      }
+
+      const currentStepIndex = session.currentStepIndex;
+      const nextStepIndex = currentStepIndex + 1;
+      const updated: CookingSession = {
+        ...session,
+        correctCount: session.correctCount + 1,
+        currentStepIndex: nextStepIndex,
+        completedStepIndexes: [...session.completedStepIndexes, currentStepIndex],
+        potIngredients: [],
+        actionButtonLabel: null,
+        runningScoreDelta: session.runningScoreDelta + SCORE_RULES.correctPoints,
+      };
+
+      if (nextStepIndex >= session.recipe.steps.length) {
+        return { session: finalizeSession(updated, false) };
+      }
+      return { session: updated };
     }
     case 'RESET':
       return initialState;
@@ -153,8 +175,24 @@ export function CookingProvider({ children }: { children: ReactNode }) {
     dispatch({ type: 'START', recipe });
   }, []);
 
-  const dropIngredient = useCallback((ingredientId: string) => {
-    dispatch({ type: 'DROP_INGREDIENT', ingredientId });
+  const dropIngredient = useCallback(
+    (ingredientId: string): boolean => {
+      const currentSession = state.session;
+      if (!currentSession || currentSession.phase !== 'running') {
+        return false;
+      }
+      const currentStep = currentSession.recipe.steps[currentSession.currentStepIndex];
+      const isCorrect = Boolean(
+        currentStep && currentStep.requiredIngredients.includes(ingredientId),
+      );
+      dispatch({ type: 'DROP_INGREDIENT', ingredientId });
+      return isCorrect;
+    },
+    [state.session],
+  );
+
+  const executeStepAction = useCallback(() => {
+    dispatch({ type: 'EXECUTE_STEP_ACTION' });
   }, []);
 
   const tickTimer = useCallback(() => {
@@ -170,10 +208,11 @@ export function CookingProvider({ children }: { children: ReactNode }) {
       session: state.session,
       startCooking,
       dropIngredient,
+      executeStepAction,
       tickTimer,
       resetCooking,
     }),
-    [state.session, startCooking, dropIngredient, tickTimer, resetCooking],
+    [state.session, startCooking, dropIngredient, executeStepAction, tickTimer, resetCooking],
   );
 
   return <CookingContext.Provider value={value}>{children}</CookingContext.Provider>;

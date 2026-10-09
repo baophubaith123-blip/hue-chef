@@ -36,7 +36,7 @@ export function validateRecipeForm(values: RecipeFormValues): RecipeFormErrors {
   }
 
   const validSteps = values.steps.filter(
-    (step) => step.title.trim() && step.description.trim() && step.durationSeconds > 0,
+    (step) => step.title.trim() && step.description.trim() && (step.duration ?? step.durationSeconds ?? 0) > 0,
   );
   if (validSteps.length < 3) {
     errors.steps = VALIDATION_KEYS.minSteps;

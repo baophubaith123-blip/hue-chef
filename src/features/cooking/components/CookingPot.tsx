@@ -1,3 +1,4 @@
+import { getIngredientById } from '@/data/ingredients';
 import { useDragDrop } from '@/features/cooking/hooks/useDragDrop';
 
 import styles from '@/features/cooking/components/CookingPot.module.css';
@@ -7,7 +8,9 @@ interface CookingPotProps {
   onDropOnPot: (ingredientId: string) => void;
   shake?: boolean;
   sparkle?: boolean;
-  placedCount: number;
+  potIngredients: string[];
+  actionButtonLabel: string | null;
+  onExecuteAction: () => void;
 }
 
 export function CookingPot({
@@ -15,7 +18,9 @@ export function CookingPot({
   onDropOnPot,
   shake = false,
   sparkle = false,
-  placedCount,
+  potIngredients,
+  actionButtonLabel,
+  onExecuteAction,
 }: CookingPotProps) {
   const { potActive, potDropZoneProps } = useDragDrop({ onDropOnPot });
 
@@ -40,9 +45,32 @@ export function CookingPot({
           <p className={styles.potHint}>
             {disabled ? 'Session ended' : 'Drop ingredients here'}
           </p>
-          <p className={styles.potCount}>{placedCount} in pot</p>
+          {potIngredients.length > 0 ? (
+            <div className={styles.chips}>
+              {potIngredients.map((id, index) => {
+                const ing = getIngredientById(id);
+                return (
+                  <span key={`${id}-${index}`} className={styles.chip}>
+                    {ing?.name || id}
+                  </span>
+                );
+              })}
+            </div>
+          ) : (
+            <p className={styles.potCount}>Pot is empty</p>
+          )}
         </div>
       </div>
+
+      {!disabled && actionButtonLabel ? (
+        <button
+          type="button"
+          className={styles.actionButton}
+          onClick={onExecuteAction}
+        >
+          ✨ {actionButtonLabel}
+        </button>
+      ) : null}
     </section>
   );
 }

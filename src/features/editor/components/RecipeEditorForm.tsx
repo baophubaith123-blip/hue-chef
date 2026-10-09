@@ -226,7 +226,14 @@ export function RecipeEditorForm({
       <DynamicFormList
         items={values.steps}
         onChange={(steps) => setValues({ ...values, steps })}
-        createItem={() => ({ title: '', description: '', durationSeconds: 30 })}
+        createItem={() => ({
+          title: '',
+          description: '',
+          duration: 30,
+          durationSeconds: 30,
+          requiredIngredients: [],
+          actionLabel: 'Thực hiện',
+        })}
         addLabel={t('recipe.addStep')}
         itemLabel={t('recipe.step')}
         minItems={3}
@@ -249,10 +256,11 @@ export function RecipeEditorForm({
               type="number"
               min={1}
               step={5}
-              value={item.durationSeconds}
-              onChange={(event) =>
-                update({ durationSeconds: Number(event.target.value) || 0 })
-              }
+              value={item.duration ?? item.durationSeconds ?? 30}
+              onChange={(event) => {
+                const dur = Number(event.target.value) || 0;
+                update({ duration: dur, durationSeconds: dur });
+              }}
             />
           </div>
         )}

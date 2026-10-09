@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/Button';
 import { Card } from '@/components/Card';
 import { EmptyState } from '@/components/EmptyState';
+import { ImageWithFallback } from '@/components/ImageWithFallback';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRecipes } from '@/contexts/RecipeContext';
 import type { CookedRecipeEntry } from '@/features/auth/types';
@@ -102,13 +103,12 @@ export default function CollectionPage() {
               >
                 <article className={styles.card}>
                   <div className={styles.imageWrap}>
-                    {item.image ? (
-                      <img src={item.image} alt={item.name} className={styles.image} />
-                    ) : (
-                      <div className={styles.imageFallback} aria-hidden="true">
-                        {item.name.slice(0, 2)}
-                      </div>
-                    )}
+                    <ImageWithFallback
+                      src={item.image}
+                      alt={item.name}
+                      fallbackTitle={item.name}
+                      className={styles.image}
+                    />
                   </div>
                   <div className={styles.cardBody}>
                     <h3 className={styles.cardTitle}>{item.name}</h3>

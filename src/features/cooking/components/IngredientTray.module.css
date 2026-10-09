@@ -8,9 +8,25 @@
   background: var(--color-surface);
 }
 
+.headerRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .title {
   margin: 0;
   font-size: 1rem;
+}
+
+.remainingBadge {
+  background: #ffedd5;
+  color: #7c2d12;
+  padding: 0.25rem 0.6rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  border: 1px solid #f97316;
 }
 
 .list {
@@ -33,6 +49,24 @@
   background: var(--color-bg);
   cursor: grab;
   text-align: left;
+  min-width: 6.5rem;
+}
+
+.chipHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 0.35rem;
+}
+
+.itemBadge {
+  background: #ea580c;
+  color: #ffffff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.05rem 0.35rem;
+  border-radius: 6px;
 }
 
 .chip:disabled {

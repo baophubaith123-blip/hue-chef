@@ -23,10 +23,16 @@ export function IngredientTray({
   draggingId,
   getTrayItemProps,
 }: IngredientTrayProps) {
+  const remainingCount = trayIngredientIds.filter(
+    (id) => !placedIngredientIds.includes(id),
+  ).length;
 
   return (
     <section className={styles.tray} aria-label="Ingredient tray">
-      <h2 className={styles.title}>Ingredients</h2>
+      <div className={styles.headerRow}>
+        <h2 className={styles.title}>Ingredients</h2>
+        <span className={styles.remainingBadge}>Remaining: {remainingCount}</span>
+      </div>
       <ul className={styles.list}>
         {trayIngredientIds.map((ingredientId) => {
           const ingredient = getIngredientById(ingredientId);
@@ -49,7 +55,10 @@ export function IngredientTray({
                 disabled={disabled || isUsed}
                 {...dragProps}
               >
-                <span className={styles.chipName}>{ingredient.name}</span>
+                <div className={styles.chipHeader}>
+                  <span className={styles.chipName}>{ingredient.name}</span>
+                  {!isUsed ? <span className={styles.itemBadge}>1</span> : null}
+                </div>
                 <span className={styles.chipMeta}>{ingredient.category}</span>
               </button>
             </li>

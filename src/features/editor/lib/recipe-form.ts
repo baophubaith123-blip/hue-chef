@@ -16,9 +16,9 @@ export function defaultRecipeFormValues(): RecipeFormValues {
       { ingredientId: '', amount: '' },
     ],
     steps: [
-      { title: '', description: '', durationSeconds: 30 },
-      { title: '', description: '', durationSeconds: 30 },
-      { title: '', description: '', durationSeconds: 30 },
+      { title: '', description: '', duration: 30, durationSeconds: 30, requiredIngredients: [], actionLabel: 'Thực hiện' },
+      { title: '', description: '', duration: 30, durationSeconds: 30, requiredIngredients: [], actionLabel: 'Thực hiện' },
+      { title: '', description: '', duration: 30, durationSeconds: 30, requiredIngredients: [], actionLabel: 'Thực hiện' },
     ],
   };
 }
@@ -35,7 +35,10 @@ export function recipeToFormValues(recipe: Recipe): RecipeFormValues {
     steps: recipe.steps.map((step) => ({
       title: step.title,
       description: step.description,
-      durationSeconds: step.durationSeconds,
+      duration: step.duration ?? step.durationSeconds ?? 30,
+      durationSeconds: step.duration ?? step.durationSeconds ?? 30,
+      requiredIngredients: step.requiredIngredients ? [...step.requiredIngredients] : [],
+      actionLabel: step.actionLabel || 'Thực hiện',
     })),
   };
 }
@@ -52,7 +55,10 @@ function buildSteps(recipeId: string, steps: RecipeFormValues['steps']): Recipe[
       order: index + 1,
       title: step.title.trim(),
       description: step.description.trim(),
-      durationSeconds: step.durationSeconds,
+      duration: step.duration ?? step.durationSeconds ?? 30,
+      durationSeconds: step.duration ?? step.durationSeconds ?? 30,
+      requiredIngredients: step.requiredIngredients ?? [],
+      actionLabel: step.actionLabel || 'Thực hiện',
     }));
 }
 

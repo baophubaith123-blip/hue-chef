@@ -132,7 +132,7 @@ export function ReviewDetail({ recipe, onApprove, onReject }: ReviewDetailProps)
                 <div className={styles.stepMeta}>
                   <strong className={styles.stepTitle}>{step.title}</strong>
                   <span className={styles.stepTime}>
-                    ⏱ {formatDuration(step.durationSeconds)}
+                    ⏱ {formatDuration(step.duration ?? step.durationSeconds ?? 0)}
                   </span>
                 </div>
               </div>

@@ -16,7 +16,10 @@ export interface CookingStep {
   order: number;
   title: string;
   description: string;
-  durationSeconds: number;
+  requiredIngredients: string[];
+  actionLabel: string;
+  duration: number;
+  durationSeconds?: number;
 }
 
 export type RecipeStatus = 'draft' | 'pending' | 'approved' | 'rejected';

@@ -37,6 +37,7 @@ export default function CookingPage() {
     isRunning,
     startCooking,
     dropIngredient,
+    executeStepAction,
     resetCooking,
     scoreRules,
   } = useCookingState();
@@ -186,9 +187,8 @@ export default function CookingPage() {
       if (!session || session.phase !== 'running') {
         return;
       }
-      const expected = session.recipe.ingredients[session.nextIngredientIndex];
-      dropIngredient(ingredientId);
-      if (expected && ingredientId === expected.ingredientId) {
+      const isCorrect = dropIngredient(ingredientId);
+      if (isCorrect) {
         pulseAnimation('sparkle');
       } else {
         pulseAnimation('shake');
@@ -197,7 +197,20 @@ export default function CookingPage() {
     [dropIngredient, pulseAnimation, session],
   );
 
+  const handleExecuteAction = useCallback(() => {
+    executeStepAction();
+    pulseAnimation('sparkle');
+  }, [executeStepAction, pulseAnimation]);
+
   const { draggingId, getTrayItemProps } = useDragDrop({ onDropOnPot: handleDropOnPot });
+
+  const placedIngredientIds = useMemo(() => {
+    if (!session) return [];
+    const usedInCompleted = session.completedStepIndexes.flatMap(
+      (idx) => session.recipe.steps[idx]?.requiredIngredients ?? [],
+    );
+    return [...usedInCompleted, ...session.potIngredients];
+  }, [session]);
 
   if (!id) {
     return <Navigate to="/recipes" replace />;
@@ -231,7 +244,7 @@ export default function CookingPage() {
   }
 
   const activeStepIndex = Math.min(
-    session.nextIngredientIndex,
+    session.currentStepIndex,
     Math.max(0, session.recipe.steps.length - 1),
   );
 
@@ -240,7 +253,7 @@ export default function CookingPage() {
 
   const displayScore =
     session.phase === 'running'
-      ? session.recipe.baseScore + session.runningScoreDelta
+      ? Math.max(0, session.recipe.baseScore + session.runningScoreDelta)
       : session.finalScore;
 
   return (
@@ -252,7 +265,7 @@ export default function CookingPage() {
         <div>
           <h1 className={styles.title}>{recipe.name}</h1>
           <p className={styles.subtitle}>
-            Drop ingredients in order · +{scoreRules.correctPoints} correct · −
+            Drop required ingredients for step · +{scoreRules.correctPoints} correct · −
             {scoreRules.wrongPenalty} wrong
           </p>
         </div>
@@ -261,7 +274,7 @@ export default function CookingPage() {
           <span className={styles.scoreValue}>{displayScore}</span>
           {session.phase === 'running' ? (
             <p className={styles.scoreHint}>
-              Session bonus {session.runningScoreDelta >= 0 ? '+' : ''}
+              Session delta {session.runningScoreDelta >= 0 ? '+' : ''}
               {session.runningScoreDelta}
             </p>
           ) : null}
@@ -277,7 +290,7 @@ export default function CookingPage() {
       <div className={styles.grid}>
         <IngredientTray
           trayIngredientIds={trayIngredientIds}
-          placedIngredientIds={session.placedIngredientIds}
+          placedIngredientIds={placedIngredientIds}
           draggingId={draggingId}
           disabled={sessionEnded}
           getTrayItemProps={getTrayItemProps}
@@ -285,11 +298,17 @@ export default function CookingPage() {
         <CookingPot
           disabled={sessionEnded}
           onDropOnPot={handleDropOnPot}
-          placedCount={session.placedIngredientIds.length}
+          potIngredients={session.potIngredients}
+          actionButtonLabel={session.actionButtonLabel}
+          onExecuteAction={handleExecuteAction}
           shake={shakePot}
           sparkle={sparklePot}
         />
-        <StepList steps={session.recipe.steps} activeStepIndex={activeStepIndex} />
+        <StepList
+          steps={session.recipe.steps}
+          activeStepIndex={activeStepIndex}
+          completedStepIndexes={session.completedStepIndexes}
+        />
       </div>
 
       {showResult ? (

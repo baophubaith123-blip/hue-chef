@@ -9,8 +9,10 @@ export interface CookingSession {
   totalDurationSeconds: number;
   correctCount: number;
   wrongCount: number;
-  nextIngredientIndex: number;
-  placedIngredientIds: string[];
+  currentStepIndex: number;
+  potIngredients: string[];
+  actionButtonLabel: string | null;
+  completedStepIndexes: number[];
   runningScoreDelta: number;
   finalScore: number;
   stars: 1 | 2 | 3 | 4 | 5;

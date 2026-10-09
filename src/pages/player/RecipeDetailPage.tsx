@@ -8,6 +8,8 @@ import { useRecipes } from '@/contexts/RecipeContext';
 import { formatDuration } from '@/lib/format';
 import { PlayerShell } from '@/pages/player/PlayerShell';
 
+import { ImageWithFallback } from '@/components/ImageWithFallback';
+
 import styles from '@/pages/player/RecipeDetailPage.module.css';
 
 export default function RecipeDetailPage() {
@@ -48,7 +50,12 @@ export default function RecipeDetailPage() {
         ← All recipes
       </Link>
       <article className={styles.hero}>
-        <img className={styles.image} src={recipe.image} alt="" />
+        <ImageWithFallback
+          className={styles.image}
+          src={recipe.image}
+          alt={recipe.name}
+          fallbackTitle={recipe.name}
+        />
         <div>
           <h1>{recipe.name}</h1>
           <div className={styles.meta}>

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import type { Recipe } from '@/data/types';
 import { formatDuration } from '@/lib/format';
 
+import { ImageWithFallback } from '@/components/ImageWithFallback';
 import styles from '@/features/recipes/components/RecipeCard.module.css';
 
 interface RecipeCardProps {
@@ -13,7 +14,13 @@ export function RecipeCard({ recipe }: RecipeCardProps) {
   return (
     <article className={styles.card}>
       <div className={styles.imageWrap}>
-        <img className={styles.image} src={recipe.image} alt="" loading="lazy" />
+        <ImageWithFallback
+          className={styles.image}
+          src={recipe.image}
+          alt={recipe.name}
+          fallbackTitle={recipe.name}
+          loading="lazy"
+        />
       </div>
       <div className={styles.body}>
         <span className={styles.category}>{recipe.category}</span>

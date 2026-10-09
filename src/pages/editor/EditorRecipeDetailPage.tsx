@@ -135,7 +135,7 @@ export default function EditorRecipeDetailPage() {
             <li key={step.id} className={styles.stepItem}>
               <div>
                 <strong className={styles.stepTitle}>{step.title}</strong>
-                <span className={styles.stepTime}> ({formatDuration(step.durationSeconds)})</span>
+                <span className={styles.stepTime}> ({formatDuration(step.duration ?? step.durationSeconds ?? 0)})</span>
               </div>
               <p className={styles.stepDesc}>{step.description}</p>
             </li>
