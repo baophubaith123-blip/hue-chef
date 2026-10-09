@@ -113,7 +113,7 @@ export function PlayerShell({ children }: PlayerShellProps) {
               )}
               {user?.equippedAchievementId ? (
                 <div className={styles.badgeOverlayHeader}>
-                  <AchievementIcon badgeId={user.equippedAchievementId} size="sm" />
+                  <AchievementIcon badgeId={user.equippedAchievementId} size="xs" />
                 </div>
               ) : null}
             </div>

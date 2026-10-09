@@ -162,7 +162,7 @@ export default function ProfilePage() {
                       ? equippedBadgeId
                       : targetUser.equippedAchievementId) || ''
                   }
-                  size="sm"
+                  size="xs"
                 />
               </div>
             ) : null}

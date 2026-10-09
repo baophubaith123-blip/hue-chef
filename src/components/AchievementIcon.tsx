@@ -3,7 +3,7 @@ import styles from './AchievementIcon.module.css';
 interface AchievementIconProps {
   badgeId: string;
   category?: 'bun' | 'com' | 'banh' | 'che' | 'nem' | 'special' | string;
-  size?: 'sm' | 'md' | 'lg';
+  size?: 'xs' | 'sm' | 'md' | 'lg';
   locked?: boolean;
   className?: string;
 }

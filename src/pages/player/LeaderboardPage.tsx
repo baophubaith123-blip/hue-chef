@@ -112,7 +112,7 @@ export default function LeaderboardPage() {
                             <div className={styles.badgeOverlay}>
                               <AchievementIcon
                                 badgeId={player.equippedAchievementId}
-                                size="sm"
+                                size="xs"
                               />
                             </div>
                           ) : null}

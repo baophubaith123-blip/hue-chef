@@ -14,10 +14,18 @@
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
 }
 
+.xs {
+  width: 1.15rem;
+  height: 1.15rem;
+  padding: 0.15rem;
+  border: 1.5px solid #ffffff;
+}
+
 .sm {
-  width: 2rem;
-  height: 2rem;
-  padding: 0.3rem;
+  width: 1.6rem;
+  height: 1.6rem;
+  padding: 0.25rem;
+  border: 1.5px solid #ffffff;
 }
 
 .md {
