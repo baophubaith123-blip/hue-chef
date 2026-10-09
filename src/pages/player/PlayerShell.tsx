@@ -1,6 +1,7 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 
+import { AchievementIcon } from '@/components/AchievementIcon';
 import { Button } from '@/components/Button';
 import { useAuth } from '@/contexts/AuthContext';
 import { useMail } from '@/contexts/MailContext';
@@ -62,9 +63,17 @@ export function PlayerShell({ children }: PlayerShellProps) {
             className={({ isActive }) =>
               [styles.navLink, isActive ? styles.navLinkActive : ''].filter(Boolean).join(' ')
             }
+            to="/leaderboard"
+          >
+            🏆 {t('nav.leaderboard')}
+          </NavLink>
+          <NavLink
+            className={({ isActive }) =>
+              [styles.navLink, isActive ? styles.navLinkActive : ''].filter(Boolean).join(' ')
+            }
             to="/achievements"
           >
-            🏆 {t('nav.achievements')}
+            🎖️ {t('nav.achievements')}
           </NavLink>
           <NavLink
             className={({ isActive }) =>
@@ -87,7 +96,30 @@ export function PlayerShell({ children }: PlayerShellProps) {
               </span>
             ) : null}
           </NavLink>
-          <span className={styles.navLink}>{user?.name}</span>
+
+          <NavLink
+            to="/profile"
+            className={({ isActive }) =>
+              [styles.avatarBtn, isActive ? styles.navLinkActive : ''].filter(Boolean).join(' ')
+            }
+          >
+            <div className={styles.avatarCircle}>
+              {user?.avatar ? (
+                <img src={user.avatar} alt={user.name} className={styles.avatarImg} />
+              ) : (
+                <div className={styles.avatarInitials}>
+                  {user?.name?.charAt(0).toUpperCase() || 'P'}
+                </div>
+              )}
+              {user?.equippedAchievementId ? (
+                <div className={styles.badgeOverlayHeader}>
+                  <AchievementIcon badgeId={user.equippedAchievementId} size="sm" />
+                </div>
+              ) : null}
+            </div>
+            <span>{user?.name}</span>
+          </NavLink>
+
           <Button
             variant="secondary"
             onClick={() => {

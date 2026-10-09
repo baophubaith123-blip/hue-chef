@@ -81,6 +81,8 @@ export interface I18nDictionary {
     auditLog: string;
     backup: string;
     collection: string;
+    leaderboard: string;
+    profile: string;
   };
   recipe: {
     name: string;
@@ -520,5 +522,39 @@ export interface I18nDictionary {
     subtitle: string;
     backHome: string;
     code: string;
+  };
+  leaderboard: {
+    title: string;
+    subtitle: string;
+    rank: string;
+    player: string;
+    cookedCount: string;
+    totalScore: string;
+    level: string;
+    empty: string;
+    emptyHint: string;
+  };
+  profile: {
+    title: string;
+    subtitle: string;
+    editTitle: string;
+    viewTitle: string;
+    displayName: string;
+    avatar: string;
+    uploadAvatar: string;
+    changePassword: string;
+    oldPassword: string;
+    newPassword: string;
+    confirmNewPassword: string;
+    equippedBadge: string;
+    noBadge: string;
+    saveSuccess: string;
+    invalidOldPassword: string;
+    passwordMismatch: string;
+    maxAvatarSize: string;
+    invalidImageType: string;
+    equip: string;
+    equipped: string;
+    locked: string;
   };
 }

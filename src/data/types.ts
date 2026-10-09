@@ -54,6 +54,8 @@ export interface Achievement {
   id: string;
   name: string;
   description: string;
+  story?: string;
+  category?: 'bun' | 'com' | 'banh' | 'che' | 'nem' | 'special';
   icon: string;
   condition: AchievementCondition;
 }

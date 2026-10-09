@@ -5,6 +5,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useAchievements } from '@/contexts/AchievementContext';
 import { AchievementList } from '@/features/achievements/components/AchievementList';
 import type { AchievementListItem } from '@/features/achievements/components/AchievementList';
+import { AchievementDetailModal } from '@/features/achievements/components/AchievementDetailModal';
 import { useTranslation } from '@/i18n/useTranslation';
 import { PlayerShell } from '@/pages/player/PlayerShell';
 
@@ -17,6 +18,7 @@ export default function AchievementsPage() {
   const { user } = useAuth();
   const { allAchievements, isUnlocked, unlockedForUser, getProgressPct } = useAchievements();
   const [filter, setFilter] = useState<AchievementFilter>('all');
+  const [selectedItem, setSelectedItem] = useState<AchievementListItem | null>(null);
 
   const items = useMemo<AchievementListItem[]>(() => {
     if (!user) return [];
@@ -42,8 +44,26 @@ export default function AchievementsPage() {
         </div>
       </header>
       <Card>
-        <AchievementList items={items} filter={filter} onFilterChange={setFilter} />
+        <AchievementList
+          items={items}
+          filter={filter}
+          onFilterChange={setFilter}
+          onSelectAchievement={setSelectedItem}
+        />
       </Card>
+
+      {selectedItem ? (
+        <AchievementDetailModal
+          achievement={selectedItem.achievement}
+          isUnlocked={selectedItem.unlocked}
+          progress={{
+            current: Math.round((selectedItem.progressPct / 100) * 5),
+            target: 5,
+            percent: selectedItem.progressPct,
+          }}
+          onClose={() => setSelectedItem(null)}
+        />
+      ) : null}
     </PlayerShell>
   );
 }

@@ -35,6 +35,10 @@
   color: var(--color-text-muted);
   padding: 0.35rem 0.5rem;
   border-radius: var(--radius-md);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  position: relative;
 }
 
 .navLinkActive {
@@ -50,13 +54,6 @@
   padding: 1.5rem;
 }
 
-.navLink {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  position: relative;
-}
-
 .badgeAccent {
   display: inline-flex;
   align-items: center;
@@ -70,4 +67,57 @@
   font-size: 0.7rem;
   font-weight: 700;
   margin-left: 0.25rem;
+}
+
+.avatarBtn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.2rem 0.6rem 0.2rem 0.2rem;
+  border-radius: 999px;
+  text-decoration: none;
+  color: var(--color-text, #111827);
+  background: var(--color-bg-muted, #f3f4f6);
+  border: 1px solid var(--color-border, #e5e7eb);
+  transition: background 0.15s ease;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.avatarBtn:hover {
+  background: var(--color-primary-soft, #ffedd5);
+}
+
+.avatarCircle {
+  position: relative;
+  width: 2.25rem;
+  height: 2.25rem;
+  flex-shrink: 0;
+}
+
+.avatarImg {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--color-primary, #ea580c);
+}
+
+.avatarInitials {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ea580c, #7c2d12);
+  color: #ffffff;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+.badgeOverlayHeader {
+  position: absolute;
+  top: -4px;
+  right: -4px;
 }

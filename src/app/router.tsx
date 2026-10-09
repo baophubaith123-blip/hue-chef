@@ -31,7 +31,9 @@ import CollectionPage from '@/pages/player/CollectionPage';
 import CookingPage from '@/pages/player/CookingPage';
 import HomePage from '@/pages/player/HomePage';
 import InboxPage from '@/pages/player/InboxPage';
+import LeaderboardPage from '@/pages/player/LeaderboardPage';
 import PlayerMailDetailPage from '@/pages/player/PlayerMailDetailPage';
+import ProfilePage from '@/pages/player/ProfilePage';
 import RecipeDetailPage from '@/pages/player/RecipeDetailPage';
 import RecipeListPage from '@/pages/player/RecipeListPage';
 import SupportAppealDetailPage from '@/pages/support/SupportAppealDetailPage';
@@ -94,6 +96,18 @@ export const router = createBrowserRouter([
       {
         path: '/collection',
         element: <CollectionPage />,
+      },
+      {
+        path: '/leaderboard',
+        element: <LeaderboardPage />,
+      },
+      {
+        path: '/profile',
+        element: <ProfilePage />,
+      },
+      {
+        path: '/profile/:id',
+        element: <ProfilePage />,
       },
     ],
   },

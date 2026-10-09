@@ -21,9 +21,15 @@ interface AchievementListProps {
   items: AchievementListItem[];
   filter?: AchievementFilter;
   onFilterChange?: (filter: AchievementFilter) => void;
+  onSelectAchievement?: (item: AchievementListItem) => void;
 }
 
-export function AchievementList({ items, filter = 'all', onFilterChange }: AchievementListProps) {
+export function AchievementList({
+  items,
+  filter = 'all',
+  onFilterChange,
+  onSelectAchievement,
+}: AchievementListProps) {
   const { t } = useTranslation();
 
   const filtered = useMemo(() => {
@@ -86,6 +92,7 @@ export function AchievementList({ items, filter = 'all', onFilterChange }: Achie
               unlocked={item.unlocked}
               progressPct={item.progressPct}
               unlockedAt={item.unlockedAt}
+              onClick={() => onSelectAchievement?.(item)}
             />
           </div>
         ))}
