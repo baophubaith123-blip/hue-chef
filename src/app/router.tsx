@@ -1,16 +1,29 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom';
 
 import { ProtectedRoute } from '@/components/ProtectedRoute';
+import AdminAchievementsPage from '@/pages/admin/AdminAchievementsPage';
+import AdminAllRecipesPage from '@/pages/admin/AdminAllRecipesPage';
+import AdminAppealsPage from '@/pages/admin/AdminAppealsPage';
+import AdminAuditLogPage from '@/pages/admin/AdminAuditLogPage';
+import AdminBackupPage from '@/pages/admin/AdminBackupPage';
 import AdminBroadcastPage from '@/pages/admin/AdminBroadcastPage';
+import AdminCommentsPage from '@/pages/admin/AdminCommentsPage';
 import AdminDashboardPage from '@/pages/admin/AdminDashboardPage';
+import AdminIngredientsPage from '@/pages/admin/AdminIngredientsPage';
+import AdminReportsPage from '@/pages/admin/AdminReportsPage';
 import AdminReviewDetailPage from '@/pages/admin/AdminReviewDetailPage';
 import AdminReviewPage from '@/pages/admin/AdminReviewPage';
+import AdminSettingsPage from '@/pages/admin/AdminSettingsPage';
+import AdminUserDetailPage from '@/pages/admin/AdminUserDetailPage';
+import AdminUsersPage from '@/pages/admin/AdminUsersPage';
 import LoginPage from '@/pages/auth/LoginPage';
 import RegisterPage from '@/pages/auth/RegisterPage';
 import EditorDashboardPage from '@/pages/editor/EditorDashboardPage';
 import EditorMyRecipesPage from '@/pages/editor/EditorMyRecipesPage';
 import EditorRecipeDetailPage from '@/pages/editor/EditorRecipeDetailPage';
 import EditorRecipeFormPage from '@/pages/editor/EditorRecipeFormPage';
+import AchievementsPage from '@/pages/player/AchievementsPage';
+import CollectionPage from '@/pages/player/CollectionPage';
 import CookingPage from '@/pages/player/CookingPage';
 import HomePage from '@/pages/player/HomePage';
 import InboxPage from '@/pages/player/InboxPage';
@@ -57,6 +70,14 @@ export const router = createBrowserRouter([
       {
         path: '/inbox/:id',
         element: <PlayerMailDetailPage />,
+      },
+      {
+        path: '/achievements',
+        element: <AchievementsPage />,
+      },
+      {
+        path: '/collection',
+        element: <CollectionPage />,
       },
     ],
   },
@@ -129,6 +150,50 @@ export const router = createBrowserRouter([
       {
         path: '/admin/broadcast',
         element: <AdminBroadcastPage />,
+      },
+      {
+        path: '/admin/users',
+        element: <AdminUsersPage />,
+      },
+      {
+        path: '/admin/users/:id',
+        element: <AdminUserDetailPage />,
+      },
+      {
+        path: '/admin/recipes',
+        element: <AdminAllRecipesPage />,
+      },
+      {
+        path: '/admin/achievements',
+        element: <AdminAchievementsPage />,
+      },
+      {
+        path: '/admin/ingredients',
+        element: <AdminIngredientsPage />,
+      },
+      {
+        path: '/admin/comments',
+        element: <AdminCommentsPage />,
+      },
+      {
+        path: '/admin/reports',
+        element: <AdminReportsPage />,
+      },
+      {
+        path: '/admin/appeals',
+        element: <AdminAppealsPage />,
+      },
+      {
+        path: '/admin/settings',
+        element: <AdminSettingsPage />,
+      },
+      {
+        path: '/admin/audit-log',
+        element: <AdminAuditLogPage />,
+      },
+      {
+        path: '/admin/backup',
+        element: <AdminBackupPage />,
       },
     ],
   },

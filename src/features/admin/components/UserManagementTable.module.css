@@ -1,0 +1,161 @@
+.wrap {
+  width: 100%;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+
+.tableOverflow {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.table thead th {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  font-weight: 700;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-text-muted);
+  background: var(--color-surface-muted);
+  border-bottom: 1px solid var(--color-border);
+  white-space: nowrap;
+}
+
+.table tbody td {
+  padding: 0.85rem 1rem;
+  vertical-align: middle;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.row:nth-child(even) {
+  background: var(--color-surface-muted);
+}
+
+.row:hover {
+  background: var(--color-primary-soft);
+}
+
+.userCell {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 14rem;
+}
+
+.avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: var(--color-surface-muted);
+  flex-shrink: 0;
+}
+
+.userInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  min-width: 0;
+}
+
+.userName {
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.userEmail {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+.roleSelect {
+  padding: 0.35rem 0.6rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.roleSelect:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 1px;
+}
+
+.statusBadge {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+.statusActive {
+  background: var(--color-success-soft);
+  color: var(--color-success);
+}
+
+.statusBanned {
+  background: var(--color-danger-soft);
+  color: var(--color-danger);
+}
+
+.warningCount {
+  font-weight: 700;
+  color: var(--color-text-muted);
+}
+
+.warningHigh {
+  color: var(--color-danger);
+}
+
+.dateCell {
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+.actionsCol {
+  width: 1%;
+}
+
+.actionsCell {
+  white-space: nowrap;
+}
+
+.actionsGroup {
+  display: flex;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+
+.btnSm {
+  padding: 0.35rem 0.65rem;
+  font-size: 0.8rem;
+}
+
+.deleteBtn {
+  color: var(--color-danger);
+}
+
+.deleteBtn:hover:not(:disabled) {
+  color: var(--color-danger);
+  background: var(--color-danger-soft);
+}

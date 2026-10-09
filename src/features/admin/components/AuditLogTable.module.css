@@ -1,0 +1,187 @@
+.wrap {
+  width: 100%;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+
+.tableOverflow {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.table thead th {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  font-weight: 700;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-text-muted);
+  background: var(--color-surface-muted);
+  border-bottom: 1px solid var(--color-border);
+  white-space: nowrap;
+}
+
+.table tbody td {
+  padding: 0.75rem 1rem;
+  vertical-align: middle;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.row:nth-child(even) {
+  background: var(--color-surface-muted);
+}
+
+.actorCell {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-width: 10rem;
+}
+
+.avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: var(--color-surface-muted);
+  flex-shrink: 0;
+}
+
+.actorInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  min-width: 0;
+}
+
+.actorName {
+  font-weight: 600;
+  color: var(--color-text);
+  font-size: 0.85rem;
+}
+
+.actorRole {
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+  text-transform: lowercase;
+}
+
+.actionChip {
+  display: inline-block;
+  padding: 0.18rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  white-space: nowrap;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+.group-user {
+  background: var(--color-danger-soft);
+  color: var(--color-danger);
+}
+
+.group-recipe {
+  background: var(--color-success-soft);
+  color: var(--color-success);
+}
+
+.group-achievement {
+  background: var(--color-warning-soft);
+  color: var(--color-warning);
+}
+
+.group-comment {
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+}
+
+.group-report {
+  background: var(--color-danger-soft);
+  color: var(--color-danger);
+}
+
+.group-appeal {
+  background: var(--color-warning-soft);
+  color: var(--color-warning);
+}
+
+.group-setting {
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+}
+
+.group-backup {
+  background: var(--color-success-soft);
+  color: var(--color-success);
+}
+
+.group-broadcast {
+  background: var(--color-accent-soft);
+  color: var(--color-accent);
+}
+
+.group-other {
+  background: var(--color-surface-muted);
+  color: var(--color-text-muted);
+}
+
+.targetCell {
+  max-width: 12rem;
+}
+
+.targetId {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.75rem;
+  color: var(--color-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.targetType {
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+  text-transform: lowercase;
+}
+
+.detailCell {
+  max-width: 16rem;
+}
+
+.detailCode {
+  display: block;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.72rem;
+  padding: 0.3rem 0.5rem;
+  background: var(--color-surface-muted);
+  border-radius: var(--radius-md);
+  color: var(--color-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dateCell {
+  color: var(--color-text-muted);
+  white-space: nowrap;
+  font-size: 0.8rem;
+}
+
+.muted {
+  color: var(--color-text-muted);
+}

@@ -9,6 +9,11 @@ export const STORAGE_KEYS = {
   auditLog: 'hue-chef-audit-log',
   broadcast: 'hue-chef-broadcast',
   achievements: 'hue-chef-achievements',
+  notifications: 'hue-chef-notifications',
+  comments: 'hue-chef-comments',
+  reports: 'hue-chef-reports',
+  ingredients: 'hue-chef-ingredients',
+  adminSettings: 'hue-chef-admin-settings',
 } as const;
 
 export function getStorageItem(key: string): string | null {

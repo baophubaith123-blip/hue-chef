@@ -1,0 +1,96 @@
+.badge {
+  width: 220px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.badge:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(27, 42, 74, 0.12);
+}
+
+.unlocked {
+  border-color: var(--color-accent);
+  box-shadow: 0 2px 8px rgba(232, 69, 10, 0.18);
+}
+
+.locked {
+  opacity: 0.65;
+}
+
+.locked .icon {
+  filter: grayscale(100%);
+}
+
+.iconWrap {
+  width: 72px;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--color-accent-soft);
+  margin-bottom: 0.75rem;
+}
+
+.unlocked .iconWrap {
+  background: var(--color-accent-soft);
+}
+
+.locked .iconWrap {
+  background: var(--color-surface-muted);
+}
+
+.icon {
+  font-size: 2.5rem;
+  line-height: 1;
+}
+
+.body {
+  width: 100%;
+}
+
+.name {
+  margin: 0 0 0.35rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.description {
+  margin: 0 0 0.75rem;
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  line-height: 1.4;
+  min-height: 2.25rem;
+}
+
+.progressWrap {
+  width: 100%;
+  height: 6px;
+  background: var(--color-surface-muted);
+  border-radius: 999px;
+  overflow: hidden;
+  margin-top: 0.25rem;
+}
+
+.progressBar {
+  height: 100%;
+  background: var(--color-accent);
+  border-radius: 999px;
+  transition: width 0.3s ease;
+}
+
+.unlockedAt {
+  margin: 0.5rem 0 0;
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+}

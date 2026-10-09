@@ -1,0 +1,19 @@
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.75rem;
+  color: var(--color-text);
+}
+
+.intro {
+  margin: 0.35rem 0 0;
+  color: var(--color-text-muted);
+}

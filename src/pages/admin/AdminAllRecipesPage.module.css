@@ -1,0 +1,114 @@
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.75rem;
+  color: var(--color-text);
+}
+
+.intro {
+  margin: 0.35rem 0 0;
+  color: var(--color-text-muted);
+}
+
+.errorBanner {
+  margin: 0 0 1rem;
+  padding: 0.75rem 1rem;
+  background: var(--color-danger-soft);
+  color: var(--color-danger);
+  border: 1px solid var(--color-danger);
+  border-radius: var(--radius-md);
+  font-size: 0.9rem;
+}
+
+.tableOverflow {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.9rem;
+}
+
+.table thead th {
+  text-align: left;
+  padding: 0.65rem 0.85rem;
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  background: var(--color-surface-muted);
+}
+
+.table tbody td {
+  padding: 0.75rem 0.85rem;
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text);
+  vertical-align: middle;
+}
+
+.row:hover td {
+  background: var(--color-surface-muted);
+}
+
+.nameLink {
+  color: var(--color-primary);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.nameLink:hover {
+  text-decoration: underline;
+}
+
+.statusChip {
+  display: inline-block;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.dateCell {
+  white-space: nowrap;
+  color: var(--color-text-muted);
+}
+
+.actionsCol {
+  width: 1%;
+  white-space: nowrap;
+}
+
+.actionsCell {
+  white-space: nowrap;
+}
+
+.actionsGroup {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.btnSm {
+  padding: 0.3rem 0.6rem;
+  font-size: 0.82rem;
+}
+
+.deleteBtn {
+  color: var(--color-danger);
+}
+
+.deleteBtn:hover {
+  background: var(--color-danger-soft);
+}
