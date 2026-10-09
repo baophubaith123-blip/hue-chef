@@ -6,6 +6,7 @@ import { Card } from '@/components/Card';
 import { useAuth } from '@/contexts/AuthContext';
 import { getDefaultPathForRole } from '@/features/auth/types';
 import { AppError } from '@/lib/errors';
+import { useTranslation } from '@/i18n/useTranslation';
 import {
   hasFieldErrors,
   validateRegisterForm,
@@ -15,6 +16,7 @@ import {
 import authStyles from '@/pages/auth/AuthLayout.module.css';
 
 export default function RegisterPage() {
+  const { t } = useTranslation();
   const { user, register } = useAuth();
   const navigate = useNavigate();
   const [name, setName] = useState('');
@@ -43,9 +45,13 @@ export default function RegisterPage() {
       navigate(getDefaultPathForRole(created.role), { replace: true });
     } catch (error) {
       if (error instanceof AppError) {
-        setFormError(error.message);
+        if (error.code === 'EMAIL_EXISTS') {
+          setFormError(t('auth.emailExists'));
+        } else {
+          setFormError(error.message);
+        }
       } else {
-        setFormError('Registration failed. Please try again.');
+        setFormError(t('auth.invalidPassword'));
       }
     } finally {
       setSubmitting(false);
@@ -57,14 +63,14 @@ export default function RegisterPage() {
       <div className={authStyles.panel}>
         <header className={authStyles.brand}>
           <h1 className={authStyles.brandTitle}>{import.meta.env.VITE_APP_NAME}</h1>
-          <p className={authStyles.brandSub}>Create a player account</p>
+          <p className={authStyles.brandSub}>{t('auth.registerTitle')}</p>
         </header>
-        <Card title="Register">
+        <Card title={t('auth.registerTitle')}>
           <form className={authStyles.form} onSubmit={handleSubmit} noValidate>
             {formError ? <div className={authStyles.bannerError}>{formError}</div> : null}
             <div className={authStyles.field}>
               <label className={authStyles.label} htmlFor="name">
-                Display name
+                {t('auth.name')}
               </label>
               <input
                 id="name"
@@ -76,7 +82,7 @@ export default function RegisterPage() {
             </div>
             <div className={authStyles.field}>
               <label className={authStyles.label} htmlFor="reg-email">
-                Email
+                {t('auth.email')}
               </label>
               <input
                 id="reg-email"
@@ -90,7 +96,7 @@ export default function RegisterPage() {
             </div>
             <div className={authStyles.field}>
               <label className={authStyles.label} htmlFor="reg-password">
-                Password
+                {t('auth.password')}
               </label>
               <input
                 id="reg-password"
@@ -106,7 +112,7 @@ export default function RegisterPage() {
             </div>
             <div className={authStyles.field}>
               <label className={authStyles.label} htmlFor="confirm-password">
-                Confirm password
+                {t('auth.confirmPassword')}
               </label>
               <input
                 id="confirm-password"
@@ -121,13 +127,13 @@ export default function RegisterPage() {
               ) : null}
             </div>
             <Button type="submit" fullWidth disabled={submitting}>
-              {submitting ? 'Creating account…' : 'Create account'}
+              {submitting ? t('common.loading') : t('auth.register')}
             </Button>
           </form>
           <p className={authStyles.footer}>
-            Already have an account?{' '}
+            {t('auth.hasAccount')}{' '}
             <Link className={authStyles.link} to="/login">
-              Sign in
+              {t('auth.login')}
             </Link>
           </p>
         </Card>

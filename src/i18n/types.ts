@@ -42,6 +42,7 @@ export interface I18nDictionary {
     confirmPassword: string;
     name: string;
     login: string;
+    logout: string;
     register: string;
     noAccount: string;
     hasAccount: string;
@@ -61,6 +62,7 @@ export interface I18nDictionary {
     banned: string;
   };
   nav: {
+    home: string;
     dashboard: string;
     myRecipes: string;
     newRecipe: string;
@@ -409,5 +411,80 @@ export interface I18nDictionary {
     reportReason: string;
     alreadyReported: string;
     empty: string;
+  };
+  theme: {
+    light: string;
+    dark: string;
+    toggle: string;
+  };
+  language: {
+    vi: string;
+    en: string;
+    switch: string;
+  };
+  sound: {
+    title: string;
+    enabled: string;
+    disabled: string;
+    toggle: string;
+  };
+  header: {
+    logo: string;
+    profile: string;
+    settings: string;
+    help: string;
+    about: string;
+    feedback: string;
+  };
+  footer: {
+    copyright: (year: number) => string;
+    madeIn: string;
+    author: string;
+  };
+  help: {
+    title: string;
+    intro: string;
+    faqTitle: string;
+    gettingStarted: string;
+    gettingStartedBody: string;
+    rolesTitle: string;
+    rolesBody: string;
+    cookingTitle: string;
+    cookingBody: string;
+    supportTitle: string;
+    supportBody: string;
+  };
+  feedback: {
+    title: string;
+    intro: string;
+    subject: string;
+    message: string;
+    category: string;
+    categoryBug: string;
+    categorySuggestion: string;
+    categoryFeature: string;
+    categoryOther: string;
+    thankYou: string;
+    thankYouBody: string;
+    submit: string;
+  };
+  about: {
+    title: string;
+    intro: string;
+    projectName: string;
+    description: string;
+    authorTitle: string;
+    authorName: string;
+    authorId: string;
+    subject: string;
+    techTitle: string;
+    stackTitle: string;
+    acknowledgements: string;
+  };
+  notFound: {
+    title: string;
+    subtitle: string;
+    backHome: string;
+    code: string;
   };
 }

@@ -6,6 +6,7 @@ import { Card } from '@/components/Card';
 import { useAuth } from '@/contexts/AuthContext';
 import { getDefaultPathForRole } from '@/features/auth/types';
 import { AppError } from '@/lib/errors';
+import { useTranslation } from '@/i18n/useTranslation';
 import {
   hasFieldErrors,
   validateLoginForm,
@@ -14,20 +15,8 @@ import {
 
 import authStyles from '@/pages/auth/AuthLayout.module.css';
 
-function mapAuthError(error: AppError): string {
-  switch (error.code) {
-    case 'EMAIL_NOT_FOUND':
-      return 'Email không tồn tại';
-    case 'INVALID_PASSWORD':
-      return 'Mật khẩu không đúng';
-    case 'ACCOUNT_BANNED':
-      return 'Tài khoản đã bị khóa';
-    default:
-      return error.message;
-  }
-}
-
 export default function LoginPage() {
+  const { t } = useTranslation();
   const { user, login } = useAuth();
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
@@ -54,9 +43,21 @@ export default function LoginPage() {
       navigate(getDefaultPathForRole(loggedIn.role), { replace: true });
     } catch (error) {
       if (error instanceof AppError) {
-        setFormError(mapAuthError(error));
+        switch (error.code) {
+          case 'EMAIL_NOT_FOUND':
+            setFormError(t('auth.emailNotFound'));
+            break;
+          case 'INVALID_PASSWORD':
+            setFormError(t('auth.invalidPassword'));
+            break;
+          case 'ACCOUNT_BANNED':
+            setFormError(t('auth.accountBanned'));
+            break;
+          default:
+            setFormError(error.message);
+        }
       } else {
-        setFormError('Login failed. Please try again.');
+        setFormError(t('auth.invalidPassword'));
       }
     } finally {
       setSubmitting(false);
@@ -68,14 +69,14 @@ export default function LoginPage() {
       <div className={authStyles.panel}>
         <header className={authStyles.brand}>
           <h1 className={authStyles.brandTitle}>{import.meta.env.VITE_APP_NAME}</h1>
-          <p className={authStyles.brandSub}>Sign in to continue cooking</p>
+          <p className={authStyles.brandSub}>{t('auth.loginTitle')}</p>
         </header>
-        <Card title="Login">
+        <Card title={t('auth.loginTitle')}>
           <form className={authStyles.form} onSubmit={handleSubmit} noValidate>
             {formError ? <div className={authStyles.bannerError}>{formError}</div> : null}
             <div className={authStyles.field}>
               <label className={authStyles.label} htmlFor="email">
-                Email
+                {t('auth.email')}
               </label>
               <input
                 id="email"
@@ -91,7 +92,7 @@ export default function LoginPage() {
             </div>
             <div className={authStyles.field}>
               <label className={authStyles.label} htmlFor="password">
-                Password
+                {t('auth.password')}
               </label>
               <input
                 id="password"
@@ -106,11 +107,11 @@ export default function LoginPage() {
               ) : null}
             </div>
             <Button type="submit" fullWidth disabled={submitting}>
-              {submitting ? 'Signing in…' : 'Sign in'}
+              {submitting ? t('common.loading') : t('auth.login')}
             </Button>
           </form>
           <p className={authStyles.footer}>
-            New player? <Link className={authStyles.link} to="/register">Create account</Link>
+            {t('auth.noAccount')} <Link className={authStyles.link} to="/register">{t('auth.register')}</Link>
           </p>
           <p className={authStyles.hint}>
             Demo: player@hue.vn / player123 · support@hue.vn / support123 · editor@hue.vn /

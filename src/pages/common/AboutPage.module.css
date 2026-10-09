@@ -1,0 +1,117 @@
+.page {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 2.5rem 1rem 3rem;
+}
+
+.hero {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
+  background: var(--color-accent-soft);
+  color: var(--color-accent);
+  font-weight: 700;
+  font-size: 0.85rem;
+  margin-bottom: 1rem;
+}
+
+.title {
+  margin: 0 0 0.5rem;
+  font-size: clamp(1.75rem, 3vw, 2.75rem);
+  color: var(--color-primary);
+  letter-spacing: -0.02em;
+}
+
+.intro {
+  margin: 0 auto;
+  color: var(--color-text-muted);
+  font-size: 1.05rem;
+  max-width: 640px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.25rem;
+  margin-top: 2rem;
+}
+
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.cardTitle {
+  margin: 0 0 0.75rem;
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.1rem;
+}
+
+.list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.list li {
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+  padding-left: 1.25rem;
+  position: relative;
+}
+
+.list li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: var(--color-accent);
+  font-weight: 700;
+}
+
+.authorCard {
+  composes: card;
+  background: linear-gradient(135deg, var(--color-primary-soft), var(--color-accent-soft));
+  border-color: var(--color-primary-soft);
+}
+
+.authorName {
+  margin: 0 0 0.25rem;
+  font-size: 1.25rem;
+  color: var(--color-primary);
+}
+
+.authorMeta {
+  margin: 0 0 0.5rem;
+  color: var(--color-text-muted);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.authorSubject {
+  margin: 0;
+  color: var(--color-text);
+  font-size: 0.95rem;
+}
+
+.acknowledge {
+  margin-top: 2rem;
+  text-align: center;
+  color: var(--color-text-muted);
+  font-weight: 600;
+}

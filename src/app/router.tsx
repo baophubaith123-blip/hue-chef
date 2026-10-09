@@ -1,4 +1,4 @@
-import { createBrowserRouter, Navigate } from 'react-router-dom';
+import { createBrowserRouter } from 'react-router-dom';
 
 import { ProtectedRoute } from '@/components/ProtectedRoute';
 import AdminAchievementsPage from '@/pages/admin/AdminAchievementsPage';
@@ -18,6 +18,10 @@ import AdminUserDetailPage from '@/pages/admin/AdminUserDetailPage';
 import AdminUsersPage from '@/pages/admin/AdminUsersPage';
 import LoginPage from '@/pages/auth/LoginPage';
 import RegisterPage from '@/pages/auth/RegisterPage';
+import AboutPage from '@/pages/common/AboutPage';
+import FeedbackPage from '@/pages/common/FeedbackPage';
+import HelpPage from '@/pages/common/HelpPage';
+import NotFoundPage from '@/pages/common/NotFoundPage';
 import EditorDashboardPage from '@/pages/editor/EditorDashboardPage';
 import EditorMyRecipesPage from '@/pages/editor/EditorMyRecipesPage';
 import EditorRecipeDetailPage from '@/pages/editor/EditorRecipeDetailPage';
@@ -43,6 +47,18 @@ export const router = createBrowserRouter([
   {
     path: '/register',
     element: <RegisterPage />,
+  },
+  {
+    path: '/help',
+    element: <HelpPage />,
+  },
+  {
+    path: '/feedback',
+    element: <FeedbackPage />,
+  },
+  {
+    path: '/about',
+    element: <AboutPage />,
   },
   {
     element: <ProtectedRoute allowedRoles={['player']} />,
@@ -199,6 +215,6 @@ export const router = createBrowserRouter([
   },
   {
     path: '*',
-    element: <Navigate to="/" replace />,
+    element: <NotFoundPage />,
   },
 ]);

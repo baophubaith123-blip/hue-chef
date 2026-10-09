@@ -1,0 +1,71 @@
+.wrap {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.page {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+}
+
+.card {
+  max-width: 520px;
+  width: 100%;
+  text-align: center;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 3rem 1.5rem;
+  box-shadow: var(--shadow-md);
+}
+
+.code {
+  font-size: clamp(4rem, 14vw, 7rem);
+  margin: 0;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-weight: 900;
+  letter-spacing: -0.05em;
+  line-height: 1;
+}
+
+.codeLabel {
+  display: inline-block;
+  margin-top: 0.5rem;
+  color: var(--color-text-muted);
+  font-weight: 600;
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.title {
+  margin: 1.25rem 0 0.5rem;
+  font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+  color: var(--color-text);
+}
+
+.subtitle {
+  margin: 0 0 2rem;
+  color: var(--color-text-muted);
+  font-size: 1rem;
+}
+
+.emoji {
+  font-size: 4rem;
+  line-height: 1;
+  display: inline-block;
+  margin-bottom: 0.5rem;
+  animation: bounce 1.4s ease-in-out infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-0.6rem); }
+}
