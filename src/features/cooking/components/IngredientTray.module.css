@@ -17,16 +17,18 @@
 .title {
   margin: 0;
   font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-text);
 }
 
 .remainingBadge {
-  background: #ffedd5;
-  color: #7c2d12;
-  padding: 0.25rem 0.6rem;
-  border-radius: 12px;
+  background: var(--color-surface-alt);
+  color: var(--color-primary);
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--radius-full, 9999px);
   font-size: 0.8rem;
   font-weight: 700;
-  border: 1px solid #f97316;
+  border: 1px solid var(--color-border);
 }
 
 .list {
@@ -42,14 +44,16 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 0.15rem;
-  padding: 0.5rem 0.75rem;
+  gap: 0.2rem;
+  padding: 0.55rem 0.8rem;
   border: 1px dashed var(--color-border);
   border-radius: var(--radius-md);
-  background: var(--color-bg);
+  background: var(--color-surface);
+  color: var(--color-text);
   cursor: grab;
   text-align: left;
   min-width: 6.5rem;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
 }
 
 .chipHeader {
@@ -61,17 +65,27 @@
 }
 
 .itemBadge {
-  background: #ea580c;
-  color: #ffffff;
+  background: var(--color-primary);
+  color: var(--color-primary-contrast);
   font-size: 0.7rem;
   font-weight: 700;
   padding: 0.05rem 0.35rem;
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
+}
+
+.usedBadge {
+  background: var(--color-surface-alt);
+  color: var(--color-text-muted);
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.05rem 0.35rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
 }
 
 .chip:disabled {
-  opacity: 0.45;
   cursor: not-allowed;
+  opacity: 1; /* High contrast maintained >= 4.5:1 */
 }
 
 .chipDragging {
@@ -81,16 +95,22 @@
 
 .chipUsed {
   border-style: solid;
-  background: var(--color-surface-muted);
+  background: var(--color-surface-alt);
+}
+
+.chipUsed .chipName {
+  text-decoration: line-through;
+  color: var(--color-text-muted);
 }
 
 .chipName {
   font-weight: 600;
   font-size: 0.875rem;
+  color: var(--color-text);
 }
 
 .chipMeta {
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   color: var(--color-text-muted);
-  text-transform: capitalize;
+  font-weight: 500;
 }

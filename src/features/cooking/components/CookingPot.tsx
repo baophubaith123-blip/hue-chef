@@ -1,5 +1,6 @@
 import { getIngredientById } from '@/data/ingredients';
 import { useDragDrop } from '@/features/cooking/hooks/useDragDrop';
+import { useTranslation } from '@/i18n/useTranslation';
 
 import styles from '@/features/cooking/components/CookingPot.module.css';
 
@@ -22,11 +23,12 @@ export function CookingPot({
   actionButtonLabel,
   onExecuteAction,
 }: CookingPotProps) {
+  const { t } = useTranslation();
   const { potActive, potDropZoneProps } = useDragDrop({ onDropOnPot });
 
   return (
-    <section className={styles.column} aria-label="Cooking pot">
-      <h2 className={styles.title}>Pot</h2>
+    <section className={styles.column} aria-label={t('cooking.pot')}>
+      <h2 className={styles.title}>{t('cooking.pot')}</h2>
       <div
         className={[
           styles.pot,
@@ -43,7 +45,7 @@ export function CookingPot({
             🍲
           </span>
           <p className={styles.potHint}>
-            {disabled ? 'Session ended' : 'Drop ingredients here'}
+            {disabled ? t('cooking.sessionEnded') : t('cooking.dropIngredientsHere')}
           </p>
           {potIngredients.length > 0 ? (
             <div className={styles.chips}>
@@ -51,13 +53,14 @@ export function CookingPot({
                 const ing = getIngredientById(id);
                 return (
                   <span key={`${id}-${index}`} className={styles.chip}>
+                    {ing?.fallbackEmoji ? `${ing.fallbackEmoji} ` : ''}
                     {ing?.name || id}
                   </span>
                 );
               })}
             </div>
           ) : (
-            <p className={styles.potCount}>Pot is empty</p>
+            <p className={styles.potCount}>{t('cooking.potEmpty')}</p>
           )}
         </div>
       </div>

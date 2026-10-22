@@ -456,6 +456,25 @@ export interface I18nDictionary {
       timeout: string;
       potAria: string;
     };
+    recipeDetail: string;
+    score: string;
+    sessionDelta: string;
+    stepInstruction: string;
+    timeLeft: string;
+    ingredients: string;
+    remaining: string;
+    pot: string;
+    dropIngredientsHere: string;
+    sessionEnded: string;
+    potEmpty: string;
+    steps: string;
+    preparingKitchen: string;
+    cannotCook: string;
+    recipeMissing: string;
+    backToRecipes: string;
+    startingSession: string;
+    used: string;
+    categories: Record<'protein' | 'grain' | 'spice' | 'vegetable' | 'other', string>;
   };
   notifications: {
     bellAria: string;

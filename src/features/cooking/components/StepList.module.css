@@ -13,6 +13,8 @@
 .title {
   margin: 0;
   font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-text);
 }
 
 .list {
@@ -30,19 +32,26 @@
   padding: 0.65rem;
   border-radius: var(--radius-md);
   border: 1px solid transparent;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
 }
 
 .pending {
-  opacity: 0.55;
+  color: var(--color-text-muted);
 }
 
 .active {
   border-color: var(--color-accent);
   background: var(--color-primary-soft);
+  color: var(--color-text);
 }
 
 .done {
-  opacity: 0.85;
+  color: var(--color-text);
+}
+
+.done .stepTitle {
+  color: var(--color-text-muted);
+  text-decoration: line-through;
 }
 
 .order {
@@ -51,16 +60,25 @@
   height: 1.75rem;
   display: grid;
   place-items: center;
-  border-radius: 999px;
-  background: var(--color-bg-muted);
+  border-radius: var(--radius-full, 9999px);
+  background: var(--color-surface-alt);
+  color: var(--color-text);
   font-weight: 700;
   font-size: 0.8rem;
+  border: 1px solid var(--color-border);
+}
+
+.done .order {
+  background: var(--color-success-soft, #e4f8ec);
+  color: var(--color-success, #15803d);
+  border-color: var(--color-success, #15803d);
 }
 
 .stepTitle {
   margin: 0;
   font-weight: 600;
   font-size: 0.9rem;
+  color: var(--color-text);
 }
 
 .stepDesc {

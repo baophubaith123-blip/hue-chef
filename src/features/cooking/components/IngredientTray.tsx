@@ -1,6 +1,7 @@
 import type { DragEvent } from 'react';
 
 import { getIngredientById } from '@/data/ingredients';
+import { useTranslation } from '@/i18n/useTranslation';
 
 import styles from '@/features/cooking/components/IngredientTray.module.css';
 
@@ -25,15 +26,19 @@ export function IngredientTray({
   getTrayItemProps,
   onSelectIngredient,
 }: IngredientTrayProps) {
+  const { t, dict } = useTranslation();
+
   const remainingCount = trayIngredientIds.filter(
     (id) => !placedIngredientIds.includes(id),
   ).length;
 
   return (
-    <section className={styles.tray} aria-label="Ingredient tray">
+    <section className={styles.tray} aria-label={t('cooking.ingredients')}>
       <div className={styles.headerRow}>
-        <h2 className={styles.title}>Ingredients</h2>
-        <span className={styles.remainingBadge}>Remaining: {remainingCount}</span>
+        <h2 className={styles.title}>{t('cooking.ingredients')}</h2>
+        <span className={styles.remainingBadge}>
+          {t('cooking.remaining', { count: remainingCount })}
+        </span>
       </div>
       <ul className={styles.list}>
         {trayIngredientIds.map((ingredientId) => {
@@ -43,6 +48,9 @@ export function IngredientTray({
           }
           const isUsed = placedIngredientIds.includes(ingredientId);
           const dragProps = disabled || isUsed ? {} : getTrayItemProps(ingredientId);
+          const categoryLabel =
+            dict.cooking.categories[ingredient.category] ?? ingredient.category;
+
           return (
             <li key={ingredientId}>
               <button
@@ -63,10 +71,17 @@ export function IngredientTray({
                 {...dragProps}
               >
                 <div className={styles.chipHeader}>
-                  <span className={styles.chipName}>{ingredient.name}</span>
-                  {!isUsed ? <span className={styles.itemBadge}>1</span> : null}
+                  <span className={styles.chipName}>
+                    {ingredient.fallbackEmoji ? `${ingredient.fallbackEmoji} ` : ''}
+                    {ingredient.name}
+                  </span>
+                  {!isUsed ? (
+                    <span className={styles.itemBadge}>1</span>
+                  ) : (
+                    <span className={styles.usedBadge}>{t('cooking.used')}</span>
+                  )}
                 </div>
-                <span className={styles.chipMeta}>{ingredient.category}</span>
+                <span className={styles.chipMeta}>{categoryLabel}</span>
               </button>
             </li>
           );

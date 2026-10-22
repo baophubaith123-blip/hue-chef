@@ -1,4 +1,5 @@
 import type { CookingStep } from '@/data/types';
+import { useTranslation } from '@/i18n/useTranslation';
 
 import styles from '@/features/cooking/components/StepList.module.css';
 
@@ -9,9 +10,11 @@ interface StepListProps {
 }
 
 export function StepList({ steps, activeStepIndex, completedStepIndexes = [] }: StepListProps) {
+  const { t } = useTranslation();
+
   return (
-    <section className={styles.steps} aria-label="Cooking steps">
-      <h2 className={styles.title}>Steps</h2>
+    <section className={styles.steps} aria-label={t('cooking.steps')}>
+      <h2 className={styles.title}>{t('cooking.steps')}</h2>
       <ol className={styles.list}>
         {steps.map((step, index) => {
           const isDone = completedStepIndexes.includes(index) || index < activeStepIndex;

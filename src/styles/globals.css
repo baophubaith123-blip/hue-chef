@@ -37,7 +37,11 @@ a {
   color: inherit;
 }
 
-button,
+button {
+  color: inherit;
+  font: inherit;
+}
+
 input,
 select,
 textarea {

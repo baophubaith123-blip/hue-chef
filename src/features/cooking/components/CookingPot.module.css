@@ -7,6 +7,8 @@
 .title {
   margin: 0;
   font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-text);
 }
 
 .pot {
@@ -18,7 +20,7 @@
   padding: 1rem;
   border: 2px dashed var(--color-border);
   border-radius: var(--radius-lg);
-  background: linear-gradient(180deg, var(--color-surface) 0%, var(--color-bg-muted) 100%);
+  background: linear-gradient(180deg, var(--color-surface) 0%, var(--color-surface-alt) 100%);
   transition: border-color 0.2s ease, transform 0.2s ease;
 }
 
@@ -45,6 +47,7 @@
 .potCount {
   margin: 0.35rem 0 0;
   font-weight: 600;
+  color: var(--color-text-muted);
 }
 
 .potShake {
@@ -70,15 +73,15 @@
 @keyframes pulse-scale {
   0% {
     transform: scale(1);
-    box-shadow: 0 0 0 0 rgba(234, 88, 12, 0.7);
+    box-shadow: 0 0 0 0 var(--color-primary-soft);
   }
   70% {
-    transform: scale(1.05);
-    box-shadow: 0 0 0 10px rgba(234, 88, 12, 0);
+    transform: scale(1.04);
+    box-shadow: 0 0 0 8px rgba(0, 0, 0, 0);
   }
   100% {
     transform: scale(1);
-    box-shadow: 0 0 0 0 rgba(234, 88, 12, 0);
+    box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
   }
 }
 
@@ -87,13 +90,13 @@
   padding: 0.75rem 1.25rem;
   font-size: 1.1rem;
   font-weight: 700;
-  color: #ffffff;
-  background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%);
+  color: var(--color-primary-contrast);
+  background: var(--color-primary);
   border: none;
-  border-radius: var(--radius-md, 8px);
+  border-radius: var(--radius-md);
   cursor: pointer;
   animation: pulse-scale 1.5s infinite ease-in-out;
-  transition: transform 0.15s ease, background 0.15s ease;
+  transition: transform 0.15s ease, background-color 0.15s ease;
   width: 100%;
   display: flex;
   align-items: center;
@@ -102,8 +105,8 @@
 }
 
 .actionButton:hover {
-  transform: scale(1.03);
-  background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+  transform: scale(1.02);
+  background: var(--color-primary-hover);
 }
 
 .actionButton:active {
@@ -119,11 +122,19 @@
 }
 
 .chip {
-  background: #ffedd5;
-  color: #7c2d12;
-  padding: 0.25rem 0.6rem;
-  border-radius: 12px;
+  background: var(--color-surface-alt);
+  color: var(--color-text);
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--radius-full, 9999px);
   font-size: 0.85rem;
   font-weight: 600;
-  border: 1px solid #f97316;
+  border: 1px solid var(--color-border);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .potShake,
+  .potSparkle,
+  .actionButton {
+    animation: none;
+  }
 }

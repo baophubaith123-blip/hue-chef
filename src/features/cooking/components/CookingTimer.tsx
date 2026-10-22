@@ -1,3 +1,4 @@
+import { useTranslation } from '@/i18n/useTranslation';
 import { formatDuration } from '@/lib/format';
 
 import styles from '@/features/cooking/components/CookingTimer.module.css';
@@ -13,6 +14,8 @@ export function CookingTimer({
   totalDurationSeconds,
   isRunning,
 }: CookingTimerProps) {
+  const { t } = useTranslation();
+
   const progress =
     totalDurationSeconds > 0
       ? Math.round((timeRemainingSeconds / totalDurationSeconds) * 100)
@@ -21,7 +24,7 @@ export function CookingTimer({
   return (
     <div className={styles.timer}>
       <div className={styles.row}>
-        <span className={styles.label}>Time left</span>
+        <span className={styles.label}>{t('cooking.timeLeft')}</span>
         <span className={[styles.value, !isRunning ? styles.valuePaused : ''].filter(Boolean).join(' ')}>
           {formatDuration(timeRemainingSeconds)}
         </span>

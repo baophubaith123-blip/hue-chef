@@ -220,7 +220,7 @@ export default function CookingPage() {
   if (isLoading) {
     return (
       <PlayerShell>
-        <Loading label="Preparing kitchen…" />
+        <Loading label={t('cooking.preparingKitchen')} />
       </PlayerShell>
     );
   }
@@ -228,9 +228,12 @@ export default function CookingPage() {
   if (!approved || !recipe) {
     return (
       <PlayerShell>
-        <EmptyState title="Cannot cook this dish" description="Recipe missing or not approved." />
+        <EmptyState
+          title={t('cooking.cannotCook')}
+          description={t('cooking.recipeMissing')}
+        />
         <Link className={styles.back} to="/recipes">
-          ← Back to recipes
+          {t('cooking.backToRecipes')}
         </Link>
       </PlayerShell>
     );
@@ -239,7 +242,7 @@ export default function CookingPage() {
   if (!session || session.recipe.id !== recipe.id) {
     return (
       <PlayerShell>
-        <Loading label="Starting session…" />
+        <Loading label={t('cooking.startingSession')} />
       </PlayerShell>
     );
   }
@@ -261,22 +264,24 @@ export default function CookingPage() {
   return (
     <PlayerShell>
       <Link className={styles.back} to={`/recipes/${recipe.id}`}>
-        ← Recipe detail
+        ← {t('cooking.recipeDetail')}
       </Link>
       <div className={styles.top}>
         <div>
           <h1 className={styles.title}>{recipe.name}</h1>
           <p className={styles.subtitle}>
-            Drop required ingredients for step · +{scoreRules.correctPoints} correct · −
-            {scoreRules.wrongPenalty} wrong
+            {t('cooking.stepInstruction', {
+              correct: scoreRules.correctPoints,
+              wrong: scoreRules.wrongPenalty,
+            })}
           </p>
         </div>
         <div className={styles.scorePanel}>
-          <span className={styles.scoreLabel}>Score</span>
+          <span className={styles.scoreLabel}>{t('cooking.score')}</span>
           <span className={styles.scoreValue}>{displayScore}</span>
           {session.phase === 'running' ? (
             <p className={styles.scoreHint}>
-              Session delta {session.runningScoreDelta >= 0 ? '+' : ''}
+              {t('cooking.sessionDelta')} {session.runningScoreDelta >= 0 ? '+' : ''}
               {session.runningScoreDelta}
             </p>
           ) : null}
