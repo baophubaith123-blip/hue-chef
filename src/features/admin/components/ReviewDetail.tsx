@@ -122,10 +122,10 @@ export function ReviewDetail({ recipe, onApprove, onReject }: ReviewDetailProps)
 
       <section className={styles.section}>
         <h2 className={styles.sectionTitle}>
-          📝 {t('admin.stepsTitle')} · {recipe.steps.length}
+          📝 {t('admin.stepsTitle')} · {recipe.steps?.length ?? 0}
         </h2>
         <ol className={styles.stepsList}>
-          {recipe.steps.map((step, index) => (
+          {(recipe.steps ?? []).map((step, index) => (
             <li key={step.id} className={styles.stepItem}>
               <div className={styles.stepHeader}>
                 <span className={styles.stepNumber}>{index + 1}</span>

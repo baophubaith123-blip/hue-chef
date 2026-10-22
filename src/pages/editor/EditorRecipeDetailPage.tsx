@@ -131,7 +131,7 @@ export default function EditorRecipeDetailPage() {
         </ul>
         <h3 className={styles.sectionTitle}>{t('recipe.steps')}</h3>
         <ol className={styles.stepsList}>
-          {recipe.steps.map((step) => (
+          {(recipe.steps ?? []).map((step) => (
             <li key={step.id} className={styles.stepItem}>
               <div>
                 <strong className={styles.stepTitle}>{step.title}</strong>

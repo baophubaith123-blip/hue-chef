@@ -16,7 +16,7 @@ type IngredientCategory = Ingredient['category'];
 const CATEGORY_OPTIONS: IngredientCategory[] = ['protein', 'vegetable', 'spice', 'grain', 'other'];
 
 function emptyIngredient(): Ingredient {
-  return { id: `ingredient-${crypto.randomUUID()}`, name: '', category: 'other' };
+  return { id: `ingredient-${crypto.randomUUID()}`, name: '', category: 'other', fallbackEmoji: '🍲' };
 }
 
 export default function AdminIngredientsPage() {

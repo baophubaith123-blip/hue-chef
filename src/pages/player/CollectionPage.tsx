@@ -64,9 +64,9 @@ export default function CollectionPage() {
           lastCookedAt = entry.cookedAt;
         }
       }
-      const recipe = recipes.find((r) => r.id === recipeId);
+      const recipe = recipes.find((r) => r.id === recipeId || r.name === first.recipeName);
       const name = recipe?.name ?? first.recipeName ?? recipeId;
-      const image = first.image ?? recipe?.image ?? recipeImageByName.get(recipeId) ?? '';
+      const image = recipe?.image || first.image || recipeImageByName.get(recipeId) || '';
       result.push({
         recipeId,
         name,

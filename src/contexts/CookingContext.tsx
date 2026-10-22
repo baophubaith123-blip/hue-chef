@@ -33,7 +33,8 @@ const initialState: CookingState = { session: null };
 const CookingContext = createContext<CookingContextValue | null>(null);
 
 function buildScoreInput(session: CookingSession, timedOut: boolean): ScoreInput {
-  const allIngredientsAdded = session.currentStepIndex >= session.recipe.steps.length;
+  const steps = session.recipe.steps ?? [];
+  const allIngredientsAdded = session.currentStepIndex >= steps.length;
   return {
     baseScore: session.recipe.baseScore,
     correctCount: session.correctCount,
@@ -113,7 +114,8 @@ function cookingReducer(state: CookingState, action: CookingAction): CookingStat
         return state;
       }
 
-      const currentStep = session.recipe.steps[session.currentStepIndex];
+      const steps = session.recipe.steps ?? [];
+      const currentStep = steps[session.currentStepIndex];
       if (!currentStep) {
         return state;
       }
@@ -144,6 +146,7 @@ function cookingReducer(state: CookingState, action: CookingAction): CookingStat
         return state;
       }
 
+      const steps = session.recipe.steps ?? [];
       const currentStepIndex = session.currentStepIndex;
       const nextStepIndex = currentStepIndex + 1;
       const updated: CookingSession = {
@@ -156,7 +159,7 @@ function cookingReducer(state: CookingState, action: CookingAction): CookingStat
         runningScoreDelta: session.runningScoreDelta + SCORE_RULES.correctPoints,
       };
 
-      if (nextStepIndex >= session.recipe.steps.length) {
+      if (nextStepIndex >= steps.length) {
         return { session: finalizeSession(updated, false) };
       }
       return { session: updated };
@@ -181,7 +184,8 @@ export function CookingProvider({ children }: { children: ReactNode }) {
       if (!currentSession || currentSession.phase !== 'running') {
         return false;
       }
-      const currentStep = currentSession.recipe.steps[currentSession.currentStepIndex];
+      const steps = currentSession.recipe.steps ?? [];
+      const currentStep = steps[currentSession.currentStepIndex];
       const isCorrect = Boolean(
         currentStep && currentStep.requiredIngredients.includes(ingredientId),
       );

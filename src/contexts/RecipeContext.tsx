@@ -66,22 +66,25 @@ const RecipeContext = createContext<RecipeContextValue | null>(null);
 
 
 
-function withDefaultStatus(recipe: Recipe): Recipe {
-
-  return {
-
-    ...recipe,
-
-    status: recipe.status ?? 'approved',
-
-  };
-
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
 }
 
+function isValidRecipeObject(x: unknown): x is Recipe {
+  if (!isRecord(x)) return false;
+  return typeof x.id === 'string' && typeof x.name === 'string';
+}
 
+function withDefaultStatus(recipe: Recipe): Recipe {
+  return {
+    ...recipe,
+    status: recipe.status ?? 'approved',
+    minigames: Array.isArray(recipe.minigames) ? recipe.minigames : [],
+  };
+}
 
 function loadInitialRecipes(): Recipe[] {
-  const stored = getJsonStorage<Recipe[]>(STORAGE_KEYS.recipes);
+  const stored = getJsonStorage<unknown>(STORAGE_KEYS.recipes);
   const seeded = SEED_RECIPES.map((recipe) => withDefaultStatus(recipe));
 
   if (!stored || !Array.isArray(stored) || stored.length === 0) {
@@ -89,9 +92,15 @@ function loadInitialRecipes(): Recipe[] {
     return seeded;
   }
 
+  const validStored = stored.filter(isValidRecipeObject);
+  if (validStored.length === 0) {
+    setJsonStorage(STORAGE_KEYS.recipes, seeded);
+    return seeded;
+  }
+
   const updatedSeedMap = new Map(seeded.map((r) => [r.id, r]));
 
-  const result = stored.map((r) => {
+  const result = validStored.map((r) => {
     const seedVersion = updatedSeedMap.get(r.id);
     if (seedVersion) {
       return {

@@ -78,7 +78,7 @@ export default function RecipeDetailPage() {
           </ul>
           <h2 className={styles.sectionTitle}>Steps</h2>
           <ol className={styles.stepList}>
-            {recipe.steps.map((step) => (
+            {(recipe.steps ?? []).map((step) => (
               <li key={step.id}>
                 <strong>{step.title}</strong> — {step.description}
               </li>

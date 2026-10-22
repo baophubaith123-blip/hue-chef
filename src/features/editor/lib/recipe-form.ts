@@ -32,7 +32,7 @@ export function recipeToFormValues(recipe: Recipe): RecipeFormValues {
     description: recipe.description,
     image: recipe.image,
     ingredients: recipe.ingredients.map((item) => ({ ...item })),
-    steps: recipe.steps.map((step) => ({
+    steps: (recipe.steps ?? []).map((step) => ({
       title: step.title,
       description: step.description,
       duration: step.duration ?? step.durationSeconds ?? 30,
@@ -86,6 +86,7 @@ export function formValuesToRecipe(
     baseScore: existing?.baseScore ?? baseScoreFromDifficulty(values.difficulty),
     ingredients,
     steps: buildSteps(id, values.steps),
+    minigames: existing?.minigames ?? [],
     status: existing?.status ?? 'draft',
     editorId,
     rejectionReason: existing?.rejectionReason,

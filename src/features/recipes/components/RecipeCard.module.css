@@ -15,14 +15,21 @@
 }
 
 .imageWrap {
+  width: 100%;
+  height: 11.5rem;
   aspect-ratio: 16 / 10;
+  overflow: hidden;
+  position: relative;
   background: var(--color-bg-muted);
+  flex-shrink: 0;
 }
 
 .image {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center;
+  display: block;
 }
 
 .body {

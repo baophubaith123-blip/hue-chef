@@ -7,6 +7,7 @@ import {
 } from 'react';
 
 import type { Ingredient, Recipe } from '@/data/types';
+import { SEED_INGREDIENTS } from '@/data/ingredients';
 import { loadAuditLog, appendAudit } from '@/features/admin/lib/audit';
 import type { AdminDashboardStats, AdminSettings, AuditAction, AuditLogEntry } from '@/features/admin/types';
 import { findUserById, loadUsers, saveUsers } from '@/features/auth/store';
@@ -48,9 +49,21 @@ const DEFAULT_SETTINGS: AdminSettings = {
 };
 
 function loadIngredients(): Ingredient[] {
-  const data = getJsonStorage<Ingredient[]>(STORAGE_KEYS.ingredients);
-  if (!Array.isArray(data)) return [];
-  return data;
+  const data = getJsonStorage<unknown>(STORAGE_KEYS.ingredients);
+  if (!Array.isArray(data) || data.length === 0) return SEED_INGREDIENTS;
+  const valid = data.filter(
+    (item): item is Ingredient =>
+      typeof item === 'object' &&
+      item !== null &&
+      typeof (item as Record<string, unknown>).id === 'string' &&
+      typeof (item as Record<string, unknown>).name === 'string',
+  );
+  if (valid.length === 0) return SEED_INGREDIENTS;
+  const seedEmojiMap = new Map(SEED_INGREDIENTS.map((s) => [s.id, s.fallbackEmoji]));
+  return valid.map((item) => ({
+    ...item,
+    fallbackEmoji: item.fallbackEmoji || seedEmojiMap.get(item.id) || '🍲',
+  }));
 }
 
 function saveIngredients(list: Ingredient[]): void {

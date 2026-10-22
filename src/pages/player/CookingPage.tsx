@@ -206,8 +206,9 @@ export default function CookingPage() {
 
   const placedIngredientIds = useMemo(() => {
     if (!session) return [];
+    const steps = session.recipe.steps ?? [];
     const usedInCompleted = session.completedStepIndexes.flatMap(
-      (idx) => session.recipe.steps[idx]?.requiredIngredients ?? [],
+      (idx) => steps[idx]?.requiredIngredients ?? [],
     );
     return [...usedInCompleted, ...session.potIngredients];
   }, [session]);
@@ -243,9 +244,10 @@ export default function CookingPage() {
     );
   }
 
+  const sessionSteps = session.recipe.steps ?? [];
   const activeStepIndex = Math.min(
     session.currentStepIndex,
-    Math.max(0, session.recipe.steps.length - 1),
+    Math.max(0, sessionSteps.length - 1),
   );
 
   const showResult = session.phase === 'success' || session.phase === 'failed';
@@ -306,7 +308,7 @@ export default function CookingPage() {
           sparkle={sparklePot}
         />
         <StepList
-          steps={session.recipe.steps}
+          steps={sessionSteps}
           activeStepIndex={activeStepIndex}
           completedStepIndexes={session.completedStepIndexes}
         />
