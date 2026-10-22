@@ -8,6 +8,7 @@ export function useCookingState() {
     startCooking,
     dropIngredient,
     executeStepAction,
+    completeMinigames,
     tickTimer,
     resetCooking,
   } = useCooking();
@@ -29,6 +30,7 @@ export function useCookingState() {
     startCooking,
     dropIngredient,
     executeStepAction,
+    completeMinigames,
     resetCooking,
   };
 }

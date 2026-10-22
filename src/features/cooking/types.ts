@@ -1,6 +1,14 @@
 import type { Recipe } from '@/data/types';
 
-export type CookingPhase = 'idle' | 'running' | 'success' | 'failed';
+export type CookingPhase = 'idle' | 'running' | 'minigames' | 'success' | 'failed';
+
+export interface MinigameResultEntry {
+  minigameId: string;
+  title: string;
+  type: 'action-cooking' | 'quiz' | 'typing-speed';
+  success: boolean;
+  score: number;
+}
 
 export interface CookingSession {
   recipe: Recipe;
@@ -17,6 +25,7 @@ export interface CookingSession {
   finalScore: number;
   stars: 1 | 2 | 3 | 4 | 5;
   failReason?: 'timeout' | 'abandoned';
+  minigameResults?: MinigameResultEntry[];
 }
 
 export interface CookingState {

@@ -9,12 +9,13 @@ import { useAchievements } from '@/contexts/AchievementContext';
 import { useNotification } from '@/contexts/NotificationContext';
 import { useRecipes } from '@/contexts/RecipeContext';
 import type { CookedRecipeEntry } from '@/features/auth/types';
-import type { CookingSession } from '@/features/cooking/types';
+import type { CookingSession, MinigameResultEntry } from '@/features/cooking/types';
 import { CookingPot } from '@/features/cooking/components/CookingPot';
 import { CookingResultModal } from '@/features/cooking/components/CookingResultModal';
 import { CookingTimer } from '@/features/cooking/components/CookingTimer';
 import { IngredientTray } from '@/features/cooking/components/IngredientTray';
 import { StepList } from '@/features/cooking/components/StepList';
+import { MinigameRunner } from '@/features/cooking/components/minigames/MinigameRunner';
 import { useCookingState } from '@/features/cooking/hooks/useCookingState';
 import { useDragDrop } from '@/features/cooking/hooks/useDragDrop';
 import { buildTrayIngredientIds } from '@/features/cooking/lib/tray-ingredients';
@@ -27,7 +28,7 @@ import styles from '@/pages/player/CookingPage.module.css';
 
 export default function CookingPage() {
   const { id } = useParams<{ id: string }>();
-  const { t } = useTranslation();
+  const { t, dict } = useTranslation();
   const { isLoading, getRecipeById } = useRecipes();
   const { user, addXp, addCookedRecipe } = useAuth();
   const { checkAndUnlockForUser } = useAchievements();
@@ -38,6 +39,7 @@ export default function CookingPage() {
     startCooking,
     dropIngredient,
     executeStepAction,
+    completeMinigames,
     resetCooking,
     scoreRules,
   } = useCookingState();
@@ -202,6 +204,13 @@ export default function CookingPage() {
     pulseAnimation('sparkle');
   }, [executeStepAction, pulseAnimation]);
 
+  const handleMinigamesAllComplete = useCallback(
+    (results: MinigameResultEntry[], totalBonusScore: number) => {
+      completeMinigames(totalBonusScore, results);
+    },
+    [completeMinigames],
+  );
+
   const { draggingId, getTrayItemProps } = useDragDrop({ onDropOnPot: handleDropOnPot });
 
   const placedIngredientIds = useMemo(() => {
@@ -257,9 +266,34 @@ export default function CookingPage() {
   const sessionEnded = session.phase !== 'running';
 
   const displayScore =
-    session.phase === 'running'
+    session.phase === 'running' || session.phase === 'minigames'
       ? Math.max(0, session.recipe.baseScore + session.runningScoreDelta)
       : session.finalScore;
+
+  if (session.phase === 'minigames') {
+    return (
+      <PlayerShell>
+        <Link className={styles.back} to={`/recipes/${recipe.id}`}>
+          ← {t('cooking.recipeDetail')}
+        </Link>
+        <div className={styles.top}>
+          <div>
+            <h1 className={styles.title}>{recipe.name}</h1>
+            <p className={styles.subtitle}>{dict.cooking.minigames.headerTitle}</p>
+          </div>
+          <div className={styles.scorePanel}>
+            <span className={styles.scoreLabel}>{t('cooking.score')}</span>
+            <span className={styles.scoreValue}>{displayScore}</span>
+          </div>
+        </div>
+
+        <MinigameRunner
+          minigames={session.recipe.minigames ?? []}
+          onAllComplete={handleMinigamesAllComplete}
+        />
+      </PlayerShell>
+    );
+  }
 
   return (
     <PlayerShell>

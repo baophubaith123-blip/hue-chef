@@ -7,15 +7,16 @@ import {
   type ReactNode,
 } from 'react';
 
-import type { CookingSession, CookingState } from '@/features/cooking/types';
+import type { CookingSession, CookingState, MinigameResultEntry } from '@/features/cooking/types';
 import type { Recipe } from '@/data/types';
 import { AppError } from '@/lib/errors';
-import { calculateScoreResult, SCORE_RULES, type ScoreInput } from '@/lib/score';
+import { calculateScoreResult, calculateStars, SCORE_RULES, type ScoreInput } from '@/lib/score';
 
 type CookingAction =
   | { type: 'START'; recipe: Recipe }
   | { type: 'DROP_INGREDIENT'; ingredientId: string }
   | { type: 'EXECUTE_STEP_ACTION' }
+  | { type: 'COMPLETE_MINIGAMES'; bonusScore: number; minigameResults: MinigameResultEntry[] }
   | { type: 'TICK' }
   | { type: 'RESET' };
 
@@ -24,6 +25,7 @@ interface CookingContextValue {
   startCooking: (recipe: Recipe) => void;
   dropIngredient: (ingredientId: string) => boolean; // returns true if correct drag, false if wrong drag
   executeStepAction: () => void;
+  completeMinigames: (bonusScore: number, minigameResults: MinigameResultEntry[]) => void;
   tickTimer: () => void;
   resetCooking: () => void;
 }
@@ -160,9 +162,42 @@ function cookingReducer(state: CookingState, action: CookingAction): CookingStat
       };
 
       if (nextStepIndex >= steps.length) {
+        if (session.recipe.minigames && session.recipe.minigames.length > 0) {
+          return {
+            session: {
+              ...updated,
+              phase: 'minigames',
+            },
+          };
+        }
         return { session: finalizeSession(updated, false) };
       }
       return { session: updated };
+    }
+    case 'COMPLETE_MINIGAMES': {
+      if (!session || session.phase !== 'minigames') {
+        return state;
+      }
+      const scoreInput = buildScoreInput(session, false);
+      const { totalScore: dragDropScore } = calculateScoreResult(
+        scoreInput,
+        session.recipe.ingredients.length,
+      );
+      const finalScore = Math.max(0, dragDropScore + action.bonusScore);
+      const stars = calculateStars(
+        finalScore,
+        session.recipe.baseScore,
+        session.recipe.ingredients.length,
+      );
+      return {
+        session: {
+          ...session,
+          phase: 'success',
+          finalScore,
+          stars,
+          minigameResults: action.minigameResults,
+        },
+      };
     }
     case 'RESET':
       return initialState;
@@ -199,6 +234,13 @@ export function CookingProvider({ children }: { children: ReactNode }) {
     dispatch({ type: 'EXECUTE_STEP_ACTION' });
   }, []);
 
+  const completeMinigames = useCallback(
+    (bonusScore: number, minigameResults: MinigameResultEntry[]) => {
+      dispatch({ type: 'COMPLETE_MINIGAMES', bonusScore, minigameResults });
+    },
+    [],
+  );
+
   const tickTimer = useCallback(() => {
     dispatch({ type: 'TICK' });
   }, []);
@@ -213,10 +255,19 @@ export function CookingProvider({ children }: { children: ReactNode }) {
       startCooking,
       dropIngredient,
       executeStepAction,
+      completeMinigames,
       tickTimer,
       resetCooking,
     }),
-    [state.session, startCooking, dropIngredient, executeStepAction, tickTimer, resetCooking],
+    [
+      state.session,
+      startCooking,
+      dropIngredient,
+      executeStepAction,
+      completeMinigames,
+      tickTimer,
+      resetCooking,
+    ],
   );
 
   return <CookingContext.Provider value={value}>{children}</CookingContext.Provider>;

@@ -56,7 +56,7 @@ export function ActionCookingGame({ minigame, onComplete }: ActionCookingGamePro
           playSound('error');
           setTimeout(() => {
             onCompleteRef.current(false, 0);
-          }, 300);
+          }, 1500);
         }
         return next;
       });
@@ -78,13 +78,13 @@ export function ActionCookingGame({ minigame, onComplete }: ActionCookingGamePro
       playSound('success');
       setTimeout(() => {
         onCompleteRef.current(true, minigame.scoreReward);
-      }, 650);
+      }, 700);
     } else {
       setStatus('error');
       playSound('error');
       setTimeout(() => {
         onCompleteRef.current(false, 0);
-      }, 650);
+      }, 1500);
     }
   };
 
@@ -159,11 +159,24 @@ export function ActionCookingGame({ minigame, onComplete }: ActionCookingGamePro
       <div className={styles.actionsGrid} role="group" aria-label="Cooking Actions">
         {actions.map((act) => {
           const isSelected = selectedAction === act;
+          const isCorrectAction = act === minigame.data.correctAction;
+          const isWrongSelected = isSelected && !isCorrectAction;
+          const shouldHighlightCorrect = isFinished && isCorrectAction;
+
+          let btnClass = styles.actionButton;
+          if (shouldHighlightCorrect) {
+            btnClass += ` ${styles.actionCorrect}`;
+          } else if (isWrongSelected) {
+            btnClass += ` ${styles.actionWrong}`;
+          } else if (isSelected) {
+            btnClass += ` ${styles.actionSelected}`;
+          }
+
           return (
             <Button
               key={act}
               variant={isSelected ? 'primary' : 'secondary'}
-              className={`${styles.actionButton} ${isSelected ? styles.actionSelected : ''}`}
+              className={btnClass}
               disabled={isFinished}
               onClick={() => handleActionClick(act)}
             >
@@ -184,13 +197,17 @@ export function ActionCookingGame({ minigame, onComplete }: ActionCookingGamePro
         }`}
         aria-live="polite"
       >
-        {status === 'success'
-          ? t('cooking.actionMinigame.correct')
-          : status === 'error'
-            ? t('cooking.actionMinigame.incorrect')
-            : status === 'timeout'
-              ? t('cooking.actionMinigame.timeout')
-              : null}
+        {status === 'success' ? (
+          t('cooking.actionMinigame.correct')
+        ) : status === 'error' ? (
+          `${t('cooking.actionMinigame.incorrect')} · ${dict.cooking.actionMinigame.correctWas(
+            getActionLabel(minigame.data.correctAction),
+          )}`
+        ) : status === 'timeout' ? (
+          `${t('cooking.actionMinigame.timeout')} · ${dict.cooking.actionMinigame.correctWas(
+            getActionLabel(minigame.data.correctAction),
+          )}`
+        ) : null}
       </div>
     </div>
   );

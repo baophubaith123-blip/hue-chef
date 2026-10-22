@@ -148,6 +148,18 @@
   box-shadow: 0 0 0 3px var(--color-accent);
 }
 
+.actionCorrect {
+  border-color: var(--color-success, #15803d);
+  background-color: rgba(34, 197, 94, 0.18);
+  box-shadow: 0 0 0 2px var(--color-success, #15803d);
+}
+
+.actionWrong {
+  border-color: var(--color-danger, #b42318);
+  background-color: rgba(239, 68, 68, 0.18);
+  box-shadow: 0 0 0 2px var(--color-danger, #b42318);
+}
+
 /* Status message */
 .feedbackMessage {
   margin-top: var(--spacing-lg, 24px);

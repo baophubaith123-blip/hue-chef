@@ -438,6 +438,8 @@ export interface I18nDictionary {
       unknownError: string;
       retry: string;
       backToRecipe: string;
+      backToHome: string;
+      minigamesSummary: string;
       gainedXp: (xp: number) => string;
       levelUp: (lvl: number) => string;
       achievementUnlockTitle: string;
@@ -456,6 +458,18 @@ export interface I18nDictionary {
       incorrect: string;
       timeout: string;
       potAria: string;
+      correctWas: (ans: string) => string;
+    };
+    minigames: {
+      headerTitle: string;
+      stepCount: (current: number, total: number) => string;
+      bonusPoints: (pts: number) => string;
+      correctAnswer: string;
+      incorrectAnswer: string;
+      timeoutAnswer: string;
+      explanationLabel: string;
+      correctWas: (ans: string) => string;
+      quizInstruction: string;
     };
     recipeDetail: string;
     score: string;
