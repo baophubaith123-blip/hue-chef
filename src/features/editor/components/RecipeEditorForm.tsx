@@ -2,7 +2,7 @@ import { useState, type FormEvent } from 'react';
 
 import { Button } from '@/components/Button';
 import { DynamicFormList } from '@/components/DynamicFormList';
-import { SEED_INGREDIENTS } from '@/data/ingredients';
+import { useIngredients } from '@/contexts/IngredientContext';
 import type { RecipeCategory } from '@/data/types';
 import type { RecipeFormErrors, RecipeFormValues } from '@/features/editor/types';
 import {
@@ -33,6 +33,7 @@ export function RecipeEditorForm({
   onSubmit,
 }: RecipeEditorFormProps) {
   const { t, dict } = useTranslation();
+  const { ingredients } = useIngredients();
   const [values, setValues] = useState<RecipeFormValues>(initialValues);
   const [errors, setErrors] = useState<RecipeFormErrors>({});
   const [submitting, setSubmitting] = useState(false);
@@ -205,9 +206,9 @@ export function RecipeEditorForm({
               onChange={(event) => update({ ingredientId: event.target.value })}
             >
               <option value="">—</option>
-              {SEED_INGREDIENTS.map((ingredient) => (
+              {ingredients.map((ingredient) => (
                 <option key={ingredient.id} value={ingredient.id}>
-                  {ingredient.name}
+                  {ingredient.fallbackEmoji} {ingredient.name}
                 </option>
               ))}
             </select>

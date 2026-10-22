@@ -97,14 +97,6 @@ export function AdminShell({ children }: AdminShellProps) {
             className={({ isActive }) =>
               [styles.navLink, isActive ? styles.navLinkActive : ''].filter(Boolean).join(' ')
             }
-            to="/admin/ingredients"
-          >
-            {t('nav.ingredients')}
-          </NavLink>
-          <NavLink
-            className={({ isActive }) =>
-              [styles.navLink, isActive ? styles.navLinkActive : ''].filter(Boolean).join(' ')
-            }
             to="/admin/appeals"
           >
             {t('nav.appeals')}

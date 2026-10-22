@@ -50,6 +50,14 @@ export function EditorShell({ children }: EditorShellProps) {
           </NavLink>
           <NavLink
             className={({ isActive }) =>
+              [styles.navLink, isActive ? styles.navLinkActive : ''].filter(Boolean).join(' ')
+            }
+            to="/editor/ingredients"
+          >
+            {t('nav.ingredients')}
+          </NavLink>
+          <NavLink
+            className={({ isActive }) =>
               [styles.navLink, styles.navLinkCta, isActive ? styles.navLinkActive : '']
                 .filter(Boolean)
                 .join(' ')

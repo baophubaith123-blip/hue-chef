@@ -142,6 +142,9 @@ export interface I18nDictionary {
     reportReasonEmpty: string;
     lastAdmin: string;
     banAdmin: string;
+    emojiRequired: string;
+    duplicateIngredientName: string;
+    ingredientInUse: string;
   };
   editor: {
     dashboardTitle: string;
@@ -169,6 +172,30 @@ export interface I18nDictionary {
     inbox: string;
     inboxEmpty: string;
     inboxHint: string;
+    ingredientMgmtTitle: string;
+    ingredientMgmtIntro: string;
+    ingredientName: string;
+    ingredientCategory: string;
+    ingredientEmoji: string;
+    ingredientImage: string;
+    addIngredient: string;
+    editIngredient: string;
+    saveIngredient: string;
+    cancelEdit: string;
+    deleteIngredientConfirm: string;
+    noIngredients: string;
+    chooseImage: string;
+    ingredientUnit: string;
+    ingredientDescription: string;
+    searchIngredient: string;
+    filterAll: string;
+    filterHasImage: string;
+    filterEmojiOnly: string;
+    ingredientList: string;
+    confirmDeleteTitle: string;
+    confirmDeleteMessage: string;
+    deleteSuccess: string;
+    saveSuccess: string;
   };
   admin: {
     dashboardTitle: string;
@@ -230,11 +257,6 @@ export interface I18nDictionary {
     changeRole: string;
     allRecipesTitle: string;
     allRecipesIntro: string;
-    ingredientMgmtTitle: string;
-    ingredientMgmtIntro: string;
-    ingredientName: string;
-    ingredientCategory: string;
-    addIngredient: string;
     achievementsTitle: string;
     achievementsIntro: string;
     addAchievement: string;

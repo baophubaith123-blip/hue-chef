@@ -6,6 +6,8 @@ export interface Ingredient {
   category: 'protein' | 'vegetable' | 'spice' | 'grain' | 'other';
   fallbackEmoji: string;
   image?: string;
+  unit?: string;
+  description?: string;
 }
 
 export interface RecipeIngredientRef {

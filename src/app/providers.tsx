@@ -6,6 +6,7 @@ import { AppealProvider } from '@/contexts/AppealContext';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { CommentProvider } from '@/contexts/CommentContext';
 import { CookingProvider } from '@/contexts/CookingContext';
+import { IngredientProvider } from '@/contexts/IngredientContext';
 import { LanguageContextProvider } from '@/contexts/LanguageContext';
 import { MailProvider } from '@/contexts/MailContext';
 import { NotificationProvider } from '@/contexts/NotificationContext';
@@ -20,19 +21,21 @@ export function AppProviders({ children }: { children: ReactNode }) {
         <AuthProvider>
           <AdminProvider>
             <RecipeProvider>
-              <MailProvider>
-                <CookingProvider>
-                  <AchievementProvider>
-                    <NotificationProvider>
-                      <SupportProvider>
-                        <AppealProvider>
-                          <CommentProvider>{children}</CommentProvider>
-                        </AppealProvider>
-                      </SupportProvider>
-                    </NotificationProvider>
-                  </AchievementProvider>
-                </CookingProvider>
-              </MailProvider>
+              <IngredientProvider>
+                <MailProvider>
+                  <CookingProvider>
+                    <AchievementProvider>
+                      <NotificationProvider>
+                        <SupportProvider>
+                          <AppealProvider>
+                            <CommentProvider>{children}</CommentProvider>
+                          </AppealProvider>
+                        </SupportProvider>
+                      </NotificationProvider>
+                    </AchievementProvider>
+                  </CookingProvider>
+                </MailProvider>
+              </IngredientProvider>
             </RecipeProvider>
           </AdminProvider>
         </AuthProvider>

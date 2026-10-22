@@ -6,8 +6,7 @@ import {
   type ReactNode,
 } from 'react';
 
-import type { Ingredient, Recipe } from '@/data/types';
-import { SEED_INGREDIENTS } from '@/data/ingredients';
+import type { Recipe } from '@/data/types';
 import { loadAuditLog, appendAudit } from '@/features/admin/lib/audit';
 import type { AdminDashboardStats, AdminSettings, AuditAction, AuditLogEntry } from '@/features/admin/types';
 import { findUserById, loadUsers, saveUsers } from '@/features/auth/store';
@@ -26,9 +25,6 @@ export interface AdminContextValue {
   deleteUser: (id: string, actor: PublicUser) => void;
   listAuditLog: (options?: { action?: AuditAction; actorId?: string }) => AuditLogEntry[];
   getDashboardStats: () => AdminDashboardStats;
-  listIngredients: () => Ingredient[];
-  upsertIngredient: (ingredient: Ingredient, actor: PublicUser) => Ingredient;
-  deleteIngredient: (id: string, actor: PublicUser) => void;
   upsertAchievement: (achievement: Achievement, actor: PublicUser) => void;
   deleteAchievement: (id: string, actor: PublicUser) => void;
   listAdminAchievements: () => Achievement[];
@@ -47,28 +43,6 @@ const DEFAULT_SETTINGS: AdminSettings = {
   maxRecipeScore: 5000,
   maintenanceMode: false,
 };
-
-function loadIngredients(): Ingredient[] {
-  const data = getJsonStorage<unknown>(STORAGE_KEYS.ingredients);
-  if (!Array.isArray(data) || data.length === 0) return SEED_INGREDIENTS;
-  const valid = data.filter(
-    (item): item is Ingredient =>
-      typeof item === 'object' &&
-      item !== null &&
-      typeof (item as Record<string, unknown>).id === 'string' &&
-      typeof (item as Record<string, unknown>).name === 'string',
-  );
-  if (valid.length === 0) return SEED_INGREDIENTS;
-  const seedEmojiMap = new Map(SEED_INGREDIENTS.map((s) => [s.id, s.fallbackEmoji]));
-  return valid.map((item) => ({
-    ...item,
-    fallbackEmoji: item.fallbackEmoji || seedEmojiMap.get(item.id) || '🍲',
-  }));
-}
-
-function saveIngredients(list: Ingredient[]): void {
-  setJsonStorage(STORAGE_KEYS.ingredients, list);
-}
 
 function loadAchievementsStore(): Achievement[] {
   const data = getJsonStorage<Achievement[]>(STORAGE_KEYS.achievements);
@@ -225,28 +199,6 @@ export function AdminProvider({ children }: { children: ReactNode }) {
     };
   }, []);
 
-  const listIngredients = useCallback((): Ingredient[] => loadIngredients(), []);
-
-  const upsertIngredient = useCallback<AdminContextValue['upsertIngredient']>((ingredient, actor) => {
-    const list = loadIngredients();
-    const idx = list.findIndex((i) => i.id === ingredient.id);
-    if (idx === -1) list.push(ingredient);
-    else list[idx] = ingredient;
-    saveIngredients(list);
-    appendAudit(actor, idx === -1 ? 'achievement.create' : 'achievement.update', {
-      targetId: ingredient.id,
-      targetType: 'achievement',
-      detail: { ingredient: ingredient.name },
-    });
-    return ingredient;
-  }, []);
-
-  const deleteIngredient = useCallback<AdminContextValue['deleteIngredient']>((id, actor) => {
-    const list = loadIngredients().filter((i) => i.id !== id);
-    saveIngredients(list);
-    appendAudit(actor, 'achievement.delete', { targetId: id, targetType: 'achievement' });
-  }, []);
-
   const listAdminAchievements = useCallback((): Achievement[] => {
     const custom = loadAchievementsStore();
     if (custom.length > 0) return custom;
@@ -317,9 +269,6 @@ export function AdminProvider({ children }: { children: ReactNode }) {
       deleteUser,
       listAuditLog,
       getDashboardStats,
-      listIngredients,
-      upsertIngredient,
-      deleteIngredient,
       upsertAchievement,
       deleteAchievement,
       listAdminAchievements,
@@ -337,9 +286,6 @@ export function AdminProvider({ children }: { children: ReactNode }) {
       deleteUser,
       listAuditLog,
       getDashboardStats,
-      listIngredients,
-      upsertIngredient,
-      deleteIngredient,
       upsertAchievement,
       deleteAchievement,
       listAdminAchievements,

@@ -9,7 +9,6 @@ import AdminBackupPage from '@/pages/admin/AdminBackupPage';
 import AdminBroadcastPage from '@/pages/admin/AdminBroadcastPage';
 import AdminCommentsPage from '@/pages/admin/AdminCommentsPage';
 import AdminDashboardPage from '@/pages/admin/AdminDashboardPage';
-import AdminIngredientsPage from '@/pages/admin/AdminIngredientsPage';
 import AdminReportsPage from '@/pages/admin/AdminReportsPage';
 import AdminReviewDetailPage from '@/pages/admin/AdminReviewDetailPage';
 import AdminReviewPage from '@/pages/admin/AdminReviewPage';
@@ -23,6 +22,7 @@ import FeedbackPage from '@/pages/common/FeedbackPage';
 import HelpPage from '@/pages/common/HelpPage';
 import NotFoundPage from '@/pages/common/NotFoundPage';
 import EditorDashboardPage from '@/pages/editor/EditorDashboardPage';
+import EditorIngredientsPage from '@/pages/editor/EditorIngredientsPage';
 import EditorMyRecipesPage from '@/pages/editor/EditorMyRecipesPage';
 import EditorRecipeDetailPage from '@/pages/editor/EditorRecipeDetailPage';
 import EditorRecipeFormPage from '@/pages/editor/EditorRecipeFormPage';
@@ -160,6 +160,10 @@ export const router = createBrowserRouter([
         path: '/editor/recipes/:id/edit',
         element: <EditorRecipeFormPage />,
       },
+      {
+        path: '/editor/ingredients',
+        element: <EditorIngredientsPage />,
+      },
     ],
   },
   {
@@ -196,10 +200,6 @@ export const router = createBrowserRouter([
       {
         path: '/admin/achievements',
         element: <AdminAchievementsPage />,
-      },
-      {
-        path: '/admin/ingredients',
-        element: <AdminIngredientsPage />,
       },
       {
         path: '/admin/comments',
