@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, type ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { Button } from '@/components/Button';
@@ -14,9 +14,10 @@ interface ReviewDetailProps {
   recipe: Recipe;
   onApprove: () => void;
   onReject: (reason: string) => void;
+  minigamesSlot?: ReactNode;
 }
 
-export function ReviewDetail({ recipe, onApprove, onReject }: ReviewDetailProps) {
+export function ReviewDetail({ recipe, onApprove, onReject, minigamesSlot }: ReviewDetailProps) {
   const navigate = useNavigate();
   const { t, dict } = useTranslation();
   const [reason, setReason] = useState('');
@@ -141,6 +142,15 @@ export function ReviewDetail({ recipe, onApprove, onReject }: ReviewDetailProps)
           ))}
         </ol>
       </section>
+
+      {minigamesSlot ? (
+        <section className={styles.section}>
+          <h2 className={styles.sectionTitle}>
+            🎮 {t('editorMinigames.summaryTitle')} · {recipe.minigames?.length ?? 0}
+          </h2>
+          {minigamesSlot}
+        </section>
+      ) : null}
 
       <div className={styles.actions}>
         <Button type="button" onClick={handleApprove} disabled={processing}>

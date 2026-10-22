@@ -8,6 +8,7 @@ import { getIngredientById } from '@/data/ingredients';
 import { useRecipes } from '@/contexts/RecipeContext';
 import { RecipeStatusBadge } from '@/features/editor/components/RecipeStatusBadge';
 import { useEditorRecipes } from '@/features/editor/hooks/useEditorRecipes';
+import { MinigameSummary } from '@/features/recipes/components/MinigameSummary';
 import { formatDuration } from '@/lib/format';
 import { AppError } from '@/lib/errors';
 import { useTranslation } from '@/i18n/useTranslation';
@@ -141,6 +142,10 @@ export default function EditorRecipeDetailPage() {
             </li>
           ))}
         </ol>
+        <h3 className={styles.sectionTitle}>
+          🎮 {t('editorMinigames.summaryTitle')} · {recipe.minigames?.length ?? 0}
+        </h3>
+        <MinigameSummary minigames={recipe.minigames} />
         <div className={styles.actions}>
           {editable ? (
             <Link to={`/editor/recipes/${recipe.id}/edit`}>

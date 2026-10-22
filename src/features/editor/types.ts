@@ -1,4 +1,5 @@
 import type { RecipeCategory, RecipeIngredientRef, CookingStep } from '@/data/types';
+import type { Minigame } from '@/features/recipes/types';
 
 export interface RecipeFormValues {
   name: string;
@@ -9,6 +10,7 @@ export interface RecipeFormValues {
   image: string;
   ingredients: RecipeIngredientRef[];
   steps: Array<Omit<CookingStep, 'id' | 'order'>>;
+  minigames?: Minigame[];
 }
 
 export interface RecipeFormErrors {
@@ -18,4 +20,6 @@ export interface RecipeFormErrors {
   image?: string;
   ingredients?: string;
   steps?: string;
+  minigames?: string;
 }
+

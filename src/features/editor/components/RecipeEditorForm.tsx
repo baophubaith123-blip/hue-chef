@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from 'react';
+import { useMemo, useState, type FormEvent } from 'react';
 
 import { Button } from '@/components/Button';
 import { DynamicFormList } from '@/components/DynamicFormList';
@@ -9,8 +9,10 @@ import {
   hasRecipeFormErrors,
   validateRecipeForm,
 } from '@/features/editor/lib/validate-recipe-form';
+import { canSubmitForReview, REQUIRED_ACTION_BY_STARS } from '@/features/recipes/validation';
 import { useTranslation } from '@/i18n/useTranslation';
 
+import { MinigameFormList } from './MinigameFormList';
 import styles from '@/features/editor/components/RecipeEditorForm.module.css';
 
 export type RecipeFormSubmitMode = 'draft' | 'submit';
@@ -38,6 +40,11 @@ export function RecipeEditorForm({
   const [errors, setErrors] = useState<RecipeFormErrors>({});
   const [submitting, setSubmitting] = useState(false);
 
+  const isMinigamesValid = useMemo(() => {
+    const ingIds = values.ingredients.map((r) => r.ingredientId).filter(Boolean);
+    return canSubmitForReview(values.minigames, values.difficulty, ingIds);
+  }, [values.minigames, values.difficulty, values.ingredients]);
+
   const runValidation = (): boolean => {
     const nextErrors = validateRecipeForm(values);
     const translated: RecipeFormErrors = {};
@@ -62,7 +69,7 @@ export function RecipeEditorForm({
   };
 
   const handleSubmitForReview = async () => {
-    if (!runValidation()) return;
+    if (!runValidation() || !isMinigamesValid) return;
     setSubmitting(true);
     try {
       await onSubmit(values, 'submit');
@@ -267,6 +274,15 @@ export function RecipeEditorForm({
         )}
       />
 
+      <h3 className={styles.sectionTitle}>{t('editorMinigames.title')}</h3>
+      <p className={styles.label}>{t('editorMinigames.subtitle')}</p>
+      <MinigameFormList
+        minigames={values.minigames ?? []}
+        onChange={(minigames) => setValues({ ...values, minigames })}
+        stars={values.difficulty}
+        recipeIngredients={values.ingredients}
+      />
+
       <div className={styles.actions}>
         <Button type="submit" disabled={submitting}>
           {submitting ? '…' : draftLabel}
@@ -275,9 +291,19 @@ export function RecipeEditorForm({
           <Button
             type="button"
             variant="secondary"
-            disabled={submitting}
+            disabled={submitting || !isMinigamesValid}
             onClick={handleSubmitForReview}
             className={styles.submitBtn}
+            title={
+              !isMinigamesValid
+                ? t('editorMinigames.insufficientAction', {
+                    required: REQUIRED_ACTION_BY_STARS[values.difficulty],
+                    current: (values.minigames ?? []).filter(
+                      (m) => m.type === 'action-cooking',
+                    ).length,
+                  } as Record<string, unknown>)
+                : ''
+            }
           >
             {submitting ? '…' : submitLabel}
           </Button>

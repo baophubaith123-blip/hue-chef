@@ -43,6 +43,9 @@ export function MyRecipeCard({ recipe, canEdit, onDelete }: MyRecipeCardProps) {
       <p className={styles.meta}>
         {categoryLabel} · {formatDuration(recipe.duration)} · {t('recipe.difficulty')}{' '}
         {'★'.repeat(recipe.difficulty)}
+        {recipe.minigames && recipe.minigames.length > 0 ? (
+          <span> · 🎮 {recipe.minigames.length} minigames</span>
+        ) : null}
       </p>
       {recipe.rejectionReason ? (
         <p className={styles.reason}>

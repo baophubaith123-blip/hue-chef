@@ -20,6 +20,7 @@ export function defaultRecipeFormValues(): RecipeFormValues {
       { title: '', description: '', duration: 30, durationSeconds: 30, requiredIngredients: [], actionLabel: 'Thực hiện' },
       { title: '', description: '', duration: 30, durationSeconds: 30, requiredIngredients: [], actionLabel: 'Thực hiện' },
     ],
+    minigames: [],
   };
 }
 
@@ -40,6 +41,7 @@ export function recipeToFormValues(recipe: Recipe): RecipeFormValues {
       requiredIngredients: step.requiredIngredients ? [...step.requiredIngredients] : [],
       actionLabel: step.actionLabel || 'Thực hiện',
     })),
+    minigames: recipe.minigames ? [...recipe.minigames] : [],
   };
 }
 
@@ -86,7 +88,7 @@ export function formValuesToRecipe(
     baseScore: existing?.baseScore ?? baseScoreFromDifficulty(values.difficulty),
     ingredients,
     steps: buildSteps(id, values.steps),
-    minigames: existing?.minigames ?? [],
+    minigames: values.minigames ?? existing?.minigames ?? [],
     status: existing?.status ?? 'draft',
     editorId,
     rejectionReason: existing?.rejectionReason,

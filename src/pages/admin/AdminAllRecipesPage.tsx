@@ -7,7 +7,6 @@ import { EmptyState } from '@/components/EmptyState';
 import { useAuth } from '@/contexts/AuthContext';
 import { useAdmin } from '@/contexts/AdminContext';
 import { useRecipes } from '@/contexts/RecipeContext';
-import { AppError } from '@/lib/errors';
 import { useTranslation } from '@/i18n/useTranslation';
 import { AdminShell } from '@/pages/admin/AdminShell';
 import type { PublicUser } from '@/features/auth/types';
@@ -18,7 +17,7 @@ import styles from '@/pages/admin/AdminAllRecipesPage.module.css';
 export default function AdminAllRecipesPage() {
   const { t, dict } = useTranslation();
   useAuth();
-  const { recipes, approveRecipe, rejectRecipe, deleteRecipe } = useRecipes();
+  const { recipes, approveRecipe, rejectRecipe } = useRecipes();
   const admin = useAdmin();
   const [refreshTick, setRefreshTick] = useState(0);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -60,32 +59,18 @@ export default function AdminAllRecipesPage() {
     }
   };
 
-  const handleRemove = (recipe: Recipe) => {
-    const confirmed = window.confirm(t('common.confirm'));
-    if (!confirmed) return;
-    try {
-      if (recipe.status === 'draft') {
-        deleteRecipe(recipe.id);
-      } else {
-        rejectRecipe(recipe.id, 'Admin removed');
-      }
-      setErrorMsg(null);
-      refresh();
-    } catch (err) {
-      const code = err instanceof AppError ? err.code : null;
-      let msg = err instanceof Error ? err.message : String(err);
-      if (code === 'APPROVED_CANNOT_DELETE') msg = t('errors.approvedCannotDelete');
-      setErrorMsg(msg);
-      window.alert(msg);
-      refresh();
+  const getStatusStyle = (status: RecipeStatus) => {
+    switch (status) {
+      case 'approved':
+        return { background: 'var(--color-success-soft)', color: 'var(--color-success)' };
+      case 'rejected':
+        return { background: 'var(--color-danger-soft)', color: 'var(--color-danger)' };
+      case 'pending':
+        return { background: 'var(--color-primary-soft)', color: 'var(--color-primary)' };
+      case 'draft':
+      default:
+        return { background: 'var(--color-surface-muted)', color: 'var(--color-text-muted)' };
     }
-  };
-
-  const statusTone: Record<RecipeStatus, string> = {
-    draft: '#6b7280',
-    pending: '#e8450a',
-    approved: '#15803d',
-    rejected: '#b42318',
   };
 
   return (
@@ -135,7 +120,7 @@ export default function AdminAllRecipesPage() {
                       <td>
                         <span
                           className={styles.statusChip}
-                          style={{ background: `${statusTone[status]}20`, color: statusTone[status] }}
+                          style={getStatusStyle(status)}
                         >
                           {dict.recipeStatus[status]}
                         </span>
@@ -145,7 +130,7 @@ export default function AdminAllRecipesPage() {
                       </td>
                       <td className={styles.actionsCell}>
                         <div className={styles.actionsGroup}>
-                          <Link to={`/recipes/${r.id}`}>
+                          <Link to={status === 'pending' ? `/admin/review/${r.id}` : `/recipes/${r.id}`}>
                             <Button variant="ghost" className={styles.btnSm}>
                               {t('common.view')}
                             </Button>
@@ -167,24 +152,6 @@ export default function AdminAllRecipesPage() {
                                 {t('common.reject')}
                               </Button>
                             </>
-                          ) : null}
-                          {status === 'approved' || status === 'rejected' ? (
-                            <Button
-                              variant="ghost"
-                              className={`${styles.btnSm} ${styles.deleteBtn}`}
-                              onClick={() => handleRemove(r)}
-                            >
-                              {t('common.remove')}
-                            </Button>
-                          ) : null}
-                          {status === 'draft' ? (
-                            <Button
-                              variant="ghost"
-                              className={`${styles.btnSm} ${styles.deleteBtn}`}
-                              onClick={() => handleRemove(r)}
-                            >
-                              {t('common.delete')}
-                            </Button>
                           ) : null}
                         </div>
                       </td>

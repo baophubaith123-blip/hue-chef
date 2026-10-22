@@ -5,6 +5,7 @@ import { Loading } from '@/components/Loading';
 import { useMail } from '@/contexts/MailContext';
 import { useRecipes } from '@/contexts/RecipeContext';
 import { ReviewDetail } from '@/features/admin/components/ReviewDetail';
+import { MinigameSummary } from '@/features/recipes/components/MinigameSummary';
 import { useTranslation } from '@/i18n/useTranslation';
 import { AdminShell } from '@/pages/admin/AdminShell';
 
@@ -53,6 +54,7 @@ export default function AdminReviewDetailPage() {
     <AdminShell>
       <ReviewDetail
         recipe={recipe}
+        minigamesSlot={<MinigameSummary minigames={recipe.minigames} />}
         onApprove={() => {
           const updated = approveRecipe(recipe.id);
           sendRecipeApprovedMail(editorId, updated.id, updated.name);
