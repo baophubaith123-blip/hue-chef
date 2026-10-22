@@ -85,6 +85,6 @@ export function getDefaultPathForRole(role: UserRole): string {
       return '/admin';
     case 'player':
     default:
-      return '/';
+      return '/home';
   }
 }

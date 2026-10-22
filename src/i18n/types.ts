@@ -102,6 +102,8 @@ export interface I18nDictionary {
     title: string;
     durationSeconds: string;
     baseScore: string;
+    viewRecipe: string;
+    pts: string;
     categoryLabels: Record<'bun' | 'com' | 'banh' | 'che' | 'nem', string>;
   };
   recipeStatus: {
@@ -578,5 +580,38 @@ export interface I18nDictionary {
     equip: string;
     equipped: string;
     locked: string;
+  };
+  landing: {
+    heroTitle: string;
+    heroSubtitle: string;
+    ctaStart: string;
+    ctaExplore: string;
+    steamText: string;
+    featuredTitle: string;
+    featuredSubtitle: string;
+    howToPlayTitle: string;
+    howToPlaySubtitle: string;
+    step1Title: string;
+    step1Desc: string;
+    step2Title: string;
+    step2Desc: string;
+    step3Title: string;
+    step3Desc: string;
+    rolesTitle: string;
+    rolesSubtitle: string;
+    roleHint: string;
+    rolePlayerTitle: string;
+    rolePlayerDesc: string;
+    roleEditorTitle: string;
+    roleEditorDesc: string;
+    roleAdminTitle: string;
+    roleAdminDesc: string;
+    roleSupportTitle: string;
+    roleSupportDesc: string;
+    statsTitle: string;
+    statRecipes: string;
+    statIngredients: string;
+    statAchievements: string;
+    statCooks: string;
   };
 }

@@ -38,7 +38,7 @@ export function PlayerShell({ children }: PlayerShellProps) {
   return (
     <div className={styles.layout}>
       <header className={styles.header}>
-        <Link className={styles.brand} to="/">
+        <Link className={styles.brand} to="/home">
           {import.meta.env.VITE_APP_NAME}
         </Link>
         <nav className={styles.nav} aria-label="Player">
@@ -46,7 +46,7 @@ export function PlayerShell({ children }: PlayerShellProps) {
             className={({ isActive }) =>
               [styles.navLink, isActive ? styles.navLinkActive : ''].filter(Boolean).join(' ')
             }
-            to="/"
+            to="/home"
             end
           >
             🏠 {t('nav.home')}

@@ -20,6 +20,7 @@ import RegisterPage from '@/pages/auth/RegisterPage';
 import AboutPage from '@/pages/common/AboutPage';
 import FeedbackPage from '@/pages/common/FeedbackPage';
 import HelpPage from '@/pages/common/HelpPage';
+import LandingPage from '@/pages/common/LandingPage';
 import NotFoundPage from '@/pages/common/NotFoundPage';
 import EditorDashboardPage from '@/pages/editor/EditorDashboardPage';
 import EditorIngredientsPage from '@/pages/editor/EditorIngredientsPage';
@@ -63,10 +64,14 @@ export const router = createBrowserRouter([
     element: <AboutPage />,
   },
   {
+    path: '/',
+    element: <LandingPage />,
+  },
+  {
     element: <ProtectedRoute allowedRoles={['player']} />,
     children: [
       {
-        path: '/',
+        path: '/home',
         element: <HomePage />,
       },
       {

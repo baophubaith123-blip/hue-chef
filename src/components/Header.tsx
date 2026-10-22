@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 
 import { useAuth } from '@/contexts/AuthContext';
+import { getDefaultPathForRole } from '@/features/auth/types';
 import { useTranslation } from '@/i18n/useTranslation';
 
 import { LanguageSwitcher } from './LanguageSwitcher';
@@ -15,7 +16,11 @@ export function Header() {
   return (
     <header className={styles.header} role="banner">
       <div className={styles.inner}>
-        <Link to={user ? (user.role === 'admin' ? '/admin' : user.role === 'editor' ? '/editor' : user.role === 'support' ? '/support' : '/') : '/'} className={styles.brand} aria-label={t('header.logo')}>
+        <Link
+          to={user ? getDefaultPathForRole(user.role) : '/'}
+          className={styles.brand}
+          aria-label={t('header.logo')}
+        >
           <span className={styles.brandIcon} aria-hidden="true">🍜</span>
           <span className={styles.brandText}>
             <span className={styles.brandName}>{t('header.logo')}</span>

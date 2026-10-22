@@ -111,7 +111,7 @@ export default function ProfilePage() {
       finalPassword = newPassword;
     }
 
-    const patch: any = {
+    const patch: Parameters<typeof updateProfile>[0] = {
       name: name.trim(),
       avatar,
       equippedAchievementId: equippedBadgeId,
@@ -125,7 +125,7 @@ export default function ProfilePage() {
     if (updated) {
       setSuccessMsg(t('profile.saveSuccess'));
       setTimeout(() => {
-        navigate('/');
+        navigate('/home');
       }, 400);
     }
   };

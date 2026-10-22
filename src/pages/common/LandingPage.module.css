@@ -1,0 +1,470 @@
+.landing {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  overflow-x: hidden;
+}
+
+.main {
+  flex: 1;
+}
+
+/* Hero Section */
+.hero {
+  position: relative;
+  padding: 5rem 1.5rem 6rem;
+  background: linear-gradient(135deg, var(--color-bg) 0%, var(--color-surface-alt) 50%, var(--color-bg) 100%);
+  background-size: 200% 200%;
+  animation: warmGradientShift 14s ease infinite;
+  border-bottom: 1px solid var(--color-border);
+  overflow: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero {
+    animation: none;
+  }
+}
+
+.heroContainer {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  align-items: center;
+  gap: 3rem;
+  position: relative;
+  z-index: 2;
+}
+
+.heroContent {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.badgeTag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.85rem;
+  border-radius: var(--radius-full);
+  background: var(--color-accent-soft);
+  color: var(--color-accent);
+  font-weight: 600;
+  font-size: 0.85rem;
+  width: fit-content;
+  border: 1px solid rgba(233, 162, 59, 0.3);
+}
+
+.heroTitle {
+  font-size: 3.25rem;
+  line-height: 1.15;
+  font-weight: 800;
+  color: var(--color-text);
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.highlight {
+  color: var(--color-primary);
+  display: inline-block;
+}
+
+.heroSubtitle {
+  font-size: 1.15rem;
+  line-height: 1.6;
+  color: var(--color-text-muted);
+  margin: 0;
+  max-width: 580px;
+}
+
+.heroActions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: 0.5rem;
+}
+
+.heroActions button {
+  padding: 0.85rem 1.75rem;
+  font-size: 1.05rem;
+}
+
+/* Hero Illustration / Steam Bowl */
+.heroVisual {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 340px;
+}
+
+.bowlContainer {
+  position: relative;
+  width: 240px;
+  height: 240px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.steamWrap {
+  display: flex;
+  gap: 18px;
+  margin-bottom: -15px;
+  z-index: 3;
+}
+
+.steamWisp {
+  font-size: 2rem;
+  animation: steamRise 2.8s ease-in-out infinite;
+  filter: blur(0.5px);
+  user-select: none;
+}
+
+.steamWisp:nth-child(2) {
+  animation-delay: 0.9s;
+}
+
+.steamWisp:nth-child(3) {
+  animation-delay: 1.8s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .steamWisp {
+    animation: none;
+    opacity: 0.7;
+  }
+}
+
+.bowlGraphic {
+  font-size: 8rem;
+  line-height: 1;
+  filter: drop-shadow(0 16px 24px rgba(59, 42, 32, 0.18));
+  user-select: none;
+  z-index: 2;
+  transition: transform 0.3s ease;
+}
+
+.bowlGraphic:hover {
+  transform: scale(1.05);
+}
+
+.bowlGlow {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--color-accent-soft) 0%, transparent 70%);
+  z-index: 1;
+}
+
+/* Floating emojis */
+.floatingEmoji {
+  position: absolute;
+  font-size: 2.4rem;
+  user-select: none;
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.12));
+}
+
+.emoji1 {
+  top: 10%;
+  left: 5%;
+  animation: floatSlow 4s ease-in-out infinite;
+}
+
+.emoji2 {
+  top: 15%;
+  right: 5%;
+  animation: floatReverse 4.6s ease-in-out infinite;
+}
+
+.emoji3 {
+  bottom: 12%;
+  left: 8%;
+  animation: floatReverse 5.2s ease-in-out infinite;
+}
+
+.emoji4 {
+  bottom: 8%;
+  right: 12%;
+  animation: floatSlow 4.8s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .floatingEmoji {
+    animation: none;
+  }
+}
+
+/* Common Section */
+.section {
+  padding: 5rem 1.5rem;
+}
+
+.sectionAlt {
+  background-color: var(--color-surface-alt);
+}
+
+.sectionContainer {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.sectionHeader {
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto 3.5rem;
+}
+
+.sectionTitle {
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin: 0 0 0.75rem;
+}
+
+.sectionSubtitle {
+  font-size: 1.05rem;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Featured Recipes Grid */
+.recipesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  gap: 2rem;
+}
+
+/* How to play Steps */
+.stepsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.stepCard {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 2.5rem 2rem;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  position: relative;
+}
+
+.stepCard:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--color-accent);
+}
+
+.stepBadge {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-md);
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+}
+
+.stepTitle {
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin: 0;
+  color: var(--color-text);
+}
+
+.stepDesc {
+  font-size: 0.95rem;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* 4 Roles Section */
+.rolesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.75rem;
+}
+
+.roleCard {
+  perspective: 1000px;
+  height: 280px;
+  cursor: pointer;
+}
+
+.roleCardInner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+  border-radius: var(--radius-lg);
+}
+
+.roleCard:hover .roleCardInner,
+.roleCard:focus-within .roleCardInner {
+  transform: rotateY(180deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .roleCardInner {
+    transition: none;
+  }
+}
+
+.roleCardFront,
+.roleCardBack {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  border-radius: var(--radius-lg);
+  padding: 2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
+}
+
+.roleCardFront {
+  background: var(--color-surface);
+}
+
+.roleCardBack {
+  background: var(--color-surface);
+  transform: rotateY(180deg);
+  border-color: var(--color-primary);
+}
+
+.roleIcon {
+  font-size: 3.5rem;
+  margin-bottom: 1rem;
+}
+
+.roleTitle {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin: 0 0 0.5rem;
+}
+
+.roleHint {
+  font-size: 0.85rem;
+  color: var(--color-accent);
+  font-weight: 500;
+}
+
+.roleDesc {
+  font-size: 0.95rem;
+  color: var(--color-text);
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Stats Section */
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 2rem;
+}
+
+.statCard {
+  text-align: center;
+  padding: 2.25rem 1.5rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.2s ease;
+}
+
+.statCard:hover {
+  transform: translateY(-3px);
+  border-color: var(--color-primary);
+}
+
+.statIcon {
+  font-size: 2.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.statText {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+/* Responsive adjustments */
+@media (max-width: 900px) {
+  .heroContainer {
+    grid-template-columns: 1fr;
+    text-align: center;
+    gap: 2.5rem;
+  }
+
+  .heroContent {
+    align-items: center;
+  }
+
+  .heroTitle {
+    font-size: 2.5rem;
+  }
+
+  .heroSubtitle {
+    max-width: 100%;
+  }
+
+  .heroActions {
+    justify-content: center;
+  }
+
+  .heroVisual {
+    min-height: 260px;
+  }
+
+  .bowlGraphic {
+    font-size: 6rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .hero {
+    padding: 3.5rem 1rem 4rem;
+  }
+
+  .heroTitle {
+    font-size: 2rem;
+  }
+
+  .section {
+    padding: 3.5rem 1rem;
+  }
+
+  .sectionTitle {
+    font-size: 1.75rem;
+  }
+
+  .roleCard {
+    height: 240px;
+  }
+}

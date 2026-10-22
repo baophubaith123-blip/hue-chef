@@ -6,12 +6,14 @@
   border-radius: var(--radius-lg);
   overflow: hidden;
   background: var(--color-surface);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transform-style: preserve-3d;
+  will-change: transform;
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow 0.25s ease;
 }
 
 .card:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-lg);
 }
 
 .imageWrap {
