@@ -441,6 +441,21 @@ export interface I18nDictionary {
       levelUp: (lvl: number) => string;
       achievementUnlockTitle: string;
     };
+    actions: {
+      steam: string;
+      stirFry: string;
+      fry: string;
+      grill: string;
+      boil: string;
+    };
+    actionMinigame: {
+      instruction: string;
+      timeLeft: string;
+      correct: string;
+      incorrect: string;
+      timeout: string;
+      potAria: string;
+    };
   };
   notifications: {
     bellAria: string;

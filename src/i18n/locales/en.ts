@@ -473,6 +473,21 @@ export const en: I18nDictionary = {
       levelUp: (lvl: number) => `🎉 Level up! You reached level ${lvl}.`,
       achievementUnlockTitle: '🏆 New achievement unlocked',
     },
+    actions: {
+      steam: '♨️ Steam',
+      stirFry: '🍳 Stir-fry',
+      fry: '🫕 Fry',
+      grill: '🍢 Grill',
+      boil: '🍲 Boil',
+    },
+    actionMinigame: {
+      instruction: 'Choose the correct cooking action for this ingredient!',
+      timeLeft: 'Time remaining',
+      correct: 'Correct! Adding to the pot...',
+      incorrect: 'Incorrect action!',
+      timeout: 'Time is up!',
+      potAria: 'Cooking pot',
+    },
   },
   notifications: {
     bellAria: 'Notifications',

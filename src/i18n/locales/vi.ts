@@ -474,6 +474,21 @@ export const vi: I18nDictionary = {
       levelUp: (lvl: number) => `🎉 Chúc mừng, bạn đã lên cấp ${lvl}!`,
       achievementUnlockTitle: '🏆 Mở khóa thành tích',
     },
+    actions: {
+      steam: '♨️ Hấp',
+      stirFry: '🍳 Xào',
+      fry: '🫕 Chiên',
+      grill: '🍢 Nướng',
+      boil: '🍲 Luộc',
+    },
+    actionMinigame: {
+      instruction: 'Chọn phương pháp chế biến chính xác cho nguyên liệu này!',
+      timeLeft: 'Thời gian còn lại',
+      correct: 'Chính xác! Đang cho vào nồi...',
+      incorrect: 'Chưa chính xác!',
+      timeout: 'Hết giờ!',
+      potAria: 'Nồi nấu ăn',
+    },
   },
   notifications: {
     bellAria: 'Thông báo',

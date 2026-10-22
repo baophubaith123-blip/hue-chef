@@ -1,0 +1,227 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: var(--spacing-xl, 32px) var(--spacing-lg, 24px);
+  background: var(--color-surface, #fff);
+  border: 1px solid var(--color-border, #e5e7eb);
+  border-radius: var(--radius-xl, 16px);
+  box-shadow: var(--shadow-md);
+  text-align: center;
+}
+
+.question {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--color-text, #333);
+  margin: 0 0 0.5rem;
+}
+
+.instruction {
+  font-size: 0.95rem;
+  color: var(--color-text-muted, #666);
+  margin: 0 0 var(--spacing-lg, 24px);
+}
+
+/* Timer Section */
+.timerWrapper {
+  width: 100%;
+  max-width: 440px;
+  margin-bottom: var(--spacing-xl, 32px);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs, 6px);
+}
+
+.timerMeta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-text-muted, #666);
+}
+
+.timerSeconds {
+  font-family: monospace;
+  font-size: 1rem;
+  color: var(--color-primary, #b91c1c);
+}
+
+.progressBarTrack {
+  width: 100%;
+  height: 8px;
+  background-color: var(--color-surface-alt, #f3f4f6);
+  border-radius: var(--radius-full, 9999px);
+  overflow: hidden;
+  border: 1px solid var(--color-border, #e5e7eb);
+}
+
+.progressBarFill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-accent, #e9a23b), var(--color-primary, #c8553d));
+  border-radius: var(--radius-full, 9999px);
+  transition: width 0.1s linear;
+}
+
+.timerWarning {
+  background: var(--color-danger, #ef4444);
+}
+
+/* Ingredient Stage */
+.stage {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  margin-bottom: var(--spacing-xl, 32px);
+  width: 100%;
+}
+
+.ingredientDisplay {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: var(--color-surface-alt, #fdf8f0);
+  border: 3px solid var(--color-border, #e8d9c4);
+  box-shadow: 0 8px 24px rgba(59, 42, 32, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+  transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.ingredientImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.fallbackEmoji {
+  font-size: 5rem;
+  line-height: 1;
+  user-select: none;
+}
+
+.ingredientName {
+  margin-top: var(--spacing-sm, 8px);
+  font-weight: 700;
+  font-size: 1.15rem;
+  color: var(--color-text, #333);
+}
+
+/* Pot Graphic under ingredient */
+.potArea {
+  margin-top: var(--spacing-md, 16px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.potIcon {
+  font-size: 3rem;
+  line-height: 1;
+}
+
+/* Actions Section */
+.actionsGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-md, 16px);
+  justify-content: center;
+  width: 100%;
+  max-width: 500px;
+}
+
+.actionButton {
+  flex: 1 1 130px;
+  min-width: 120px;
+}
+
+.actionSelected {
+  box-shadow: 0 0 0 3px var(--color-accent);
+}
+
+/* Status message */
+.feedbackMessage {
+  margin-top: var(--spacing-lg, 24px);
+  font-size: 1.05rem;
+  font-weight: 600;
+  min-height: 28px;
+}
+
+.feedbackSuccess {
+  color: var(--color-success, #15803d);
+}
+
+.feedbackError {
+  color: var(--color-danger, #b42318);
+}
+
+/* Animations */
+.flyingToPot {
+  animation: flyIntoPotAnim 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  border-color: var(--color-success, #15803d);
+}
+
+@keyframes flyIntoPotAnim {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(-20px) scale(1.15);
+    opacity: 0.9;
+  }
+  100% {
+    transform: translateY(40px) scale(0.65);
+    opacity: 0;
+  }
+}
+
+.shakeRed {
+  animation: shakeRedAnim 0.5s ease-in-out forwards;
+  border-color: var(--color-danger, #ef4444);
+  box-shadow: 0 0 16px rgba(239, 68, 68, 0.4);
+}
+
+@keyframes shakeRedAnim {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-10px);
+  }
+  40% {
+    transform: translateX(10px);
+  }
+  60% {
+    transform: translateX(-6px);
+  }
+  80% {
+    transform: translateX(6px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flyingToPot {
+    animation: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .shakeRed {
+    animation: none;
+    border-color: var(--color-danger, #ef4444);
+  }
+
+  .progressBarFill {
+    transition: none;
+  }
+}
