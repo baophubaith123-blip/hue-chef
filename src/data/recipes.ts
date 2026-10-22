@@ -1,4 +1,9 @@
-import type { Recipe } from '@/data/types';
+import type {
+  ActionCookingMinigame,
+  CookingAction,
+  QuizMinigame,
+  Recipe,
+} from '@/data/types';
 
 interface StepSeedItem {
   title: string;
@@ -20,7 +25,54 @@ function steps(recipeId: string, items: StepSeedItem[]) {
   }));
 }
 
+function actionGame(
+  id: string,
+  question: string,
+  ingredientId: string,
+  correctAction: CookingAction,
+  actions: CookingAction[] = ['steam', 'stir-fry', 'fry', 'grill', 'boil'],
+  timeLimit = 15,
+  scoreReward = 50,
+): ActionCookingMinigame {
+  return {
+    id,
+    type: 'action-cooking',
+    question,
+    timeLimit,
+    scoreReward,
+    data: {
+      ingredientId,
+      correctAction,
+      actions,
+    },
+  };
+}
+
+function quizGame(
+  id: string,
+  question: string,
+  options: string[],
+  correctAnswerIndex: number,
+  explanation: string,
+  timeLimit = 20,
+  scoreReward = 50,
+): QuizMinigame {
+  return {
+    id,
+    type: 'quiz',
+    question,
+    timeLimit,
+    scoreReward,
+    data: {
+      options,
+      correctAnswerIndex,
+      explanation,
+    },
+  };
+}
+
 export const SEED_RECIPES: Recipe[] = [
+  // 1. Bún bò Huế (5★, cần ≥ 3 action-cooking)
   {
     id: 'bun-bo-hue',
     name: 'Bún bò Huế',
@@ -39,42 +91,34 @@ export const SEED_RECIPES: Recipe[] = [
       { ingredientId: 'garlic', amount: '10g' },
     ],
     minigames: [
-      {
-        id: 'quiz-bun-bo-hue-1',
-        type: 'quiz',
-        question: 'Gia vị tạo nên mùi thơm đặc trưng không thể thiếu của nước dùng Bún bò Huế là gì?',
-        timeLimit: 30,
-        scoreReward: 100,
-        data: {
-          options: ['Mắm ruốc và sả', 'Hoa hồi và thảo quả', 'Hạt tiêu đen và quế', 'Nước mắm nhỉ và giấm'],
-          correctAnswerIndex: 0,
-          explanation: 'Bún bò Huế đặc sắc bởi sự kết hợp tinh tế giữa sả phi thơm nồng và mắm ruốc xứ Huế đậm đà.',
-        },
-      },
-      {
-        id: 'quiz-bun-bo-hue-2',
-        type: 'quiz',
-        question: 'Sợi bún chuẩn dùng trong tô Bún bò Huế truyền thống có đặc điểm gì?',
-        timeLimit: 30,
-        scoreReward: 100,
-        data: {
-          options: ['Sợi tròn to, dẻo dai', 'Sợi nhỏ mảnh như bún riêu', 'Sợi dẹt như bánh phở', 'Sợi bún khô ngâm mềm'],
-          correctAnswerIndex: 0,
-          explanation: 'Bún bò Huế truyền thống dùng bún sợi to, mềm dẻo nhưng không bị bở khi chan nước dùng sôi.',
-        },
-      },
-      {
-        id: 'action-bun-bo-hue-1',
-        type: 'action-cooking',
-        question: 'Hãy chọn phương pháp chuẩn bị sơ chế phù hợp cho bắp bò trước khi ninh nước dùng:',
-        timeLimit: 30,
-        scoreReward: 100,
-        data: {
-          ingredientId: 'beef-shank',
-          actions: ['boil', 'stir-fry', 'fry', 'grill'],
-          correctAction: 'boil',
-        },
-      },
+      quizGame(
+        'quiz-bun-bo-hue-1',
+        'Gia vị tạo nên mùi thơm đặc trưng không thể thiếu của nước dùng Bún bò Huế là gì?',
+        ['Mắm ruốc và sả', 'Hoa hồi và thảo quả', 'Hạt tiêu đen và quế', 'Nước mắm nhỉ và giấm'],
+        0,
+        'Bún bò Huế đặc sắc bởi sự kết hợp tinh tế giữa sả phi thơm nồng và mắm ruốc xứ Huế đậm đà.',
+      ),
+      actionGame(
+        'action-bun-bo-hue-1',
+        'Hãy chọn cách sơ chế bắp bò trước khi ninh nước dùng:',
+        'beef-shank',
+        'boil',
+        ['boil', 'stir-fry', 'fry', 'grill'],
+      ),
+      actionGame(
+        'action-bun-bo-hue-2',
+        'Thao tác phi thơm sả băm cùng dầu màu điều để tạo màu và hương vị nồi nước lèo:',
+        'lemongrass',
+        'stir-fry',
+        ['stir-fry', 'boil', 'steam', 'grill'],
+      ),
+      actionGame(
+        'action-bun-bo-hue-3',
+        'Thao tác nấu sôi mắm ruốc rồi lọc lấy nước trong ngọt thanh cho nước dùng:',
+        'shrimp-paste',
+        'boil',
+        ['boil', 'fry', 'steam', 'grill'],
+      ),
     ],
     steps: steps('bun-bo-hue', [
       { title: 'Sơ chế bò', description: 'Rửa sạch bắp bò, luộc sơ qua.', duration: 40, requiredIngredients: ['beef-shank'], actionLabel: 'Luộc sơ' },
@@ -85,6 +129,8 @@ export const SEED_RECIPES: Recipe[] = [
       { title: 'Trụng bún', description: 'Trụng bún tươi, chan nước dùng sôi.', duration: 40, requiredIngredients: ['rice-noodle'], actionLabel: 'Trụng' },
     ]),
   },
+
+  // 2. Cơm hến (3★, cần ≥ 2 action-cooking)
   {
     id: 'com-hen',
     name: 'Cơm hến',
@@ -98,33 +144,30 @@ export const SEED_RECIPES: Recipe[] = [
       { ingredientId: 'clams', amount: '300g' },
       { ingredientId: 'rice-paper', amount: '4 tờ' },
       { ingredientId: 'rice', amount: '2 chén' },
-      { ingredientId: 'herbs-mix', amount: '1 bó' },
+      { ingredientId: 'herbs-mix', amount: '1 rổ' },
     ],
     minigames: [
-      {
-        id: 'quiz-com-hen-1',
-        type: 'quiz',
-        question: 'Nước canh ăn kèm trong món Cơm hến truyền thống được lấy từ đâu?',
-        timeLimit: 30,
-        scoreReward: 100,
-        data: {
-          options: ['Nước luộc hến nguyên chất đun nóng', 'Nước hầm xương heo đậm vị', 'Nước dùng gà luộc', 'Nước luộc rau cải ngọt'],
-          correctAnswerIndex: 0,
-          explanation: 'Cơm hến ăn kèm một chén nước luộc hến nóng hổi, pha chút gừng thơm nồng.',
-        },
-      },
-      {
-        id: 'quiz-com-hen-2',
-        type: 'quiz',
-        question: 'Cơm dùng để trộn trong món Cơm hến Huế là loại cơm nào?',
-        timeLimit: 30,
-        scoreReward: 100,
-        data: {
-          options: ['Cơm nguội tơi hạt', 'Cơm nếp dẻo thơm', 'Cơm cháy giòn rụm', 'Cơm nóng hổi vừa chín'],
-          correctAnswerIndex: 0,
-          explanation: 'Theo đúng điệu Huế, cơm hến phải dùng cơm nguội để giữ được độ giòn mát của rau sống và giòn rụm của tóp mỡ.',
-        },
-      },
+      quizGame(
+        'quiz-com-hen-1',
+        'Món cơm hến xứ Huế chuẩn vị xưa thường dùng loại cơm như thế nào?',
+        ['Cơm nguội tơi hạt', 'Cơm nếp dẻo thơm', 'Cơm cháy giòn rụm', 'Cơm nóng hổi vừa chín'],
+        0,
+        'Theo đúng điệu Huế, cơm hến phải dùng cơm nguội để giữ được độ giòn mát của rau sống và giòn rụm của tóp mỡ.',
+      ),
+      actionGame(
+        'action-com-hen-1',
+        'Thao tác chế biến thịt hến với hành tỏi, ớt và mắm ruốc thơm lừng:',
+        'clams',
+        'stir-fry',
+        ['stir-fry', 'boil', 'steam', 'fry'],
+      ),
+      actionGame(
+        'action-com-hen-2',
+        'Thao tác nấu chín gạo tẻ rồi để nguội trước khi trộn cơm hến:',
+        'rice',
+        'boil',
+        ['boil', 'stir-fry', 'steam', 'grill'],
+      ),
     ],
     steps: steps('com-hen', [
       { title: 'Luộc hến', description: 'Luộc hến, lấy thịt, giữ nước dùng.', duration: 45, requiredIngredients: ['clams'], actionLabel: 'Luộc' },
@@ -133,6 +176,8 @@ export const SEED_RECIPES: Recipe[] = [
       { title: 'Rắc rau sống', description: 'Rắc rau sống và đậu phộng rang.', duration: 35, requiredIngredients: ['herbs-mix'], actionLabel: 'Hoàn thiện' },
     ]),
   },
+
+  // 3. Bánh bèo (2★, cần ≥ 1 action-cooking)
   {
     id: 'banh-beo',
     name: 'Bánh bèo',
@@ -148,18 +193,27 @@ export const SEED_RECIPES: Recipe[] = [
       { ingredientId: 'fish-sauce', amount: '2 muỗng' },
     ],
     minigames: [
-      {
-        id: 'quiz-banh-beo-1',
-        type: 'quiz',
-        question: 'Phần "cháy" rắc lên mặt Bánh bèo chén Huế được làm từ nguyên liệu gì?',
-        timeLimit: 30,
-        scoreReward: 100,
-        data: {
-          options: ['Tôm khô giã nhỏ rang vàng', 'Thịt heo băm phi hành', 'Đậu xanh đồ chín tán nhuyễn', 'Bột ớt cay rắc đều'],
-          correctAnswerIndex: 0,
-          explanation: 'Tôm cháy trên bánh bèo Huế làm từ tôm giã nhuyễn rồi sao khô vàng ươm thơm phức.',
-        },
-      },
+      quizGame(
+        'quiz-banh-beo-1',
+        'Phần "cháy" rắc lên mặt Bánh bèo chén Huế được làm từ nguyên liệu gì?',
+        ['Tôm khô giã nhỏ rang vàng', 'Thịt heo băm phi hành', 'Đậu xanh đồ chín tán nhuyễn', 'Bột ớt cay rắc đều'],
+        0,
+        'Tôm cháy trên bánh bèo Huế làm từ tôm giã nhuyễn rồi sao khô vàng ươm thơm phức.',
+      ),
+      actionGame(
+        'action-banh-beo-1',
+        'Đổ bột vào chén nhỏ rồi cho vào xửng chế biến bằng cách nào để bánh xoáy sâu mềm mướt?',
+        'rice-flour',
+        'steam',
+        ['steam', 'boil', 'fry', 'grill'],
+      ),
+      actionGame(
+        'action-banh-beo-2',
+        'Thao tác chấy tôm khô giã nhuyễn làm nhân rắc mặt bánh bèo:',
+        'dried-shrimp',
+        'stir-fry',
+        ['stir-fry', 'fry', 'steam', 'boil'],
+      ),
     ],
     steps: steps('banh-beo', [
       { title: 'Hấp bánh', description: 'Đổ bột gạo vào chén, hấp chín.', duration: 60, requiredIngredients: ['rice-flour'], actionLabel: 'Hấp' },
@@ -167,6 +221,8 @@ export const SEED_RECIPES: Recipe[] = [
       { title: 'Rưới nước mắm', description: 'Rưới nước mắm đường lên bánh bèo.', duration: 30, requiredIngredients: ['fish-sauce'], actionLabel: 'Rưới' },
     ]),
   },
+
+  // 4. Bánh khoái (4★, cần ≥ 2 action-cooking)
   {
     id: 'banh-khoai',
     name: 'Bánh khoái',
@@ -184,18 +240,27 @@ export const SEED_RECIPES: Recipe[] = [
       { ingredientId: 'peanut', amount: '80g' },
     ],
     minigames: [
-      {
-        id: 'quiz-banh-khoai-1',
-        type: 'quiz',
-        question: 'Nước chấm đặc trưng của Bánh khoái xứ Huế gọi là gì?',
-        timeLimit: 30,
-        scoreReward: 100,
-        data: {
-          options: ['Nước lèo đậu phộng và gan heo', 'Nước mắm tỏi ớt chua ngọt', 'Mắm tôm pha chanh đường', 'Xì dầu tỏi ớt'],
-          correctAnswerIndex: 0,
-          explanation: 'Nước lèo bánh khoái nấu từ tương đậu nành, gan heo, đậu phộng và mè rang béo ngậy đậm đà.',
-        },
-      },
+      quizGame(
+        'quiz-banh-khoai-1',
+        'Nước chấm đặc trưng của Bánh khoái xứ Huế gọi là gì?',
+        ['Nước lèo đậu phộng và gan heo', 'Nước mắm tỏi ớt chua ngọt', 'Mắm tôm pha chanh đường', 'Xì dầu tỏi ớt'],
+        0,
+        'Nước lèo bánh khoái nấu từ tương đậu nành, gan heo, đậu phộng và mè rang béo ngậy đậm đà.',
+      ),
+      actionGame(
+        'action-banh-khoai-1',
+        'Đổ bột bánh khoai vào chảo gang dầu sôi chiên bằng cách nào để vỏ phồng giòn rụm?',
+        'rice-flour',
+        'fry',
+        ['fry', 'steam', 'boil', 'stir-fry'],
+      ),
+      actionGame(
+        'action-banh-khoai-2',
+        'Chiên thịt ba chỉ xắt mỏng cháy cạnh giòn thơm làm nhân bánh khoái:',
+        'pork-belly',
+        'fry',
+        ['fry', 'steam', 'boil', 'grill'],
+      ),
     ],
     steps: steps('banh-khoai', [
       { title: 'Pha bột', description: 'Pha bột gạo mịn với nước lạnh.', duration: 35, requiredIngredients: ['rice-flour'], actionLabel: 'Pha' },
@@ -205,6 +270,8 @@ export const SEED_RECIPES: Recipe[] = [
       { title: 'Nấu nước lèo', description: 'Nấu nước lèo đậu phộng sánh mịn.', duration: 45, requiredIngredients: ['peanut'], actionLabel: 'Nấu' },
     ]),
   },
+
+  // 5. Bánh lọc (3★, cần ≥ 2 action-cooking)
   {
     id: 'banh-loc',
     name: 'Bánh lọc',
@@ -221,18 +288,27 @@ export const SEED_RECIPES: Recipe[] = [
       { ingredientId: 'banana-leaf', amount: '10 lá' },
     ],
     minigames: [
-      {
-        id: 'quiz-banh-loc-1',
-        type: 'quiz',
-        question: 'Vỏ bánh lọc trong suốt, dai dẻo được làm từ loại bột nào?',
-        timeLimit: 30,
-        scoreReward: 100,
-        data: {
-          options: ['Bột năng (bột đao)', 'Bột gạo tẻ', 'Bột nếp thơm', 'Bột mì đa dụng'],
-          correctAnswerIndex: 0,
-          explanation: 'Bột năng khi nhào với nước sôi và hấp/luộc chín sẽ trở nên trong suốt, khoe trọn nhân tôm thịt đỏ ửng bên trong.',
-        },
-      },
+      quizGame(
+        'quiz-banh-loc-1',
+        'Vỏ bánh lọc trong suốt, dai dẻo được làm từ loại bột nào?',
+        ['Bột năng (bột đao)', 'Bột gạo tẻ', 'Bột nếp thơm', 'Bột mì đa dụng'],
+        0,
+        'Bột năng khi nhào với nước sôi và hấp/luộc chín sẽ trở nên trong suốt, khoe trọn nhân tôm thịt đỏ ửng bên trong.',
+      ),
+      actionGame(
+        'action-banh-loc-1',
+        'Rim xào tôm tươi với gia vị tiêu đường nước mắm đậm đà làm nhân:',
+        'shrimp',
+        'stir-fry',
+        ['stir-fry', 'steam', 'boil', 'grill'],
+      ),
+      actionGame(
+        'action-banh-loc-2',
+        'Thao tác luộc bánh lọc trần trong nước sôi đến khi bánh nổi lên trong suốt:',
+        'tapioca',
+        'boil',
+        ['boil', 'steam', 'fry', 'grill'],
+      ),
     ],
     steps: steps('banh-loc', [
       { title: 'Xào tôm', description: 'Xào tôm tươi với gia vị đậm đà.', duration: 35, requiredIngredients: ['shrimp'], actionLabel: 'Xào' },
@@ -241,6 +317,8 @@ export const SEED_RECIPES: Recipe[] = [
       { title: 'Gói lá chuối', description: 'Gói bánh lọc dẹt trong lá chuối.', duration: 40, requiredIngredients: ['banana-leaf'], actionLabel: 'Gói' },
     ]),
   },
+
+  // 6. Bánh nậm (3★, cần ≥ 2 action-cooking)
   {
     id: 'banh-nam',
     name: 'Bánh nậm',
@@ -257,18 +335,27 @@ export const SEED_RECIPES: Recipe[] = [
       { ingredientId: 'banana-leaf', amount: '12 lá' },
     ],
     minigames: [
-      {
-        id: 'quiz-banh-nam-1',
-        type: 'quiz',
-        question: 'Bánh nậm truyền thống của xứ Huế thường được gói bằng lá gì?',
-        timeLimit: 30,
-        scoreReward: 100,
-        data: {
-          options: ['Lá chuối tươi', 'Lá dong xanh', 'Lá sen thơm', 'Lá lốt rừng'],
-          correctAnswerIndex: 0,
-          explanation: 'Lá chuối tươi sau khi lau sạch hơ lửa mềm sẽ được dùng để gói bánh nậm dẹt mỏng trước khi đem hấp.',
-        },
-      },
+      quizGame(
+        'quiz-banh-nam-1',
+        'Bánh nậm truyền thống của xứ Huế thường được gói bằng lá gì?',
+        ['Lá chuối tươi', 'Lá dong xanh', 'Lá sen thơm', 'Lá lốt rừng'],
+        0,
+        'Lá chuối tươi sau khi lau sạch hơ lửa mềm sẽ được dùng để gói bánh nậm dẹt mỏng trước khi đem hấp.',
+      ),
+      actionGame(
+        'action-banh-nam-1',
+        'Xào chín thịt băm và tôm băm cùng hành tím thơm lừng làm nhân bánh nậm:',
+        'pork-mince',
+        'stir-fry',
+        ['stir-fry', 'steam', 'fry', 'boil'],
+      ),
+      actionGame(
+        'action-banh-nam-2',
+        'Gói bánh nậm trong lá chuối rồi đặt vào xửng hấp cách thủy chín mềm mướt:',
+        'rice-flour',
+        'steam',
+        ['steam', 'boil', 'fry', 'grill'],
+      ),
     ],
     steps: steps('banh-nam', [
       { title: 'Pha bột', description: 'Pha bột gạo mịn quấy đều.', duration: 30, requiredIngredients: ['rice-flour'], actionLabel: 'Pha' },
@@ -277,6 +364,8 @@ export const SEED_RECIPES: Recipe[] = [
       { title: 'Gói nậm', description: 'Gói bánh dẹt trong lá chuối rồi hấp.', duration: 40, requiredIngredients: ['banana-leaf'], actionLabel: 'Gói' },
     ]),
   },
+
+  // 7. Chè hạt sen (2★, cần ≥ 1 action-cooking)
   {
     id: 'che-hat-sen',
     name: 'Chè hạt sen',
@@ -292,18 +381,27 @@ export const SEED_RECIPES: Recipe[] = [
       { ingredientId: 'coconut-milk', amount: '200ml' },
     ],
     minigames: [
-      {
-        id: 'quiz-che-hat-sen-1',
-        type: 'quiz',
-        question: 'Hạt sen ngon nhất xứ Huế để nấu món chè thanh tao này được hái từ đâu?',
-        timeLimit: 30,
-        scoreReward: 100,
-        data: {
-          options: ['Hồ Tịnh Tâm', 'Sông Hương', 'Hồ Thủy Tiên', 'Đầm Cầu Hai'],
-          correctAnswerIndex: 0,
-          explanation: 'Hạt sen hồ Tịnh Tâm nổi tiếng từ thời triều Nguyễn vì độ bở bùi, thơm thanh đặc biệt.',
-        },
-      },
+      quizGame(
+        'quiz-che-hat-sen-1',
+        'Hạt sen ngon nhất xứ Huế để nấu món chè thanh tao này được hái từ đâu?',
+        ['Hồ Tịnh Tâm', 'Sông Hương', 'Hồ Thủy Tiên', 'Đầm Cầu Hai'],
+        0,
+        'Hạt sen hồ Tịnh Tâm nổi tiếng từ thời triều Nguyễn vì độ bở bùi, thơm thanh đặc biệt.',
+      ),
+      actionGame(
+        'action-che-hat-sen-1',
+        'Ninh hạt sen tươi hồ Tịnh Tâm với lửa nhỏ liu riu cho mềm bùi thanh mát:',
+        'lotus-seed',
+        'boil',
+        ['boil', 'steam', 'stir-fry', 'fry'],
+      ),
+      actionGame(
+        'action-che-hat-sen-2',
+        'Nấu tan đường thốt nốt cùng nước hạt sen tạo vị ngọt thanh:',
+        'palm-sugar',
+        'boil',
+        ['boil', 'stir-fry', 'steam', 'grill'],
+      ),
     ],
     steps: steps('che-hat-sen', [
       { title: 'Nấu hạt sen', description: 'Nấu hạt sen tươi mềm bùi.', duration: 55, requiredIngredients: ['lotus-seed'], actionLabel: 'Nấu' },
@@ -311,6 +409,8 @@ export const SEED_RECIPES: Recipe[] = [
       { title: 'Rưới cốt dừa', description: 'Rưới nước cốt dừa béo ngậy.', duration: 35, requiredIngredients: ['coconut-milk'], actionLabel: 'Rưới' },
     ]),
   },
+
+  // 8. Nem lụi (4★, cần ≥ 2 action-cooking)
   {
     id: 'nem-lui',
     name: 'Nem lụi',
@@ -328,18 +428,27 @@ export const SEED_RECIPES: Recipe[] = [
       { ingredientId: 'rice-paper', amount: '8 tờ' },
     ],
     minigames: [
-      {
-        id: 'quiz-nem-lui-1',
-        type: 'quiz',
-        question: 'Nem lụi Huế khi nướng trên than hồng thường được quấn quanh que gì để tăng mùi thơm?',
-        timeLimit: 30,
-        scoreReward: 100,
-        data: {
-          options: ['Cây sả tươi', 'Thanh tre vót nhọn', 'Đũa gỗ mun', 'Cuống lá mía'],
-          correctAnswerIndex: 0,
-          explanation: 'Thịt nem quấn quanh thân sả tươi khi nướng giúp tinh dầu sả thấm sâu vào thịt thơm lừng khó cưỡng.',
-        },
-      },
+      quizGame(
+        'quiz-nem-lui-1',
+        'Nem lụi Huế khi nướng trên than hồng thường được quấn quanh que gì để tăng mùi thơm?',
+        ['Cây sả tươi', 'Thanh tre vót nhọn', 'Đũa gỗ mun', 'Cuống lá mía'],
+        0,
+        'Thịt nem quấn quanh thân sả tươi khi nướng giúp tinh dầu sả thấm sâu vào thịt thơm lừng khó cưỡng.',
+      ),
+      actionGame(
+        'action-nem-lui-1',
+        'Quết nhuyễn thịt heo băm rồi nướng trên bếp than hồng đỏ rực:',
+        'pork-mince',
+        'grill',
+        ['grill', 'steam', 'boil', 'stir-fry'],
+      ),
+      actionGame(
+        'action-nem-lui-2',
+        'Nấu xào nước lèo đậu phộng gan heo bùi béo sền sệt:',
+        'peanut',
+        'stir-fry',
+        ['stir-fry', 'boil', 'steam', 'grill'],
+      ),
     ],
     steps: steps('nem-lui', [
       { title: 'Ướp thịt', description: 'Ướp thịt heo băm đậm đà.', duration: 40, requiredIngredients: ['pork-mince'], actionLabel: 'Ướp' },
@@ -349,6 +458,8 @@ export const SEED_RECIPES: Recipe[] = [
       { title: 'Cuốn bánh tráng', description: 'Cuốn nem lụi với bánh tráng.', duration: 40, requiredIngredients: ['rice-paper'], actionLabel: 'Cuốn' },
     ]),
   },
+
+  // 9. Bún thịt nướng (3★, cần ≥ 2 action-cooking)
   {
     id: 'bun-thit-nuong',
     name: 'Bún thịt nướng',
@@ -365,18 +476,27 @@ export const SEED_RECIPES: Recipe[] = [
       { ingredientId: 'herbs-mix', amount: '1 rổ' },
     ],
     minigames: [
-      {
-        id: 'quiz-bun-thit-nuong-1',
-        type: 'quiz',
-        question: 'Thịt heo nướng trong món Bún thịt nướng Huế thường được ướp với gia vị chính nào?',
-        timeLimit: 30,
-        scoreReward: 100,
-        data: {
-          options: ['Sả băm, mật ong và mè rang', 'Ngũ vị hương và sốt cà chua', 'Hạt tiêu sọ và giấm táo', 'Rượu mai quế lộ và tương đen'],
-          correctAnswerIndex: 0,
-          explanation: 'Sả băm nhỏ cùng chút mật mía/mật ong và mè rang giúp thịt nướng than hoa vàng óng, dậy mùi quyến rũ.',
-        },
-      },
+      quizGame(
+        'quiz-bun-thit-nuong-1',
+        'Thịt heo nướng trong món Bún thịt nướng Huế thường được ướp với gia vị chính nào?',
+        ['Sả băm, mật ong và mè rang', 'Ngũ vị hương và sốt cà chua', 'Hạt tiêu sọ và giấm táo', 'Rượu mai quế lộ và tương đen'],
+        0,
+        'Sả băm nhỏ cùng chút mật mía/mật ong và mè rang giúp thịt nướng than hoa vàng óng, dậy mùi quyến rũ.',
+      ),
+      actionGame(
+        'action-bun-thit-nuong-1',
+        'Thịt ướp đậm vị được chế biến bằng cách nào trên vỉ than hoa cháy cạnh?',
+        'grilled-pork',
+        'grill',
+        ['grill', 'boil', 'steam', 'stir-fry'],
+      ),
+      actionGame(
+        'action-bun-thit-nuong-2',
+        'Thao tác trụng bún tươi nhanh qua nước sôi rồi để ráo:',
+        'rice-noodle',
+        'boil',
+        ['boil', 'stir-fry', 'fry', 'grill'],
+      ),
     ],
     steps: steps('bun-thit-nuong', [
       { title: 'Nướng thịt', description: 'Nướng thịt heo cháy cạnh thơm lừng.', duration: 45, requiredIngredients: ['grilled-pork'], actionLabel: 'Nướng' },
@@ -385,6 +505,8 @@ export const SEED_RECIPES: Recipe[] = [
       { title: 'Xếp rau sống', description: 'Xếp rau sống vào tô bún.', duration: 40, requiredIngredients: ['herbs-mix'], actionLabel: 'Xếp tô' },
     ]),
   },
+
+  // 10. Bánh canh Nam Phổ (4★, cần ≥ 2 action-cooking)
   {
     id: 'banh-canh',
     name: 'Bánh canh Nam Phổ',
@@ -402,18 +524,27 @@ export const SEED_RECIPES: Recipe[] = [
       { ingredientId: 'shrimp', amount: '150g' },
     ],
     minigames: [
-      {
-        id: 'quiz-banh-canh-1',
-        type: 'quiz',
-        question: 'Đặc trưng nổi bật của nước dùng Bánh canh Nam Phổ là gì?',
-        timeLimit: 30,
-        scoreReward: 100,
-        data: {
-          options: ['Sánh sệt màu gạch tôm tự nhiên', 'Trong veo không chút váng mỡ', 'Nước cốt dừa ngọt béo ngậy', 'Nước hầm bò màu nâu cánh gián'],
-          correctAnswerIndex: 0,
-          explanation: 'Bánh canh Nam Phổ có nước dùng sánh sệt từ bột gạo/bột lọc hòa quyện cùng riêu tôm thịt đỏ au óng ả.',
-        },
-      },
+      quizGame(
+        'quiz-banh-canh-1',
+        'Đặc trưng nổi bật của nước dùng Bánh canh Nam Phổ là gì?',
+        ['Sánh sệt màu gạch tôm tự nhiên', 'Trong veo không chút váng mỡ', 'Nước cốt dừa ngọt béo ngậy', 'Nước hầm bò màu nâu cánh gián'],
+        0,
+        'Bánh canh Nam Phổ có nước dùng sánh sệt từ bột gạo/bột lọc hòa quyện cùng riêu tôm thịt đỏ au óng ả.',
+      ),
+      actionGame(
+        'action-banh-canh-1',
+        'Hầm ninh giò heo lấy nước lèo ngọt thanh cho bánh canh:',
+        'pork-hock',
+        'boil',
+        ['boil', 'grill', 'steam', 'fry'],
+      ),
+      actionGame(
+        'action-banh-canh-2',
+        'Phi hành tím thơm giòn để dậy mùi béo ngậy cho nồi riêu tôm cua:',
+        'shallot',
+        'stir-fry',
+        ['stir-fry', 'boil', 'steam', 'grill'],
+      ),
     ],
     steps: steps('banh-canh', [
       { title: 'Ninh giò heo', description: 'Ninh giò heo ngọt nước.', duration: 45, requiredIngredients: ['pork-hock'], actionLabel: 'Ninh' },
@@ -423,6 +554,8 @@ export const SEED_RECIPES: Recipe[] = [
       { title: 'Thêm tôm tươi', description: 'Cho tôm tươi ngọt thịt.', duration: 40, requiredIngredients: ['shrimp'], actionLabel: 'Luộc' },
     ]),
   },
+
+  // 11. Bánh xèo Huế (4★, cần ≥ 2 action-cooking)
   {
     id: 'banh-xeo',
     name: 'Bánh xèo Huế',
@@ -440,18 +573,27 @@ export const SEED_RECIPES: Recipe[] = [
       { ingredientId: 'bean-sprout', amount: '100g' },
     ],
     minigames: [
-      {
-        id: 'quiz-banh-xeo-1',
-        type: 'quiz',
-        question: 'Bánh xèo Huế (bánh khoái nhỏ) có kích thước như thế nào so với bánh xèo miền Tây?',
-        timeLimit: 30,
-        scoreReward: 100,
-        data: {
-          options: ['Nhỏ gọn vừa bằng lòng bàn tay, vỏ dày giòn', 'Rất lớn gấp đôi đĩa to, vỏ mỏng tanh', 'Vuông vức dày như bánh chưng', 'Dài thon như nem rán'],
-          correctAnswerIndex: 0,
-          explanation: 'Bánh xèo xứ Huế nhỏ nhắn, đổ trong chảo gang nhỏ, ăn kèm rau sống và nước lèo tương đậu.',
-        },
-      },
+      quizGame(
+        'quiz-banh-xeo-1',
+        'Bánh xèo Huế (bánh khoái nhỏ) có kích thước như thế nào so với bánh xèo miền Tây?',
+        ['Nhỏ gọn vừa bằng lòng bàn tay, vỏ dày giòn', 'Rất lớn gấp đôi đĩa to, vỏ mỏng tanh', 'Vuông vức dày như bánh chưng', 'Dài thon như nem rán'],
+        0,
+        'Bánh xèo xứ Huế nhỏ nhắn, đổ trong chảo gang nhỏ, ăn kèm rau sống và nước lèo tương đậu.',
+      ),
+      actionGame(
+        'action-banh-xeo-1',
+        'Đổ lớp bột mỏng vào chảo dầu nóng chiên xèo xèo vàng giòn rụm:',
+        'crispy-pancake-batter',
+        'fry',
+        ['fry', 'steam', 'boil', 'grill'],
+      ),
+      actionGame(
+        'action-banh-xeo-2',
+        'Chiên giòn thịt ba chỉ thái mỏng và tôm tươi trước khi gập đôi bánh:',
+        'pork-belly',
+        'fry',
+        ['fry', 'steam', 'boil', 'grill'],
+      ),
     ],
     steps: steps('banh-xeo', [
       { title: 'Pha bột xèo', description: 'Pha bột bánh xèo với nước.', duration: 35, requiredIngredients: ['crispy-pancake-batter'], actionLabel: 'Pha' },
@@ -461,6 +603,8 @@ export const SEED_RECIPES: Recipe[] = [
       { title: 'Thêm giá đỗ', description: 'Rắc giá đỗ giòn ngọt.', duration: 45, requiredIngredients: ['bean-sprout'], actionLabel: 'Hoàn thiện' },
     ]),
   },
+
+  // 12. Bún mắm nêm (5★, cần ≥ 3 action-cooking)
   {
     id: 'bun-mam',
     name: 'Bún mắm nêm',
@@ -479,18 +623,34 @@ export const SEED_RECIPES: Recipe[] = [
       { ingredientId: 'rice-noodle', amount: '400g' },
     ],
     minigames: [
-      {
-        id: 'quiz-bun-mam-1',
-        type: 'quiz',
-        question: 'Hương vị chủ đạo của tô Bún mắm nêm Huế đến từ loại mắm nào?',
-        timeLimit: 30,
-        scoreReward: 100,
-        data: {
-          options: ['Mắm nêm cá cơm lên men chua mặn', 'Mắm tôm Bắc đậm đà', 'Mắm ruốc xào sả ớt', 'Nước mắm cốt nhĩ'],
-          correctAnswerIndex: 0,
-          explanation: 'Mắm nêm làm từ cá cơm tươi ủ chín, hòa cùng tỏi ớt giã nhuyễn và thơm tạo vị chua ngọt cay mặn đặc trưng.',
-        },
-      },
+      quizGame(
+        'quiz-bun-mam-1',
+        'Hương vị chủ đạo của tô Bún mắm nêm Huế đến từ loại mắm nào?',
+        ['Mắm nêm cá cơm lên men chua mặn', 'Mắm tôm Bắc đậm đà', 'Mắm ruốc xào sả ớt', 'Nước mắm cốt nhĩ'],
+        0,
+        'Mắm nêm làm từ cá cơm tươi ủ chín, hòa cùng tỏi ớt giã nhuyễn và thơm tạo vị chua ngọt cay mặn đặc trưng.',
+      ),
+      actionGame(
+        'action-bun-mam-1',
+        'Nấu sôi mắm nêm lọc bỏ bã lấy nước cốt thơm nồng sánh đậm:',
+        'fermented-fish',
+        'boil',
+        ['boil', 'stir-fry', 'steam', 'grill'],
+      ),
+      actionGame(
+        'action-bun-mam-2',
+        'Chiên da heo trong chảo dầu sôi đến khi phồng rộp giòn tan:',
+        'pork-crackling',
+        'fry',
+        ['fry', 'boil', 'steam', 'grill'],
+      ),
+      actionGame(
+        'action-bun-mam-3',
+        'Xào thịt heo băm với tỏi ớt phi thơm để trộn bún:',
+        'pork-mince',
+        'stir-fry',
+        ['stir-fry', 'boil', 'steam', 'grill'],
+      ),
     ],
     steps: steps('bun-mam', [
       { title: 'Xào thịt băm', description: 'Xào thịt heo băm thơm lừng.', duration: 40, requiredIngredients: ['pork-mince'], actionLabel: 'Xào' },
@@ -501,6 +661,8 @@ export const SEED_RECIPES: Recipe[] = [
       { title: 'Trụng bún', description: 'Trụng bún tươi chan mắm.', duration: 40, requiredIngredients: ['rice-noodle'], actionLabel: 'Trụng' },
     ]),
   },
+
+  // 13. Cơm âm phủ (4★, cần ≥ 2 action-cooking)
   {
     id: 'com-am-phu',
     name: 'Cơm âm phủ',
@@ -518,18 +680,27 @@ export const SEED_RECIPES: Recipe[] = [
       { ingredientId: 'herbs-mix', amount: '1 bó' },
     ],
     minigames: [
-      {
-        id: 'quiz-com-am-phu-1',
-        type: 'quiz',
-        question: 'Món "Cơm âm phủ" Huế nổi tiếng với cách trình bày như thế nào?',
-        timeLimit: 30,
-        scoreReward: 100,
-        data: {
-          options: ['Cơm đặt ở giữa, 7 loại thức ăn xếp xung quanh rực rỡ', 'Cơm cháy giòn cuộn tròn như sushi', 'Tất cả nguyên liệu xay nhuyễn nấu chung', 'Chỉ gồm cơm trắng chấm muối mè'],
-          correctAnswerIndex: 0,
-          explanation: 'Cơm âm phủ được bày biện như bông hoa 7 cánh với thịt nướng, chả lụa, nem chua, trứng tráng, tôm chấy, dưa leo và rau thơm quanh ụ cơm trắng.',
-        },
-      },
+      quizGame(
+        'quiz-com-am-phu-1',
+        'Món "Cơm âm phủ" Huế nổi tiếng với cách trình bày như thế nào?',
+        ['Cơm đặt ở giữa, 7 loại thức ăn xếp xung quanh rực rỡ', 'Cơm cháy giòn cuộn tròn như sushi', 'Tất cả nguyên liệu xay nhuyễn nấu chung', 'Chỉ gồm cơm trắng chấm muối mè'],
+        0,
+        'Cơm âm phủ được bày biện như bông hoa 7 cánh với thịt nướng, chả lụa, nem chua, trứng tráng, tôm chấy, dưa leo và rau thơm quanh ụ cơm trắng.',
+      ),
+      actionGame(
+        'action-com-am-phu-1',
+        'Nấu gạo tẻ cho chín tơi xốp từng hạt trước khi bày đĩa hoa 7 cánh:',
+        'rice',
+        'boil',
+        ['boil', 'stir-fry', 'steam', 'grill'],
+      ),
+      actionGame(
+        'action-com-am-phu-2',
+        'Xào tôm tươi giòn ngọt đậm đà để làm topping xếp quanh cơm:',
+        'shrimp',
+        'stir-fry',
+        ['stir-fry', 'boil', 'steam', 'fry'],
+      ),
     ],
     steps: steps('com-am-phu', [
       { title: 'Nấu cơm', description: 'Nấu cơm tơi xốp.', duration: 45, requiredIngredients: ['rice'], actionLabel: 'Nấu' },
@@ -539,6 +710,8 @@ export const SEED_RECIPES: Recipe[] = [
       { title: 'Rắc rau sống', description: 'Rắc rau sống thái nhỏ.', duration: 45, requiredIngredients: ['herbs-mix'], actionLabel: 'Trộn' },
     ]),
   },
+
+  // 14. Bánh bột lọc (3★, cần ≥ 2 action-cooking)
   {
     id: 'banh-bot-loc',
     name: 'Bánh bột lọc',
@@ -555,18 +728,27 @@ export const SEED_RECIPES: Recipe[] = [
       { ingredientId: 'banana-leaf', amount: '8 lá' },
     ],
     minigames: [
-      {
-        id: 'quiz-banh-bot-loc-1',
-        type: 'quiz',
-        question: 'Bánh bột lọc Huế luộc xong ăn kèm nước mắm như thế nào là đúng điệu?',
-        timeLimit: 30,
-        scoreReward: 100,
-        data: {
-          options: ['Nước mắm ruốc nguyên chất dầm ớt xanh cay xé', 'Nước mắm chua ngọt pha tỏi chanh nhiều đường', 'Tương ớt ngọt đóng chai', 'Muối tiêu chanh ớt'],
-          correctAnswerIndex: 0,
-          explanation: 'Người Huế ăn bánh lọc với nước mắm ngon nguyên chất dầm ớt xiêm xanh cay nồng, không pha loãng với nước hay chanh đường.',
-        },
-      },
+      quizGame(
+        'quiz-banh-bot-loc-1',
+        'Bánh bột lọc Huế luộc xong ăn kèm nước mắm như thế nào là đúng điệu?',
+        ['Nước mắm ruốc nguyên chất dầm ớt xanh cay xé', 'Nước mắm chua ngọt pha tỏi chanh nhiều đường', 'Tương ớt ngọt đóng chai', 'Muối tiêu chanh ớt'],
+        0,
+        'Người Huế ăn bánh lọc với nước mắm ngon nguyên chất dầm ớt xiêm xanh cay nồng, không pha loãng với nước hay chanh đường.',
+      ),
+      actionGame(
+        'action-banh-bot-loc-1',
+        'Rim xào tôm thịt đậm vị tiêu đường nước mắm làm nhân bánh lọc:',
+        'shrimp',
+        'stir-fry',
+        ['stir-fry', 'steam', 'boil', 'grill'],
+      ),
+      actionGame(
+        'action-banh-bot-loc-2',
+        'Bánh gói lá chuối được đặt vào xửng hấp cách thủy đến khi bột trong veo:',
+        'tapioca',
+        'steam',
+        ['steam', 'boil', 'fry', 'grill'],
+      ),
     ],
     steps: steps('banh-bot-loc', [
       { title: 'Sơ chế tôm', description: 'Ướp tôm tươi giòn.', duration: 35, requiredIngredients: ['shrimp'], actionLabel: 'Sơ chế' },
@@ -575,6 +757,8 @@ export const SEED_RECIPES: Recipe[] = [
       { title: 'Gói lá chuối', description: 'Gói bánh hình thoi trong lá chuối.', duration: 40, requiredIngredients: ['banana-leaf'], actionLabel: 'Gói' },
     ]),
   },
+
+  // 15. Chè bắp (2★, cần ≥ 1 action-cooking)
   {
     id: 'che-bap',
     name: 'Chè bắp',
@@ -590,18 +774,27 @@ export const SEED_RECIPES: Recipe[] = [
       { ingredientId: 'coconut-milk', amount: '250ml' },
     ],
     minigames: [
-      {
-        id: 'quiz-che-bap-1',
-        type: 'quiz',
-        question: 'Giống bắp nổi tiếng nào của xứ Huế tạo nên món chè bắp trứ danh?',
-        timeLimit: 30,
-        scoreReward: 100,
-        data: {
-          options: ['Bắp cồn Hến ngọt thơm dẻo hạt', 'Bắp ngọt Mỹ giòn vàng', 'Bắp nếp nương Tây Bắc', 'Bắp ngô tím sấy giòn'],
-          correctAnswerIndex: 0,
-          explanation: 'Bắp bãi bồi cồn Hến phù sa sông Hương cho hạt bắp non ngọt mềm tự nhiên, nấu chè không cần nhiều đường vẫn thơm nức.',
-        },
-      },
+      quizGame(
+        'quiz-che-bap-1',
+        'Giống bắp nổi tiếng nào của xứ Huế tạo nên món chè bắp trứ danh?',
+        ['Bắp cồn Hến ngọt thơm dẻo hạt', 'Bắp ngọt Mỹ giòn vàng', 'Bắp nếp nương Tây Bắc', 'Bắp ngô tím sấy giòn'],
+        0,
+        'Bắp bãi bồi cồn Hến phù sa sông Hương cho hạt bắp non ngọt mềm tự nhiên, nấu chè không cần nhiều đường vẫn thơm nức.',
+      ),
+      actionGame(
+        'action-che-bap-1',
+        'Bào bắp non Cồn Hến ninh nhừ cùng nước lá dứa thơm lừng:',
+        'corn',
+        'boil',
+        ['boil', 'stir-fry', 'steam', 'grill'],
+      ),
+      actionGame(
+        'action-che-bap-2',
+        'Nấu nước cốt dừa sôi lăn tăn béo ngậy rưới mặt chè:',
+        'coconut-milk',
+        'boil',
+        ['boil', 'stir-fry', 'steam', 'fry'],
+      ),
     ],
     steps: steps('che-bap', [
       { title: 'Tách hạt bắp', description: 'Tách hạt bắp tươi non.', duration: 35, requiredIngredients: ['corn'], actionLabel: 'Sơ chế' },

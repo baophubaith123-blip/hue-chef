@@ -19,12 +19,22 @@ import {
 
 
 import { SEED_RECIPES } from '@/data/recipes';
-
 import type { Recipe, RecipeStatus } from '@/data/types';
-
+import { validateMinigames } from '@/features/recipes/validation';
 import { AppError } from '@/lib/errors';
-
 import { getJsonStorage, setJsonStorage, STORAGE_KEYS } from '@/lib/storage';
+
+if (import.meta.env.DEV) {
+  for (const recipe of SEED_RECIPES) {
+    const validIngredientIds = recipe.ingredients.map((i) => i.ingredientId);
+    const result = validateMinigames(recipe.minigames, recipe.difficulty, validIngredientIds);
+    if (!result.valid) {
+      throw new Error(
+        `[DEV-VALIDATION-ERROR] Recipe "${recipe.name}" (${recipe.id}, ${recipe.difficulty} stars) failed minigame validation: ${result.errors.join(', ')}`,
+      );
+    }
+  }
+}
 
 
 
