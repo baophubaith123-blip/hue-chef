@@ -63,7 +63,7 @@ export default function LandingPage() {
 
               <div className={styles.heroActions}>
                 <Button variant="primary" onClick={handleStartCooking}>
-                  {t('landing.ctaStart')}
+                  {user ? t('landing.ctaContinue') : t('landing.ctaStart')}
                 </Button>
                 <Button variant="secondary" onClick={handleScrollToFeatured}>
                   {t('landing.ctaExplore')}

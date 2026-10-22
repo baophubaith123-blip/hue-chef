@@ -83,6 +83,7 @@ export const vi: I18nDictionary = {
     collection: 'Bộ sưu tập',
     leaderboard: 'Bảng xếp hạng',
     profile: 'Trang cá nhân',
+    about: 'Giới thiệu',
   },
   recipe: {
     name: 'Tên món',
@@ -568,6 +569,8 @@ export const vi: I18nDictionary = {
     help: 'Trợ giúp',
     about: 'Giới thiệu',
     feedback: 'Góp ý',
+    enterGame: 'Vào game',
+    login: 'Đăng nhập',
   },
   footer: {
     copyright: (year: number) => `© ${year} Hue Chef. Mọi quyền được bảo lưu.`,
@@ -658,6 +661,7 @@ export const vi: I18nDictionary = {
     heroTitle: 'Tinh Hoa Ẩm Thực Cố Đô Huế',
     heroSubtitle: 'Khám phá nghệ thuật nấu ăn cung đình và dân gian xứ Huế qua từng minigame sinh động, từng nguyên liệu đậm đà hồn Việt.',
     ctaStart: 'Bắt đầu nấu ngay',
+    ctaContinue: 'Tiếp tục nấu',
     ctaExplore: 'Khám phá công thức',
     steamText: 'Hương vị Huế',
     featuredTitle: 'Món Huế Đặc Sắc',

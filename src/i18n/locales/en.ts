@@ -83,6 +83,7 @@ export const en: I18nDictionary = {
     collection: 'Collection',
     leaderboard: 'Leaderboard',
     profile: 'Profile',
+    about: 'About',
   },
   recipe: {
     name: 'Name',
@@ -567,6 +568,8 @@ export const en: I18nDictionary = {
     help: 'Help',
     about: 'About',
     feedback: 'Feedback',
+    enterGame: 'Enter Game',
+    login: 'Log In',
   },
   footer: {
     copyright: (year: number) => `© ${year} Hue Chef. All rights reserved.`,
@@ -657,6 +660,7 @@ export const en: I18nDictionary = {
     heroTitle: 'The Essence of Hue Royal Cuisine',
     heroSubtitle: 'Explore the royal and folk culinary art of Hue through vibrant minigames and authentic Vietnamese ingredients.',
     ctaStart: 'Start Cooking Now',
+    ctaContinue: 'Continue Cooking',
     ctaExplore: 'Explore Recipes',
     steamText: 'Taste of Hue',
     featuredTitle: 'Featured Hue Specialties',

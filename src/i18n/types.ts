@@ -83,6 +83,7 @@ export interface I18nDictionary {
     collection: string;
     leaderboard: string;
     profile: string;
+    about: string;
   };
   recipe: {
     name: string;
@@ -529,6 +530,8 @@ export interface I18nDictionary {
     help: string;
     about: string;
     feedback: string;
+    enterGame: string;
+    login: string;
   };
   footer: {
     copyright: (year: number) => string;
@@ -619,6 +622,7 @@ export interface I18nDictionary {
     heroTitle: string;
     heroSubtitle: string;
     ctaStart: string;
+    ctaContinue: string;
     ctaExplore: string;
     steamText: string;
     featuredTitle: string;

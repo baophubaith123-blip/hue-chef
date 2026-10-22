@@ -34,6 +34,15 @@ export function Header() {
             <Link to="/about" className={styles.link}>{t('header.about')}</Link>
             <Link to="/feedback" className={styles.link}>{t('header.feedback')}</Link>
           </nav>
+          {user ? (
+            <Link to={getDefaultPathForRole(user.role)} className={styles.enterGameBtn}>
+              🎮 {t('header.enterGame')}
+            </Link>
+          ) : (
+            <Link to="/login" className={styles.loginBtn}>
+              🔑 {t('header.login')}
+            </Link>
+          )}
           {user ? <NotificationBell /> : null}
           <LanguageSwitcher />
         </div>
