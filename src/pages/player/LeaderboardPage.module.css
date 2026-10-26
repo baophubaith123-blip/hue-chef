@@ -72,21 +72,29 @@
 }
 
 .boardLayout {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
+  display: grid;
+  grid-template-columns: 1.25fr 1fr;
+  align-items: stretch;
+  gap: 1.5rem;
 }
 
-/* Top 3 Podium (Image 1 Style) */
+@media (max-width: 960px) {
+  .boardLayout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Top 3 Podium (Image 2 Style) */
 .podiumSection {
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  gap: 1.5rem;
-  padding: 2.5rem 1.5rem 0;
-  background: linear-gradient(180deg, rgba(233, 162, 59, 0.08) 0%, rgba(200, 85, 61, 0.04) 100%);
-  border-radius: var(--radius-xl);
-  border: 1px solid var(--color-border);
+  gap: 1.25rem;
+  padding: 2.5rem 1.25rem 0;
+  background: linear-gradient(180deg, #FFFDF9 0%, #FAF0E2 100%);
+  border-radius: var(--radius-xl, 20px);
+  border: 1.5px solid var(--color-card-border, #E8DAC8);
+  box-shadow: 0 4px 16px rgba(74, 21, 37, 0.04);
 }
 
 .podiumCol {

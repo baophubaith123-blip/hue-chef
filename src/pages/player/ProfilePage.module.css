@@ -3,52 +3,55 @@
 }
 
 .title {
-  margin: 0 0 0.5rem;
-  font-family: var(--font-serif);
+  margin: 0 0 0.35rem;
+  font-family: var(--font-display, var(--font-serif), Georgia, serif);
   font-size: 1.85rem;
   font-weight: 700;
-  color: var(--color-plum);
+  color: var(--color-plum, #4a1525);
 }
 
 [data-theme='dark'] .title {
-  color: #F8EFEA;
+  color: #f8efea;
 }
 
 .subtitle {
   margin: 0;
-  color: var(--color-text-muted);
+  color: var(--color-text-muted, #7c6c64);
   font-size: 0.95rem;
 }
 
+/* 2-Column Layout (Khung 4 Target) */
 .grid {
   display: grid;
-  grid-template-columns: 1fr 2fr;
-  gap: 1.75rem;
+  grid-template-columns: 340px 1fr;
+  align-items: start;
+  gap: 2rem;
 }
 
-@media (max-width: 860px) {
+@media (max-width: 960px) {
   .grid {
     grid-template-columns: 1fr;
+    gap: 1.5rem;
   }
 }
 
+/* Left Card: Profile & Avatar Summary */
 .profileCard {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-xl);
-  padding: 2rem 1.5rem;
+  background: var(--color-surface, #ffffff);
+  border: 1.5px solid var(--color-card-border, #e8dac8);
+  border-radius: var(--radius-xl, 20px);
+  padding: 2.25rem 1.75rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  box-shadow: var(--shadow-sm);
-  height: fit-content;
+  box-shadow: 0 4px 16px rgba(74, 21, 37, 0.04);
 }
 
 .avatarContainer {
   position: relative;
-  width: 6.5rem;
-  height: 6.5rem;
+  width: 7rem;
+  height: 7rem;
   margin-bottom: 1rem;
 }
 
@@ -57,20 +60,22 @@
   height: 100%;
   border-radius: 50%;
   object-fit: cover;
-  border: 3px solid var(--color-gold);
-  box-shadow: 0 4px 14px rgba(233, 162, 59, 0.3);
+  border: 3.5px solid var(--color-gold, #e9a23b);
+  box-shadow: 0 4px 16px rgba(233, 162, 59, 0.35);
 }
 
 .avatarFallback {
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+  background: linear-gradient(135deg, var(--color-brick, #c8553d), var(--color-gold, #e9a23b));
   color: #ffffff;
   display: grid;
   place-items: center;
-  font-size: 2.25rem;
-  font-weight: 700;
+  font-size: 2.5rem;
+  font-weight: 800;
+  border: 3.5px solid var(--color-gold, #e9a23b);
+  box-shadow: 0 4px 16px rgba(233, 162, 59, 0.35);
 }
 
 .equippedOverlay {
@@ -85,129 +90,183 @@
 
 .userName {
   margin: 0 0 0.25rem;
-  font-family: var(--font-serif);
-  font-size: 1.35rem;
-  font-weight: 700;
-  color: var(--color-text);
+  font-family: var(--font-display, var(--font-serif), Georgia, serif);
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--color-plum, #4a1525);
 }
 
 .userEmail {
-  margin: 0 0 1rem;
+  margin: 0 0 1.25rem;
   font-size: 0.85rem;
-  color: var(--color-text-muted);
-}
-
-.levelBadge {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.25rem;
-  background: var(--color-surface-alt);
-  border: 1px solid var(--color-border);
-  color: var(--color-primary);
-  font-size: 0.82rem;
-  font-weight: 700;
-  padding: 0.25rem 0.75rem;
-  border-radius: var(--radius-full);
-  margin-bottom: 1.25rem;
+  color: var(--color-text-muted, #7c6c64);
 }
 
 .statsRow {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.75rem;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
   width: 100%;
-  border-top: 1px dashed var(--color-border);
-  padding-top: 1.25rem;
+  border-top: 1px dashed var(--color-card-border, #e8dac8);
+  border-bottom: 1px dashed var(--color-card-border, #e8dac8);
+  padding: 1rem 0;
+  margin-bottom: 1.25rem;
 }
 
-.statItem {
-  background: var(--color-surface-alt);
-  padding: 0.75rem 0.5rem;
-  border-radius: var(--radius-md);
-  border: 1px solid var(--color-border);
-}
-
-.statValue {
-  font-size: 1.25rem;
-  font-weight: 800;
-  color: var(--color-plum);
-}
-
-[data-theme='dark'] .statValue {
-  color: #F8EFEA;
-}
-
-.statLabel {
-  font-size: 0.75rem;
-  color: var(--color-text-muted);
-  font-weight: 600;
-  margin-top: 2px;
-}
-
-.editCard {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-xl);
-  padding: 2rem;
-  box-shadow: var(--shadow-sm);
+.statBox {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  align-items: center;
+  gap: 0.2rem;
 }
 
-.sectionHeading {
-  margin: 0 0 1rem;
-  font-family: var(--font-serif);
-  font-size: 1.15rem;
+.statVal {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--color-plum, #4a1525);
+}
+
+.statLbl {
+  font-size: 0.72rem;
+  color: var(--color-text-muted, #7c6c64);
+  font-weight: 600;
+}
+
+.badgeShowcase {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+/* Right Card: Edit Form */
+.formCard {
+  background: var(--color-surface, #ffffff);
+  border: 1.5px solid var(--color-card-border, #e8dac8);
+  border-radius: var(--radius-xl, 20px);
+  padding: 2.25rem 2.5rem;
+  box-shadow: 0 4px 16px rgba(74, 21, 37, 0.04);
+}
+
+.formTitle {
+  margin: 0 0 1.5rem;
+  font-family: var(--font-display, var(--font-serif), Georgia, serif);
+  font-size: 1.35rem;
   font-weight: 700;
-  color: var(--color-text);
-  border-bottom: 1px solid var(--color-border);
-  padding-bottom: 0.5rem;
+  color: var(--color-plum, #4a1525);
+  border-bottom: 1px solid var(--color-card-border, #e8dac8);
+  padding-bottom: 0.75rem;
 }
 
-.formGroup {
+.fieldGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+}
+
+.field {
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
-  margin-bottom: 1rem;
 }
 
 .label {
   font-size: 0.88rem;
-  font-weight: 600;
-  color: var(--color-text);
+  font-weight: 700;
+  color: var(--color-text, #3b2a20);
 }
 
+/* Inputs with warm cream background & soft rounding */
 .input {
   width: 100%;
-  padding: 0.65rem 0.85rem;
-  border-radius: var(--radius-md);
-  border: 1px solid var(--color-border);
-  background: var(--color-bg);
-  color: var(--color-text);
-  font-size: 0.92rem;
-  box-shadow: 0 1px 2px rgba(59, 42, 32, 0.04);
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-lg, 12px);
+  border: 1.5px solid var(--color-card-border, #e8dac8);
+  background: var(--color-bg-ivory, #faf5ef);
+  color: var(--color-text, #3b2a20);
+  font-size: 0.95rem;
   transition: all 0.2s ease;
+  box-shadow: inset 0 1px 2px rgba(74, 21, 37, 0.02);
 }
 
 .input:focus {
   outline: none;
-  border-color: var(--color-primary);
+  border-color: var(--color-brick, #c8553d);
+  background: #ffffff;
   box-shadow: 0 0 0 3px rgba(200, 85, 61, 0.15);
 }
 
+.select {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-lg, 12px);
+  border: 1.5px solid var(--color-card-border, #e8dac8);
+  background: var(--color-bg-ivory, #faf5ef);
+  color: var(--color-text, #3b2a20);
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.select:focus {
+  outline: none;
+  border-color: var(--color-brick, #c8553d);
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(200, 85, 61, 0.15);
+}
+
+.fileUploadBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.15rem;
+  border-radius: var(--radius-lg, 12px);
+  border: 1.5px solid var(--color-card-border, #e8dac8);
+  background: var(--color-bg-ivory, #faf5ef);
+  color: var(--color-plum, #4a1525);
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: fit-content;
+}
+
+.fileUploadBtn:hover {
+  background: var(--color-surface-hover, #f5efe6);
+  border-color: var(--color-brick, #c8553d);
+  color: var(--color-brick, #c8553d);
+}
+
+.fileInput {
+  display: none;
+}
+
+.sectionDivider {
+  border: none;
+  border-top: 1px dashed var(--color-card-border, #e8dac8);
+  margin: 0.75rem 0;
+}
+
 .errorText {
-  color: var(--color-danger);
-  font-size: 0.8rem;
+  color: var(--color-danger, #ef4444);
+  font-size: 0.82rem;
   font-weight: 600;
+  margin: 0.2rem 0 0;
 }
 
 .successText {
-  color: var(--color-success);
-  font-size: 0.88rem;
-  font-weight: 600;
-  background: var(--color-success-soft);
-  padding: 0.65rem 1rem;
-  border-radius: var(--radius-md);
-  border: 1px solid var(--color-success);
+  color: var(--color-success, #15803d);
+  font-size: 0.9rem;
+  font-weight: 700;
+  background: rgba(34, 197, 94, 0.12);
+  padding: 0.75rem 1.25rem;
+  border-radius: var(--radius-lg, 12px);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  margin-top: 1rem;
+}
+
+.actions {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: flex-start;
 }

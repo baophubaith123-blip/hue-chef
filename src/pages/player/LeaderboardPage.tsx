@@ -11,6 +11,79 @@ import styles from './LeaderboardPage.module.css';
 
 type TimeFrame = 'weekly' | 'monthly' | 'allTime';
 
+const MOCK_COMMUNITY_LEADERBOARD = [
+  {
+    id: 'comm-1',
+    name: 'GameMaster',
+    email: 'gamemaster@hue.vn',
+    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=GameMaster',
+    level: 18,
+    totalScore: 12560,
+    cookedCount: 24,
+    equippedAchievementId: 'badge-grandmaster',
+  },
+  {
+    id: 'comm-2',
+    name: 'Minh Anh',
+    email: 'minhanh@hue.vn',
+    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=MinhAnh',
+    level: 15,
+    totalScore: 10230,
+    cookedCount: 19,
+    equippedAchievementId: 'badge-master',
+  },
+  {
+    id: 'comm-3',
+    name: 'Thảo Vy',
+    email: 'thaovy@hue.vn',
+    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=ThaoVy',
+    level: 14,
+    totalScore: 9870,
+    cookedCount: 18,
+    equippedAchievementId: 'badge-spice',
+  },
+  {
+    id: 'comm-4',
+    name: 'Đắc Thắng',
+    email: 'dacthang@hue.vn',
+    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=DacThang',
+    level: 12,
+    totalScore: 8920,
+    cookedCount: 15,
+    equippedAchievementId: undefined,
+  },
+  {
+    id: 'comm-5',
+    name: 'Linh Anh',
+    email: 'linhanh@hue.vn',
+    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=LinhAnh',
+    level: 11,
+    totalScore: 8750,
+    cookedCount: 14,
+    equippedAchievementId: undefined,
+  },
+  {
+    id: 'comm-6',
+    name: 'Đức Minh',
+    email: 'ducminh@hue.vn',
+    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=DucMinh',
+    level: 10,
+    totalScore: 8600,
+    cookedCount: 13,
+    equippedAchievementId: undefined,
+  },
+  {
+    id: 'comm-7',
+    name: 'Nguyễn Gia Bảo',
+    email: 'giabao@hue.vn',
+    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=GiaBao',
+    level: 9,
+    totalScore: 8185,
+    cookedCount: 12,
+    equippedAchievementId: undefined,
+  },
+];
+
 export default function LeaderboardPage() {
   const { t } = useTranslation();
   const { user } = useAuth();
@@ -36,14 +109,23 @@ export default function LeaderboardPage() {
       };
     });
 
-    mapped.sort((a, b) => {
+    // Merge with community players if needed so the leaderboard has full competition
+    const existingIds = new Set(mapped.map((p) => p.id));
+    const merged = [...mapped];
+    for (const comm of MOCK_COMMUNITY_LEADERBOARD) {
+      if (!existingIds.has(comm.id)) {
+        merged.push(comm);
+      }
+    }
+
+    merged.sort((a, b) => {
       if (b.totalScore !== a.totalScore) {
         return b.totalScore - a.totalScore;
       }
       return b.level - a.level;
     });
 
-    return mapped;
+    return merged;
   }, []);
 
   const rank1 = leaderboardData[0];
@@ -196,7 +278,7 @@ export default function LeaderboardPage() {
                         </div>
                         <div className={styles.playerNameGroup}>
                           <span className={styles.playerName}>
-                            {player.name} {isCurrentUser ? `(${t('dashboard.you')})` : ''}
+                            {player.name} {isCurrentUser ? '(Bạn)' : ''}
                           </span>
                           <span className={styles.playerLevel}>Lv.{player.level}</span>
                         </div>

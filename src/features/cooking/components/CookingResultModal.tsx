@@ -94,7 +94,7 @@ export function CookingResultModal({
               <div className={styles.metricCard}>
                 <span className={styles.metricIcon}>⏱️</span>
                 <div className={styles.metricDetails}>
-                  <span className={styles.metricLabel}>{t('cooking.time')}</span>
+                  <span className={styles.metricLabel}>{t('collection.timeUsed')}</span>
                   <span className={styles.metricValue}>{formatDuration(timeUsed)}</span>
                 </div>
               </div>

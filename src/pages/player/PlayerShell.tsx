@@ -45,19 +45,6 @@ export function PlayerShell({ children }: PlayerShellProps) {
     setMobileMenuOpen(false);
   }, [location.pathname]);
 
-  // Calculate dynamic coins & gems for gamification header
-  const coins = useMemo(() => {
-    if (!user) return 1200;
-    const totalScore = user.cookedRecipes?.reduce((sum, r) => sum + r.score, 0) ?? 0;
-    return totalScore > 0 ? totalScore : 1200;
-  }, [user]);
-
-  const gems = useMemo(() => {
-    if (!user) return 50;
-    const count = user.unlockedAchievements?.length ?? 0;
-    return 50 + count * 10;
-  }, [user]);
-
   // Determine current breadcrumb
   const breadcrumbCurrent = useMemo(() => {
     const p = location.pathname;
@@ -240,14 +227,6 @@ export function PlayerShell({ children }: PlayerShellProps) {
           </div>
 
           <div className={styles.topBarActions}>
-            <div className={`${styles.statPill} ${styles.coinPill}`} title="Tiền thưởng">
-              <span aria-hidden="true">🪙</span>
-              <span>{coins.toLocaleString()}</span>
-            </div>
-            <div className={`${styles.statPill} ${styles.gemPill}`} title="Ngọc thử thách">
-              <span aria-hidden="true">💎</span>
-              <span>{gems.toLocaleString()}</span>
-            </div>
             <NotificationBell />
             <LanguageSwitcher />
             <Button variant="secondary" className={styles.logoutBtn} onClick={handleLogout}>

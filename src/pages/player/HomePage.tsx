@@ -175,9 +175,8 @@ export default function HomePage() {
   return (
     <PlayerShell>
       <div className={styles.dashboard}>
-        {/* 1. Hero Banner mang phong cách Cố Đô Cung Đình Huế (Image 1) */}
+        {/* 1. Hero Banner mang phong cách Cố Đô Cung Đình Huế (Image 6 Target) */}
         <section className={styles.heroBanner} aria-label={dict.dashboard.heroTitleHue}>
-          <div className={styles.heroOverlay} />
           <div className={styles.heroContent}>
             <div className={styles.heroUserBadge}>
               <div className={styles.avatarWrapSmall}>
@@ -217,8 +216,7 @@ export default function HomePage() {
           </div>
 
           <div className={styles.heroArtwork} aria-hidden="true">
-            <div className={styles.citadelSilhouette} />
-            <div className={styles.heroFoodShowcase}>
+            <div className={styles.heroFoodCircle}>
               <span className={styles.floatingDishEmoji}>🍜</span>
             </div>
           </div>
