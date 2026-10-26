@@ -1,13 +1,40 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding-bottom: 3rem;
+}
+
 .head {
-  margin-bottom: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.titleRow {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.titleIcon {
+  font-size: 1.75rem;
 }
 
 .title {
-  margin: 0 0 0.35rem;
-  font-size: 1.75rem;
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: 1.85rem;
+  font-weight: 700;
+  color: var(--color-plum);
+}
+
+[data-theme='dark'] .title {
+  color: #F8EFEA;
 }
 
 .subtitle {
   margin: 0;
+  font-size: 0.95rem;
   color: var(--color-text-muted);
 }

@@ -1,6 +1,6 @@
 :root {
   /* Warm Culinary Palette - Light Mode */
-  --color-bg: #FBF5EC;
+  --color-bg: #FAF5EF;
   --color-surface: #FFFDF9;
   --color-surface-alt: #F5EBDC;
   --color-surface-muted: #F5EBDC;
@@ -27,6 +27,27 @@
   --color-warning-soft: #fff4e5;
   --color-info: #2563eb;
 
+  /* Imperial Hue Plum & Burgundy Brand Palette */
+  --color-plum: #4A1525;
+  --color-plum-dark: #370E1B;
+  --color-plum-light: #5E1D31;
+  --color-plum-active: #7A243B;
+  --color-plum-hover: rgba(255, 255, 255, 0.08);
+  --color-plum-text: #F8EFEA;
+  --color-plum-text-muted: #D1B3BC;
+
+  /* Gold & Gamification Tokens */
+  --color-gold: #E9A23B;
+  --color-gold-hover: #d58f28;
+  --color-gold-soft: rgba(233, 162, 59, 0.15);
+  --color-gem: #38BDF8;
+  --color-gem-soft: rgba(56, 189, 248, 0.15);
+
+  /* Card and Borders */
+  --color-card: #FFFDF9;
+  --color-card-border: #E8DAC8;
+  --color-card-hover: #FDF9F2;
+
   /* Spacing */
   --spacing-xs: 4px;
   --spacing-sm: 8px;
@@ -49,7 +70,11 @@
 
   /* Typography */
   --font-serif: 'Playfair Display', 'Merriweather', Georgia, serif;
+  --font-display: 'Playfair Display', 'Merriweather', Georgia, serif;
   --font-sans: 'Be Vietnam Pro', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --color-bg-ivory: #FAF5EF;
+  --color-brick: #C8553D;
+  --color-surface-hover: #F5EBDC;
 }
 
 [data-theme='dark'] {
@@ -81,8 +106,32 @@
   --color-warning-soft: rgba(245, 158, 11, 0.18);
   --color-info: #3b82f6;
 
+  /* Imperial Hue Plum & Burgundy - Dark Mode */
+  --color-plum: #2D0B16;
+  --color-plum-dark: #1E060E;
+  --color-plum-light: #441223;
+  --color-plum-active: #5E1A2C;
+  --color-plum-hover: rgba(255, 255, 255, 0.06);
+  --color-plum-text: #F8EFEA;
+  --color-plum-text-muted: #B399A2;
+
+  /* Gold & Gamification Tokens - Dark Mode */
+  --color-gold: #F0B95B;
+  --color-gold-hover: #f4c676;
+  --color-gold-soft: rgba(240, 185, 91, 0.18);
+  --color-gem: #38BDF8;
+  --color-gem-soft: rgba(56, 189, 248, 0.18);
+
+  /* Card and Borders - Dark Mode */
+  --color-card: #2A201B;
+  --color-card-border: #4A3A31;
+  --color-card-hover: #352923;
+
   /* Shadows */
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
   --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.4);
   --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.5);
+  --color-bg-ivory: #1C1512;
+  --color-brick: #E8884D;
+  --color-surface-hover: #352923;
 }

@@ -12,7 +12,7 @@ interface RecipeCardProps {
 }
 
 export function RecipeCard({ recipe }: RecipeCardProps) {
-  const { t, dict } = useTranslation();
+  const { dict } = useTranslation();
   const [tilt, setTilt] = useState<{ rotateX: number; rotateY: number } | null>(null);
 
   const handleMouseMove = (e: MouseEvent<HTMLElement>) => {
@@ -25,13 +25,12 @@ export function RecipeCard({ recipe }: RecipeCardProps) {
     const centerX = rect.width / 2;
     const centerY = rect.height / 2;
 
-    // Max 8 degrees limit
-    const rotateX = -((y - centerY) / centerY) * 8;
-    const rotateY = ((x - centerX) / centerX) * 8;
+    const rotateX = -((y - centerY) / centerY) * 6;
+    const rotateY = ((x - centerX) / centerX) * 6;
 
     setTilt({
-      rotateX: Math.max(-8, Math.min(8, rotateX)),
-      rotateY: Math.max(-8, Math.min(8, rotateY)),
+      rotateX: Math.max(-6, Math.min(6, rotateX)),
+      rotateY: Math.max(-6, Math.min(6, rotateY)),
     });
   };
 
@@ -40,6 +39,7 @@ export function RecipeCard({ recipe }: RecipeCardProps) {
   };
 
   const categoryLabel = dict.recipe.categoryLabels[recipe.category] ?? recipe.category;
+  const ratingScore = (4.0 + (recipe.difficulty * 0.18)).toFixed(1);
 
   return (
     <article
@@ -49,38 +49,46 @@ export function RecipeCard({ recipe }: RecipeCardProps) {
       style={
         tilt
           ? {
-              transform: `perspective(1000px) rotateX(${tilt.rotateX.toFixed(2)}deg) rotateY(${tilt.rotateY.toFixed(2)}deg) scale3d(1.02, 1.02, 1.02)`,
+              transform: `perspective(1000px) rotateX(${tilt.rotateX.toFixed(2)}deg) rotateY(${tilt.rotateY.toFixed(2)}deg) translateY(-4px)`,
               transition: 'transform 0.08s ease-out',
             }
           : {
-              transform: 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)',
+              transform: 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0)',
               transition: 'transform 0.35s ease-out',
             }
       }
     >
-      <div className={styles.imageWrap}>
-        <ImageWithFallback
-          className={styles.image}
-          src={recipe.image}
-          alt={recipe.name}
-          fallbackTitle={recipe.name}
-          loading="lazy"
-        />
-      </div>
-      <div className={styles.body}>
-        <span className={styles.category}>{categoryLabel}</span>
-        <h3 className={styles.title}>
-          <Link to={`/recipes/${recipe.id}`}>{recipe.name}</Link>
-        </h3>
-        <p className={styles.description}>{recipe.description}</p>
-        <div className={styles.meta}>
-          <span>{t('recipe.difficulty')} {'★'.repeat(recipe.difficulty)}</span>
-          <span>{formatDuration(recipe.duration)}</span>
-          <span>{recipe.baseScore} {t('recipe.pts')}</span>
+      <Link to={`/recipes/${recipe.id}`} className={styles.imageLink} tabIndex={-1} aria-hidden="true">
+        <div className={styles.imageWrap}>
+          <ImageWithFallback
+            className={styles.image}
+            src={recipe.image}
+            alt={recipe.name}
+            fallbackTitle={recipe.name}
+            loading="lazy"
+          />
+          <div className={styles.timeBadge}>
+            ⏱ {formatDuration(recipe.duration)}
+          </div>
         </div>
-        <Link className={styles.link} to={`/recipes/${recipe.id}`}>
-          {t('recipe.viewRecipe')}
-        </Link>
+      </Link>
+
+      <div className={styles.body}>
+        <h3 className={styles.title}>
+          <Link to={`/recipes/${recipe.id}`} className={styles.titleLink}>
+            {recipe.name}
+          </Link>
+        </h3>
+
+        <p className={styles.description}>{recipe.description}</p>
+
+        <div className={styles.cardFooter}>
+          <span className={styles.categoryBadge}>{categoryLabel}</span>
+          <div className={styles.ratingBox}>
+            <span className={styles.starIcon}>★</span>
+            <span className={styles.ratingValue}>{ratingScore}</span>
+          </div>
+        </div>
       </div>
     </article>
   );

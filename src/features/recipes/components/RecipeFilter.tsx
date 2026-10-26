@@ -1,4 +1,5 @@
 import type { RecipeCategory } from '@/data/types';
+import { useTranslation } from '@/i18n/useTranslation';
 
 import styles from '@/features/recipes/components/RecipeFilter.module.css';
 
@@ -16,78 +17,55 @@ interface RecipeFilterProps {
   onChange: (next: RecipeFilterState) => void;
 }
 
-const CATEGORIES: Array<{ value: RecipeCategory | 'all'; label: string }> = [
-  { value: 'all', label: 'All types' },
-  { value: 'bun', label: 'Bún' },
-  { value: 'com', label: 'Cơm' },
-  { value: 'banh', label: 'Bánh' },
-  { value: 'che', label: 'Chè' },
-  { value: 'nem', label: 'Nem' },
+const CATEGORY_KEYS: Array<{ value: RecipeCategory | 'all'; key: string; defaultLabel: string }> = [
+  { value: 'all', key: 'recipe.allCategories', defaultLabel: 'Tất cả' },
+  { value: 'bun', key: 'recipe.categoryLabels.bun', defaultLabel: 'Bún' },
+  { value: 'com', key: 'recipe.categoryLabels.com', defaultLabel: 'Cơm' },
+  { value: 'banh', key: 'recipe.categoryLabels.banh', defaultLabel: 'Bánh' },
+  { value: 'che', key: 'recipe.categoryLabels.che', defaultLabel: 'Chè' },
+  { value: 'nem', key: 'recipe.categoryLabels.nem', defaultLabel: 'Nem' },
 ];
 
 export function RecipeFilter({ value, onChange }: RecipeFilterProps) {
+  const { t } = useTranslation();
+
   const update = (patch: Partial<RecipeFilterState>) => {
     onChange({ ...value, ...patch });
   };
 
   return (
-    <div className={styles.bar}>
-      <label className={styles.field}>
-        <span className={styles.label}>Search</span>
+    <div className={styles.filterContainer}>
+      {/* Category Pills (Image 1 Style) */}
+      <div className={styles.categoryPills} role="tablist" aria-label="Bộ lọc danh mục">
+        {CATEGORY_KEYS.map((item) => {
+          const isActive = value.category === item.value;
+          return (
+            <button
+              key={item.value}
+              type="button"
+              role="tab"
+              aria-selected={isActive}
+              className={`${styles.categoryPill} ${isActive ? styles.categoryPillActive : ''}`}
+              onClick={() => update({ category: item.value })}
+            >
+              {t(item.key) || item.defaultLabel}
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Search Input Bar (Image 1 Right aligned) */}
+      <div className={styles.searchWrapper}>
+        <span className={styles.searchIcon} aria-hidden="true">🔍</span>
         <input
-          className={styles.input}
+          className={styles.searchInput}
           type="search"
-          placeholder="Search without diacritics…"
+          placeholder={t('recipe.searchPlaceholder') || 'Tìm kiếm món ăn...'}
+          aria-label={t('recipe.searchPlaceholder') || 'Tìm kiếm món ăn...'}
           value={value.search}
           onChange={(event) => update({ search: event.target.value })}
         />
-      </label>
-      <label className={styles.field}>
-        <span className={styles.label}>Category</span>
-        <select
-          className={styles.select}
-          value={value.category}
-          onChange={(event) =>
-            update({ category: event.target.value as RecipeFilterState['category'] })
-          }
-        >
-          {CATEGORIES.map((item) => (
-            <option key={item.value} value={item.value}>
-              {item.label}
-            </option>
-          ))}
-        </select>
-      </label>
-      <label className={styles.field}>
-        <span className={styles.label}>Difficulty</span>
-        <select
-          className={styles.select}
-          value={value.difficulty}
-          onChange={(event) =>
-            update({ difficulty: event.target.value as RecipeFilterState['difficulty'] })
-          }
-        >
-          <option value="all">All</option>
-          {[1, 2, 3, 4, 5].map((level) => (
-            <option key={level} value={String(level)}>
-              Level {level}
-            </option>
-          ))}
-        </select>
-      </label>
-      <label className={styles.field}>
-        <span className={styles.label}>Sort</span>
-        <select
-          className={styles.select}
-          value={value.sort}
-          onChange={(event) => update({ sort: event.target.value as RecipeSort })}
-        >
-          <option value="name-asc">Name A–Z</option>
-          <option value="difficulty-desc">Hardest first</option>
-          <option value="duration-asc">Shortest time</option>
-          <option value="score-desc">Highest score</option>
-        </select>
-      </label>
+      </div>
     </div>
   );
 }

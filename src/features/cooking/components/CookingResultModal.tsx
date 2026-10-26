@@ -6,6 +6,7 @@ import { Button } from '@/components/Button';
 import { Modal } from '@/components/Modal';
 import type { CookingSession } from '@/features/cooking/types';
 import { useTranslation } from '@/i18n/useTranslation';
+import { formatDuration } from '@/lib/format';
 
 import styles from './CookingResultModal.module.css';
 
@@ -40,6 +41,7 @@ export function CookingResultModal({
   }, [isSuccess, onApplyProgress]);
 
   const title = isSuccess ? t('cooking.result.successTitle') : t('cooking.result.failTitle');
+  const timeUsed = Math.max(0, session.totalDurationSeconds - session.timeRemainingSeconds);
 
   return (
     <Modal
@@ -49,13 +51,13 @@ export function CookingResultModal({
       footer={
         <div className={styles.modalFooter}>
           <Button variant="secondary" onClick={onRetry}>
-            {t('cooking.result.retry')}
+            🔄 {t('cooking.result.retry')}
           </Button>
           <Link to={`/recipes/${session.recipe.id}`} onClick={onClose}>
-            <Button variant="secondary">{t('cooking.result.backToRecipe')}</Button>
+            <Button variant="secondary">📖 {t('cooking.result.backToRecipe')}</Button>
           </Link>
           <Link to="/home" onClick={onClose}>
-            <Button variant="primary">{dict.cooking.result.backToHome}</Button>
+            <Button variant="primary">🏠 {dict.cooking.result.backToHome}</Button>
           </Link>
         </div>
       }
@@ -63,35 +65,75 @@ export function CookingResultModal({
       <div className={styles.content}>
         {isSuccess ? (
           <>
-            <div className={styles.statsRow}>
-              <span>{t('cooking.result.score')}:</span>
-              <strong>{session.finalScore}</strong>
+            {/* Top Celebration Banner */}
+            <div className={styles.celebrationHero}>
+              <div className={styles.trophyBadge} aria-hidden="true">
+                🏆
+              </div>
+              <h3 className={styles.recipeName}>{session.recipe.name}</h3>
+              <div className={styles.starsDisplay} aria-label={`${session.stars} sao`}>
+                {Array.from({ length: 5 }).map((_, idx) => (
+                  <span
+                    key={idx}
+                    className={idx < session.stars ? styles.starFilled : styles.starEmpty}
+                  >
+                    ★
+                  </span>
+                ))}
+              </div>
             </div>
-            <div className={styles.statsRow}>
-              <span>{t('cooking.result.stars')}:</span>
-              <span className={styles.starsDisplay}>
-                {'★'.repeat(session.stars)}
-                {'☆'.repeat(5 - session.stars)}
-              </span>
+
+            {/* Big Score Card */}
+            <div className={styles.scoreHero}>
+              <span className={styles.scoreHeroLabel}>{t('cooking.result.score')}</span>
+              <span className={styles.scoreHeroValue}>{session.finalScore.toLocaleString()}</span>
             </div>
-            <div className={styles.statsRow}>
-              <span>
-                {t('cooking.result.correctCount')} / {t('cooking.result.mistakeCount')}:
-              </span>
-              <span>
-                {session.correctCount} / {session.wrongCount}
-              </span>
+
+            {/* Metrics Grid */}
+            <div className={styles.metricsGrid}>
+              <div className={styles.metricCard}>
+                <span className={styles.metricIcon}>⏱️</span>
+                <div className={styles.metricDetails}>
+                  <span className={styles.metricLabel}>{t('cooking.time')}</span>
+                  <span className={styles.metricValue}>{formatDuration(timeUsed)}</span>
+                </div>
+              </div>
+
+              <div className={styles.metricCard}>
+                <span className={styles.metricIcon}>🎯</span>
+                <div className={styles.metricDetails}>
+                  <span className={styles.metricLabel}>{t('cooking.result.correctCount')}</span>
+                  <span className={styles.metricValue}>
+                    {session.correctCount} / {session.correctCount + session.wrongCount}
+                  </span>
+                </div>
+              </div>
+
+              {typeof gainedXp === 'number' ? (
+                <div className={styles.metricCard}>
+                  <span className={styles.metricIcon}>🌟</span>
+                  <div className={styles.metricDetails}>
+                    <span className={styles.metricLabel}>EXP</span>
+                    <span className={styles.metricValueHighlight}>+{gainedXp} XP</span>
+                  </div>
+                </div>
+              ) : null}
             </div>
-            {typeof gainedXp === 'number' ? (
-              <p>
-                <strong>{t('cooking.result.gainedXp', { xp: gainedXp } as Record<string, unknown>)}</strong>
-              </p>
-            ) : null}
+
+            {/* Level Up Banner */}
             {typeof newLevel === 'number' ? (
-              <p>
-                <strong>{t('cooking.result.levelUp', { lvl: newLevel } as Record<string, unknown>)}</strong>
-              </p>
+              <div className={styles.levelUpCard}>
+                <span className={styles.levelUpIcon}>🎉</span>
+                <div>
+                  <h4 className={styles.levelUpTitle}>
+                    {t('cooking.result.levelUp', { lvl: newLevel } as Record<string, unknown>)}
+                  </h4>
+                  <p className={styles.levelUpSubtitle}>Kỹ năng đầu bếp của bạn đã nâng tầm!</p>
+                </div>
+              </div>
             ) : null}
+
+            {/* Minigames Summary */}
             {session.minigameResults && session.minigameResults.length > 0 && (
               <div className={styles.minigamesSection}>
                 <h4 className={styles.minigamesTitle}>{dict.cooking.result.minigamesSummary}</h4>
@@ -114,30 +156,42 @@ export function CookingResultModal({
                 </ul>
               </div>
             )}
+
+            {/* Unlocked Achievements */}
             {unlockedAchievements.length > 0 ? (
-              <div>
-                <p>
-                  <strong>{t('cooking.result.achievementUnlockTitle')}:</strong>
-                </p>
-                <ul>
+              <div className={styles.achievementSection}>
+                <h4 className={styles.achievementTitle}>
+                  🎖️ {t('cooking.result.achievementUnlockTitle')}
+                </h4>
+                <div className={styles.achievementGrid}>
                   {unlockedAchievements.map((a) => (
-                    <li key={a.id}>
-                      {a.icon} {a.name}
-                    </li>
+                    <div key={a.id} className={styles.achievementBadge}>
+                      <span className={styles.achievementIcon}>{a.icon}</span>
+                      <span className={styles.achievementName}>{a.name}</span>
+                    </div>
                   ))}
-                </ul>
+                </div>
               </div>
             ) : null}
           </>
         ) : (
-          <>
-            <p>
+          <div className={styles.failContainer}>
+            <div className={styles.failIcon} aria-hidden="true">
+              ⏱️
+            </div>
+            <h3 className={styles.failTitle}>
               {session.failReason === 'timeout'
                 ? t('cooking.result.timeout')
                 : t('cooking.result.unknownError')}
+            </h3>
+            <p className={styles.failSubtitle}>
+              Đừng nản lòng! Hãy chuẩn bị lại nguyên liệu và thử sức lần nữa nhé.
             </p>
-            <p>{t('cooking.result.score')}: 0</p>
-          </>
+            <div className={styles.failScore}>
+              <span>{t('cooking.result.score')}: </span>
+              <strong>0</strong>
+            </div>
+          </div>
         )}
       </div>
     </Modal>

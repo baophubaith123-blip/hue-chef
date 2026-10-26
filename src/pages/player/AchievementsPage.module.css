@@ -1,19 +1,248 @@
-.header {
+.container {
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
+  flex-direction: column;
+  gap: 2rem;
+  padding-bottom: 3rem;
 }
 
-.title {
+/* Profile Header Box (Image 1 Style) */
+.profileHeaderCard {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: 2rem;
+  box-shadow: 0 4px 20px rgba(59, 42, 32, 0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+
+.userMainRow {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+@media (max-width: 600px) {
+  .userMainRow {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+.avatarWrapper {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 3px solid var(--color-gold);
+  background: var(--color-surface);
+  box-shadow: 0 4px 14px rgba(233, 162, 59, 0.3);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.avatarImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.avatarInitials {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 2rem;
+  color: var(--color-plum);
+  background: var(--color-surface-alt);
+}
+
+.badgeOverlay {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+
+.userMeta {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.userNameRow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 600px) {
+  .userNameRow {
+    justify-content: center;
+  }
+}
+
+.userName {
   margin: 0;
+  font-family: var(--font-serif);
+  font-size: 1.85rem;
+  font-weight: 700;
+  color: var(--color-plum);
+}
+
+[data-theme='dark'] .userName {
+  color: #F8EFEA;
+}
+
+.levelBadge {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  background: var(--color-primary);
+  padding: 2px 10px;
+  border-radius: var(--radius-full);
+}
+
+.expSection {
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.expText {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+}
+
+.expTrack {
+  width: 100%;
+  height: 8px;
+  background-color: var(--color-surface-alt);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+}
+
+.expFill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-accent), var(--color-primary));
+  border-radius: var(--radius-full);
+  transition: width 0.3s ease;
+}
+
+/* 3 Stat boxes (Image 1 Style) */
+.statsSummaryGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+  border-top: 1px dashed var(--color-border);
+  padding-top: 1.5rem;
+}
+
+@media (max-width: 600px) {
+  .statsSummaryGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.statBox {
+  background: var(--color-surface-alt);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.statNumber {
   font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--color-plum);
+}
+
+[data-theme='dark'] .statNumber {
+  color: #F8EFEA;
+}
+
+.statLabel {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  font-weight: 600;
+}
+
+/* Badges Showcase Section */
+.badgesShowcaseSection {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.sectionTitle {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: 1.35rem;
+  font-weight: 700;
   color: var(--color-text);
 }
 
-.intro {
-  margin: 0.35rem 0 0;
-  color: var(--color-text-muted);
+.badgesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 1rem;
+}
+
+.badgePillCard {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.65rem;
+  text-align: center;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(59, 42, 32, 0.05);
+  transition: all 0.2s ease;
+}
+
+.badgePillCard:hover {
+  transform: translateY(-3px);
+  border-color: var(--color-accent);
+  box-shadow: 0 6px 16px rgba(59, 42, 32, 0.1);
+}
+
+.badgeIconCircle {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: rgba(233, 162, 59, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.75rem;
+}
+
+.badgeName {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.fullListSection {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }

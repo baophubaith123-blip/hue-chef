@@ -30,14 +30,25 @@ export default function RecipeListPage() {
 
   return (
     <PlayerShell>
-      <header className={styles.head}>
-        <h1 className={styles.title}>Hue recipes</h1>
-        <p className={styles.subtitle}>
-          {visibleRecipes.length} dishes · filter, search without diacritics, then cook
-        </p>
-      </header>
-      <RecipeFilter value={filters} onChange={setFilters} />
-      {isLoading ? <Loading label="Loading recipes…" /> : <RecipeGrid recipes={visibleRecipes} />}
+      <div className={styles.container}>
+        <header className={styles.head}>
+          <div className={styles.titleRow}>
+            <span className={styles.titleIcon} aria-hidden="true">🍲</span>
+            <h1 className={styles.title}>Danh sách công thức món Huế</h1>
+          </div>
+          <p className={styles.subtitle}>
+            {visibleRecipes.length} món ăn truyền thống Cố Đô sẵn sàng để bạn trổ tài nấu nướng
+          </p>
+        </header>
+
+        <RecipeFilter value={filters} onChange={setFilters} />
+
+        {isLoading ? (
+          <Loading label="Đang chuẩn bị công thức ẩm thực..." />
+        ) : (
+          <RecipeGrid recipes={visibleRecipes} />
+        )}
+      </div>
     </PlayerShell>
   );
 }

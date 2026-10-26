@@ -704,6 +704,20 @@ export interface I18nDictionary {
     pts: string;
     scoreLabel: string;
     you: string;
+    quickModesTitle: string;
+    modeFreeCook: string;
+    modeFreeCookDesc: string;
+    modeJourney: string;
+    modeJourneyDesc: string;
+    modeDuel: string;
+    modeDuelDesc: string;
+    modeSpecialEvents: string;
+    modeSpecialEventsDesc: string;
+    heroTitle: string;
+    heroTitleHue: string;
+    heroSubtitle: string;
+    heroPlayNow: string;
+    heroExplore: string;
   };
   editorMinigames: {
     title: string;

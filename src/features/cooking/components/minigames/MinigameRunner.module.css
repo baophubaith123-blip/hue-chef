@@ -1,8 +1,8 @@
 .runnerContainer {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-lg);
-  max-width: 720px;
+  gap: 1.5rem;
+  max-width: 680px;
   width: 100%;
   margin: 0 auto;
 }
@@ -10,12 +10,12 @@
 .runnerHeader {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-sm);
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  padding: var(--spacing-md) var(--spacing-lg);
-  box-shadow: var(--shadow-sm);
+  gap: 0.75rem;
+  background: var(--color-surface, #ffffff);
+  border: 1.5px solid var(--color-card-border, #e8dfd5);
+  border-radius: var(--radius-xl, 18px);
+  padding: 1rem 1.5rem;
+  box-shadow: 0 4px 16px rgba(74, 21, 37, 0.05);
 }
 
 .headerTop {
@@ -23,57 +23,58 @@
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  gap: var(--spacing-sm);
+  gap: 0.75rem;
 }
 
 .challengeTitle {
-  font-size: 1.1rem;
+  font-family: var(--font-display, Georgia, 'Times New Roman', serif);
+  font-size: 1.2rem;
   font-weight: 700;
-  color: var(--color-text);
+  color: var(--color-plum, #4a1525);
   display: flex;
   align-items: center;
-  gap: var(--spacing-xs);
+  gap: 0.4rem;
 }
 
 .headerStats {
   display: flex;
   align-items: center;
-  gap: var(--spacing-sm);
+  gap: 0.6rem;
 }
 
 .stepBadge {
   font-size: 0.85rem;
-  font-weight: 600;
-  padding: 4px 10px;
-  border-radius: var(--radius-full);
-  background: var(--color-surface-alt);
-  color: var(--color-text-muted);
-  border: 1px solid var(--color-border);
+  font-weight: 700;
+  padding: 0.3rem 0.75rem;
+  border-radius: var(--radius-full, 9999px);
+  background: var(--color-bg-ivory, #faf5ef);
+  color: var(--color-text-muted, #7c6c64);
+  border: 1px solid var(--color-card-border, #e8dfd5);
 }
 
 .scoreBonusBadge {
-  font-size: 0.9rem;
-  font-weight: 700;
-  padding: 4px 12px;
-  border-radius: var(--radius-full);
-  background: rgba(34, 197, 94, 0.15);
-  color: var(--color-success);
-  border: 1px solid var(--color-success);
+  font-size: 0.88rem;
+  font-weight: 800;
+  padding: 0.3rem 0.85rem;
+  border-radius: var(--radius-full, 9999px);
+  background: rgba(34, 197, 94, 0.12);
+  color: var(--color-success, #15803d);
+  border: 1px solid rgba(34, 197, 94, 0.3);
 }
 
 .headerProgressTrack {
   width: 100%;
   height: 6px;
-  background-color: var(--color-surface-alt);
-  border-radius: var(--radius-full);
+  background-color: var(--color-bg-ivory, #faf5ef);
+  border-radius: 9999px;
   overflow: hidden;
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--color-card-border, #e8dfd5);
 }
 
 .headerProgressFill {
   height: 100%;
-  background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
-  border-radius: var(--radius-full);
+  background: linear-gradient(90deg, var(--color-gold, #e9a23b) 0%, var(--color-brick, #c8553d) 100%);
+  border-radius: 9999px;
   transition: width 0.3s ease;
 }
 

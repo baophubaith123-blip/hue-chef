@@ -9,19 +9,22 @@
 
 .title {
   margin: 0;
+  font-family: var(--font-display, Georgia, 'Times New Roman', serif);
   font-size: 1.75rem;
-  color: var(--color-text);
+  color: var(--color-plum, #4a1525);
+  font-weight: 700;
 }
 
 .intro {
   margin: 0.35rem 0 0;
-  color: var(--color-text-muted);
+  color: var(--color-text-muted, #7c6c64);
+  font-size: 0.95rem;
 }
 
 .grid {
   display: grid;
-  gap: 1rem;
-  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+  gap: 1.25rem;
+  grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
 }
 
 .cardLink {
@@ -30,16 +33,17 @@
 }
 
 .card {
-  border-radius: var(--radius-md);
-  border: 1px solid var(--color-border);
-  background: var(--color-surface);
+  border-radius: var(--radius-xl, 16px);
+  border: 1.5px solid var(--color-card-border, #e8dfd5);
+  background: var(--color-surface, #ffffff);
   overflow: hidden;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
 .card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(74, 21, 37, 0.08);
+  border-color: var(--color-brick, #c8553d);
 }
 
 .imageWrap {
@@ -48,7 +52,7 @@
   aspect-ratio: 16 / 10;
   overflow: hidden;
   position: relative;
-  background: var(--color-surface-muted);
+  background: var(--color-bg-ivory, #faf5ef);
   flex-shrink: 0;
 }
 
@@ -68,28 +72,33 @@
   justify-content: center;
   font-size: 3rem;
   font-weight: 800;
-  color: var(--color-primary);
-  background: linear-gradient(135deg, var(--color-surface-muted), var(--color-surface));
+  color: var(--color-plum, #4a1525);
+  background: linear-gradient(135deg, var(--color-bg-ivory, #faf5ef), var(--color-surface, #ffffff));
 }
 
 .cardBody {
-  padding: 1rem;
+  padding: 1.15rem;
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 0.85rem;
 }
 
 .cardTitle {
   margin: 0;
-  font-size: 1rem;
-  color: var(--color-text);
+  font-family: var(--font-display, Georgia, serif);
+  font-size: 1.15rem;
+  color: var(--color-plum, #4a1525);
   font-weight: 700;
 }
 
 .stats {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 0.5rem;
+  gap: 0.6rem;
+  padding: 0.6rem;
+  background: var(--color-bg-ivory, #faf5ef);
+  border-radius: var(--radius-lg, 12px);
+  border: 1px solid var(--color-card-border, #e8dfd5);
 }
 
 .stat {
@@ -99,28 +108,31 @@
 }
 
 .statLabel {
-  font-size: 0.75rem;
-  color: var(--color-text-muted);
+  font-size: 0.72rem;
+  color: var(--color-text-muted, #7c6c64);
+  text-transform: uppercase;
+  font-weight: 600;
 }
 
 .statValue {
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 700;
-  color: var(--color-primary);
+  color: var(--color-plum, #4a1525);
 }
 
 .stars {
   display: flex;
-  gap: 0.15rem;
-  font-size: 1rem;
+  gap: 0.2rem;
+  font-size: 1.1rem;
 }
 
 .starFilled {
-  color: #f59e0b;
+  color: var(--color-gold, #e9a23b);
+  filter: drop-shadow(0 1px 2px rgba(233, 162, 59, 0.4));
 }
 
 .starEmpty {
-  color: var(--color-border);
+  color: var(--color-card-border, #e8dfd5);
 }
 
 .cardAction {

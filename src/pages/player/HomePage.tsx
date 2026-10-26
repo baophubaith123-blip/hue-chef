@@ -175,49 +175,101 @@ export default function HomePage() {
   return (
     <PlayerShell>
       <div className={styles.dashboard}>
-        {/* 1. Banner chào mừng */}
-        <section className={styles.banner} aria-label={t('home.welcome', { name: user?.name ?? '' } as Record<string, unknown>)}>
-          <div className={styles.bannerContent}>
-            <div className={styles.avatarWrap}>
-              {user?.avatar ? (
-                <img src={user.avatar} alt={user.name} className={styles.avatarImg} />
-              ) : (
-                <div className={styles.avatarInitials}>
-                  {user?.name?.charAt(0).toUpperCase() || '👨‍🍳'}
-                </div>
-              )}
-              {user?.equippedAchievementId ? (
-                <div className={styles.avatarBadgeOverlay}>
-                  <AchievementIcon badgeId={user.equippedAchievementId} size="xs" />
-                </div>
-              ) : null}
+        {/* 1. Hero Banner mang phong cách Cố Đô Cung Đình Huế (Image 1) */}
+        <section className={styles.heroBanner} aria-label={dict.dashboard.heroTitleHue}>
+          <div className={styles.heroOverlay} />
+          <div className={styles.heroContent}>
+            <div className={styles.heroUserBadge}>
+              <div className={styles.avatarWrapSmall}>
+                {user?.avatar ? (
+                  <img src={user.avatar} alt={user.name} className={styles.avatarImg} />
+                ) : (
+                  <div className={styles.avatarInitialsSmall}>
+                    {user?.name?.charAt(0).toUpperCase() || '👨‍🍳'}
+                  </div>
+                )}
+                {user?.equippedAchievementId ? (
+                  <div className={styles.avatarBadgeOverlay}>
+                    <AchievementIcon badgeId={user.equippedAchievementId} size="xs" />
+                  </div>
+                ) : null}
+              </div>
+              <div className={styles.heroUserMeta}>
+                <span className={styles.greeting}>{greeting}, <strong>{user?.name}</strong></span>
+                <span className={styles.titleTagText}>🎖️ {chefTitle}</span>
+              </div>
             </div>
 
-            <div className={styles.bannerText}>
-              <div className={styles.greetingWrap}>
-                <span className={styles.greeting}>{greeting},</span>
-              </div>
-              <h1 className={styles.userName}>{user?.name ?? t('home.playerHome')}</h1>
-              <div className={styles.titleTag}>
-                <span aria-hidden>🎖️</span>
-                <span>{chefTitle}</span>
-              </div>
+            <h1 className={styles.heroHeading}>
+              <span className={styles.heroSubHeading}>{dict.dashboard.heroTitle}</span>
+              <span className={styles.heroMainHeading}>{dict.dashboard.heroTitleHue}</span>
+            </h1>
+            <p className={styles.heroSubtitle}>{dict.dashboard.heroSubtitle}</p>
+
+            <div className={styles.heroActions}>
+              <Button variant="primary" className={styles.heroPlayBtn} onClick={handleCookNow}>
+                🔥 {dict.dashboard.heroPlayNow}
+              </Button>
+              <Link to="/recipes" className={styles.heroExploreBtn}>
+                🍲 {dict.dashboard.heroExplore}
+              </Link>
             </div>
           </div>
 
-          <div className={styles.bannerActions}>
-            <Button variant="primary" onClick={handleCookNow}>
-              🔥 {t('dashboard.ctaCookNow')}
-            </Button>
-          </div>
-
-          <div className={styles.bannerDecoration} aria-hidden>
-            <span className={styles.steamIcon}>♨️</span>
-            <span className={styles.steamIcon}>♨️</span>
+          <div className={styles.heroArtwork} aria-hidden="true">
+            <div className={styles.citadelSilhouette} />
+            <div className={styles.heroFoodShowcase}>
+              <span className={styles.floatingDishEmoji}>🍜</span>
+            </div>
           </div>
         </section>
 
-        {/* 2. Thống kê nhanh (4 card) */}
+        {/* 2. Chế độ chơi nhanh (Image 1 - 4 interactive cards) */}
+        <section className={styles.quickModesSection} aria-label={dict.dashboard.quickModesTitle}>
+          <h2 className={styles.quickModesTitle}>{dict.dashboard.quickModesTitle}</h2>
+          <div className={styles.quickModesGrid}>
+            <Link to="/recipes" className={styles.quickModeCard}>
+              <div className={styles.quickModeIcon} aria-hidden="true">👨‍🍳</div>
+              <div className={styles.quickModeInfo}>
+                <h3 className={styles.quickModeName}>{dict.dashboard.modeFreeCook}</h3>
+                <p className={styles.quickModeDesc}>{dict.dashboard.modeFreeCookDesc}</p>
+              </div>
+              <span className={styles.quickModeArrow}>›</span>
+            </Link>
+
+            <Link
+              to={nextRecipe ? `/cooking/${nextRecipe.id}` : '/recipes'}
+              className={styles.quickModeCard}
+            >
+              <div className={styles.quickModeIcon} aria-hidden="true">📍</div>
+              <div className={styles.quickModeInfo}>
+                <h3 className={styles.quickModeName}>{dict.dashboard.modeJourney}</h3>
+                <p className={styles.quickModeDesc}>{dict.dashboard.modeJourneyDesc}</p>
+              </div>
+              <span className={styles.quickModeArrow}>›</span>
+            </Link>
+
+            <Link to="/leaderboard" className={styles.quickModeCard}>
+              <div className={styles.quickModeIcon} aria-hidden="true">🏆</div>
+              <div className={styles.quickModeInfo}>
+                <h3 className={styles.quickModeName}>{dict.dashboard.modeDuel}</h3>
+                <p className={styles.quickModeDesc}>{dict.dashboard.modeDuelDesc}</p>
+              </div>
+              <span className={styles.quickModeArrow}>›</span>
+            </Link>
+
+            <Link to="/achievements" className={styles.quickModeCard}>
+              <div className={styles.quickModeIcon} aria-hidden="true">🎁</div>
+              <div className={styles.quickModeInfo}>
+                <h3 className={styles.quickModeName}>{dict.dashboard.modeSpecialEvents}</h3>
+                <p className={styles.quickModeDesc}>{dict.dashboard.modeSpecialEventsDesc}</p>
+              </div>
+              <span className={styles.quickModeArrow}>›</span>
+            </Link>
+          </div>
+        </section>
+
+        {/* 3. Thống kê nhanh (4 card) */}
         <section className={styles.statsGrid} aria-label={t('dashboard.statLevel')}>
           {/* Card 1: Level & EXP */}
           <div className={styles.statCard}>

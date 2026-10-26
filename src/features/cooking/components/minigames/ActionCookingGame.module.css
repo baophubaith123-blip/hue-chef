@@ -2,71 +2,81 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  max-width: 600px;
+  max-width: 640px;
+  width: 100%;
   margin: 0 auto;
-  padding: var(--spacing-xl, 32px) var(--spacing-lg, 24px);
-  background: var(--color-surface, #fff);
-  border: 1px solid var(--color-border, #e5e7eb);
-  border-radius: var(--radius-xl, 16px);
-  box-shadow: var(--shadow-md);
+  padding: 2rem 2rem 2.25rem;
+  background: var(--color-surface, #ffffff);
+  border: 1.5px solid var(--color-card-border, #e8dfd5);
+  border-radius: var(--radius-xl, 20px);
+  box-shadow: 0 8px 30px rgba(74, 21, 37, 0.08);
   text-align: center;
 }
 
 .question {
-  font-size: 1.35rem;
+  font-family: var(--font-display, Georgia, 'Times New Roman', serif);
+  font-size: 1.45rem;
   font-weight: 700;
-  color: var(--color-text, #333);
+  color: var(--color-plum, #4a1525);
   margin: 0 0 0.5rem;
+  line-height: 1.35;
 }
 
 .instruction {
-  font-size: 0.95rem;
-  color: var(--color-text-muted, #666);
-  margin: 0 0 var(--spacing-lg, 24px);
+  font-size: 0.92rem;
+  color: var(--color-text-muted, #7c6c64);
+  margin: 0 0 1.25rem;
 }
 
 /* Timer Section */
 .timerWrapper {
   width: 100%;
-  max-width: 440px;
-  margin-bottom: var(--spacing-xl, 32px);
+  max-width: 480px;
+  margin-bottom: 1.75rem;
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-xs, 6px);
+  gap: 0.4rem;
 }
 
 .timerMeta {
   display: flex;
   justify-content: space-between;
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--color-text-muted, #666);
+  align-items: center;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--color-text-muted, #7c6c64);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
 .timerSeconds {
-  font-family: monospace;
-  font-size: 1rem;
-  color: var(--color-primary, #b91c1c);
+  font-family: var(--font-display, Georgia, serif);
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--color-brick, #c8553d);
 }
 
 .progressBarTrack {
   width: 100%;
   height: 8px;
-  background-color: var(--color-surface-alt, #f3f4f6);
-  border-radius: var(--radius-full, 9999px);
+  background-color: var(--color-bg-ivory, #faf5ef);
+  border-radius: 9999px;
   overflow: hidden;
-  border: 1px solid var(--color-border, #e5e7eb);
+  border: 1px solid var(--color-card-border, #e8dfd5);
+  padding: 1px;
 }
 
 .progressBarFill {
   height: 100%;
-  background: linear-gradient(90deg, var(--color-accent, #e9a23b), var(--color-primary, #c8553d));
-  border-radius: var(--radius-full, 9999px);
+  background: linear-gradient(90deg, var(--color-gold, #e9a23b) 0%, var(--color-brick, #c8553d) 100%);
+  border-radius: 9999px;
   transition: width 0.1s linear;
+  box-shadow: 0 0 6px rgba(233, 162, 59, 0.4);
 }
 
 .timerWarning {
   background: var(--color-danger, #ef4444);
+  box-shadow: 0 0 8px rgba(239, 68, 68, 0.5);
 }
 
 /* Ingredient Stage */
@@ -76,18 +86,18 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 200px;
-  margin-bottom: var(--spacing-xl, 32px);
+  min-height: 180px;
+  margin-bottom: 1.75rem;
   width: 100%;
 }
 
 .ingredientDisplay {
-  width: 120px;
-  height: 120px;
+  width: 110px;
+  height: 110px;
   border-radius: 50%;
-  background: var(--color-surface-alt, #fdf8f0);
-  border: 3px solid var(--color-border, #e8d9c4);
-  box-shadow: 0 8px 24px rgba(59, 42, 32, 0.12);
+  background: radial-gradient(circle, #ffffff 40%, var(--color-bg-ivory, #faf5ef) 100%);
+  border: 3px solid var(--color-card-border, #e8dfd5);
+  box-shadow: 0 8px 24px rgba(74, 21, 37, 0.1);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -104,68 +114,90 @@
 }
 
 .fallbackEmoji {
-  font-size: 5rem;
+  font-size: 4rem;
   line-height: 1;
   user-select: none;
 }
 
 .ingredientName {
-  margin-top: var(--spacing-sm, 8px);
+  margin-top: 0.65rem;
+  font-family: var(--font-display, Georgia, serif);
   font-weight: 700;
-  font-size: 1.15rem;
-  color: var(--color-text, #333);
+  font-size: 1.2rem;
+  color: var(--color-plum, #4a1525);
 }
 
 /* Pot Graphic under ingredient */
 .potArea {
-  margin-top: var(--spacing-md, 16px);
+  margin-top: 0.75rem;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
 .potIcon {
-  font-size: 3rem;
+  font-size: 2.75rem;
   line-height: 1;
+  filter: drop-shadow(0 4px 8px rgba(74, 21, 37, 0.15));
 }
 
 /* Actions Section */
 .actionsGrid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--spacing-md, 16px);
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 0.85rem;
   justify-content: center;
   width: 100%;
-  max-width: 500px;
+  max-width: 520px;
 }
 
 .actionButton {
-  flex: 1 1 130px;
-  min-width: 120px;
+  min-height: 3rem;
+  font-size: 1rem;
+  font-weight: 700;
+  border-radius: var(--radius-lg, 12px);
+  border: 1.5px solid var(--color-card-border, #e8dfd5);
+  background: var(--color-surface, #ffffff);
+  color: var(--color-text, #3b2a20);
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.actionButton:hover:not(:disabled) {
+  border-color: var(--color-brick, #c8553d);
+  background: var(--color-surface-hover, #f5efe6);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(74, 21, 37, 0.08);
 }
 
 .actionSelected {
-  box-shadow: 0 0 0 3px var(--color-accent);
+  box-shadow: 0 0 0 3px var(--color-gold, #e9a23b);
+  border-color: var(--color-gold, #e9a23b);
 }
 
 .actionCorrect {
-  border-color: var(--color-success, #15803d);
-  background-color: rgba(34, 197, 94, 0.18);
-  box-shadow: 0 0 0 2px var(--color-success, #15803d);
+  border-color: var(--color-success, #15803d) !important;
+  background-color: rgba(34, 197, 94, 0.15) !important;
+  color: var(--color-success, #15803d) !important;
+  box-shadow: 0 0 0 2px var(--color-success, #15803d) !important;
 }
 
 .actionWrong {
-  border-color: var(--color-danger, #b42318);
-  background-color: rgba(239, 68, 68, 0.18);
-  box-shadow: 0 0 0 2px var(--color-danger, #b42318);
+  border-color: var(--color-danger, #ef4444) !important;
+  background-color: rgba(239, 68, 68, 0.15) !important;
+  color: var(--color-danger, #ef4444) !important;
+  box-shadow: 0 0 0 2px var(--color-danger, #ef4444) !important;
 }
 
 /* Status message */
 .feedbackMessage {
-  margin-top: var(--spacing-lg, 24px);
-  font-size: 1.05rem;
-  font-weight: 600;
+  margin-top: 1.25rem;
+  font-size: 1rem;
+  font-weight: 700;
   min-height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .feedbackSuccess {
@@ -173,7 +205,7 @@
 }
 
 .feedbackError {
-  color: var(--color-danger, #b42318);
+  color: var(--color-danger, #ef4444);
 }
 
 /* Animations */
@@ -200,7 +232,7 @@
 .shakeRed {
   animation: shakeRedAnim 0.5s ease-in-out forwards;
   border-color: var(--color-danger, #ef4444);
-  box-shadow: 0 0 16px rgba(239, 68, 68, 0.4);
+  box-shadow: 0 0 16px rgba(239, 68, 68, 0.35);
 }
 
 @keyframes shakeRedAnim {
@@ -208,16 +240,16 @@
     transform: translateX(0);
   }
   20% {
-    transform: translateX(-10px);
+    transform: translateX(-8px);
   }
   40% {
-    transform: translateX(10px);
+    transform: translateX(8px);
   }
   60% {
-    transform: translateX(-6px);
+    transform: translateX(-5px);
   }
   80% {
-    transform: translateX(6px);
+    transform: translateX(5px);
   }
 }
 
