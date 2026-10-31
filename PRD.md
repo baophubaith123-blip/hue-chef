@@ -10,11 +10,11 @@
 | **Tên dự án** | Hue Chef — Game nấu món ăn Huế |
 | **Mã học phần** | INT.7.18 — Web FrontEnd nâng cao |
 | **Hình thức** | Đồ án cá nhân |
-| **Phiên bản** | 2.0 |
-| **Ngày tạo** | [Ngày tạo] |
+| **Phiên bản** | 2.1 (Hoàn thiện toàn diện) |
+| **Ngày cập nhật** | 31/10/2026 |
 | **Tác giả** | Nguyễn Gia Bảo |
 | **MSSV** | 2401ITA006 |
-| **Trạng thái** | Đang thực hiện |
+| **Trạng thái** | Hoàn thành 100% (Đã nghiệm thu và kiểm thử thành công bằng Playwright) |
 
 ---
 
@@ -213,7 +213,7 @@ Hệ thống có **4 vai trò**:
 
 ---
 
-## 5. 📋 FEATURE LIST — 15 FEATURES
+## 5. 📋 FEATURE LIST — 16 FEATURES
 
 | # | Feature | Vai trò | Điểm |
 |---|---|---|---|
@@ -232,8 +232,9 @@ Hệ thống có **4 vai trò**:
 | 13 | `support` | Support | 10 |
 | 14 | `admin` | Admin | 20 |
 | 15 | `i18n` | Cả 4 | 8 |
+| 16 | `minigames & imperial-ui` ⭐ | Player + Editor | 16 |
 
-**TỔNG:** ~184 điểm.
+**TỔNG:** ~200 điểm.
 
 ### 5.1. Feature `auth` — 15 điểm
 
@@ -395,6 +396,16 @@ Hệ thống có **4 vai trò**:
 | LanguageSwitcher | 2 |
 | Auto-detect browser | 1 |
 | Lưu preference | 1 |
+
+### 5.16. Feature `minigames & imperial-ui` ⭐ — 16 điểm
+
+| Chức năng | Điểm |
+|---|---|
+| Minigame thử thách phương pháp chế biến (Action Cooking) | 4 |
+| Minigame câu đố trắc nghiệm ẩm thực Huế (Quiz Game) | 3 |
+| Bục vinh danh Podium Top 3 Leaderboard bằng CSS | 3 |
+| Thiết kế 3 Panel Cooking (Nguyên liệu 2 cột, Nồi viền nét đứt, Checkmark các bước) | 3 |
+| Hệ thống bảng màu Hoàng Cung (Mận hoàng gia, Đỏ gạch, Vàng kim, Kem ấm) | 3 |
 
 ---
 

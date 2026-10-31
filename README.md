@@ -17,16 +17,19 @@
 | Nhóm | Tính năng |
 |---|---|
 | 🎮 **Gameplay** | Drag & drop nấu ăn, tính điểm theo độ chính xác, 1~5 sao, tính năng đếm ngược thời gian |
+| ⚡ **Minigames** | Thử thách thao tác chế biến (Xào/Luộc/Hấp/Nướng) + Quiz câu hỏi văn hóa ẩm thực Huế tích hợp ngay trong màn nấu |
+| 👑 **Bảng xếp hạng** | Bục vinh danh Podium Top 3 (Vàng 👑, Bạc 🥈, Đồng 🥉) vẽ hoàn toàn bằng CSS + Danh sách Top 4+ |
+| 🏛️ **Imperial UI/UX** | Ngôn ngữ thiết kế Cố Đô Cung Đình Huế: Tím mận hoàng gia (#4A1525), Đỏ gạch (#C8553D), Vàng kim (#E9A23B), Nền kem ấm (#FAF5EF) |
 | 🏆 **Thành tích** | 12 huy chương theo điều kiện (loại món, số lần nấu, điểm tuyệt đối, level, nấu đủ 15 món…) |
 | 📚 **Bộ sưu tập** | Theo dõi các món đã nấu, lần nấu, điểm cao nhất, số sao trung bình |
-| ✍️ **Editor** | Tạo/sửa công thức (draft → chờ duyệt), xem lý do từ chối, resubmit |
+| ✍️ **Editor** | Tạo/sửa công thức (draft → chờ duyệt), xem lý do từ chối, resubmit, tạo kịch bản minigame |
 | 💬 **Support** | Live chat 1-1 với Player, tạo phiếu khiếu nại, đề xuất giải pháp cho Admin |
 | 🛡️ **Admin** | Duyệt công thức, CRUD người dùng & khoá/mở tài khoản, audit log, CRUD nguyên liệu/thành tích, quản lý bình luận, báo cáo, khiếu nại, cài đặt hệ thống, sao lưu JSON |
 | 📬 **Hệ thống Mail** | 6 loại thư: phê duyệt / từ chối công thức, cảnh cáo, thông báo khoá, thông báo chung, hỗ trợ trả lời |
 | 🌐 **i18n** | Tiếng Việt + English (auto-detect ngôn ngữ trình duyệt, lưu lựa chọn vào localStorage) |
-| 🌙 **Dark Mode** | Toggle theme sáng/tối, CSS variables full màu sắc (primary #1B2A4A, accent #E8450A) |
+| 🌙 **Dark Mode** | Toggle theme sáng/tối, CSS variables full màu sắc (primary #1B2A4A, accent #E8450A, plum dark mode) |
 | 🔊 **Sound Effects** | Web Audio API 5 âm thanh (click / success / error / drop / unlock) với toggle bật tắt |
-| 📱 **Responsive** | Tối ưu mobile/tablet (breakpoint 640px) |
+| 📱 **Responsive** | Tối ưu mobile/tablet/desktop (Sidebar ngăn kéo, Grid thích ứng, 3 Panel cooking) |
 
 ---
 
@@ -280,20 +283,21 @@ Danh sách đầy đủ tại [router.tsx](src/app/router.tsx).
 
 ---
 
-## 🗺️ Roadmap 6 Phase trên GitHub
+## 🗺️ Roadmap & Tiến độ phát triển trên GitHub
 
-Dự án chia làm 6 giai đoạn, mỗi giai đoạn 1 commit & 1 tag riêng (trên `main`):
+Dự án hoàn thành qua 7 giai đoạn phát triển toàn diện (trên nhánh `main` và nhánh tính năng):
 
-| Tag | Commit message | Mục tiêu |
+| Giai đoạn | Commit message | Mục tiêu hoàn thành |
 |---|---|---|
-| 🏷️ **phase-1** | `feat(setup): phase 1 - auth, player core, seed data` | Auth + Player core + 15 recipes + 12 achievements seed |
-| 🏷️ **phase-2** | `feat(cooking): phase 2 - drag-drop cooking + scoring` | Drag-drop cooking, timer, score.ts tự viết 100% |
-| 🏷️ **phase-3** | `feat(editor-admin): phase 3 - creator workflow + approval` | Editor tạo công thức, Admin duyệt (draft→pending→approved/rejected) |
-| 🏷️ **phase-4** | `feat(support-mail): phase 4 - appeals, chat, broadcast, ban notices` | Support chat, khiếu nại, mail 6 loại, cảnh báo, khoá |
-| 🏷️ **phase-5** | `feat(admin): phase 5 - user management, audit log, achievements` | User CRUD + ban/unban, AuditLogTable, 11 Admin pages, AchievementContext + NotificationBell + 2 Player pages |
-| 🏷️ **phase-6** | `feat(i18n-polish): phase 6 - multi-language, dark mode, sound, common pages` | i18n vi/en (auto-detect), Dark mode CSS vars, Web Audio sound, 4 Common pages (Help/Feedback/About/404), Header+Footer responsive |
+| 🏷️ **Phase 1** | `feat(setup): phase 1 - auth, player core, seed data` | Auth + Player core + 15 recipes + 12 achievements seed |
+| 🏷️ **Phase 2** | `feat(cooking): phase 2 - drag-drop cooking + scoring` | Drag-drop cooking, timer, score.ts tự viết 100% |
+| 🏷️ **Phase 3** | `feat(editor-admin): phase 3 - creator workflow + approval` | Editor tạo công thức, Admin duyệt (draft→pending→approved/rejected) |
+| 🏷️ **Phase 4** | `feat(support-mail): phase 4 - appeals, chat, broadcast, ban notices` | Support chat, khiếu nại, mail 6 loại, cảnh báo, khoá |
+| 🏷️ **Phase 5** | `feat(admin): phase 5 - user management, audit log, achievements` | User CRUD + ban/unban, AuditLogTable, 11 Admin pages, AchievementContext + NotificationBell + 2 Player pages |
+| 🏷️ **Phase 6** | `feat(i18n-polish): phase 6 - multi-language, dark mode, sound, common pages` | i18n vi/en (auto-detect), Dark mode CSS vars, Web Audio sound, 4 Common pages (Help/Feedback/About/404), Header+Footer responsive |
+| 🏷️ **Phase 7** | `style(ui): comprehensive imperial hue design system overhaul` & `style(ui): align layout with 9-frame reference map` | **Nâng cấp UI/UX Cố Đô Cung Đình Huế toàn diện**: Sidebar màu tím mận, Topbar tinh giản, Hero Banner 2 cột chống đè chữ, Podium Leaderboard Top 3 vẽ bằng CSS, Trang cá nhân 2 cột, Màn hình nấu ăn 3 Panel bo tròn 16px, Minigame chọn phương pháp chế biến & Quiz 2 cột đáp án, Modal kết quả cúp vàng 🏆 |
 
-Xem tất cả tags: [github.com/baophubaith123-blip/hue-chef/tags](https://github.com/baophubaith123-blip/hue-chef/tags)
+Xem lịch sử commit đầy đủ: [github.com/baophubaith123-blip/hue-chef/commits/main](https://github.com/baophubaith123-blip/hue-chef/commits/main)
 
 ---
 
