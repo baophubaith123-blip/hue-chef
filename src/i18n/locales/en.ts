@@ -33,6 +33,7 @@ export const en: I18nDictionary = {
     actions: 'Actions',
     target: 'Target',
     preview: 'Preview',
+    details: 'Details',
   },
   auth: {
     loginTitle: 'Sign in',
@@ -105,6 +106,8 @@ export const en: I18nDictionary = {
     baseScore: 'Base score',
     viewRecipe: 'View recipe',
     pts: 'pts',
+    allCategories: 'All',
+    searchPlaceholder: 'Search recipes...',
     categoryLabels: {
       bun: 'Noodles',
       com: 'Rice',

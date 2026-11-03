@@ -1,8 +1,10 @@
 import type { MouseEvent } from 'react';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { Button } from '@/components/Button';
 import { useAuth } from '@/contexts/AuthContext';
+import { useMail } from '@/contexts/MailContext';
 import { useNotification } from '@/contexts/NotificationContext';
 import { useTranslation } from '@/i18n/useTranslation';
 
@@ -11,7 +13,9 @@ import styles from '@/components/NotificationBell.module.css';
 export function NotificationBell() {
   const { user } = useAuth();
   const { listForUser, unreadCount, markRead, markAllReadForUser } = useNotification();
+  const { markAllRead } = useMail();
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const wrapRef = useRef<HTMLDivElement | null>(null);
 
@@ -39,15 +43,20 @@ export function NotificationBell() {
     toggle();
   };
 
-  const handleNotifClick = (notifId: string, readAt?: string) => {
+  const handleNotifClick = (notifId: string, readAt?: string, link?: string) => {
     if (!readAt) {
       markRead(notifId);
+    }
+    if (link) {
+      setIsOpen(false);
+      navigate(link);
     }
   };
 
   const handleMarkAll = () => {
     if (!user) return;
     markAllReadForUser(user.id);
+    markAllRead(user.id);
   };
 
   return (
@@ -92,7 +101,7 @@ export function NotificationBell() {
                       key={n.id}
                       role="option"
                       className={`${styles.item} ${isUnread ? styles.itemUnread : ''}`}
-                      onClick={() => handleNotifClick(n.id, n.readAt)}
+                      onClick={() => handleNotifClick(n.id, n.readAt, n.link)}
                     >
                       <div className={styles.itemContent}>
                         <div className={styles.itemTitle}>{n.title}</div>

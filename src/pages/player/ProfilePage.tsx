@@ -66,16 +66,42 @@ export default function ProfilePage() {
       return;
     }
 
-    if (file.size > 5 * 1024 * 1024) {
+    if (file.size > 10 * 1024 * 1024) {
       setAvatarError(t('profile.maxAvatarSize'));
       return;
     }
 
     const reader = new FileReader();
     reader.onload = (event) => {
-      if (typeof event.target?.result === 'string') {
-        setAvatar(event.target.result);
-      }
+      const rawData = event.target?.result;
+      if (typeof rawData !== 'string') return;
+
+      const img = new Image();
+      img.onload = () => {
+        try {
+          const canvas = document.createElement('canvas');
+          const size = 256;
+          canvas.width = size;
+          canvas.height = size;
+          const ctx = canvas.getContext('2d');
+          if (ctx) {
+            const minDim = Math.min(img.width, img.height);
+            const sx = (img.width - minDim) / 2;
+            const sy = (img.height - minDim) / 2;
+            ctx.drawImage(img, sx, sy, minDim, minDim, 0, 0, size, size);
+            const compressed = canvas.toDataURL('image/jpeg', 0.85);
+            setAvatar(compressed);
+          } else {
+            setAvatar(rawData);
+          }
+        } catch {
+          setAvatar(rawData);
+        }
+      };
+      img.onerror = () => {
+        setAvatar(rawData);
+      };
+      img.src = rawData;
     };
     reader.readAsDataURL(file);
   };
@@ -121,12 +147,16 @@ export default function ProfilePage() {
       patch.password = finalPassword;
     }
 
-    const updated = updateProfile(patch);
-    if (updated) {
-      setSuccessMsg(t('profile.saveSuccess'));
-      setTimeout(() => {
-        navigate('/home');
-      }, 400);
+    try {
+      const updated = updateProfile(patch);
+      if (updated) {
+        setSuccessMsg(t('profile.saveSuccess'));
+        setTimeout(() => {
+          navigate('/home');
+        }, 800);
+      }
+    } catch {
+      setAvatarError('Lỗi khi lưu thông tin. Kích thước dữ liệu ảnh có thể quá lớn.');
     }
   };
 

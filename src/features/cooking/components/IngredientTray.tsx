@@ -75,11 +75,7 @@ export function IngredientTray({
                     {ingredient.fallbackEmoji ? `${ingredient.fallbackEmoji} ` : ''}
                     {ingredient.name}
                   </span>
-                  {!isUsed ? (
-                    <span className={styles.itemBadge}>1</span>
-                  ) : (
-                    <span className={styles.usedBadge}>{t('cooking.used')}</span>
-                  )}
+                  <span className={styles.itemBadge}>1</span>
                 </div>
                 <span className={styles.chipMeta}>{categoryLabel}</span>
               </button>

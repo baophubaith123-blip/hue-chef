@@ -36,6 +36,10 @@
   gap: 0.4rem;
 }
 
+[data-theme='dark'] .challengeTitle {
+  color: var(--color-plum-text, #f8efea);
+}
+
 .headerStats {
   display: flex;
   align-items: center;
@@ -50,6 +54,12 @@
   background: var(--color-bg-ivory, #faf5ef);
   color: var(--color-text-muted, #7c6c64);
   border: 1px solid var(--color-card-border, #e8dfd5);
+}
+
+[data-theme='dark'] .stepBadge {
+  background: var(--color-surface-alt, #352923);
+  color: var(--color-text-muted, #bba896);
+  border-color: var(--color-card-border, #4a3a31);
 }
 
 .scoreBonusBadge {

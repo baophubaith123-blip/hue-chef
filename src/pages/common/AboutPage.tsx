@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { useTranslation } from '@/i18n/useTranslation';
 
 import { Footer } from '@/components/Footer';
@@ -35,10 +36,39 @@ export default function AboutPage() {
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <Header />
       <main className={styles.page}>
-        <section className={styles.hero}>
-          <span className={styles.badge}>🍜 {t('header.logo')}</span>
-          <h1 className={styles.title}>{t('about.title')}</h1>
-          <p className={styles.intro}>{t('about.intro')}</p>
+        <section className={styles.heroBanner} aria-label={t('about.title')}>
+          <div className={styles.heroContent}>
+            <div className={styles.heroBadge}>
+              <span className={styles.badgeIcon}>🏮</span>
+              <span>{t('header.logo')} · Di Sản Ẩm Thực Cung Đình</span>
+            </div>
+            <h1 className={styles.heroTitle}>{t('about.title')}</h1>
+            <p className={styles.heroDesc}>{t('about.intro')}</p>
+            <div className={styles.heroActions}>
+              <Link to="/recipes" className={styles.heroBtnPrimary}>
+                🍲 Khám phá công thức
+              </Link>
+              <Link to="/login" className={styles.heroBtnSecondary}>
+                🎮 Bắt đầu ngay
+              </Link>
+            </div>
+          </div>
+
+          <div className={styles.heroArtwork} aria-hidden="true">
+            <div className={styles.heroFoodCircle}>
+              <div className={styles.steamTrack}>
+                <span className={`${styles.steamParticle} ${styles.steam1}`}>♨️</span>
+                <span className={`${styles.steamParticle} ${styles.steam2}`}>♨️</span>
+                <span className={`${styles.steamParticle} ${styles.steam3}`}>♨️</span>
+              </div>
+              <span className={styles.floatingDishEmoji}>🍲</span>
+              <span className={`${styles.orbitItem} ${styles.orbit1}`}>🌶️</span>
+              <span className={`${styles.orbitItem} ${styles.orbit2}`}>🦐</span>
+              <span className={`${styles.orbitItem} ${styles.orbit3}`}>🌾</span>
+              <span className={`${styles.orbitItem} ${styles.orbit4}`}>🏮</span>
+              <span className={`${styles.orbitItem} ${styles.orbit5}`}>🪷</span>
+            </div>
+          </div>
         </section>
 
         <div className={styles.grid}>

@@ -26,6 +26,10 @@
   letter-spacing: -0.01em;
 }
 
+[data-theme='dark'] .brandTitle {
+  color: var(--color-plum-text, #f8efea);
+}
+
 .brandSub {
   margin: 0.4rem 0 0;
   color: var(--color-text-muted, #7c6c64);
@@ -55,9 +59,23 @@
   border: 1.5px solid var(--color-card-border, #e8dfd5);
   border-radius: var(--radius-lg, 12px);
   background: var(--color-surface, #ffffff);
-  color: var(--color-text, #3b2a20);
+  color: var(--color-text, #3b2a20) !important;
   font-size: 0.95rem;
   transition: all 0.2s ease;
+}
+
+.input:-webkit-autofill,
+.input:-webkit-autofill:hover,
+.input:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--color-text, #3b2a20) !important;
+  -webkit-box-shadow: 0 0 0px 1000px var(--color-surface, #ffffff) inset !important;
+}
+
+[data-theme='dark'] .input:-webkit-autofill,
+[data-theme='dark'] .input:-webkit-autofill:hover,
+[data-theme='dark'] .input:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--color-text, #f6ebdd) !important;
+  -webkit-box-shadow: 0 0 0px 1000px var(--color-surface, #2a201b) inset !important;
 }
 
 .input:focus {

@@ -33,6 +33,7 @@ export const vi: I18nDictionary = {
     actions: 'Thao tác',
     target: 'Đối tượng',
     preview: 'Xem trước',
+    details: 'Chi tiết',
   },
   auth: {
     loginTitle: 'Đăng nhập',
@@ -105,6 +106,8 @@ export const vi: I18nDictionary = {
     baseScore: 'Điểm cơ bản',
     viewRecipe: 'Xem công thức',
     pts: 'điểm',
+    allCategories: 'Tất cả',
+    searchPlaceholder: 'Tìm kiếm món ăn...',
     categoryLabels: {
       bun: 'Bún / Mì',
       com: 'Cơm',

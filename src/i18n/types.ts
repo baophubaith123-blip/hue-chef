@@ -33,6 +33,7 @@ export interface I18nDictionary {
     actions: string;
     target: string;
     preview: string;
+    details: string;
   };
   auth: {
     loginTitle: string;
@@ -105,6 +106,8 @@ export interface I18nDictionary {
     baseScore: string;
     viewRecipe: string;
     pts: string;
+    allCategories: string;
+    searchPlaceholder: string;
     categoryLabels: Record<'bun' | 'com' | 'banh' | 'che' | 'nem', string>;
   };
   recipeStatus: {

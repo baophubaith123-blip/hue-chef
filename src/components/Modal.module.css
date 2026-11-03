@@ -50,6 +50,10 @@
   color: var(--color-plum, #4a1525);
 }
 
+[data-theme='dark'] .title {
+  color: var(--color-plum-text, #f8efea);
+}
+
 .close {
   border: none;
   background: transparent;
@@ -69,6 +73,11 @@
 .close:hover {
   background: rgba(74, 21, 37, 0.08);
   color: var(--color-plum, #4a1525);
+}
+
+[data-theme='dark'] .close:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--color-plum-text, #f8efea);
 }
 
 .body {

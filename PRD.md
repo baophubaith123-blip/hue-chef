@@ -10,11 +10,11 @@
 | **Tên dự án** | Hue Chef — Game nấu món ăn Huế |
 | **Mã học phần** | INT.7.18 — Web FrontEnd nâng cao |
 | **Hình thức** | Đồ án cá nhân |
-| **Phiên bản** | 2.1 (Hoàn thiện toàn diện) |
-| **Ngày cập nhật** | 31/10/2026 |
+| **Phiên bản** | 2.2 (Cập nhật UI/UX & Sửa lỗi toàn diện theo error.md) |
+| **Ngày cập nhật** | 03/11/2026 |
 | **Tác giả** | Nguyễn Gia Bảo |
 | **MSSV** | 2401ITA006 |
-| **Trạng thái** | Hoàn thành 100% (Đã nghiệm thu và kiểm thử thành công bằng Playwright) |
+| **Trạng thái** | Hoàn thành 100% (Đã nghiệm thu và vượt qua toàn bộ kiểm thử TypeScript & Build) |
 
 ---
 

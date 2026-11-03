@@ -5,8 +5,13 @@
   padding: 1.25rem;
   border: 1.5px solid var(--color-card-border, #e8dac8);
   border-radius: 16px;
-  background: #fffdf9;
+  background: var(--color-surface, #fffdf9);
   box-shadow: 0 4px 16px rgba(74, 21, 37, 0.05);
+}
+
+[data-theme='dark'] .tray {
+  background: var(--color-surface, #2A201B);
+  border-color: var(--color-card-border, #4A3A31);
 }
 
 .headerRow {
@@ -94,14 +99,15 @@
 }
 
 .chipUsed {
-  opacity: 0.5;
-  background: #f3f4f6;
+  opacity: 0.38;
+  filter: grayscale(0.5);
   cursor: not-allowed;
-  border-color: #e5e7eb;
+  pointer-events: none;
+  transform: none !important;
+  box-shadow: none !important;
 }
 
 .chipUsed .chipName {
-  text-decoration: line-through;
   color: var(--color-text-muted, #7c6c64);
 }
 
@@ -119,6 +125,26 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+[data-theme='dark'] .chipName {
+  color: var(--color-plum-text, #f8efea);
+}
+
+[data-theme='dark'] .chip {
+  background: var(--color-surface-alt, #352923);
+  border-color: var(--color-card-border, #4a3a31);
+  color: var(--color-text, #f6ebdd);
+}
+
+[data-theme='dark'] .chipMeta {
+  color: var(--color-text-muted, #bba896);
+}
+
+[data-theme='dark'] .remainingBadge {
+  background: var(--color-surface-alt, #352923);
+  color: var(--color-accent, #f0b95b);
+  border-color: var(--color-card-border, #4a3a31);
 }
 
 .itemBadge {

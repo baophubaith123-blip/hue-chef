@@ -15,6 +15,10 @@
   letter-spacing: -0.01em;
 }
 
+[data-theme='dark'] .title {
+  color: var(--color-plum-text, #f8efea);
+}
+
 .body {
   color: var(--color-text-muted, #7c6c64);
   line-height: 1.5;

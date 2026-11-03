@@ -296,6 +296,7 @@ Dự án hoàn thành qua 7 giai đoạn phát triển toàn diện (trên nhán
 | 🏷️ **Phase 5** | `feat(admin): phase 5 - user management, audit log, achievements` | User CRUD + ban/unban, AuditLogTable, 11 Admin pages, AchievementContext + NotificationBell + 2 Player pages |
 | 🏷️ **Phase 6** | `feat(i18n-polish): phase 6 - multi-language, dark mode, sound, common pages` | i18n vi/en (auto-detect), Dark mode CSS vars, Web Audio sound, 4 Common pages (Help/Feedback/About/404), Header+Footer responsive |
 | 🏷️ **Phase 7** | `style(ui): comprehensive imperial hue design system overhaul` & `style(ui): align layout with 9-frame reference map` | **Nâng cấp UI/UX Cố Đô Cung Đình Huế toàn diện**: Sidebar màu tím mận, Topbar tinh giản, Hero Banner 2 cột chống đè chữ, Podium Leaderboard Top 3 vẽ bằng CSS, Trang cá nhân 2 cột, Màn hình nấu ăn 3 Panel bo tròn 16px, Minigame chọn phương pháp chế biến & Quiz 2 cột đáp án, Modal kết quả cúp vàng 🏆 |
+| 🏷️ **Phase 8** | `fix(ui): resolve all issues from error.md and enhance UI` | **Hoàn thiện và xử lý triệt để toàn bộ 8 mục trong `error.md`**: Khắc phục tương phản màu chữ Dark Mode trên toàn bộ trang & minigame, nén ảnh đại diện 256x256 bằng Canvas chống tràn localStorage & fix avatar layout, bỏ badge "Đã dùng" chống phồng chip nguyên liệu, đồng bộ hóa thông báo & hộp thư `/inbox`, fix lỗi dịch bộ lọc & tìm kiếm công thức, thêm banner động steaming & orbiting culinary delicacies cho Trang Chủ và Trang Giới Thiệu, xử lý màu chữ autofill. |
 
 Xem lịch sử commit đầy đủ: [github.com/baophubaith123-blip/hue-chef/commits/main](https://github.com/baophubaith123-blip/hue-chef/commits/main)
 
@@ -316,6 +317,11 @@ Xem lịch sử commit đầy đủ: [github.com/baophubaith123-blip/hue-chef/co
 | 9 | Reload vẫn giữ ngôn ngữ | Đổi EN → F5 → vẫn EN | Storage lưu `hue-chef-locale` |
 | 10 | Dark mode reload | Toggle 🌙 → reload → vẫn dark | Storage lưu `hue-chef-theme` |
 | 11 | Truy cập route không tồn tại | Mở `/abc-def-xyz` | NotFoundPage 404 gradient đẹp |
+| 12 | Tương phản chữ Dark Mode | Bật Dark mode trên Home, Profile, Cooking, Minigames | Chữ hiển thị rõ nét màu kem/vàng kim, không bị chìm màu đen |
+| 13 | Nén và lưu avatar | Upload ảnh chân dung dung lượng lớn tại Profile | Tự động resize 256x256, lưu thành công không tràn bộ nhớ, không làm méo banner |
+| 14 | Thả nguyên liệu vào nồi | Kéo thả nguyên liệu vào nồi nấu | Thẻ nguyên liệu mờ đi tinh tế, giữ nguyên kích thước không bị phồng |
+| 15 | Đồng bộ Hộp thư & Chuông | Nhận thông báo mở khóa thành tích → mở `/inbox` | Danh sách 3 thông báo hiển thị đầy đủ trên `/inbox`, bấm "Đã đọc tất cả" cập nhật tức thì |
+| 16 | Bộ lọc công thức song ngữ | Chuyển đổi giữa Tiếng Việt và English | Tab "Tất cả" / "All" và placeholder tìm kiếm thay đổi đúng theo ngôn ngữ |
 
 ---
 

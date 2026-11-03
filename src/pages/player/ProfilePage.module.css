@@ -96,6 +96,10 @@
   color: var(--color-plum, #4a1525);
 }
 
+[data-theme='dark'] .userName {
+  color: var(--color-plum-text, #f8efea);
+}
+
 .userEmail {
   margin: 0 0 1.25rem;
   font-size: 0.85rem;
@@ -124,6 +128,10 @@
   font-size: 1.05rem;
   font-weight: 800;
   color: var(--color-plum, #4a1525);
+}
+
+[data-theme='dark'] .statVal {
+  color: var(--color-plum-text, #f8efea);
 }
 
 .statLbl {
@@ -156,6 +164,11 @@
   color: var(--color-plum, #4a1525);
   border-bottom: 1px solid var(--color-card-border, #e8dac8);
   padding-bottom: 0.75rem;
+}
+
+[data-theme='dark'] .formTitle {
+  color: var(--color-plum-text, #f8efea);
+  border-color: var(--color-card-border, #4a3a31);
 }
 
 .fieldGroup {
@@ -229,6 +242,12 @@
   cursor: pointer;
   transition: all 0.2s ease;
   width: fit-content;
+}
+
+[data-theme='dark'] .fileUploadBtn {
+  background: var(--color-surface-alt, #352923);
+  color: var(--color-plum-text, #f8efea);
+  border-color: var(--color-card-border, #4a3a31);
 }
 
 .fileUploadBtn:hover {

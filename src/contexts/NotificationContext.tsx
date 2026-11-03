@@ -3,6 +3,7 @@ import {
   useCallback,
   useContext,
   useMemo,
+  useState,
   type ReactNode,
 } from 'react';
 
@@ -50,8 +51,9 @@ function createId(): string {
 }
 
 export function NotificationProvider({ children }: { children: ReactNode }) {
+  const [store, setStore] = useState<NotificationStore>(() => loadStore());
+
   const push = useCallback<NotificationContextValue['push']>((args) => {
-    const store = loadStore();
     const notif: AppNotification = {
       id: createId(),
       userId: args.userId,
@@ -62,67 +64,96 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
       relatedId: args.relatedId,
       createdAt: new Date().toISOString(),
     };
-    const arr = store[args.userId] ?? [];
-    store[args.userId] = [notif, ...arr].slice(0, 200);
-    saveStore(store);
+    setStore((prev) => {
+      const arr = prev[args.userId] ?? [];
+      const updated = {
+        ...prev,
+        [args.userId]: [notif, ...arr].slice(0, 200),
+      };
+      saveStore(updated);
+      return updated;
+    });
     return notif;
   }, []);
 
-  const listForUser = useCallback((userId: string): AppNotification[] => {
-    const store = loadStore();
-    return store[userId] ?? [];
-  }, []);
+  const listForUser = useCallback(
+    (userId: string): AppNotification[] => {
+      return store[userId] ?? [];
+    },
+    [store],
+  );
 
-  const unreadCount = useCallback((userId: string): number => {
-    const list = listForUser(userId);
-    return list.filter((n) => !n.readAt).length;
-  }, [listForUser]);
+  const unreadCount = useCallback(
+    (userId: string): number => {
+      const list = store[userId] ?? [];
+      return list.filter((n) => !n.readAt).length;
+    },
+    [store],
+  );
 
   const markRead = useCallback((notificationId: string): void => {
-    const store = loadStore();
-    let found = false;
-    for (const userId of Object.keys(store)) {
-      const arr = store[userId];
-      for (let i = 0; i < arr.length; i += 1) {
-        if (arr[i].id === notificationId && !arr[i].readAt) {
-          arr[i] = { ...arr[i], readAt: new Date().toISOString() };
-          found = true;
+    setStore((prev) => {
+      let found = false;
+      const next: NotificationStore = { ...prev };
+      for (const userId of Object.keys(next)) {
+        const arr = next[userId];
+        if (!arr) continue;
+        const newArr = arr.map((item) => {
+          if (item.id === notificationId && !item.readAt) {
+            found = true;
+            return { ...item, readAt: new Date().toISOString() };
+          }
+          return item;
+        });
+        if (found) {
+          next[userId] = newArr;
         }
       }
-    }
-    if (found) saveStore(store);
+      if (found) {
+        saveStore(next);
+        return next;
+      }
+      return prev;
+    });
   }, []);
 
   const markAllReadForUser = useCallback((userId: string): void => {
-    const store = loadStore();
-    const arr = store[userId];
-    if (!arr) return;
-    const now = new Date().toISOString();
-    let changed = false;
-    const next = arr.map((n) => {
-      if (n.readAt) return n;
-      changed = true;
-      return { ...n, readAt: now };
+    setStore((prev) => {
+      const arr = prev[userId];
+      if (!arr || arr.length === 0) return prev;
+      const now = new Date().toISOString();
+      let changed = false;
+      const nextArr = arr.map((n) => {
+        if (n.readAt) return n;
+        changed = true;
+        return { ...n, readAt: now };
+      });
+      if (!changed) return prev;
+      const updated = { ...prev, [userId]: nextArr };
+      saveStore(updated);
+      return updated;
     });
-    if (changed) {
-      store[userId] = next;
-      saveStore(store);
-    }
   }, []);
 
   const dismiss = useCallback((notificationId: string): void => {
-    const store = loadStore();
-    let changed = false;
-    for (const userId of Object.keys(store)) {
-      const arr = store[userId];
-      const len = arr.length;
-      const filtered = arr.filter((n) => n.id !== notificationId);
-      if (filtered.length !== len) {
-        store[userId] = filtered;
-        changed = true;
+    setStore((prev) => {
+      let changed = false;
+      const next: NotificationStore = { ...prev };
+      for (const userId of Object.keys(next)) {
+        const arr = next[userId];
+        if (!arr) continue;
+        const filtered = arr.filter((n) => n.id !== notificationId);
+        if (filtered.length !== arr.length) {
+          next[userId] = filtered;
+          changed = true;
+        }
       }
-    }
-    if (changed) saveStore(store);
+      if (changed) {
+        saveStore(next);
+        return next;
+      }
+      return prev;
+    });
   }, []);
 
   const value = useMemo<NotificationContextValue>(

@@ -22,6 +22,10 @@
   line-height: 1.4;
 }
 
+[data-theme='dark'] .question {
+  color: var(--color-plum-text, #f8efea);
+}
+
 .instruction {
   font-size: 0.92rem;
   color: var(--color-text-muted, #7c6c64);
@@ -132,6 +136,12 @@
   font-weight: 700;
   color: var(--color-plum, #4a1525);
   flex-shrink: 0;
+}
+
+[data-theme='dark'] .optionIndexBadge {
+  background: var(--color-surface-alt, #352923);
+  color: var(--color-gold, #f0b95b);
+  border-color: var(--color-card-border, #4a3a31);
 }
 
 .optionText {

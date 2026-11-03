@@ -5,10 +5,15 @@
   padding: 1.25rem;
   border: 1.5px solid var(--color-card-border, #e8dac8);
   border-radius: 16px;
-  background: #fffdf9;
+  background: var(--color-surface, #fffdf9);
   box-shadow: 0 4px 16px rgba(74, 21, 37, 0.05);
   max-height: 520px;
   overflow-y: auto;
+}
+
+[data-theme='dark'] .steps {
+  background: var(--color-surface, #2A201B);
+  border-color: var(--color-card-border, #4A3A31);
 }
 
 .title {
@@ -57,6 +62,11 @@
   opacity: 0.85;
 }
 
+[data-theme='dark'] .pending {
+  background: var(--color-surface-alt, #352923);
+  border-color: var(--color-card-border, #4a3a31);
+}
+
 /* Active Step: Warm light yellow background, amber border (Khung 7 Target) */
 .active {
   border-color: #f59e0b;
@@ -65,9 +75,18 @@
   transform: translateX(3px);
 }
 
+[data-theme='dark'] .active {
+  background: #3b2a14;
+  border-color: #f59e0b;
+}
+
 .active .stepTitle {
   color: var(--color-plum, #4a1525);
   font-weight: 800;
+}
+
+[data-theme='dark'] .active .stepTitle {
+  color: #fef3c7;
 }
 
 /* Completed Step: Soft green background & checkmark (Khung 7 Target) */
@@ -76,8 +95,17 @@
   border-color: #a7f3d0;
 }
 
+[data-theme='dark'] .done {
+  background: #123020;
+  border-color: #065f46;
+}
+
 .done .stepTitle {
   color: #065f46;
+}
+
+[data-theme='dark'] .done .stepTitle {
+  color: #6ee7b7;
 }
 
 .order {
