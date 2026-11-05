@@ -235,7 +235,11 @@ export function PlayerShell({ children }: PlayerShellProps) {
           </div>
         </header>
 
-        <main className={styles.content}>{children}</main>
+        <main className={styles.content}>
+          <div key={location.pathname} className="page-transition">
+            {children}
+          </div>
+        </main>
       </div>
 
       {showWarning && warningCount > 0 ? (

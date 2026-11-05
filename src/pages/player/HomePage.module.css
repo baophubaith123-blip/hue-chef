@@ -5,32 +5,65 @@
   padding-bottom: 3rem;
 }
 
-/* 1. Hero Banner phong cách Cố Đô Cung Đình Huế (Image 6 Target) */
+/* 1. Hero Banner 3D — nguyên liệu hoảng sợ nhảy vào nồi (v3 redesign) */
 .heroBanner {
   position: relative;
   overflow: hidden;
-  border-radius: var(--radius-xl, 20px);
-  background: linear-gradient(135deg, #FFFDF9 0%, #FAF0E2 60%, #F5E3CE 100%);
-  border: 1.5px solid var(--color-card-border, #E8DAC8);
-  box-shadow: 0 10px 30px rgba(74, 21, 37, 0.06);
-  padding: 2.5rem 3rem;
-  display: grid;
-  grid-template-columns: 1.25fr 0.75fr;
+  border-radius: var(--radius-2xl, 24px);
+  background: var(--gradient-banner);
+  border: 1.5px solid rgba(233, 162, 59, 0.35);
+  box-shadow: var(--shadow-glow-plum);
+  padding: 2.75rem 3rem;
+  min-height: 380px;
+  display: flex;
   align-items: center;
-  gap: 2.5rem;
 }
 
-[data-theme='dark'] .heroBanner {
-  background: linear-gradient(135deg, #2D1D18 0%, #241612 100%);
-  border-color: #4A3A31;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+.heroBg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.heroBgImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: right center;
+  display: block;
+}
+
+/* Plum scrim so the copy stays readable over the artwork in both themes */
+.heroBg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    100deg,
+    rgba(55, 14, 27, 0.92) 0%,
+    rgba(55, 14, 27, 0.78) 38%,
+    rgba(55, 14, 27, 0.25) 68%,
+    rgba(55, 14, 27, 0) 100%
+  );
 }
 
 @media (max-width: 900px) {
   .heroBanner {
-    grid-template-columns: 1fr;
     padding: 2rem 1.5rem;
-    gap: 1.5rem;
+    min-height: 340px;
+  }
+
+  .heroBgImg {
+    object-position: center;
+  }
+
+  .heroBg::after {
+    background: linear-gradient(
+      180deg,
+      rgba(55, 14, 27, 0.82) 0%,
+      rgba(55, 14, 27, 0.65) 60%,
+      rgba(55, 14, 27, 0.45) 100%
+    );
   }
 }
 
@@ -40,23 +73,19 @@
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  max-width: 580px;
 }
 
 .heroUserBadge {
   display: inline-flex;
   align-items: center;
   gap: 0.75rem;
-  background: rgba(255, 255, 255, 0.85);
-  border: 1px solid var(--color-card-border, #E8DAC8);
+  background: rgba(55, 14, 27, 0.55);
+  border: 1px solid rgba(248, 239, 234, 0.28);
   padding: 0.35rem 0.85rem 0.35rem 0.35rem;
   border-radius: var(--radius-full);
   width: fit-content;
   backdrop-filter: blur(8px);
-}
-
-[data-theme='dark'] .heroUserBadge {
-  background: rgba(45, 32, 26, 0.85);
-  border-color: #4A3A31;
 }
 
 .avatarWrapSmall {
@@ -105,13 +134,13 @@
 
 .greeting {
   font-size: 0.82rem;
-  color: var(--color-text, #3B2A20);
+  color: #f8efea;
 }
 
 .titleTagText {
   font-size: 0.72rem;
   font-weight: 700;
-  color: var(--color-brick, #C8553D);
+  color: #f6c453;
 }
 
 .heroHeading {
@@ -126,7 +155,7 @@
   font-family: var(--font-sans);
   font-size: 0.95rem;
   font-weight: 700;
-  color: var(--color-gold, #E9A23B);
+  color: #f6c453;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   display: block;
@@ -136,20 +165,17 @@
   font-family: var(--font-display, var(--font-serif), Georgia, serif);
   font-size: 2.85rem;
   font-weight: 800;
-  color: var(--color-plum, #4A1525);
+  color: #f8efea;
   letter-spacing: -0.02em;
   display: block;
   line-height: 1.15;
-}
-
-[data-theme='dark'] .heroMainHeading {
-  color: #F8EFEA;
+  text-shadow: 0 3px 18px rgba(30, 6, 14, 0.55);
 }
 
 .heroSubtitle {
   margin: 0;
   font-size: 1rem;
-  color: var(--color-text-muted, #7A6455);
+  color: rgba(248, 239, 234, 0.88);
   line-height: 1.5;
   max-width: 520px;
 }
@@ -163,21 +189,20 @@
 }
 
 .heroPlayBtn {
-  background: var(--color-brick, #C8553D) !important;
+  background: var(--gradient-fire) !important;
   color: #FFFFFF !important;
   padding: 0.8rem 1.85rem;
   font-size: 1rem;
   font-weight: 700;
   border-radius: var(--radius-full);
-  box-shadow: 0 4px 16px rgba(200, 85, 61, 0.35);
+  box-shadow: var(--shadow-glow-fire);
   transition: all 0.2s ease;
   border: none;
 }
 
 .heroPlayBtn:hover {
-  background: var(--color-primary-hover, #B0442E) !important;
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(200, 85, 61, 0.45);
+  box-shadow: 0 16px 36px rgba(200, 85, 61, 0.5);
 }
 
 .heroExploreBtn {
@@ -185,168 +210,24 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.8rem 1.75rem;
-  background: var(--color-surface, #FFFFFF);
-  border: 1.5px solid var(--color-card-border, #E8DAC8);
+  background: rgba(255, 253, 249, 0.12);
+  border: 1.5px solid rgba(248, 239, 234, 0.45);
   border-radius: var(--radius-full);
-  color: var(--color-plum, #4A1525);
+  color: #f8efea;
   font-weight: 700;
   font-size: 0.95rem;
   text-decoration: none;
-  box-shadow: 0 2px 8px rgba(74, 21, 37, 0.04);
+  backdrop-filter: blur(6px);
   transition: all 0.2s ease;
 }
 
 .heroExploreBtn:hover {
-  background: var(--color-surface-hover, #F5EBDC);
-  border-color: var(--color-brick, #C8553D);
-  color: var(--color-brick, #C8553D);
+  background: rgba(255, 253, 249, 0.2);
+  border-color: #f6c453;
+  color: #f6c453;
   transform: translateY(-2px);
 }
 
-[data-theme='dark'] .heroExploreBtn {
-  background: var(--color-surface, #2A201B);
-  color: var(--color-plum-text, #F8EFEA);
-  border-color: var(--color-card-border, #4A3A31);
-}
-
-[data-theme='dark'] .heroExploreBtn:hover {
-  background: var(--color-surface-hover, #352923);
-  color: var(--color-accent, #F0B95B);
-  border-color: var(--color-accent, #F0B95B);
-}
-
-.heroArtwork {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-}
-
-.heroFoodCircle {
-  width: 230px;
-  height: 230px;
-  border-radius: 50%;
-  background: radial-gradient(circle, #FFFDF9 40%, #FAF0E2 70%, #F5E3CE 100%);
-  border: 4px solid #FAF0E2;
-  box-shadow: 0 14px 36px rgba(74, 21, 37, 0.12), inset 0 2px 6px rgba(255, 255, 255, 0.8);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  transition: all 0.3s ease;
-}
-
-[data-theme='dark'] .heroFoodCircle {
-  background: radial-gradient(circle, #38241c 40%, #2a1a14 80%, #1f120e 100%);
-  border-color: #4a3a31;
-  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.6), inset 0 1px 3px rgba(255, 255, 255, 0.05);
-}
-
-.heroFoodCircle::before {
-  content: '';
-  position: absolute;
-  inset: -12px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(233, 162, 59, 0.25) 0%, rgba(200, 85, 61, 0.1) 60%, transparent 80%);
-  z-index: 0;
-  animation: auraPulse 4s ease-in-out infinite alternate;
-  pointer-events: none;
-}
-
-@keyframes auraPulse {
-  0% {
-    transform: scale(0.96);
-    opacity: 0.6;
-  }
-  100% {
-    transform: scale(1.06);
-    opacity: 1;
-  }
-}
-
-.steamTrack {
-  position: absolute;
-  top: -24px;
-  display: flex;
-  gap: 12px;
-  z-index: 2;
-  pointer-events: none;
-}
-
-.steamParticle {
-  font-size: 1.4rem;
-  opacity: 0;
-  animation: steamRise 3s ease-in-out infinite;
-  display: block;
-  filter: blur(0.5px);
-}
-
-.steam1 { animation-delay: 0s; }
-.steam2 { animation-delay: 1s; }
-.steam3 { animation-delay: 2s; }
-
-@keyframes steamRise {
-  0% {
-    opacity: 0;
-    transform: translateY(12px) scale(0.7);
-  }
-  40% {
-    opacity: 0.85;
-    transform: translateY(-4px) scale(1);
-  }
-  80% {
-    opacity: 0.4;
-    transform: translateY(-16px) scale(1.2) rotate(6deg);
-  }
-  100% {
-    opacity: 0;
-    transform: translateY(-24px) scale(1.4);
-  }
-}
-
-.orbitItem {
-  position: absolute;
-  font-size: 1.6rem;
-  z-index: 3;
-  filter: drop-shadow(0 4px 10px rgba(74, 21, 37, 0.2));
-  animation: floatOrbit 4s ease-in-out infinite alternate;
-  pointer-events: none;
-}
-
-.orbit1 { top: -8px; right: 18px; animation-delay: 0.2s; }
-.orbit2 { bottom: 12px; right: -12px; animation-delay: 1.2s; }
-.orbit3 { bottom: 18px; left: -10px; animation-delay: 2.1s; }
-.orbit4 { top: 12px; left: -12px; animation-delay: 0.8s; font-size: 1.7rem; }
-.orbit5 { top: -14px; left: 40%; animation-delay: 1.6s; font-size: 1.2rem; }
-
-@keyframes floatOrbit {
-  0% {
-    transform: translateY(0) rotate(-4deg);
-  }
-  100% {
-    transform: translateY(-10px) rotate(6deg);
-  }
-}
-
-.floatingDishEmoji {
-  font-size: 7rem;
-  filter: drop-shadow(0 14px 20px rgba(74, 21, 37, 0.25));
-  animation: floatDish 4s ease-in-out infinite;
-  display: block;
-  position: relative;
-  z-index: 2;
-}
-
-@keyframes floatDish {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-8px);
-  }
-}
 
 /* 2. Chế độ chơi nhanh (Image 1 Quick Modes Grid) */
 .quickModesSection {

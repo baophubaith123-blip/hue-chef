@@ -177,6 +177,10 @@ export default function HomePage() {
       <div className={styles.dashboard}>
         {/* 1. Hero Banner mang phong cách Cố Đô Cung Đình Huế (Image 6 Target) */}
         <section className={styles.heroBanner} aria-label={dict.dashboard.heroTitleHue}>
+          <div className={styles.heroBg} aria-hidden="true">
+            <img src="/images/banner-3d.jpg" alt="" className={styles.heroBgImg} />
+          </div>
+
           <div className={styles.heroContent}>
             <div className={styles.heroUserBadge}>
               <div className={styles.avatarWrapSmall}>
@@ -215,21 +219,6 @@ export default function HomePage() {
             </div>
           </div>
 
-          <div className={styles.heroArtwork} aria-hidden="true">
-            <div className={styles.heroFoodCircle}>
-              <div className={styles.steamTrack}>
-                <span className={`${styles.steamParticle} ${styles.steam1}`}>♨️</span>
-                <span className={`${styles.steamParticle} ${styles.steam2}`}>♨️</span>
-                <span className={`${styles.steamParticle} ${styles.steam3}`}>♨️</span>
-              </div>
-              <span className={styles.floatingDishEmoji}>🍜</span>
-              <span className={`${styles.orbitItem} ${styles.orbit1}`}>🌶️</span>
-              <span className={`${styles.orbitItem} ${styles.orbit2}`}>🦐</span>
-              <span className={`${styles.orbitItem} ${styles.orbit3}`}>🌿</span>
-              <span className={`${styles.orbitItem} ${styles.orbit4}`}>🏮</span>
-              <span className={`${styles.orbitItem} ${styles.orbit5}`}>✨</span>
-            </div>
-          </div>
         </section>
 
         {/* 2. Chế độ chơi nhanh (Image 1 - 4 interactive cards) */}

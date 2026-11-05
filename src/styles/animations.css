@@ -107,3 +107,131 @@
     opacity: 0;
   }
 }
+
+/* === Game redesign animation layer (2026-11) === */
+
+/* Page / card entrance: fade + slide up */
+@keyframes fadeSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Pop-in for badges, tokens, modal content */
+@keyframes popIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  70% {
+    transform: scale(1.04);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Gentle bounce for mascot & call-to-action art */
+@keyframes bounceSoft {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+/* Playful wiggle (locked items, wrong drops) */
+@keyframes wiggle {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-4deg);
+  }
+  75% {
+    transform: rotate(4deg);
+  }
+}
+
+/* Confetti pieces falling in the result celebration */
+@keyframes confettiFall {
+  0% {
+    transform: translateY(-10%) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(105vh) rotate(660deg);
+    opacity: 0.85;
+  }
+}
+
+/* Urgency pulse for the countdown ring when time is low */
+@keyframes timerPulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.07);
+  }
+}
+
+/* Shimmer sweep for skeleton / premium surfaces */
+@keyframes shimmer {
+  0% {
+    background-position: -400px 0;
+  }
+  100% {
+    background-position: 400px 0;
+  }
+}
+
+/* Flame flicker under the cooking pot */
+@keyframes flameFlicker {
+  0%,
+  100% {
+    transform: scaleY(1) scaleX(1);
+    opacity: 0.9;
+  }
+  50% {
+    transform: scaleY(1.12) scaleX(0.96);
+    opacity: 1;
+  }
+}
+
+/* Route-change wrapper (applied in shells, keyed by pathname) */
+.page-transition {
+  animation: fadeSlideUp 0.45s ease both;
+}
+
+/* Reusable entrance utilities */
+.anim-fade-up {
+  animation: fadeSlideUp 0.55s ease both;
+}
+
+.anim-pop {
+  animation: popIn 0.4s ease both;
+}
+
+.anim-bounce-soft {
+  animation: bounceSoft 3.2s ease-in-out infinite;
+}
+
+/* Stagger helpers for card grids (use with .anim-fade-up) */
+.anim-delay-1 { animation-delay: 0.05s; }
+.anim-delay-2 { animation-delay: 0.1s; }
+.anim-delay-3 { animation-delay: 0.15s; }
+.anim-delay-4 { animation-delay: 0.2s; }
+.anim-delay-5 { animation-delay: 0.25s; }
+.anim-delay-6 { animation-delay: 0.3s; }
+.anim-delay-7 { animation-delay: 0.35s; }
+.anim-delay-8 { animation-delay: 0.4s; }
