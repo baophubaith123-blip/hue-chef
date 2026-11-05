@@ -9,6 +9,11 @@
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
+  background: var(--gradient-banner);
+  border: 1.5px solid rgba(233, 162, 59, 0.4);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-glow-plum);
+  padding: 1.5rem 1.75rem;
 }
 
 .titleRow {
@@ -26,15 +31,11 @@
   font-family: var(--font-serif);
   font-size: 1.85rem;
   font-weight: 700;
-  color: var(--color-plum);
-}
-
-[data-theme='dark'] .title {
-  color: #F8EFEA;
+  color: #f8efea;
 }
 
 .subtitle {
   margin: 0;
   font-size: 0.95rem;
-  color: var(--color-text-muted);
+  color: rgba(248, 239, 234, 0.82);
 }

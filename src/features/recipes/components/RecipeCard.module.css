@@ -113,20 +113,50 @@
   border: 1px solid var(--color-border);
 }
 
-.ratingBox {
+.scoreBox {
   display: flex;
   align-items: center;
-  gap: 3px;
+  gap: 4px;
   font-size: 0.85rem;
   font-weight: 700;
   color: var(--color-text);
 }
 
-.starIcon {
-  color: var(--color-gold);
-  font-size: 0.95rem;
+/* Difficulty tier badge over the dish photo */
+.difficultyBadge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(45, 11, 22, 0.78);
+  color: #fffdf9;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  padding: 3px 9px;
+  border-radius: var(--radius-full);
+  border: 1.5px solid var(--color-gold);
+  backdrop-filter: blur(4px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
 }
 
-.ratingValue {
-  color: var(--color-text);
+.difficultyStars {
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
 }
+
+.tier1 { border-color: #4ade80; }
+.tier1 .difficultyStars { color: #4ade80; }
+.tier2 { border-color: #38bdf8; }
+.tier2 .difficultyStars { color: #38bdf8; }
+.tier3 { border-color: #e9a23b; }
+.tier3 .difficultyStars { color: #e9a23b; }
+.tier4 { border-color: #fb923c; }
+.tier4 .difficultyStars { color: #fb923c; }
+.tier5 {
+  border-color: #ef4444;
+  box-shadow: 0 0 12px rgba(239, 68, 68, 0.55);
+}
+.tier5 .difficultyStars { color: #ef4444; }

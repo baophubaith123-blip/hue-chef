@@ -27,6 +27,11 @@ export function StepList({ steps, activeStepIndex, completedStepIndexes = [] }: 
               <div>
                 <p className={styles.stepTitle}>{step.title}</p>
                 <p className={styles.stepDesc}>{step.description}</p>
+                {step.requiredIngredients.length > 0 ? (
+                  <p className={styles.stepNeeds}>
+                    🧺 {t('cooking.stepNeeds', { count: step.requiredIngredients.length })}
+                  </p>
+                ) : null}
               </div>
             </li>
           );

@@ -44,6 +44,16 @@
   color: var(--color-danger, #ef4444);
 }
 
+.valueUrgent {
+  color: var(--color-danger, #ef4444);
+  animation: timerPulse 1s ease-in-out infinite;
+}
+
+.fillUrgent {
+  background: var(--color-danger, #ef4444);
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
+}
+
 .track {
   height: 0.65rem;
   border-radius: 999px;

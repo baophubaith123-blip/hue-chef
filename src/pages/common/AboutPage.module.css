@@ -4,26 +4,20 @@
   padding: 2rem 1.25rem 3.5rem;
 }
 
-/* Dynamic Animated Banner */
+/* Hero banner with the 3D Noi Noi mascot */
 .heroBanner {
   position: relative;
   overflow: hidden;
-  border-radius: var(--radius-xl, 20px);
-  background: linear-gradient(135deg, #FFFDF9 0%, #FAF0E2 60%, #F5E3CE 100%);
-  border: 1.5px solid var(--color-card-border, #E8DAC8);
-  box-shadow: 0 12px 36px rgba(74, 21, 37, 0.08);
+  border-radius: var(--radius-2xl, 24px);
+  background: var(--gradient-banner);
+  border: 1.5px solid rgba(233, 162, 59, 0.4);
+  box-shadow: var(--shadow-glow-plum);
   padding: 3rem 3.25rem;
   display: grid;
   grid-template-columns: 1.2fr 0.8fr;
   align-items: center;
   gap: 2.5rem;
   margin-bottom: 2.5rem;
-}
-
-[data-theme='dark'] .heroBanner {
-  background: linear-gradient(135deg, #2D1D18 0%, #241612 100%);
-  border-color: #4A3A31;
-  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.45);
 }
 
 @media (max-width: 860px) {
@@ -48,19 +42,13 @@
   gap: 0.5rem;
   padding: 0.4rem 1rem;
   border-radius: var(--radius-full, 9999px);
-  background: rgba(255, 255, 255, 0.85);
-  border: 1px solid var(--color-card-border, #E8DAC8);
-  color: var(--color-brick, #C8553D);
+  background: rgba(55, 14, 27, 0.55);
+  border: 1px solid rgba(248, 239, 234, 0.28);
+  color: #f6c453;
   font-weight: 700;
   font-size: 0.85rem;
   width: fit-content;
-  box-shadow: 0 2px 8px rgba(74, 21, 37, 0.04);
-}
-
-[data-theme='dark'] .heroBadge {
-  background: rgba(45, 32, 26, 0.85);
-  border-color: #4A3A31;
-  color: var(--color-accent, #F0B95B);
+  backdrop-filter: blur(8px);
 }
 
 @media (max-width: 860px) {
@@ -78,25 +66,17 @@
   font-family: var(--font-display, var(--font-serif), Georgia, serif);
   font-size: clamp(2rem, 3.2vw, 3rem);
   font-weight: 800;
-  color: var(--color-plum, #4A1525);
+  color: #f8efea;
   line-height: 1.2;
   letter-spacing: -0.01em;
 }
 
-[data-theme='dark'] .heroTitle {
-  color: var(--color-plum-text, #F8EFEA);
-}
-
 .heroDesc {
   margin: 0;
-  color: var(--color-text-muted, #7A6455);
+  color: rgba(248, 239, 234, 0.85);
   font-size: 1.05rem;
   line-height: 1.6;
   max-width: 540px;
-}
-
-[data-theme='dark'] .heroDesc {
-  color: var(--color-text-muted, #BBA896);
 }
 
 .heroActions {
@@ -118,20 +98,19 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.85rem 1.85rem;
-  background: var(--color-brick, #C8553D);
+  background: var(--gradient-fire);
   color: #FFFFFF;
   border-radius: var(--radius-full, 9999px);
   font-weight: 700;
   font-size: 0.95rem;
   text-decoration: none;
-  box-shadow: 0 4px 16px rgba(200, 85, 61, 0.35);
+  box-shadow: var(--shadow-glow-fire);
   transition: all 0.2s ease;
 }
 
 .heroBtnPrimary:hover {
-  background: var(--color-primary-hover, #B0442E);
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(200, 85, 61, 0.45);
+  filter: brightness(1.07);
 }
 
 .heroBtnSecondary {
@@ -139,154 +118,120 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.85rem 1.75rem;
-  background: var(--color-surface, #FFFFFF);
-  border: 1.5px solid var(--color-card-border, #E8DAC8);
+  background: rgba(255, 253, 249, 0.12);
+  border: 1.5px solid rgba(248, 239, 234, 0.45);
   border-radius: var(--radius-full, 9999px);
-  color: var(--color-plum, #4A1525);
+  color: #f8efea;
   font-weight: 700;
   font-size: 0.95rem;
   text-decoration: none;
-  box-shadow: 0 2px 8px rgba(74, 21, 37, 0.04);
+  backdrop-filter: blur(6px);
   transition: all 0.2s ease;
 }
 
 .heroBtnSecondary:hover {
-  background: var(--color-surface-hover, #F5EBDC);
-  border-color: var(--color-brick, #C8553D);
-  color: var(--color-brick, #C8553D);
+  background: rgba(255, 253, 249, 0.2);
+  border-color: #f6c453;
+  color: #f6c453;
   transform: translateY(-2px);
 }
 
-[data-theme='dark'] .heroBtnSecondary {
-  background: var(--color-surface, #2A201B);
-  color: var(--color-plum-text, #F8EFEA);
-  border-color: var(--color-card-border, #4A3A31);
-}
-
-[data-theme='dark'] .heroBtnSecondary:hover {
-  background: var(--color-surface-hover, #352923);
-  color: var(--color-accent, #F0B95B);
-  border-color: var(--color-accent, #F0B95B);
-}
-
-/* Artwork with Floating Orbit & Steaming Pot */
+/* Mascot artwork */
 .heroArtwork {
-  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 100%;
-  height: 100%;
 }
 
-.heroFoodCircle {
-  width: 240px;
-  height: 240px;
-  border-radius: 50%;
-  background: radial-gradient(circle, #FFFDF9 40%, #FAF0E2 70%, #F5E3CE 100%);
-  border: 4px solid #FAF0E2;
-  box-shadow: 0 14px 36px rgba(74, 21, 37, 0.12), inset 0 2px 6px rgba(255, 255, 255, 0.8);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  transition: all 0.3s ease;
-}
-
-[data-theme='dark'] .heroFoodCircle {
-  background: radial-gradient(circle, #38241c 40%, #2a1a14 80%, #1f120e 100%);
-  border-color: #4a3a31;
-  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.6), inset 0 1px 3px rgba(255, 255, 255, 0.05);
-}
-
-.heroFoodCircle::before {
-  content: '';
-  position: absolute;
-  inset: -14px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(233, 162, 59, 0.28) 0%, rgba(200, 85, 61, 0.12) 60%, transparent 80%);
-  z-index: 0;
-  animation: auraPulseAbout 4s ease-in-out infinite alternate;
-  pointer-events: none;
-}
-
-@keyframes auraPulseAbout {
-  0% { transform: scale(0.96); opacity: 0.6; }
-  100% { transform: scale(1.06); opacity: 1; }
-}
-
-.steamTrack {
-  position: absolute;
-  top: -24px;
-  display: flex;
-  gap: 12px;
-  z-index: 2;
-  pointer-events: none;
-}
-
-.steamParticle {
-  font-size: 1.4rem;
-  opacity: 0;
-  animation: steamRiseAbout 3s ease-in-out infinite;
+.heroPotImg {
+  width: min(300px, 80vw);
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 28px;
+  border: 3px solid rgba(233, 162, 59, 0.55);
+  box-shadow: 0 18px 38px rgba(0, 0, 0, 0.4);
+  animation: bounceSoft 3.8s ease-in-out infinite;
   display: block;
-  filter: blur(0.5px);
 }
 
-.steam1 { animation-delay: 0s; }
-.steam2 { animation-delay: 1s; }
-.steam3 { animation-delay: 2s; }
+/* Journey strip */
+.journey {
+  margin-bottom: 2.5rem;
+}
 
-@keyframes steamRiseAbout {
-  0% {
-    opacity: 0;
-    transform: translateY(12px) scale(0.7);
-  }
-  40% {
-    opacity: 0.85;
-    transform: translateY(-4px) scale(1);
-  }
-  80% {
-    opacity: 0.4;
-    transform: translateY(-16px) scale(1.2) rotate(6deg);
-  }
-  100% {
-    opacity: 0;
-    transform: translateY(-24px) scale(1.4);
+.journeyTitle {
+  margin: 0 0 1.1rem;
+  font-family: var(--font-display, var(--font-serif), Georgia, serif);
+  font-size: 1.45rem;
+  font-weight: 800;
+  color: var(--color-plum);
+}
+
+[data-theme='dark'] .journeyTitle {
+  color: var(--color-plum-text);
+}
+
+.journeyGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+@media (max-width: 860px) {
+  .journeyGrid {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
-.floatingDishEmoji {
-  font-size: 7.2rem;
-  filter: drop-shadow(0 14px 20px rgba(74, 21, 37, 0.25));
-  animation: floatPot 4s ease-in-out infinite;
-  display: block;
+@media (max-width: 520px) {
+  .journeyGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.journeyStep {
   position: relative;
-  z-index: 2;
+  background: var(--color-surface);
+  border: 1.5px solid var(--color-card-border);
+  border-radius: var(--radius-xl, 18px);
+  padding: 1.35rem 1.15rem 1.15rem;
+  box-shadow: var(--shadow-sm);
 }
 
-@keyframes floatPot {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-8px); }
-}
-
-.orbitItem {
+.journeyNum {
   position: absolute;
-  font-size: 1.6rem;
-  z-index: 3;
-  filter: drop-shadow(0 4px 10px rgba(74, 21, 37, 0.2));
-  animation: floatOrbitAbout 4s ease-in-out infinite alternate;
-  pointer-events: none;
+  top: -11px;
+  left: 14px;
+  width: 23px;
+  height: 23px;
+  border-radius: 50%;
+  background: var(--gradient-gold);
+  color: #4a1525;
+  font-size: 0.78rem;
+  font-weight: 800;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 2px 6px rgba(233, 162, 59, 0.4);
 }
 
-.orbit1 { top: -8px; right: 18px; animation-delay: 0.2s; }
-.orbit2 { bottom: 12px; right: -12px; animation-delay: 1.2s; }
-.orbit3 { bottom: 18px; left: -10px; animation-delay: 2.1s; }
-.orbit4 { top: 12px; left: -12px; animation-delay: 0.8s; font-size: 1.7rem; }
-.orbit5 { top: -14px; left: 40%; animation-delay: 1.6s; font-size: 1.3rem; }
+.journeyIcon {
+  font-size: 1.7rem;
+  display: block;
+  margin-bottom: 0.5rem;
+}
 
-@keyframes floatOrbitAbout {
-  0% { transform: translateY(0) rotate(-4deg); }
-  100% { transform: translateY(-10px) rotate(6deg); }
+.journeyStepTitle {
+  margin: 0 0 0.35rem;
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--color-text);
+}
+
+.journeyStepDesc {
+  margin: 0;
+  font-size: 0.86rem;
+  line-height: 1.5;
+  color: var(--color-text-muted);
 }
 
 .grid {

@@ -72,20 +72,7 @@ export default function LandingPage() {
             </div>
 
             <div className={styles.heroVisual} aria-hidden="true">
-              <span className={`${styles.floatingEmoji} ${styles.emoji1}`}>🦐</span>
-              <span className={`${styles.floatingEmoji} ${styles.emoji2}`}>🌾</span>
-              <span className={`${styles.floatingEmoji} ${styles.emoji3}`}>🌶️</span>
-              <span className={`${styles.floatingEmoji} ${styles.emoji4}`}>🫙</span>
-
-              <div className={styles.bowlContainer}>
-                <div className={styles.steamWrap}>
-                  <span className={styles.steamWisp}>♨️</span>
-                  <span className={styles.steamWisp}>♨️</span>
-                  <span className={styles.steamWisp}>♨️</span>
-                </div>
-                <div className={styles.bowlGraphic}>🍜</div>
-                <div className={styles.bowlGlow} />
-              </div>
+              <img src="/images/banner-3d.jpg" alt="" className={styles.heroBannerImg} />
             </div>
           </div>
         </section>

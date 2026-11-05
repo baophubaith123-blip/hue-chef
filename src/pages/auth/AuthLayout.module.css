@@ -4,12 +4,20 @@
   align-items: center;
   justify-content: center;
   padding: 1.5rem;
-  background: radial-gradient(circle at top center, var(--color-surface, #ffffff) 0%, var(--color-bg-ivory, #faf5ef) 100%);
+  background:
+    linear-gradient(160deg, rgba(45, 11, 22, 0.86) 0%, rgba(74, 21, 37, 0.78) 55%, rgba(45, 11, 22, 0.9) 100%),
+    url('/images/banner-3d.jpg') center / cover no-repeat;
 }
 
 .panel {
   width: 100%;
   max-width: 440px;
+  background: var(--color-surface);
+  border: 1.5px solid rgba(233, 162, 59, 0.5);
+  border-radius: var(--radius-2xl, 24px);
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.45);
+  padding: 2.25rem 2rem 1.75rem;
+  animation: popIn 0.45s ease both;
 }
 
 .brand {

@@ -148,3 +148,10 @@
   color: var(--color-text-muted, #7c6c64);
   line-height: 1.4;
 }
+
+.stepNeeds {
+  margin: 0.35rem 0 0;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--color-primary, #c8553d);
+}

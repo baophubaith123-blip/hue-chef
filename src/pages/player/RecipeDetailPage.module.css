@@ -108,6 +108,14 @@
   letter-spacing: 1px;
 }
 
+.metricTier {
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: var(--color-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
 .metricValue {
   font-size: 0.95rem;
   font-weight: 700;
@@ -135,8 +143,8 @@
   font-size: 1.05rem;
   font-weight: 700;
   border-radius: var(--radius-full);
-  background: var(--color-primary);
-  box-shadow: 0 4px 14px rgba(200, 85, 61, 0.35);
+  background: var(--gradient-fire);
+  box-shadow: var(--shadow-glow-fire);
   transition: all 0.2s ease;
 }
 
@@ -279,4 +287,25 @@
   font-size: 0.85rem;
   color: var(--color-text-muted);
   line-height: 1.45;
+}
+
+.stepIngredients {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.45rem;
+}
+
+.stepIngredientChip {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--color-plum);
+  background: var(--color-accent-soft);
+  border: 1px solid var(--color-border);
+  padding: 0.12rem 0.5rem;
+  border-radius: var(--radius-full);
+}
+
+[data-theme='dark'] .stepIngredientChip {
+  color: var(--color-plum-text);
 }

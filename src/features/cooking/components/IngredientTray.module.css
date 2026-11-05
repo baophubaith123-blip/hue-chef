@@ -50,14 +50,16 @@
   border: 1px solid var(--color-card-border, #e8dac8);
 }
 
-/* 2-Column Grid (Khung 7 Target) */
+/* 2-Column Grid — scrolls when a hard recipe brings up to 40 tokens */
 .list {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 0.65rem;
   margin: 0;
-  padding: 0;
+  padding: 0.15rem 0.35rem 0.15rem 0.15rem;
   list-style: none;
+  max-height: 520px;
+  overflow-y: auto;
 }
 
 @media (max-width: 600px) {
@@ -68,9 +70,11 @@
 
 .chip {
   display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-  padding: 0.65rem 0.8rem;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.6rem;
+  width: 100%;
+  padding: 0.55rem 0.7rem;
   border: 1.5px solid var(--color-card-border, #e8dac8);
   border-radius: var(--radius-lg, 12px);
   background: var(--color-bg-ivory, #faf5ef);
@@ -80,6 +84,32 @@
   transition: all 0.2s ease;
   user-select: none;
   box-shadow: 0 1px 3px rgba(74, 21, 37, 0.04);
+}
+
+/* Ingredient character medallion, tinted by category */
+.medal {
+  flex-shrink: 0;
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  font-size: 1.3rem;
+  border-radius: 14px;
+  background: var(--color-surface-alt, #f5ebdc);
+  box-shadow: inset 0 0 0 1.5px rgba(74, 21, 37, 0.06);
+}
+
+.cat-protein { background: rgba(200, 85, 61, 0.16); }
+.cat-vegetable { background: rgba(21, 128, 61, 0.16); }
+.cat-spice { background: rgba(233, 162, 59, 0.2); }
+.cat-grain { background: rgba(146, 110, 60, 0.16); }
+.cat-other { background: rgba(122, 75, 122, 0.16); }
+
+.chipTexts {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  min-width: 0;
 }
 
 .chip:hover {
@@ -111,20 +141,11 @@
   color: var(--color-text-muted, #7c6c64);
 }
 
-.chipHeader {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.4rem;
-}
-
 .chipName {
   font-size: 0.88rem;
   font-weight: 700;
   color: var(--color-plum, #4a1525);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  line-height: 1.25;
 }
 
 [data-theme='dark'] .chipName {
@@ -145,15 +166,6 @@
   background: var(--color-surface-alt, #352923);
   color: var(--color-accent, #f0b95b);
   border-color: var(--color-card-border, #4a3a31);
-}
-
-.itemBadge {
-  font-size: 0.72rem;
-  font-weight: 700;
-  color: var(--color-brick, #c8553d);
-  background: rgba(200, 85, 61, 0.12);
-  padding: 0.1rem 0.45rem;
-  border-radius: var(--radius-full);
 }
 
 .usedBadge {

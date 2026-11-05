@@ -3,7 +3,42 @@
   flex-direction: column;
   gap: 1.15rem;
   padding: 0.25rem 0;
+  position: relative;
 }
+
+/* One-shot confetti celebration over the success content */
+.confetti {
+  position: absolute;
+  inset: -0.5rem -0.25rem auto;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.confettiPiece {
+  position: absolute;
+  top: -14px;
+  width: 8px;
+  height: 13px;
+  border-radius: 2px;
+  background: var(--color-gold, #e9a23b);
+  opacity: 0;
+  animation: confettiFall 3s ease-in 0.2s forwards;
+}
+
+.confettiPiece:nth-child(1) { left: 4%; background: #e9a23b; animation-delay: 0.1s; }
+.confettiPiece:nth-child(2) { left: 12%; background: #c8553d; animation-delay: 0.45s; animation-duration: 3.4s; }
+.confettiPiece:nth-child(3) { left: 21%; background: #38bdf8; animation-delay: 0.25s; }
+.confettiPiece:nth-child(4) { left: 30%; background: #22c55e; animation-delay: 0.6s; animation-duration: 2.8s; }
+.confettiPiece:nth-child(5) { left: 39%; background: #7a243b; animation-delay: 0.15s; animation-duration: 3.2s; }
+.confettiPiece:nth-child(6) { left: 48%; background: #e9a23b; animation-delay: 0.5s; }
+.confettiPiece:nth-child(7) { left: 57%; background: #c8553d; animation-delay: 0.05s; animation-duration: 3.5s; }
+.confettiPiece:nth-child(8) { left: 66%; background: #38bdf8; animation-delay: 0.4s; }
+.confettiPiece:nth-child(9) { left: 74%; background: #22c55e; animation-delay: 0.2s; animation-duration: 3.1s; }
+.confettiPiece:nth-child(10) { left: 82%; background: #e9a23b; animation-delay: 0.55s; }
+.confettiPiece:nth-child(11) { left: 90%; background: #7a243b; animation-delay: 0.3s; animation-duration: 2.9s; }
+.confettiPiece:nth-child(12) { left: 96%; background: #c8553d; animation-delay: 0.65s; animation-duration: 3.3s; }
 
 /* Celebration Hero */
 .celebrationHero {

@@ -40,8 +40,8 @@ export function IngredientTray({
           {t('cooking.remaining', { count: remainingCount })}
         </span>
       </div>
-      <ul className={styles.list}>
-        {trayIngredientIds.map((ingredientId) => {
+      <ul className={`${styles.list} scroll-slim`}>
+        {trayIngredientIds.map((ingredientId, index) => {
           const ingredient = getIngredientById(ingredientId);
           if (!ingredient) {
             return null;
@@ -52,7 +52,7 @@ export function IngredientTray({
             dict.cooking.categories[ingredient.category] ?? ingredient.category;
 
           return (
-            <li key={ingredientId}>
+            <li key={ingredientId} className={`anim-fade-up anim-delay-${(index % 8) + 1}`}>
               <button
                 type="button"
                 className={[
@@ -70,14 +70,18 @@ export function IngredientTray({
                 }}
                 {...dragProps}
               >
-                <div className={styles.chipHeader}>
-                  <span className={styles.chipName}>
-                    {ingredient.fallbackEmoji ? `${ingredient.fallbackEmoji} ` : ''}
-                    {ingredient.name}
-                  </span>
-                  <span className={styles.itemBadge}>1</span>
-                </div>
-                <span className={styles.chipMeta}>{categoryLabel}</span>
+                <span
+                  className={[styles.medal, styles[`cat-${ingredient.category}`] ?? '']
+                    .filter(Boolean)
+                    .join(' ')}
+                  aria-hidden
+                >
+                  {ingredient.fallbackEmoji}
+                </span>
+                <span className={styles.chipTexts}>
+                  <span className={styles.chipName}>{ingredient.name}</span>
+                  <span className={styles.chipMeta}>{categoryLabel}</span>
+                </span>
               </button>
             </li>
           );

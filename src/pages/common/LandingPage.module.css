@@ -11,30 +11,22 @@
   flex: 1;
 }
 
-/* Hero Section */
+/* Hero Section — plum stage with the wide 3D banner scene */
 .hero {
   position: relative;
-  padding: 5rem 1.5rem 6rem;
-  background: linear-gradient(135deg, var(--color-bg) 0%, var(--color-surface-alt) 50%, var(--color-bg) 100%);
-  background-size: 200% 200%;
-  animation: warmGradientShift 14s ease infinite;
-  border-bottom: 1px solid var(--color-border);
+  padding: 4.5rem 1.5rem 5rem;
+  background: var(--gradient-banner);
   overflow: hidden;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .hero {
-    animation: none;
-  }
 }
 
 .heroContainer {
   max-width: 1200px;
   margin: 0 auto;
-  display: grid;
-  grid-template-columns: 1.2fr 0.8fr;
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 3rem;
+  text-align: center;
+  gap: 2.75rem;
   position: relative;
   z-index: 2;
 }
@@ -42,6 +34,7 @@
 .heroContent {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 1.5rem;
 }
 
@@ -51,32 +44,33 @@
   gap: 0.5rem;
   padding: 0.35rem 0.85rem;
   border-radius: var(--radius-full);
-  background: var(--color-accent-soft);
-  color: var(--color-accent);
+  background: rgba(55, 14, 27, 0.55);
+  color: #f6c453;
   font-weight: 600;
   font-size: 0.85rem;
   width: fit-content;
-  border: 1px solid rgba(233, 162, 59, 0.3);
+  border: 1px solid rgba(248, 239, 234, 0.28);
+  backdrop-filter: blur(8px);
 }
 
 .heroTitle {
   font-size: 3.25rem;
   line-height: 1.15;
   font-weight: 800;
-  color: var(--color-text);
+  color: #f8efea;
   margin: 0;
   letter-spacing: -0.02em;
 }
 
 .highlight {
-  color: var(--color-primary);
+  color: #f6c453;
   display: inline-block;
 }
 
 .heroSubtitle {
   font-size: 1.15rem;
   line-height: 1.6;
-  color: var(--color-text-muted);
+  color: rgba(248, 239, 234, 0.85);
   margin: 0;
   max-width: 580px;
 }
@@ -86,6 +80,7 @@
   gap: 1rem;
   flex-wrap: wrap;
   align-items: center;
+  justify-content: center;
   margin-top: 0.5rem;
 }
 
@@ -94,112 +89,22 @@
   font-size: 1.05rem;
 }
 
-/* Hero Illustration / Steam Bowl */
+/* Hero banner artwork */
 .heroVisual {
-  position: relative;
+  width: 100%;
   display: flex;
   justify-content: center;
-  align-items: center;
-  min-height: 340px;
 }
 
-.bowlContainer {
-  position: relative;
-  width: 240px;
-  height: 240px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-.steamWrap {
-  display: flex;
-  gap: 18px;
-  margin-bottom: -15px;
-  z-index: 3;
-}
-
-.steamWisp {
-  font-size: 2rem;
-  animation: steamRise 2.8s ease-in-out infinite;
-  filter: blur(0.5px);
-  user-select: none;
-}
-
-.steamWisp:nth-child(2) {
-  animation-delay: 0.9s;
-}
-
-.steamWisp:nth-child(3) {
-  animation-delay: 1.8s;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .steamWisp {
-    animation: none;
-    opacity: 0.7;
-  }
-}
-
-.bowlGraphic {
-  font-size: 8rem;
-  line-height: 1;
-  filter: drop-shadow(0 16px 24px rgba(59, 42, 32, 0.18));
-  user-select: none;
-  z-index: 2;
-  transition: transform 0.3s ease;
-}
-
-.bowlGraphic:hover {
-  transform: scale(1.05);
-}
-
-.bowlGlow {
-  position: absolute;
-  width: 200px;
-  height: 200px;
-  border-radius: 50%;
-  background: radial-gradient(circle, var(--color-accent-soft) 0%, transparent 70%);
-  z-index: 1;
-}
-
-/* Floating emojis */
-.floatingEmoji {
-  position: absolute;
-  font-size: 2.4rem;
-  user-select: none;
-  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.12));
-}
-
-.emoji1 {
-  top: 10%;
-  left: 5%;
-  animation: floatSlow 4s ease-in-out infinite;
-}
-
-.emoji2 {
-  top: 15%;
-  right: 5%;
-  animation: floatReverse 4.6s ease-in-out infinite;
-}
-
-.emoji3 {
-  bottom: 12%;
-  left: 8%;
-  animation: floatReverse 5.2s ease-in-out infinite;
-}
-
-.emoji4 {
-  bottom: 8%;
-  right: 12%;
-  animation: floatSlow 4.8s ease-in-out infinite;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .floatingEmoji {
-    animation: none;
-  }
+.heroBannerImg {
+  width: 100%;
+  max-width: 1080px;
+  height: auto;
+  border-radius: var(--radius-2xl, 24px);
+  border: 3px solid rgba(233, 162, 59, 0.55);
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.45);
+  display: block;
+  animation: fadeSlideUp 0.8s ease both;
 }
 
 /* Common Section */
@@ -439,11 +344,7 @@
   }
 
   .heroVisual {
-    min-height: 260px;
-  }
-
-  .bowlGraphic {
-    font-size: 6rem;
+    min-height: 0;
   }
 }
 

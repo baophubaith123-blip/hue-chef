@@ -24,7 +24,7 @@ export default function AboutPage() {
     '15 món ăn Huế đặc trưng',
     'Drag & Drop cooking mode',
     'Hệ thống tính điểm + 5 sao',
-    '12 thành tích theo điều kiện',
+    '27 thành tích theo điều kiện',
     '4 vai trò phân quyền rõ ràng',
     'Mail system (6 loại thư)',
     'Support chat & khiếu nại',
@@ -55,18 +55,44 @@ export default function AboutPage() {
           </div>
 
           <div className={styles.heroArtwork} aria-hidden="true">
-            <div className={styles.heroFoodCircle}>
-              <div className={styles.steamTrack}>
-                <span className={`${styles.steamParticle} ${styles.steam1}`}>♨️</span>
-                <span className={`${styles.steamParticle} ${styles.steam2}`}>♨️</span>
-                <span className={`${styles.steamParticle} ${styles.steam3}`}>♨️</span>
-              </div>
-              <span className={styles.floatingDishEmoji}>🍲</span>
-              <span className={`${styles.orbitItem} ${styles.orbit1}`}>🌶️</span>
-              <span className={`${styles.orbitItem} ${styles.orbit2}`}>🦐</span>
-              <span className={`${styles.orbitItem} ${styles.orbit3}`}>🌾</span>
-              <span className={`${styles.orbitItem} ${styles.orbit4}`}>🏮</span>
-              <span className={`${styles.orbitItem} ${styles.orbit5}`}>🪷</span>
+            <img src="/images/noi-noi.jpg" alt="" className={styles.heroPotImg} />
+          </div>
+        </section>
+
+        <section className={styles.journey} aria-label="Hành trình của một đầu bếp Huế">
+          <h2 className={styles.journeyTitle}>🧭 Hành trình của một đầu bếp Huế</h2>
+          <div className={styles.journeyGrid}>
+            <div className={styles.journeyStep}>
+              <span className={styles.journeyNum}>1</span>
+              <span className={styles.journeyIcon} aria-hidden="true">🍲</span>
+              <h3 className={styles.journeyStepTitle}>Chọn món</h3>
+              <p className={styles.journeyStepDesc}>
+                15 món Huế từ cấp Dễ đến Địa ngục đang chờ bạn chinh phục.
+              </p>
+            </div>
+            <div className={styles.journeyStep}>
+              <span className={styles.journeyNum}>2</span>
+              <span className={styles.journeyIcon} aria-hidden="true">🥘</span>
+              <h3 className={styles.journeyStepTitle}>Kéo-thả nguyên liệu</h3>
+              <p className={styles.journeyStepDesc}>
+                Đọc kỹ từng bước nấu thật, thả đúng nguyên liệu vào nồi theo thứ tự.
+              </p>
+            </div>
+            <div className={styles.journeyStep}>
+              <span className={styles.journeyNum}>3</span>
+              <span className={styles.journeyIcon} aria-hidden="true">🎮</span>
+              <h3 className={styles.journeyStepTitle}>Đấu trí minigame</h3>
+              <p className={styles.journeyStepDesc}>
+                Trả lời hỏi đáp văn hoá ẩm thực và vượt thử thách tay nghề để ghi điểm thưởng.
+              </p>
+            </div>
+            <div className={styles.journeyStep}>
+              <span className={styles.journeyNum}>4</span>
+              <span className={styles.journeyIcon} aria-hidden="true">🏆</span>
+              <h3 className={styles.journeyStepTitle}>Nhận sao & thành tích</h3>
+              <p className={styles.journeyStepDesc}>
+                Tích điểm, lên cấp, leo bảng xếp hạng và mở khoá huy chương đầu bếp Cố Đô.
+              </p>
             </div>
           </div>
         </section>

@@ -367,6 +367,7 @@ export default function CookingPage() {
           disabled={sessionEnded}
           onDropOnPot={handleDropOnPot}
           potIngredients={session.potIngredients}
+          requiredCount={sessionSteps[activeStepIndex]?.requiredIngredients.length ?? 0}
           actionButtonLabel={session.actionButtonLabel}
           onExecuteAction={handleExecuteAction}
           shake={shakePot}

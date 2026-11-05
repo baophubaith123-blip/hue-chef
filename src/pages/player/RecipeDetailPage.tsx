@@ -4,6 +4,7 @@ import { Button } from '@/components/Button';
 import { EmptyState } from '@/components/EmptyState';
 import { Loading } from '@/components/Loading';
 import { getIngredientById } from '@/data/ingredients';
+import { difficultyName } from '@/features/recipes/lib/difficulty';
 import { useRecipes } from '@/contexts/RecipeContext';
 import { formatDuration } from '@/lib/format';
 import { PlayerShell } from '@/pages/player/PlayerShell';
@@ -73,6 +74,9 @@ export default function RecipeDetailPage() {
                   {'★'.repeat(recipe.difficulty)}
                   {'☆'.repeat(5 - recipe.difficulty)}
                 </span>
+                <span className={styles.metricTier}>
+                  {difficultyName(dict.recipe.difficultyNames, recipe.difficulty)}
+                </span>
               </div>
               <div className={styles.metricDivider} />
               <div className={styles.metricItem}>
@@ -138,6 +142,19 @@ export default function RecipeDetailPage() {
                     <div className={styles.stepContent}>
                       <strong className={styles.stepTitle}>{step.title}</strong>
                       <p className={styles.stepDesc}>{step.description}</p>
+                      {step.requiredIngredients.length > 0 ? (
+                        <div className={styles.stepIngredients}>
+                          {step.requiredIngredients.map((ingId) => {
+                            const ing = getIngredientById(ingId);
+                            return (
+                              <span key={ingId} className={styles.stepIngredientChip}>
+                                {ing?.fallbackEmoji ? `${ing.fallbackEmoji} ` : ''}
+                                {ing?.name ?? ingId}
+                              </span>
+                            );
+                          })}
+                        </div>
+                      ) : null}
                     </div>
                   </li>
                 ))}

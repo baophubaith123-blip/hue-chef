@@ -115,6 +115,7 @@ export const vi: I18nDictionary = {
       che: 'Chè',
       nem: 'Nem / Chả',
     },
+    difficultyNames: ['Dễ', 'Trung bình', 'Khó', 'Cực khó', 'Địa ngục'],
   },
   recipeStatus: {
     draft: 'Bản nháp',
@@ -437,6 +438,11 @@ export const vi: I18nDictionary = {
     current: 'Hiện tại',
     target: 'Mục tiêu',
     percent: 'Phần trăm',
+    rarityCommon: 'Thường',
+    rarityRare: 'Hiếm',
+    rarityEpic: 'Sử thi',
+    rarityLegendary: 'Huyền thoại',
+    storyLabel: 'Câu chuyện',
   },
   collection: {
     title: 'Thư viện công thức',
@@ -447,6 +453,8 @@ export const vi: I18nDictionary = {
     stars: 'Số sao',
     timeUsed: 'Thời gian',
     lastCooked: 'Nấu lúc',
+    notCooked: 'Chưa nấu — hãy chinh phục món này!',
+    conquered: 'Đã chinh phục {done}/{total} món',
   },
   home: {
     welcome: (name: string) => `Chào mừng, ${name}`,
@@ -518,6 +526,8 @@ export const vi: I18nDictionary = {
     dropIngredientsHere: 'Thả nguyên liệu vào đây',
     sessionEnded: 'Phiên nấu đã kết thúc',
     potEmpty: 'Nồi đang trống',
+    potProgress: 'Đã vào nồi {placed}/{total} nguyên liệu của bước này',
+    stepNeeds: 'Bước này cần {count} nguyên liệu',
     steps: 'Các bước nấu',
     preparingKitchen: 'Đang chuẩn bị gian bếp…',
     cannotCook: 'Không thể nấu món này',

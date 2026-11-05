@@ -115,6 +115,7 @@ export const en: I18nDictionary = {
       che: 'Sweet soups',
       nem: 'Rolls / Sausage',
     },
+    difficultyNames: ['Easy', 'Medium', 'Hard', 'Extreme', 'Hell'],
   },
   recipeStatus: {
     draft: 'Draft',
@@ -437,6 +438,11 @@ export const en: I18nDictionary = {
     current: 'Current',
     target: 'Target',
     percent: 'Percent',
+    rarityCommon: 'Common',
+    rarityRare: 'Rare',
+    rarityEpic: 'Epic',
+    rarityLegendary: 'Legendary',
+    storyLabel: 'Story',
   },
   collection: {
     title: 'Recipe collection',
@@ -447,6 +453,8 @@ export const en: I18nDictionary = {
     stars: 'Stars',
     timeUsed: 'Time used',
     lastCooked: 'Last cooked',
+    notCooked: 'Not cooked yet — go conquer this dish!',
+    conquered: 'Conquered {done}/{total} dishes',
   },
   home: {
     welcome: (name: string) => `Welcome, ${name}`,
@@ -517,6 +525,8 @@ export const en: I18nDictionary = {
     dropIngredientsHere: 'Drop ingredients here',
     sessionEnded: 'Session ended',
     potEmpty: 'Pot is empty',
+    potProgress: '{placed}/{total} ingredients of this step are in the pot',
+    stepNeeds: 'This step needs {count} ingredients',
     steps: 'Steps',
     preparingKitchen: 'Preparing kitchen…',
     cannotCook: 'Cannot cook this dish',

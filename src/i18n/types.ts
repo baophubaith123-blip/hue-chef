@@ -109,6 +109,7 @@ export interface I18nDictionary {
     allCategories: string;
     searchPlaceholder: string;
     categoryLabels: Record<'bun' | 'com' | 'banh' | 'che' | 'nem', string>;
+    difficultyNames: string[];
   };
   recipeStatus: {
     draft: string;
@@ -406,6 +407,11 @@ export interface I18nDictionary {
     current: string;
     target: string;
     percent: string;
+    rarityCommon: string;
+    rarityRare: string;
+    rarityEpic: string;
+    rarityLegendary: string;
+    storyLabel: string;
   };
   collection: {
     title: string;
@@ -416,6 +422,8 @@ export interface I18nDictionary {
     stars: string;
     timeUsed: string;
     lastCooked: string;
+    notCooked: string;
+    conquered: string;
   };
   home: {
     welcome: (name: string) => string;
@@ -485,6 +493,8 @@ export interface I18nDictionary {
     dropIngredientsHere: string;
     sessionEnded: string;
     potEmpty: string;
+    potProgress: string;
+    stepNeeds: string;
     steps: string;
     preparingKitchen: string;
     cannotCook: string;

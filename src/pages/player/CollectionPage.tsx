@@ -18,6 +18,7 @@ interface CollectionItem {
   recipeId: string;
   name: string;
   image: string;
+  cooked: boolean;
   timesCooked: number;
   bestScore: number;
   bestStars: 1 | 2 | 3 | 4 | 5;
@@ -71,6 +72,7 @@ export default function CollectionPage() {
         recipeId,
         name,
         image,
+        cooked: true,
         timesCooked: list.length,
         bestScore,
         bestStars,
@@ -79,8 +81,26 @@ export default function CollectionPage() {
       });
     }
     result.sort((a, b) => (a.lastCookedAt < b.lastCookedAt ? 1 : -1));
-    return result;
+    // Album: every dish appears — uncooked ones stay locked silhouettes.
+    const cookedIds = new Set(result.map((item) => item.recipeId));
+    const locked: CollectionItem[] = recipes
+      .filter((r) => !cookedIds.has(r.id))
+      .sort((a, b) => a.difficulty - b.difficulty)
+      .map((r) => ({
+        recipeId: r.id,
+        name: r.name,
+        image: r.image,
+        cooked: false,
+        timesCooked: 0,
+        bestScore: 0,
+        bestStars: 1 as const,
+        lastCookedAt: '',
+        bestTimeUsed: 0,
+      }));
+    return [...result, ...locked];
   }, [user, recipes]);
+
+  const cookedCount = items.filter((item) => item.cooked).length;
 
   return (
     <PlayerShell>
@@ -88,6 +108,15 @@ export default function CollectionPage() {
         <div>
           <h1 className={styles.title}>{t('collection.title')}</h1>
           <p className={styles.intro}>{t('collection.intro')}</p>
+          <p className={styles.progressText}>
+            {t('collection.conquered', { done: cookedCount, total: items.length })}
+          </p>
+          <div className={styles.progressTrack} aria-hidden="true">
+            <div
+              className={styles.progressFill}
+              style={{ width: `${items.length > 0 ? Math.round((cookedCount / items.length) * 100) : 0}%` }}
+            />
+          </div>
         </div>
       </header>
       <Card>
@@ -101,17 +130,21 @@ export default function CollectionPage() {
                 to={`/recipes/${item.recipeId}`}
                 className={styles.cardLink}
               >
-                <article className={styles.card}>
+                <article className={`${styles.card} ${item.cooked ? '' : styles.cardLocked}`}>
                   <div className={styles.imageWrap}>
                     <ImageWithFallback
                       src={item.image}
                       alt={item.name}
                       fallbackTitle={item.name}
-                      className={styles.image}
+                      className={`${styles.image} ${item.cooked ? '' : styles.imageLocked}`}
                     />
+                    {item.cooked ? null : (
+                      <span className={styles.lockBadge} aria-hidden="true">🔒</span>
+                    )}
                   </div>
                   <div className={styles.cardBody}>
                     <h3 className={styles.cardTitle}>{item.name}</h3>
+                    {item.cooked ? (
                     <div className={styles.stats}>
                       <div className={styles.stat}>
                         <span className={styles.statLabel}>{t('collection.timesCooked')}</span>
@@ -132,6 +165,9 @@ export default function CollectionPage() {
                         </span>
                       </div>
                     </div>
+                    ) : (
+                      <p className={styles.notCookedText}>{t('collection.notCooked')}</p>
+                    )}
                     <div
                       className={styles.stars}
                       aria-label={`${item.bestStars} ${t('collection.stars')}`}
@@ -139,7 +175,11 @@ export default function CollectionPage() {
                       {Array.from({ length: 5 }).map((_, i) => (
                         <span
                           key={i}
-                          className={i < item.bestStars ? styles.starFilled : styles.starEmpty}
+                          className={
+                            i < (item.cooked ? item.bestStars : 0)
+                              ? styles.starFilled
+                              : styles.starEmpty
+                          }
                         >
                           ★
                         </span>

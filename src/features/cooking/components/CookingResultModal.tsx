@@ -65,6 +65,12 @@ export function CookingResultModal({
       <div className={styles.content}>
         {isSuccess ? (
           <>
+            <div className={styles.confetti} aria-hidden="true">
+              {Array.from({ length: 12 }).map((_, idx) => (
+                <span key={idx} className={styles.confettiPiece} />
+              ))}
+            </div>
+
             {/* Top Celebration Banner */}
             <div className={styles.celebrationHero}>
               <div className={styles.trophyBadge} aria-hidden="true">
@@ -75,7 +81,7 @@ export function CookingResultModal({
                 {Array.from({ length: 5 }).map((_, idx) => (
                   <span
                     key={idx}
-                    className={idx < session.stars ? styles.starFilled : styles.starEmpty}
+                    className={`${idx < session.stars ? styles.starFilled : styles.starEmpty} anim-pop anim-delay-${idx + 1}`}
                   >
                     ★
                   </span>

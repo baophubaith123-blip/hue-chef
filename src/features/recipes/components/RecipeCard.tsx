@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 
 import type { Recipe } from '@/data/types';
 import { formatDuration } from '@/lib/format';
+import { difficultyName, difficultyStars } from '@/features/recipes/lib/difficulty';
 import { useTranslation } from '@/i18n/useTranslation';
 import { ImageWithFallback } from '@/components/ImageWithFallback';
 import styles from '@/features/recipes/components/RecipeCard.module.css';
@@ -39,7 +40,7 @@ export function RecipeCard({ recipe }: RecipeCardProps) {
   };
 
   const categoryLabel = dict.recipe.categoryLabels[recipe.category] ?? recipe.category;
-  const ratingScore = (4.0 + (recipe.difficulty * 0.18)).toFixed(1);
+  const tierName = difficultyName(dict.recipe.difficultyNames, recipe.difficulty);
 
   return (
     <article
@@ -70,6 +71,14 @@ export function RecipeCard({ recipe }: RecipeCardProps) {
           <div className={styles.timeBadge}>
             ⏱ {formatDuration(recipe.duration)}
           </div>
+          <div
+            className={[styles.difficultyBadge, styles[`tier${recipe.difficulty}`] ?? '']
+              .filter(Boolean)
+              .join(' ')}
+          >
+            <span className={styles.difficultyStars}>{difficultyStars(recipe.difficulty)}</span>
+            <span>{tierName}</span>
+          </div>
         </div>
       </Link>
 
@@ -84,9 +93,9 @@ export function RecipeCard({ recipe }: RecipeCardProps) {
 
         <div className={styles.cardFooter}>
           <span className={styles.categoryBadge}>{categoryLabel}</span>
-          <div className={styles.ratingBox}>
-            <span className={styles.starIcon}>★</span>
-            <span className={styles.ratingValue}>{ratingScore}</span>
+          <div className={styles.scoreBox}>
+            <span aria-hidden>🪙</span>
+            <span>{recipe.baseScore.toLocaleString()}</span>
           </div>
         </div>
       </div>
