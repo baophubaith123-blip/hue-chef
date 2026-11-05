@@ -63,15 +63,20 @@ export default function EditorRecipeFormPage() {
   const initialValues = existing ? recipeToFormValues(existing) : defaultRecipeFormValues();
   const canSubmitDirectly = !existing || canEditRecipe(existing);
 
-  const persistRecipeFromValues = (values: RecipeFormValues) => {
+  const persistRecipeFromValues = (values: RecipeFormValues, mode: RecipeFormSubmitMode = 'draft') => {
     const recipe = formValuesToRecipe(values, editorId, existing);
 
     if (existing) {
       updateRecipeAsEditor(existing.id, editorId, recipe);
+      if (mode === 'submit') {
+        submitRecipeForReview(existing.id, editorId);
+      }
       return { id: existing.id, isNew: false };
     }
 
-    addRecipe({ ...recipe, status: 'draft', editorId });
+    const initialStatus = mode === 'submit' ? 'pending' : 'draft';
+    const submittedAt = mode === 'submit' ? new Date().toISOString() : undefined;
+    addRecipe({ ...recipe, status: initialStatus, submittedAt, editorId });
     const users = loadUsers();
     const editor = findUserById(users, editorId);
     if (editor) {
@@ -86,10 +91,7 @@ export default function EditorRecipeFormPage() {
   };
 
   const handleSave = async (values: RecipeFormValues, mode: RecipeFormSubmitMode) => {
-    const { id: recipeId } = persistRecipeFromValues(values);
-    if (mode === 'submit') {
-      submitRecipeForReview(recipeId, editorId);
-    }
+    const { id: recipeId } = persistRecipeFromValues(values, mode);
     navigate(`/editor/recipes/${recipeId}`);
   };
 

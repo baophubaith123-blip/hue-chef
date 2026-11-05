@@ -101,5 +101,9 @@ export function canSubmitForReview(
   stars: 1 | 2 | 3 | 4 | 5,
   availableIngredientIds?: string[],
 ): boolean {
-  return validateMinigames(minigames, stars, availableIngredientIds).valid;
+  const result = validateMinigames(minigames, stars, availableIngredientIds);
+  const hasStructuralErrors = result.errors.some(
+    (e) => !e.includes('insufficientActionCooking'),
+  );
+  return !hasStructuralErrors && (minigames?.length ?? 0) > 0;
 }

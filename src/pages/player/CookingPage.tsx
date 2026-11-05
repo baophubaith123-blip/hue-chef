@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Link, Navigate, useParams } from 'react-router-dom';
 
 import type { Achievement } from '@/data/types';
+import { Button } from '@/components/Button';
 import { EmptyState } from '@/components/EmptyState';
 import { Loading } from '@/components/Loading';
 import { useAuth } from '@/contexts/AuthContext';
@@ -46,6 +47,7 @@ export default function CookingPage() {
 
   const [shakePot, setShakePot] = useState(false);
   const [sparklePot, setSparklePot] = useState(false);
+  const [viewMinigames, setViewMinigames] = useState(false);
   const [appliedResult, setAppliedResult] = useState<{
     gainedXp: number;
     newLevel?: number;
@@ -270,12 +272,27 @@ export default function CookingPage() {
       ? Math.max(0, session.recipe.baseScore + session.runningScoreDelta)
       : session.finalScore;
 
-  if (session.phase === 'minigames') {
+  const isMinigamesPhase =
+    session.phase === 'minigames' ||
+    (viewMinigames && (session.recipe.minigames?.length ?? 0) > 0);
+
+  if (isMinigamesPhase) {
     return (
       <PlayerShell>
-        <Link className={styles.back} to={`/recipes/${recipe.id}`}>
-          ← {t('cooking.recipeDetail')}
-        </Link>
+        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', marginBottom: '1rem' }}>
+          <Link className={styles.back} to={`/recipes/${recipe.id}`}>
+            ← {t('cooking.recipeDetail')}
+          </Link>
+          {viewMinigames && (
+            <button
+              type="button"
+              className={styles.back}
+              onClick={() => setViewMinigames(false)}
+            >
+              🍳 {t('cooking.pot')}
+            </button>
+          )}
+        </div>
         <div className={styles.top}>
           <div>
             <h1 className={styles.title}>{recipe.name}</h1>
@@ -319,6 +336,15 @@ export default function CookingPage() {
               {session.runningScoreDelta}
             </p>
           ) : null}
+          {(session.recipe.minigames?.length ?? 0) > 0 && (
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={() => setViewMinigames(true)}
+            >
+              🎮 Chơi Minigame ({session.recipe.minigames?.length})
+            </Button>
+          )}
         </div>
       </div>
 

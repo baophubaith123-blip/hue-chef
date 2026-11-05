@@ -49,19 +49,33 @@ function baseScoreFromDifficulty(difficulty: Recipe['difficulty']): number {
   return difficulty * 200;
 }
 
-function buildSteps(recipeId: string, steps: RecipeFormValues['steps']): Recipe['steps'] {
+function buildSteps(
+  recipeId: string,
+  steps: RecipeFormValues['steps'],
+  recipeIngredients: { ingredientId: string; amount: string }[] = [],
+): Recipe['steps'] {
   return steps
     .filter((step) => step.title.trim() && step.description.trim())
-    .map((step, index) => ({
-      id: `${recipeId}-step-${index + 1}`,
-      order: index + 1,
-      title: step.title.trim(),
-      description: step.description.trim(),
-      duration: step.duration ?? step.durationSeconds ?? 30,
-      durationSeconds: step.duration ?? step.durationSeconds ?? 30,
-      requiredIngredients: step.requiredIngredients ?? [],
-      actionLabel: step.actionLabel || 'Thực hiện',
-    }));
+    .map((step, index) => {
+      const fallbackIngredientId =
+        recipeIngredients[index]?.ingredientId ||
+        recipeIngredients[0]?.ingredientId ||
+        'beef-shank';
+      const required =
+        step.requiredIngredients && step.requiredIngredients.length > 0
+          ? step.requiredIngredients
+          : [fallbackIngredientId];
+      return {
+        id: `${recipeId}-step-${index + 1}`,
+        order: index + 1,
+        title: step.title.trim(),
+        description: step.description.trim(),
+        duration: step.duration ?? step.durationSeconds ?? 30,
+        durationSeconds: step.duration ?? step.durationSeconds ?? 30,
+        requiredIngredients: required,
+        actionLabel: step.actionLabel || 'Thực hiện',
+      };
+    });
 }
 
 export function formValuesToRecipe(
@@ -87,7 +101,7 @@ export function formValuesToRecipe(
     image: values.image.trim(),
     baseScore: existing?.baseScore ?? baseScoreFromDifficulty(values.difficulty),
     ingredients,
-    steps: buildSteps(id, values.steps),
+    steps: buildSteps(id, values.steps, ingredients),
     minigames: values.minigames ?? existing?.minigames ?? [],
     status: existing?.status ?? 'draft',
     editorId,
