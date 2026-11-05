@@ -125,11 +125,20 @@ function cookingReducer(state: CookingState, action: CookingAction): CookingStat
       const isRequired = currentStep.requiredIngredients.includes(action.ingredientId);
 
       if (isRequired) {
+        if (session.potIngredients.includes(action.ingredientId)) {
+          return state;
+        }
+        const nextPotIngredients = [...session.potIngredients, action.ingredientId];
+        // A step may require several ingredients: the action button only
+        // unlocks once every required ingredient of the step is in the pot.
+        const stepComplete = currentStep.requiredIngredients.every((id) =>
+          nextPotIngredients.includes(id),
+        );
         return {
           session: {
             ...session,
-            potIngredients: [...session.potIngredients, action.ingredientId],
-            actionButtonLabel: currentStep.actionLabel,
+            potIngredients: nextPotIngredients,
+            actionButtonLabel: stepComplete ? currentStep.actionLabel : null,
           },
         };
       }
@@ -151,14 +160,18 @@ function cookingReducer(state: CookingState, action: CookingAction): CookingStat
       const steps = session.recipe.steps ?? [];
       const currentStepIndex = session.currentStepIndex;
       const nextStepIndex = currentStepIndex + 1;
+      // Score per ingredient (not per step) so multi-ingredient steps match
+      // the max-score model in lib/score, which scales with ingredient count.
+      const stepIngredientCount = steps[currentStepIndex]?.requiredIngredients.length ?? 1;
       const updated: CookingSession = {
         ...session,
-        correctCount: session.correctCount + 1,
+        correctCount: session.correctCount + stepIngredientCount,
         currentStepIndex: nextStepIndex,
         completedStepIndexes: [...session.completedStepIndexes, currentStepIndex],
         potIngredients: [],
         actionButtonLabel: null,
-        runningScoreDelta: session.runningScoreDelta + SCORE_RULES.correctPoints,
+        runningScoreDelta:
+          session.runningScoreDelta + SCORE_RULES.correctPoints * stepIngredientCount,
       };
 
       if (nextStepIndex >= steps.length) {
