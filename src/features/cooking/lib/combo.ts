@@ -5,6 +5,9 @@
 // and combo/streak/speed bonuses are added on top of it (the same channel
 // minigame bonus points already use). lib/score.ts itself is untouched.
 
+/** A combo streak only stays alive this long after the last correct drop. */
+export const COMBO_WINDOW_MS = 2000;
+
 /** Bonus points grow +10 per consecutive success, capped at +50. */
 export const COMBO_STEP_BONUS = 10;
 export const COMBO_MAX_BONUS = 50;

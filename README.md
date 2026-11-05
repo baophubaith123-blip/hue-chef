@@ -8,7 +8,7 @@
 
 ## 📖 Giới thiệu
 
-**Hue Chef** là game mô phỏng nấu các món ăn đặc trưng xứ Huế qua cơ chế kéo-thả (drag-and-drop) nguyên liệu. Người chơi sẽ làm quen với 15 món ăn kinh điển, mở khoá 12 huy chương thành tích, xây dựng bộ sưu tập công thức và nhận điểm thưởng theo từng màn nấu. Hệ thống hỗ trợ **4 vai trò** phân quyền rõ ràng (Player / Support / Editor / Admin) với **40 tuyến** truy cập.
+**Hue Chef** là game mô phỏng nấu các món ăn đặc trưng xứ Huế qua cơ chế kéo-thả (drag-and-drop) nguyên liệu. Người chơi sẽ làm quen với 15 món ăn kinh điển, mở khoá 27 huy chương thành tích, xây dựng bộ sưu tập công thức và nhận điểm thưởng theo từng màn nấu. Hệ thống hỗ trợ **4 vai trò** phân quyền rõ ràng (Player / Support / Editor / Admin) với **40 tuyến** truy cập.
 
 ---
 
@@ -16,11 +16,12 @@
 
 | Nhóm | Tính năng |
 |---|---|
-| 🎮 **Gameplay** | Drag & drop nấu ăn, tính điểm theo độ chính xác, 1~5 sao, tính năng đếm ngược thời gian |
-| ⚡ **Minigames** | Thử thách thao tác chế biến (Xào/Luộc/Hấp/Nướng) + Quiz câu hỏi văn hóa ẩm thực Huế tích hợp ngay trong màn nấu |
-| 👑 **Bảng xếp hạng** | Bục vinh danh Podium Top 3 (Vàng 👑, Bạc 🥈, Đồng 🥉) vẽ hoàn toàn bằng CSS + Danh sách Top 4+ |
-| 🏛️ **Imperial UI/UX** | Ngôn ngữ thiết kế Cố Đô Cung Đình Huế: Tím mận hoàng gia (#4A1525), Đỏ gạch (#C8553D), Vàng kim (#E9A23B), Nền kem ấm (#FAF5EF) |
-| 🏆 **Thành tích** | 12 huy chương theo điều kiện (loại món, số lần nấu, điểm tuyệt đối, level, nấu đủ 15 món…) |
+| 🎮 **Gameplay** | Drag & drop nấu ăn, tính điểm theo độ chính xác, 1~5 sao, đếm ngược thời gian, **hệ thống Combo**: thả đúng liên tiếp trong cửa sổ 2 giây để gom điểm thưởng combo (+10→+50/lần), thả sai hoặc chậm quá 2s là mất chuỗi |
+| ⚡ **Minigames** | Thử thách thao tác chế biến (Xào/Luộc/Hấp/Nướng) + Quiz văn hóa ẩm thực Huế phong cách gameshow (vòng đếm ngược, **bonus tốc độ** tới +50% điểm câu, chuỗi đúng cộng dồn điểm) |
+| 👑 **Bảng xếp hạng** | Bục vinh danh Podium Top 3 (Vàng 👑, Bạc 🥈, Đồng 🥉) vẽ hoàn toàn bằng CSS + danh sách **cuộn riêng**, **cập nhật thời gian thực** (tự làm mới khi có điểm mới / đổi tab / 5 giây), mũi tên ▲▼ tăng giảm hạng so với kỳ trước, 40 tài khoản người chơi thật |
+| 🏛️ **Imperial UI/UX** | Ngôn ngữ thiết kế Cố Đô Cung Đình Huế: Tím mận hoàng gia (#4A1525), Đỏ gạch (#C8553D), Vàng kim (#E9A23B), Nền kem ấm (#FAF5EF); các danh sách dài (công thức, xếp hạng, bước nấu, khay nguyên liệu) có **bộ cuộn riêng** để thanh tìm kiếm & tiêu đề đứng im |
+| 🏆 **Thành tích** | 27 huy chương theo điều kiện với 4 độ hiếm (Thường/Hiếm/Sử thi/Huyền thoại), xem chi tiết tiến độ khi bấm vào |
+| 💾 **Lưu trữ bền vững** | Toàn bộ tiến trình (món đã nấu/bộ sưu tập, thành tích, EXP/level, hộp thư, thông báo) lưu bằng localStorage ngay trên máy người chơi — tắt máy, mở lại hôm sau vẫn còn nguyên; chỉ mất khi xoá dữ liệu trình duyệt hoặc chơi trên trình duyệt/máy khác |
 | 📚 **Bộ sưu tập** | Theo dõi các món đã nấu, lần nấu, điểm cao nhất, số sao trung bình |
 | ✍️ **Editor** | Tạo/sửa công thức (draft → chờ duyệt), xem lý do từ chối, resubmit, tạo kịch bản minigame |
 | 💬 **Support** | Live chat 1-1 với Player, tạo phiếu khiếu nại, đề xuất giải pháp cho Admin |
@@ -285,7 +286,7 @@ Danh sách đầy đủ tại [router.tsx](src/app/router.tsx).
 
 ## 🗺️ Roadmap & Tiến độ phát triển trên GitHub
 
-Dự án hoàn thành qua 7 giai đoạn phát triển toàn diện (trên nhánh `main` và nhánh tính năng):
+Dự án hoàn thành qua 10 giai đoạn phát triển toàn diện (trên nhánh `main` và nhánh tính năng):
 
 | Giai đoạn | Commit message | Mục tiêu hoàn thành |
 |---|---|---|
@@ -297,6 +298,8 @@ Dự án hoàn thành qua 7 giai đoạn phát triển toàn diện (trên nhán
 | 🏷️ **Phase 6** | `feat(i18n-polish): phase 6 - multi-language, dark mode, sound, common pages` | i18n vi/en (auto-detect), Dark mode CSS vars, Web Audio sound, 4 Common pages (Help/Feedback/About/404), Header+Footer responsive |
 | 🏷️ **Phase 7** | `style(ui): comprehensive imperial hue design system overhaul` & `style(ui): align layout with 9-frame reference map` | **Nâng cấp UI/UX Cố Đô Cung Đình Huế toàn diện**: Sidebar màu tím mận, Topbar tinh giản, Hero Banner 2 cột chống đè chữ, Podium Leaderboard Top 3 vẽ bằng CSS, Trang cá nhân 2 cột, Màn hình nấu ăn 3 Panel bo tròn 16px, Minigame chọn phương pháp chế biến & Quiz 2 cột đáp án, Modal kết quả cúp vàng 🏆 |
 | 🏷️ **Phase 8** | `fix(ui): resolve all issues from error.md and enhance UI` | **Hoàn thiện và xử lý triệt để toàn bộ 8 mục trong `error.md`**: Khắc phục tương phản màu chữ Dark Mode trên toàn bộ trang & minigame, nén ảnh đại diện 256x256 bằng Canvas chống tràn localStorage & fix avatar layout, bỏ badge "Đã dùng" chống phồng chip nguyên liệu, đồng bộ hóa thông báo & hộp thư `/inbox`, fix lỗi dịch bộ lọc & tìm kiếm công thức, thêm banner động steaming & orbiting culinary delicacies cho Trang Chủ và Trang Giới Thiệu, xử lý màu chữ autofill. |
+| 🏷️ **Phase 9** | `feat(player/recipes/achievements)` — GD1→GD4 | **Redesign toàn bộ giao diện Player phong cách game + làm lại nội dung**: banner 3D nguyên liệu mắt lồi & linh vật Nồi Nồi, màn nấu sân khấu game, quiz gameshow, 40 tài khoản người chơi thật đăng nhập được, 15 công thức viết lại theo 5 cấp độ khó (Địa ngục = 20 đúng + 20 nhiễu, 182 câu hỏi quiz), 27 thành tích có độ hiếm; `score.ts` giữ nguyên 100% tự viết. |
+| 🏷️ **Phase 10** | `feat(cooking/player/live)` | **Combo & hoàn thiện theo mẫu thiết kế mới**: combo thả đúng liên tiếp (cửa sổ 2 giây, +10→+50/lần, hiện riêng dòng "Thưởng combo" ở kết quả), bonus tốc độ quiz, HUD màn nấu, trang cá nhân/hộp thư/giới thiệu phong cách game, BXH có mũi tên trend + **cập nhật thời gian thực**, **bộ cuộn riêng** cho lưới công thức / danh sách BXH / cột bước nấu / khay nguyên liệu, sửa ảnh bún bò Huế bị gãy; khẳng định cơ chế **lưu trữ bền vững bằng localStorage** cho bộ sưu tập, thành tích và hộp thư. |
 
 Xem lịch sử commit đầy đủ: [github.com/baophubaith123-blip/hue-chef/commits/main](https://github.com/baophubaith123-blip/hue-chef/commits/main)
 

@@ -236,6 +236,10 @@
 .rankingsList {
   display: flex;
   flex-direction: column;
+  /* The accounts list scrolls on its own; the podium stays put */
+  max-height: 36rem;
+  overflow-y: auto;
+  padding-right: 0.3rem;
 }
 
 .rankingRow {

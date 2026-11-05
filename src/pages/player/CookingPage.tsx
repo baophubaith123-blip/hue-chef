@@ -20,7 +20,7 @@ import { StepList } from '@/features/cooking/components/StepList';
 import { MinigameRunner } from '@/features/cooking/components/minigames/MinigameRunner';
 import { useCookingState } from '@/features/cooking/hooks/useCookingState';
 import { useDragDrop } from '@/features/cooking/hooks/useDragDrop';
-import { comboBonusForStreak } from '@/features/cooking/lib/combo';
+import { COMBO_WINDOW_MS, comboBonusForStreak } from '@/features/cooking/lib/combo';
 import { buildTrayIngredientIds } from '@/features/cooking/lib/tray-ingredients';
 import { shuffleArray } from '@/features/cooking/lib/shuffle';
 import { useTranslation } from '@/i18n/useTranslation';
@@ -41,6 +41,7 @@ export default function CookingPage() {
     isRunning,
     startCooking,
     dropIngredient,
+    expireCombo,
     executeStepAction,
     completeMinigames,
     resetCooking,
@@ -248,6 +249,21 @@ export default function CookingPage() {
     pulseAnimation('sparkle');
   }, [executeStepAction, pulseAnimation]);
 
+  // Combo lifetime: the streak dies COMBO_WINDOW_MS after the last
+  // correct drop; this timer re-arms on every new correct drop.
+  const comboStreakNow = session?.comboStreak ?? 0;
+  const lastComboAt = session?.lastComboAt ?? null;
+  useEffect(() => {
+    if (comboStreakNow <= 0 || lastComboAt === null) {
+      return undefined;
+    }
+    const remaining = Math.max(0, COMBO_WINDOW_MS - (Date.now() - lastComboAt));
+    const timer = window.setTimeout(() => {
+      expireCombo(Date.now());
+    }, remaining + 30);
+    return () => window.clearTimeout(timer);
+  }, [comboStreakNow, lastComboAt, expireCombo]);
+
   const handleMinigamesAllComplete = useCallback(
     (results: MinigameResultEntry[], totalBonusScore: number) => {
       completeMinigames(totalBonusScore, results);
@@ -430,6 +446,7 @@ export default function CookingPage() {
           shake={shakePot}
           sparkle={sparklePot}
           comboStreak={session.comboStreak}
+          lastComboAt={session.lastComboAt}
           requiredNames={requiredNames}
           dropFx={dropFx}
         />

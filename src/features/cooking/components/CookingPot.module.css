@@ -43,7 +43,7 @@
   top: 0.9rem;
   right: 0.9rem;
   z-index: 3;
-  padding: 0.3rem 0.75rem;
+  padding: 0.3rem 0.75rem 0.45rem;
   border-radius: var(--radius-full);
   background: linear-gradient(90deg, #f59e0b, #dc2626);
   color: #ffffff;
@@ -52,6 +52,24 @@
   letter-spacing: 0.03em;
   box-shadow: 0 4px 14px rgba(220, 38, 38, 0.45);
   animation: comboPulse 0.9s ease-in-out infinite alternate;
+  overflow: hidden;
+}
+
+/* 2-second combo lifetime countdown (matches COMBO_WINDOW_MS) */
+.comboTimerBar {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 3px;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.9);
+  transform-origin: left center;
+  animation: comboCountdown 2s linear forwards;
+}
+
+@keyframes comboCountdown {
+  from { transform: scaleX(1); }
+  to { transform: scaleX(0); }
 }
 
 @keyframes comboPulse {

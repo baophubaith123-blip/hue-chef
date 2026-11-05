@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { AchievementIcon } from '@/components/AchievementIcon';
 import { EmptyState } from '@/components/EmptyState';
@@ -16,6 +16,23 @@ export default function LeaderboardPage() {
   const { t } = useTranslation();
   const { user } = useAuth();
   const [timeFrame, setTimeFrame] = useState<TimeFrame>('weekly');
+
+  // Real-time board: re-read the stored scores when this tab regains focus,
+  // when another tab writes storage, and on a light 5s heartbeat. Combined
+  // with the AuthContext `user` dependency below, a fresh cook shows up
+  // here without a page reload.
+  const [refreshTick, setRefreshTick] = useState(0);
+  useEffect(() => {
+    const bump = () => setRefreshTick((n) => n + 1);
+    const interval = window.setInterval(bump, 5000);
+    window.addEventListener('storage', bump);
+    window.addEventListener('focus', bump);
+    return () => {
+      window.clearInterval(interval);
+      window.removeEventListener('storage', bump);
+      window.removeEventListener('focus', bump);
+    };
+  }, []);
 
   const { leaderboardData, prevRankById } = useMemo(() => {
     const users = loadUsers();
@@ -70,7 +87,7 @@ export default function LeaderboardPage() {
     prevRanked.forEach((p, idx) => prevMap.set(p.id, idx + 1));
 
     return { leaderboardData: ranked, prevRankById: prevMap };
-  }, [timeFrame]);
+  }, [timeFrame, refreshTick, user]);
 
   const rank1 = leaderboardData[0];
   const rank2 = leaderboardData[1];
@@ -204,7 +221,7 @@ export default function LeaderboardPage() {
 
             {/* Remaining Ranks List (Rank 4+) */}
             <div className={styles.rankingsCard}>
-              <div className={styles.rankingsList}>
+              <div className={`${styles.rankingsList} scroll-slim`}>
                 {restPlayers.map((player, idx) => {
                   const rank = idx + 4;
                   const isCurrentUser = player.id === user?.id;

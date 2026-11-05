@@ -9,13 +9,14 @@ import {
 
 import type { CookingSession, CookingState, MinigameResultEntry } from '@/features/cooking/types';
 import type { Recipe } from '@/data/types';
-import { comboBonusForStreak } from '@/features/cooking/lib/combo';
+import { COMBO_WINDOW_MS, comboBonusForStreak } from '@/features/cooking/lib/combo';
 import { AppError } from '@/lib/errors';
 import { calculateScoreResult, calculateStars, SCORE_RULES, type ScoreInput } from '@/lib/score';
 
 type CookingAction =
   | { type: 'START'; recipe: Recipe }
-  | { type: 'DROP_INGREDIENT'; ingredientId: string }
+  | { type: 'DROP_INGREDIENT'; ingredientId: string; at: number }
+  | { type: 'COMBO_EXPIRE'; at: number }
   | { type: 'EXECUTE_STEP_ACTION' }
   | { type: 'COMPLETE_MINIGAMES'; bonusScore: number; minigameResults: MinigameResultEntry[] }
   | { type: 'TICK' }
@@ -25,6 +26,7 @@ interface CookingContextValue {
   session: CookingSession | null;
   startCooking: (recipe: Recipe) => void;
   dropIngredient: (ingredientId: string) => boolean; // returns true if correct drag, false if wrong drag
+  expireCombo: (at: number) => void;
   executeStepAction: () => void;
   completeMinigames: (bonusScore: number, minigameResults: MinigameResultEntry[]) => void;
   tickTimer: () => void;
@@ -96,6 +98,7 @@ function cookingReducer(state: CookingState, action: CookingAction): CookingStat
         completedStepIndexes: [],
         runningScoreDelta: 0,
         comboStreak: 0,
+        lastComboAt: null,
         maxCombo: 0,
         comboBonus: 0,
         finalScore: 0,
@@ -150,6 +153,7 @@ function cookingReducer(state: CookingState, action: CookingAction): CookingStat
             potIngredients: nextPotIngredients,
             actionButtonLabel: stepComplete ? currentStep.actionLabel : null,
             comboStreak: nextStreak,
+            lastComboAt: action.at,
             maxCombo: Math.max(session.maxCombo, nextStreak),
             comboBonus: session.comboBonus + comboGain,
             runningScoreDelta: session.runningScoreDelta + comboGain,
@@ -165,8 +169,23 @@ function cookingReducer(state: CookingState, action: CookingAction): CookingStat
           actionButtonLabel: null,
           // A wrong drop breaks the combo streak (banked bonus is kept).
           comboStreak: 0,
+          lastComboAt: null,
         },
       };
+    }
+    case 'COMBO_EXPIRE': {
+      if (!session || session.phase !== 'running') {
+        return state;
+      }
+      // The combo only lives 2 seconds after the last correct drop.
+      if (
+        session.comboStreak > 0 &&
+        session.lastComboAt !== null &&
+        action.at - session.lastComboAt >= COMBO_WINDOW_MS
+      ) {
+        return { session: { ...session, comboStreak: 0, lastComboAt: null } };
+      }
+      return state;
     }
     case 'EXECUTE_STEP_ACTION': {
       if (!session || session.phase !== 'running' || !session.actionButtonLabel) {
@@ -253,11 +272,15 @@ export function CookingProvider({ children }: { children: ReactNode }) {
       const isCorrect = Boolean(
         currentStep && currentStep.requiredIngredients.includes(ingredientId),
       );
-      dispatch({ type: 'DROP_INGREDIENT', ingredientId });
+      dispatch({ type: 'DROP_INGREDIENT', ingredientId, at: Date.now() });
       return isCorrect;
     },
     [state.session],
   );
+
+  const expireCombo = useCallback((at: number) => {
+    dispatch({ type: 'COMBO_EXPIRE', at });
+  }, []);
 
   const executeStepAction = useCallback(() => {
     dispatch({ type: 'EXECUTE_STEP_ACTION' });
@@ -283,6 +306,7 @@ export function CookingProvider({ children }: { children: ReactNode }) {
       session: state.session,
       startCooking,
       dropIngredient,
+      expireCombo,
       executeStepAction,
       completeMinigames,
       tickTimer,
@@ -292,6 +316,7 @@ export function CookingProvider({ children }: { children: ReactNode }) {
       state.session,
       startCooking,
       dropIngredient,
+      expireCombo,
       executeStepAction,
       completeMinigames,
       tickTimer,

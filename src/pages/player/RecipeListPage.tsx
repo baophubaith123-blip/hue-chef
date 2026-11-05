@@ -46,7 +46,9 @@ export default function RecipeListPage() {
         {isLoading ? (
           <Loading label="Đang chuẩn bị công thức ẩm thực..." />
         ) : (
-          <RecipeGrid recipes={visibleRecipes} />
+          <div className={`${styles.gridScroll} scroll-slim`}>
+            <RecipeGrid recipes={visibleRecipes} />
+          </div>
         )}
       </div>
     </PlayerShell>

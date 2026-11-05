@@ -22,8 +22,10 @@ export interface CookingSession {
   actionButtonLabel: string | null;
   completedStepIndexes: number[];
   runningScoreDelta: number;
-  /** Consecutive correct drops right now (resets on a wrong drop). */
+  /** Consecutive correct drops right now (resets on a wrong drop or after 2s idle). */
   comboStreak: number;
+  /** Timestamp (ms) of the last correct drop — the combo dies 2s after it. */
+  lastComboAt: number | null;
   /** Longest combo streak reached during this session. */
   maxCombo: number;
   /** Total combo bonus points banked (added on top of the lib/score total). */

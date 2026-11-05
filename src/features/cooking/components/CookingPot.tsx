@@ -21,6 +21,8 @@ interface CookingPotProps {
   onExecuteAction: () => void;
   /** Current combo streak (badge shows from ×2). */
   comboStreak?: number;
+  /** Timestamp of the last correct drop — restarts the badge countdown bar. */
+  lastComboAt?: number | null;
   /** Comma-separated names the current step still needs, for the speech line. */
   requiredNames?: string;
   /** Transient "+points" popup + "added to pot" pill after a correct drop. */
@@ -37,6 +39,7 @@ export function CookingPot({
   actionButtonLabel,
   onExecuteAction,
   comboStreak = 0,
+  lastComboAt = null,
   requiredNames = '',
   dropFx = null,
 }: CookingPotProps) {
@@ -60,6 +63,7 @@ export function CookingPot({
         {comboStreak >= 2 ? (
           <span className={styles.comboBadge} aria-live="polite">
             🔥 {t('cooking.comboLabel')} ×{comboStreak}
+            <span key={lastComboAt ?? 0} className={styles.comboTimerBar} aria-hidden />
           </span>
         ) : null}
         {dropFx ? (

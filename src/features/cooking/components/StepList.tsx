@@ -15,7 +15,7 @@ export function StepList({ steps, activeStepIndex, completedStepIndexes = [] }: 
   return (
     <section className={styles.steps} aria-label={t('cooking.steps')}>
       <h2 className={styles.title}>{t('cooking.steps')}</h2>
-      <ol className={styles.list}>
+      <ol className={`${styles.list} scroll-slim`}>
         {steps.map((step, index) => {
           const isDone = completedStepIndexes.includes(index) || index < activeStepIndex;
           const isActive = index === activeStepIndex && !isDone;

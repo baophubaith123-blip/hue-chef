@@ -529,3 +529,20 @@ Hệ thống có **4 vai trò**:
 | 9 | Video demo (nếu yêu cầu) | ⚠️ |
 
 ### 8.2. Kịch bản demo (8 phút)
+
+---
+
+## 9. 🔄 CẬP NHẬT TRIỂN KHAI SAU PRD (Phase 9–10)
+
+> Ghi nhận các thay đổi đã triển khai sau khi PRD được duyệt — PRD gốc giữ nguyên để đối chiếu.
+
+| Hạng mục | PRD gốc | Hiện trạng triển khai |
+|---|---|---|
+| Thành tích | 12 huy chương | **27 huy chương**, 4 độ hiếm (Thường/Hiếm/Sử thi/Huyền thoại), 2 loại điều kiện mới (perfect_count, cook_difficulty) |
+| Global state | 12 contexts | **13 contexts** |
+| Tài khoản BXH | Dữ liệu mẫu tĩnh | **40 tài khoản người chơi thật**, đăng nhập được, BXH lọc tuần/tháng/mọi thời đại |
+| Độ khó công thức | Chưa phân cấp thật | **5 cấp** (Dễ→Địa ngục), nguyên liệu đúng/nhiễu 6/4→20/20, bước cần 1–3 nguyên liệu, 182 câu hỏi quiz |
+| Điểm thưởng | Điểm nền + minigame | Thêm **combo thả đúng liên tiếp** (cửa sổ 2 giây, +10→+50/lần) và **bonus tốc độ quiz** (tới +50%); `lib/score.ts` vẫn 100% tự viết, combo cộng qua kênh bonus mở rộng |
+| Bảng xếp hạng | Tĩnh, tải lại trang | **Thời gian thực**: tự làm mới khi có điểm mới, khi quay lại tab, heartbeat 5 giây; có mũi tên tăng/giảm hạng so với kỳ trước |
+| Cuộn danh sách | Cuộn toàn trang | **Bộ cuộn riêng** cho lưới công thức (tìm kiếm đứng im), danh sách BXH, cột bước nấu và khay nguyên liệu |
+| Lưu trữ | localStorage | Giữ nguyên & đã kiểm chứng: bộ sưu tập, thành tích, EXP, hộp thư, thông báo **không mất khi tắt máy/mở lại**; chỉ mất khi xoá dữ liệu trình duyệt hoặc đổi trình duyệt/máy (đồng bộ đa thiết bị cần backend — ngoài phạm vi PRD) |
