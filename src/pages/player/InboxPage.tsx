@@ -21,6 +21,11 @@ export default function InboxPage() {
             💬 {t('nav.chat')}
           </Button>
         }
+        emptyAction={
+          <Button variant="primary" onClick={() => navigate('/recipes')}>
+            🍲 {t('inbox.emptyCook')}
+          </Button>
+        }
       />
     </PlayerShell>
   );

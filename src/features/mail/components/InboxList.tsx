@@ -2,7 +2,6 @@ import { useMemo, type ReactNode } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 import { Button } from '@/components/Button';
-import { EmptyState } from '@/components/EmptyState';
 import { useMail } from '@/contexts/MailContext';
 import { useNotification } from '@/contexts/NotificationContext';
 import type { MailMessage, MailType } from '@/features/mail/types';
@@ -120,13 +119,27 @@ export function InboxList({
     }
   };
 
+  const formatRelative = (iso: string): string => {
+    const diffMs = Date.now() - new Date(iso).getTime();
+    const minutes = Math.floor(diffMs / 60000);
+    if (minutes < 1) return dict.mail.relJustNow;
+    if (minutes < 60) return dict.mail.relMinutes(minutes);
+    const hours = Math.floor(minutes / 60);
+    if (hours < 24) return dict.mail.relHours(hours);
+    const days = Math.floor(hours / 24);
+    if (days === 1) return dict.mail.relYesterday;
+    if (days < 30) return dict.mail.relDays(days);
+    return new Date(iso).toLocaleDateString([], { dateStyle: 'medium' });
+  };
+
   if (allItems.length === 0) {
     return (
-      <EmptyState
-        title={t('inbox.empty')}
-        description={emptyHint ?? t('inbox.hint')}
-        action={emptyAction}
-      />
+      <div className={styles.emptyWrap}>
+        <img src="/images/noi-noi.jpg" alt="" className={styles.emptyPot} aria-hidden />
+        <h2 className={styles.emptyTitle}>{t('inbox.emptyTitle')}</h2>
+        <p className={styles.emptyHint}>{emptyHint ?? t('inbox.hint')}</p>
+        {emptyAction}
+      </div>
     );
   }
 
@@ -170,12 +183,7 @@ export function InboxList({
               <div className={styles.body}>
                 <div className={styles.meta}>
                   <span className={styles.typeChip}>{item.typeLabel}</span>
-                  <span className={styles.date}>
-                    {new Date(item.createdAt).toLocaleString([], {
-                      dateStyle: 'medium',
-                      timeStyle: 'short',
-                    })}
-                  </span>
+                  <span className={styles.date}>{formatRelative(item.createdAt)}</span>
                 </div>
                 <h3 className={styles.subject}>{item.subject}</h3>
                 <p className={styles.preview}>

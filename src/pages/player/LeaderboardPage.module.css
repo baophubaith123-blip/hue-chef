@@ -348,3 +348,31 @@
   color: var(--color-text);
   font-size: 1rem;
 }
+
+.podiumLevel {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: rgba(248, 239, 234, 0.75);
+  margin-top: 0.15rem;
+}
+
+.trendUp {
+  margin-left: 0.6rem;
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: #16a34a;
+}
+
+.trendDown {
+  margin-left: 0.6rem;
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: #dc2626;
+}
+
+.trendFlat {
+  margin-left: 0.6rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--color-text-muted, #7c6c64);
+}

@@ -17,47 +17,59 @@ export default function LeaderboardPage() {
   const { user } = useAuth();
   const [timeFrame, setTimeFrame] = useState<TimeFrame>('weekly');
 
-  const leaderboardData = useMemo(() => {
+  const { leaderboardData, prevRankById } = useMemo(() => {
     const users = loadUsers();
     const players = users.filter((u) => u.role === 'player' && u.status !== 'banned');
 
-    const windowMs =
-      timeFrame === 'weekly'
-        ? 7 * 24 * 60 * 60 * 1000
-        : timeFrame === 'monthly'
-          ? 30 * 24 * 60 * 60 * 1000
-          : null;
+    const dayMs = 24 * 60 * 60 * 1000;
+    const windowMs = timeFrame === 'weekly' ? 7 * dayMs : timeFrame === 'monthly' ? 30 * dayMs : null;
     const now = Date.now();
 
-    const mapped = players.map((p) => {
-      const allCooked = p.cookedRecipes ?? [];
-      const cookedRecipes =
+    const scoreWhere = (inWindow: (cookedAtMs: number) => boolean) =>
+      players.map((p) => {
+        const cooked = (p.cookedRecipes ?? []).filter((r) =>
+          inWindow(new Date(r.cookedAt).getTime()),
+        );
+        return {
+          id: p.id,
+          name: p.name,
+          email: p.email,
+          avatar: p.avatar,
+          level: p.level ?? 1,
+          totalScore: cooked.reduce((sum, r) => sum + (r.score ?? 0), 0),
+          cookedCount: cooked.length,
+          equippedAchievementId: p.equippedAchievementId,
+        };
+      });
+
+    const sortRanked = (rows: ReturnType<typeof scoreWhere>) => {
+      const ranked = rows.filter((p) => p.totalScore > 0);
+      ranked.sort((a, b) => {
+        if (b.totalScore !== a.totalScore) {
+          return b.totalScore - a.totalScore;
+        }
+        return b.level - a.level;
+      });
+      return ranked;
+    };
+
+    const ranked = sortRanked(
+      scoreWhere((t) => (windowMs === null ? true : now - t <= windowMs)),
+    );
+
+    // Previous-period ranking for trend arrows: the window right before the
+    // current one (all-time compares against the standings 7 days ago).
+    const prevRanked = sortRanked(
+      scoreWhere((t) =>
         windowMs === null
-          ? allCooked
-          : allCooked.filter((r) => now - new Date(r.cookedAt).getTime() <= windowMs);
-      const totalScore = cookedRecipes.reduce((sum, r) => sum + (r.score ?? 0), 0);
-      const cookedCount = cookedRecipes.length;
-      return {
-        id: p.id,
-        name: p.name,
-        email: p.email,
-        avatar: p.avatar,
-        level: p.level ?? 1,
-        totalScore,
-        cookedCount,
-        equippedAchievementId: p.equippedAchievementId,
-      };
-    });
+          ? t <= now - 7 * dayMs
+          : now - t > windowMs && now - t <= windowMs * 2,
+      ),
+    );
+    const prevMap = new Map<string, number>();
+    prevRanked.forEach((p, idx) => prevMap.set(p.id, idx + 1));
 
-    const ranked = mapped.filter((p) => p.totalScore > 0);
-    ranked.sort((a, b) => {
-      if (b.totalScore !== a.totalScore) {
-        return b.totalScore - a.totalScore;
-      }
-      return b.level - a.level;
-    });
-
-    return ranked;
+    return { leaderboardData: ranked, prevRankById: prevMap };
   }, [timeFrame]);
 
   const rank1 = leaderboardData[0];
@@ -130,6 +142,7 @@ export default function LeaderboardPage() {
                   </div>
                   <div className={styles.podiumName}>{rank2.name}</div>
                   <div className={styles.podiumScore}>{rank2.totalScore.toLocaleString()} pts</div>
+                  <div className={styles.podiumLevel}>Lv.{rank2.level}</div>
                   <div className={styles.podiumPillar2}>
                     <span className={styles.pillarNumber}>2</span>
                   </div>
@@ -152,6 +165,14 @@ export default function LeaderboardPage() {
                   </div>
                   <div className={styles.podiumName}>{rank1.name}</div>
                   <div className={styles.podiumScoreGold}>{rank1.totalScore.toLocaleString()} pts</div>
+                  <div className={styles.podiumLevel}>
+                    Lv.{rank1.level} ·{' '}
+                    {timeFrame === 'weekly'
+                      ? t('leaderboard.kingWeekly')
+                      : timeFrame === 'monthly'
+                        ? t('leaderboard.kingMonthly')
+                        : t('leaderboard.kingAllTime')}
+                  </div>
                   <div className={styles.podiumPillar1}>
                     <span className={styles.pillarNumber}>1</span>
                   </div>
@@ -173,6 +194,7 @@ export default function LeaderboardPage() {
                   </div>
                   <div className={styles.podiumName}>{rank3.name}</div>
                   <div className={styles.podiumScore}>{rank3.totalScore.toLocaleString()} pts</div>
+                  <div className={styles.podiumLevel}>Lv.{rank3.level}</div>
                   <div className={styles.podiumPillar3}>
                     <span className={styles.pillarNumber}>3</span>
                   </div>
@@ -217,10 +239,47 @@ export default function LeaderboardPage() {
                       </div>
                       <div className={styles.playerScore}>
                         <strong>{player.totalScore.toLocaleString()}</strong> pts
+                        {(() => {
+                          const prev = prevRankById.get(player.id);
+                          if (prev === undefined) return null;
+                          const delta = prev - rank;
+                          if (delta > 0) {
+                            return <span className={styles.trendUp}>▲ {delta}</span>;
+                          }
+                          if (delta < 0) {
+                            return <span className={styles.trendDown}>▼ {Math.abs(delta)}</span>;
+                          }
+                          return <span className={styles.trendFlat}>— 0</span>;
+                        })()}
                       </div>
                     </div>
                   );
                 })}
+
+                {/* Own row pinned when the current player is not ranked yet */}
+                {user && !leaderboardData.some((p) => p.id === user.id) ? (
+                  <div className={`${styles.rankingRow} ${styles.currentUserRow}`}>
+                    <div className={styles.rankIndex}>{leaderboardData.length + 1}</div>
+                    <div className={styles.playerInfo}>
+                      <div className={styles.rowAvatarWrap}>
+                        {user.avatar ? (
+                          <img src={user.avatar} alt={user.name} className={styles.rowAvatar} />
+                        ) : (
+                          <div className={styles.rowInitials}>
+                            {user.name.charAt(0).toUpperCase()}
+                          </div>
+                        )}
+                      </div>
+                      <div className={styles.playerNameGroup}>
+                        <span className={styles.playerName}>{user.name} (Bạn)</span>
+                        <span className={styles.playerLevel}>Lv.{user.level ?? 1}</span>
+                      </div>
+                    </div>
+                    <div className={styles.playerScore}>
+                      <strong>0</strong> pts · {t('leaderboard.cookToRank')}
+                    </div>
+                  </div>
+                ) : null}
               </div>
             </div>
           </div>

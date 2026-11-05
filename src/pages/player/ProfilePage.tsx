@@ -55,6 +55,21 @@ export default function ProfilePage() {
   const cookedCount = cookedRecipes.length;
   const unlockedBadges = targetUser.unlockedAchievements ?? [];
 
+  const expValue = targetUser.exp ?? 0;
+  const maxExpValue = targetUser.maxExp ?? 1000;
+  const xpPercent =
+    maxExpValue > 0 ? Math.min(100, Math.round((expValue / maxExpValue) * 100)) : 0;
+  const equippedAchievement = SEED_ACHIEVEMENTS.find(
+    (b) => b.id === (equippedBadgeId ?? targetUser.equippedAchievementId ?? ''),
+  );
+  const joinedDate = targetUser.createdAt ? new Date(targetUser.createdAt) : null;
+  const joinedLabel =
+    joinedDate && !Number.isNaN(joinedDate.getTime())
+      ? t('profile.joinedLabel', {
+          date: `${joinedDate.getMonth() + 1}/${joinedDate.getFullYear()}`,
+        })
+      : '';
+
   const handleAvatarChange = (e: ChangeEvent<HTMLInputElement>) => {
     setAvatarError('');
     setSuccessMsg('');
@@ -172,6 +187,9 @@ export default function ProfilePage() {
       <div className={styles.grid}>
         {/* Profile Card Summary */}
         <div className={styles.profileCard}>
+          <div className={styles.cover} aria-hidden>
+            <img src="/images/noi-noi.jpg" alt="" className={styles.coverPot} />
+          </div>
           <div className={styles.avatarContainer}>
             {avatar || targetUser.avatar ? (
               <img
@@ -198,8 +216,31 @@ export default function ProfilePage() {
             ) : null}
           </div>
 
-          <h2 className={styles.userName}>{isOwnProfile ? name || targetUser.name : targetUser.name}</h2>
-          <p className={styles.userEmail}>{targetUser.email}</p>
+          <div className={styles.nameRow}>
+            <h2 className={styles.userName}>{isOwnProfile ? name || targetUser.name : targetUser.name}</h2>
+            <span className={styles.lvChip}>
+              ⭐ Lv.{targetUser.level ?? 1}
+              {equippedAchievement ? ` · ${equippedAchievement.name}` : ''}
+            </span>
+          </div>
+          <p className={styles.userEmail}>
+            {targetUser.email}
+            {joinedLabel ? ` · ${joinedLabel}` : ''}
+          </p>
+
+          <div className={styles.xpBlock}>
+            <div className={styles.xpTrack}>
+              <div className={styles.xpFill} style={{ width: `${xpPercent}%` }} />
+            </div>
+            <p className={styles.xpText}>
+              {t('profile.expLine', {
+                exp: expValue,
+                maxExp: maxExpValue,
+                remaining: Math.max(0, maxExpValue - expValue),
+                next: (targetUser.level ?? 1) + 1,
+              })}
+            </p>
+          </div>
 
           <div className={styles.statsRow}>
             <div className={styles.statBox}>
@@ -217,18 +258,40 @@ export default function ProfilePage() {
           </div>
 
           <div style={{ width: '100%', textAlign: 'left', marginTop: '0.5rem' }}>
-            <span className={styles.label}>Thành tích đã mở khoá ({unlockedBadges.length}/12)</span>
-            <div className={styles.badgeShowcase}>
+            <span className={styles.label}>
+              {t('profile.unlockedCount', {
+                unlocked: unlockedBadges.length,
+                total: SEED_ACHIEVEMENTS.length,
+              })}
+            </span>
+            <div className={styles.badgeTiles}>
               {SEED_ACHIEVEMENTS.map((b) => {
                 const isUnlocked = unlockedBadges.includes(b.id);
+                const isEquipped =
+                  (equippedBadgeId ?? targetUser.equippedAchievementId) === b.id;
                 return (
-                  <AchievementIcon
+                  <div
                     key={b.id}
-                    badgeId={b.id}
-                    category={b.category}
-                    size="sm"
-                    locked={!isUnlocked}
-                  />
+                    className={[
+                      styles.badgeTile,
+                      isEquipped ? styles.badgeTileEquipped : '',
+                      !isUnlocked ? styles.badgeTileLocked : '',
+                    ]
+                      .filter(Boolean)
+                      .join(' ')}
+                  >
+                    <AchievementIcon
+                      badgeId={b.id}
+                      category={b.category}
+                      size="sm"
+                      locked={!isUnlocked}
+                    />
+                    <span className={styles.badgeTileName}>
+                      {isEquipped ? `${t('profile.wearingLabel')}: ` : ''}
+                      {b.name}
+                      {!isUnlocked ? ` (${t('profile.lockedShort')})` : ''}
+                    </span>
+                  </div>
                 );
               })}
             </div>
@@ -256,9 +319,21 @@ export default function ProfilePage() {
 
                 <div className={styles.field}>
                   <label className={styles.label}>{t('profile.avatar')}</label>
-                  <label htmlFor="avatar-file" className={styles.fileUploadBtn}>
-                    📷 {t('profile.uploadAvatar')}
-                  </label>
+                  <div className={styles.avatarBtns}>
+                    <label htmlFor="avatar-file" className={styles.fileUploadBtn}>
+                      📷 {t('profile.uploadAvatar')}
+                    </label>
+                    <button
+                      type="button"
+                      className={styles.fileUploadBtn}
+                      onClick={() => {
+                        setAvatar('/images/noi-noi.jpg');
+                        setAvatarError('');
+                      }}
+                    >
+                      🍲 {t('profile.useNoiNoi')}
+                    </button>
+                  </div>
                   <input
                     id="avatar-file"
                     type="file"
@@ -343,8 +418,8 @@ export default function ProfilePage() {
               {successMsg ? <p className={styles.successText}>{successMsg}</p> : null}
 
               <div className={styles.actions}>
-                <Button type="submit" variant="primary">
-                  {t('common.save')}
+                <Button type="submit" variant="primary" className={styles.saveButton}>
+                  💾 {t('common.save')}
                 </Button>
               </div>
             </form>
