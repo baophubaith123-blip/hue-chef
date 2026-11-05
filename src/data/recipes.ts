@@ -2073,7 +2073,7 @@ export const SEED_RECIPES: Recipe[] = [
     difficulty: 5,
     duration: 480,
     description: 'Bún bò Huế trứ danh: bắp bò, gân, giò heo, chả cua, mắm ruốc và sả thơm nức.',
-    image: '/images/bun-bo-hue.jpg',
+    image: '/images/bun-bo.jpg',
     baseScore: 1000,
     ingredients: [
       { ingredientId: 'beef-shank', amount: '500g' },
