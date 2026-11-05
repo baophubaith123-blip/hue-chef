@@ -88,10 +88,14 @@ export interface Recipe {
 export type AchievementCondition =
   | { type: 'cook_count'; count: number; category?: RecipeCategory }
   | { type: 'perfect_score' }
+  | { type: 'perfect_count'; count: number }
   | { type: 'no_mistakes'; count: number }
   | { type: 'all_categories' }
   | { type: 'score_threshold'; score: number }
-  | { type: 'level'; level: number };
+  | { type: 'level'; level: number }
+  | { type: 'cook_difficulty'; difficulty: number; count: number };
+
+export type AchievementRarity = 'common' | 'rare' | 'epic' | 'legendary';
 
 export interface Achievement {
   id: string;
@@ -100,5 +104,6 @@ export interface Achievement {
   story?: string;
   category?: 'bun' | 'com' | 'banh' | 'che' | 'nem' | 'special';
   icon: string;
+  rarity?: AchievementRarity;
   condition: AchievementCondition;
 }

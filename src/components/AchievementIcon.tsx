@@ -123,6 +123,116 @@ export function AchievementIcon({
             d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6h-6z"
           />
         );
+      case 'cook-3':
+        // Star outline
+        return (
+          <path
+            fill="currentColor"
+            d="M22 9.24l-7.19-.62L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.63-7.03L22 9.24zM12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.44-.37L12 6.1l1.71 4.04 4.44.37-3.32 2.88 1 4.28L12 15.4z"
+          />
+        );
+      case 'cook-10':
+        // Restaurant cutlery
+        return (
+          <path
+            fill="currentColor"
+            d="M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.83 3.75 3.97V22h3V13.97C11.34 12.83 13 11.12 13 9V2h-2v7zm5-3v8h2.5v8h3V2c-2.76 0-5.5 2.24-5.5 4z"
+          />
+        );
+      case 'cook-25':
+        // Star filled
+        return (
+          <path
+            fill="currentColor"
+            d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"
+          />
+        );
+      case 'score-2000':
+        // Lightning bolt
+        return <path fill="currentColor" d="M7 2v11h3v9l7-12h-4l4-8z" />;
+      case 'score-10000':
+        // Sparkles
+        return (
+          <path
+            fill="currentColor"
+            d="M19 9l1.25-2.75L23 5l-2.75-1.25L19 1l-1.25 2.75L15 5l2.75 1.25L19 9zm-7.5.5L9 4 6.5 9.5 1 12l5.5 2.5L9 20l2.5-5.5L17 12l-5.5-2.5zM19 15l-1.25 2.75L15 19l2.75 1.25L19 23l1.25-2.75L23 19l-2.75-1.25L19 15z"
+          />
+        );
+      case 'level-3':
+        // Double chevron up
+        return (
+          <path
+            fill="currentColor"
+            d="M6.41 6L5 7.41 6.41 8.83 12 14.83l5.58-6L19 7.41 17.59 6 12 12 6.41 6zM6.41 13L5 14.41l1.41 1.42L12 21.83l5.58-6L19 14.41 17.59 13 12 19 6.41 13z"
+          />
+        );
+      case 'level-8':
+        // Trophy detailed
+        return (
+          <path
+            fill="currentColor"
+            d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94.63 1.5 1.98 2.63 3.61 2.96V19H7v3h10v-3h-4v-3.1c1.63-.33 2.98-1.46 3.61-2.96C19.08 12.63 21 10.55 21 8V7c0-1.1-.9-2-2-2z"
+          />
+        );
+      case 'no-mistake-3':
+        // Check circle
+        return (
+          <path
+            fill="currentColor"
+            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"
+          />
+        );
+      case 'no-mistake-5':
+        // Target
+        return (
+          <path
+            fill="currentColor"
+            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm0-13c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zm0 8c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3z"
+          />
+        );
+      case 'perfect-3':
+        // Star in circle
+        return (
+          <path
+            fill="currentColor"
+            d="M12 2a10 10 0 100 20 10 10 0 000-20zm0 4.6l1.85 3.75 4.14.6-3 2.92.7 4.13L12 16.05 8.31 18l.7-4.13-3-2.92 4.14-.6L12 6.6z"
+          />
+        );
+      case 'perfect-10':
+        // Crown
+        return (
+          <path
+            fill="currentColor"
+            d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .55-.45 1-1 1H6c-.55 0-1-.45-1-1v-1h14v1z"
+          />
+        );
+      case 'difficulty-3':
+        // Mountain
+        return (
+          <path
+            fill="currentColor"
+            d="M14 6l-3.75 5 2.85 3.8-1.6 1.2C9.81 13.75 7 10 7 10l-6 8h22L14 6z"
+          />
+        );
+      case 'difficulty-4':
+        // Flag
+        return <path fill="currentColor" d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6h-5.6z" />;
+      case 'hell-1':
+        // Flame
+        return (
+          <path
+            fill="currentColor"
+            d="M13.5.67s.74 2.65.74 4.8c0 2.06-1.35 3.73-3.41 3.73-2.07 0-3.63-1.67-3.63-3.73l.03-.36C5.21 7.51 4 10.62 4 14c0 4.42 3.58 8 8 8s8-3.58 8-8C20 8.61 17.41 3.8 13.5.67zM11.71 19c-1.78 0-3.22-1.4-3.22-3.14 0-1.62 1.05-2.76 2.81-3.12 1.77-.36 3.6-1.21 4.62-2.58.39 1.29.59 2.65.59 4.04 0 2.65-2.15 4.8-4.8 4.8z"
+          />
+        );
+      case 'hell-3':
+        // Crown with gem
+        return (
+          <path
+            fill="currentColor"
+            d="M12 4l3.5 6L21 5l-2 11H5L3 5l5.5 5L12 4zm0 5.2a1.8 1.8 0 100 3.6 1.8 1.8 0 000-3.6zM5 18h14v1c0 .55-.45 1-1 1H6c-.55 0-1-.45-1-1v-1z"
+          />
+        );
       case 'all-recipes':
       default:
         // Royal Crown

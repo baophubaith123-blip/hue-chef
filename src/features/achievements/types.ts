@@ -22,4 +22,9 @@ export interface AchievementContextValue {
   isUnlocked: (userId: string, achievementId: string) => boolean;
   checkAndUnlockForUser: (user: PublicUser, progress: Partial<PlayerAchievementProgress>) => Achievement[];
   getProgressPct: (user: PublicUser, achievementId: Achievement['id'], progress: Partial<PlayerAchievementProgress>) => number;
+  getProgressDetail: (
+    user: PublicUser,
+    achievementId: Achievement['id'],
+    progress: Partial<PlayerAchievementProgress>,
+  ) => { current: number; target: number; pct: number };
 }

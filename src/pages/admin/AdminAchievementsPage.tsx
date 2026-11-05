@@ -128,6 +128,12 @@ export default function AdminAchievementsPage() {
       case 'level':
         next = { type: 'level', level: 1 };
         break;
+      case 'perfect_count':
+        next = { type: 'perfect_count', count: 1 };
+        break;
+      case 'cook_difficulty':
+        next = { type: 'cook_difficulty', difficulty: 5, count: 1 };
+        break;
     }
     setForm({ ...form, condition: next });
   };
@@ -136,6 +142,8 @@ export default function AdminAchievementsPage() {
   const condCount = 'count' in form.condition ? (form.condition as { count: number }).count : 0;
   const condScore = 'score' in form.condition ? (form.condition as { score: number }).score : 0;
   const condLevel = 'level' in form.condition ? (form.condition as { level: number }).level : 0;
+  const condDifficulty =
+    'difficulty' in form.condition ? (form.condition as { difficulty: number }).difficulty : 0;
   const condCategory =
     'category' in form.condition ? (form.condition as { category?: 'bun' | 'com' | 'banh' | 'che' | 'nem' }).category : undefined;
 
@@ -262,6 +270,8 @@ export default function AdminAchievementsPage() {
               <option value="all_categories">all_categories</option>
               <option value="score_threshold">score_threshold</option>
               <option value="level">level</option>
+              <option value="perfect_count">perfect_count</option>
+              <option value="cook_difficulty">cook_difficulty</option>
             </select>
           </div>
           {condType === 'cook_count' ? (
@@ -335,6 +345,55 @@ export default function AdminAchievementsPage() {
               />
             </div>
           ) : null}
+          {condType === 'perfect_count' ? (
+            <div className={styles.field}>
+              <label className={styles.label}>Count</label>
+              <input
+                className={styles.input}
+                type="number"
+                min={1}
+                value={condCount}
+                onChange={(e) =>
+                  setForm({ ...form, condition: { type: 'perfect_count', count: Number(e.target.value) } })
+                }
+              />
+            </div>
+          ) : null}
+          {condType === 'cook_difficulty' ? (
+            <>
+              <div className={styles.field}>
+                <label className={styles.label}>Difficulty (1-5)</label>
+                <input
+                  className={styles.input}
+                  type="number"
+                  min={1}
+                  max={5}
+                  value={condDifficulty}
+                  onChange={(e) =>
+                    setForm({
+                      ...form,
+                      condition: { type: 'cook_difficulty', difficulty: Number(e.target.value), count: condCount },
+                    })
+                  }
+                />
+              </div>
+              <div className={styles.field}>
+                <label className={styles.label}>Count</label>
+                <input
+                  className={styles.input}
+                  type="number"
+                  min={1}
+                  value={condCount}
+                  onChange={(e) =>
+                    setForm({
+                      ...form,
+                      condition: { type: 'cook_difficulty', difficulty: condDifficulty, count: Number(e.target.value) },
+                    })
+                  }
+                />
+              </div>
+            </>
+          ) : null}
           {condType === 'level' ? (
             <div className={styles.field}>
               <label className={styles.label}>Level</label>
@@ -369,5 +428,9 @@ function describeCondition(c: AchievementCondition): string {
       return `score_threshold: ${c.score}`;
     case 'level':
       return `level: ${c.level}`;
+    case 'perfect_count':
+      return `perfect_count: ${c.count}`;
+    case 'cook_difficulty':
+      return `cook_difficulty: ${c.count} x ${c.difficulty}★`;
   }
 }

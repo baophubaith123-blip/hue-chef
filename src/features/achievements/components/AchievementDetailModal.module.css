@@ -73,6 +73,56 @@
   font-size: 0.95rem;
 }
 
+.rarityChip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.15rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 0.6rem;
+  border: 1px solid currentColor;
+}
+
+.rarityCommon {
+  color: var(--rarity-common);
+  background: var(--rarity-common-soft);
+}
+
+.rarityRare {
+  color: var(--rarity-rare);
+  background: var(--rarity-rare-soft);
+}
+
+.rarityEpic {
+  color: var(--rarity-epic);
+  background: var(--rarity-epic-soft);
+}
+
+.rarityLegendary {
+  color: var(--rarity-legendary);
+  background: var(--rarity-legendary-soft);
+  box-shadow: var(--shadow-glow-gold);
+}
+
+.storyLabel {
+  display: block;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 0.72rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  margin-bottom: 0.35rem;
+}
+
+.unlockedDate {
+  color: var(--color-text-muted);
+  font-weight: 500;
+}
+
 .storyBox {
   background: var(--color-bg-muted, #f9fafb);
   border-left: 3px solid var(--color-primary, #ea580c);

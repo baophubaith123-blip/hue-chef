@@ -7,6 +7,7 @@ import {
 } from 'react';
 
 import { SEED_ACHIEVEMENTS } from '@/data/achievements';
+import { getRecipeById } from '@/data/recipes';
 import type { Achievement, RecipeCategory } from '@/data/types';
 import { findUserById, loadUsers, saveUsers, updateStoredUserById } from '@/features/auth/store';
 import type { CookedRecipeEntry, PublicUser } from '@/features/auth/types';
@@ -138,6 +139,24 @@ function evaluate(
       const pct = Math.min(100, Math.round((lvl / target) * 100));
       return { unlocked: lvl >= target, pct, current: lvl, target };
     }
+    case 'perfect_count': {
+      // Entries already include the just-finished cook (see CookingPage),
+      // so count entries only — adding progress.perfectScoreCount would double-count.
+      const count = countPerfectScore(entries, 0);
+      const target = cond.count;
+      const pct = Math.min(100, Math.round((count / target) * 100));
+      return { unlocked: count >= target, pct, current: count, target };
+    }
+    case 'cook_difficulty': {
+      let count = 0;
+      for (const entry of entries) {
+        const recipe = getRecipeById(entry.recipeId);
+        if (recipe && recipe.difficulty >= cond.difficulty) count += 1;
+      }
+      const target = cond.count;
+      const pct = Math.min(100, Math.round((count / target) * 100));
+      return { unlocked: count >= target, pct, current: count, target };
+    }
   }
 }
 
@@ -202,6 +221,20 @@ export function AchievementProvider({ children }: { children: ReactNode }) {
     [],
   );
 
+  const getProgressDetail = useCallback(
+    (
+      user: PublicUser,
+      achievementId: string,
+      progress: Partial<PlayerAchievementProgress>,
+    ): { current: number; target: number; pct: number } => {
+      const achievement = SEED_ACHIEVEMENTS.find((a) => a.id === achievementId);
+      if (!achievement) return { current: 0, target: 0, pct: 0 };
+      const result = evaluate(achievement, user, progress);
+      return { current: result.current, target: result.target, pct: result.pct };
+    },
+    [],
+  );
+
   const value = useMemo<AchievementContextValue>(
     () => ({
       allAchievements: SEED_ACHIEVEMENTS,
@@ -209,8 +242,9 @@ export function AchievementProvider({ children }: { children: ReactNode }) {
       isUnlocked,
       checkAndUnlockForUser,
       getProgressPct,
+      getProgressDetail,
     }),
-    [unlockedForUser, isUnlocked, checkAndUnlockForUser, getProgressPct],
+    [unlockedForUser, isUnlocked, checkAndUnlockForUser, getProgressPct, getProgressDetail],
   );
 
   return <AchievementContext.Provider value={value}>{children}</AchievementContext.Provider>;

@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { AchievementIcon } from '@/components/AchievementIcon';
 import { Card } from '@/components/Card';
@@ -17,9 +17,26 @@ type AchievementFilter = 'all' | 'unlocked' | 'locked';
 export default function AchievementsPage() {
   const { t } = useTranslation();
   const { user } = useAuth();
-  const { allAchievements, isUnlocked, unlockedForUser, getProgressPct } = useAchievements();
+  const {
+    allAchievements,
+    isUnlocked,
+    unlockedForUser,
+    getProgressPct,
+    getProgressDetail,
+    checkAndUnlockForUser,
+  } = useAchievements();
   const [filter, setFilter] = useState<AchievementFilter>('all');
   const [selectedItem, setSelectedItem] = useState<AchievementListItem | null>(null);
+  const [refreshKey, setRefreshKey] = useState(0);
+
+  // Sync unlock state with cooked history on open: achievements whose
+  // conditions are already met (e.g. seeded accounts) become unlocked.
+  useEffect(() => {
+    if (!user) return;
+    const newly = checkAndUnlockForUser(user, {});
+    if (newly.length > 0) setRefreshKey((k) => k + 1);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.id]);
 
   const items = useMemo<AchievementListItem[]>(() => {
     if (!user) return [];
@@ -34,7 +51,7 @@ export default function AchievementsPage() {
         unlockedAt,
       };
     });
-  }, [user, allAchievements, isUnlocked, unlockedForUser, getProgressPct]);
+  }, [user, allAchievements, isUnlocked, unlockedForUser, getProgressPct, refreshKey]);
 
   // Derived stats
   const level = user?.level ?? 1;
@@ -137,15 +154,15 @@ export default function AchievementsPage() {
           </Card>
         </section>
 
-        {selectedItem ? (
+        {selectedItem && user ? (
           <AchievementDetailModal
             achievement={selectedItem.achievement}
             isUnlocked={selectedItem.unlocked}
-            progress={{
-              current: Math.round((selectedItem.progressPct / 100) * 5),
-              target: 5,
-              percent: selectedItem.progressPct,
-            }}
+            progress={(() => {
+              const detail = getProgressDetail(user, selectedItem.achievement.id, {});
+              return { current: detail.current, target: detail.target, percent: detail.pct };
+            })()}
+            unlockedAt={selectedItem.unlockedAt}
             onClose={() => setSelectedItem(null)}
           />
         ) : null}

@@ -21,10 +21,27 @@ export function AchievementBadge({
 }: AchievementBadgeProps) {
   const { t } = useTranslation();
   const safeProgress = Math.max(0, Math.min(100, progressPct));
+  const rarity = achievement.rarity ?? 'common';
+  const rarityLabel =
+    rarity === 'rare'
+      ? t('achievements.rarityRare')
+      : rarity === 'epic'
+        ? t('achievements.rarityEpic')
+        : rarity === 'legendary'
+          ? t('achievements.rarityLegendary')
+          : t('achievements.rarityCommon');
+  const rarityClass =
+    rarity === 'rare'
+      ? styles.rarityRare
+      : rarity === 'epic'
+        ? styles.rarityEpic
+        : rarity === 'legendary'
+          ? styles.rarityLegendary
+          : styles.rarityCommon;
 
   return (
     <article
-      className={`${styles.badge} ${unlocked ? styles.unlocked : styles.locked}`}
+      className={`${styles.badge} ${unlocked ? styles.unlocked : styles.locked} ${rarityClass}`}
       aria-label={unlocked ? t('achievements.unlocked') : t('achievements.locked')}
       onClick={onClick}
       style={{ cursor: onClick ? 'pointer' : 'default' }}
@@ -39,6 +56,7 @@ export function AchievementBadge({
       </div>
       <div className={styles.body}>
         <h3 className={styles.name}>{achievement.name}</h3>
+        <span className={styles.rarityChip}>{rarityLabel}</span>
         <p className={styles.description}>{achievement.description}</p>
         {!unlocked ? (
           <div
