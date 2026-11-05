@@ -9,6 +9,7 @@ import {
 
 import type { CookingSession, CookingState, MinigameResultEntry } from '@/features/cooking/types';
 import type { Recipe } from '@/data/types';
+import { comboBonusForStreak } from '@/features/cooking/lib/combo';
 import { AppError } from '@/lib/errors';
 import { calculateScoreResult, calculateStars, SCORE_RULES, type ScoreInput } from '@/lib/score';
 
@@ -50,10 +51,7 @@ function buildScoreInput(session: CookingSession, timedOut: boolean): ScoreInput
 
 function finalizeSession(session: CookingSession, timedOut: boolean): CookingSession {
   const scoreInput = buildScoreInput(session, timedOut);
-  const { totalScore, stars } = calculateScoreResult(
-    scoreInput,
-    session.recipe.ingredients.length,
-  );
+  const { totalScore } = calculateScoreResult(scoreInput, session.recipe.ingredients.length);
 
   if (timedOut) {
     return {
@@ -65,10 +63,15 @@ function finalizeSession(session: CookingSession, timedOut: boolean): CookingSes
     };
   }
 
+  // Combo bonus is an extension layer on top of the lib/score total
+  // (same channel as minigame bonus points); lib/score.ts stays untouched.
+  const finalScore = Math.max(0, totalScore + session.comboBonus);
+  const stars = calculateStars(finalScore, session.recipe.baseScore, session.recipe.ingredients.length);
+
   return {
     ...session,
     phase: 'success',
-    finalScore: totalScore,
+    finalScore,
     stars,
   };
 }
@@ -92,6 +95,9 @@ function cookingReducer(state: CookingState, action: CookingAction): CookingStat
         actionButtonLabel: null,
         completedStepIndexes: [],
         runningScoreDelta: 0,
+        comboStreak: 0,
+        maxCombo: 0,
+        comboBonus: 0,
         finalScore: 0,
         stars: 1,
       };
@@ -134,11 +140,19 @@ function cookingReducer(state: CookingState, action: CookingAction): CookingStat
         const stepComplete = currentStep.requiredIngredients.every((id) =>
           nextPotIngredients.includes(id),
         );
+        // Combo: every correct drop extends the streak; from the 2nd drop
+        // in a row it banks bonus points (see features/cooking/lib/combo).
+        const nextStreak = session.comboStreak + 1;
+        const comboGain = comboBonusForStreak(nextStreak);
         return {
           session: {
             ...session,
             potIngredients: nextPotIngredients,
             actionButtonLabel: stepComplete ? currentStep.actionLabel : null,
+            comboStreak: nextStreak,
+            maxCombo: Math.max(session.maxCombo, nextStreak),
+            comboBonus: session.comboBonus + comboGain,
+            runningScoreDelta: session.runningScoreDelta + comboGain,
           },
         };
       }
@@ -149,6 +163,8 @@ function cookingReducer(state: CookingState, action: CookingAction): CookingStat
           wrongCount: session.wrongCount + 1,
           runningScoreDelta: session.runningScoreDelta - SCORE_RULES.wrongPenalty,
           actionButtonLabel: null,
+          // A wrong drop breaks the combo streak (banked bonus is kept).
+          comboStreak: 0,
         },
       };
     }
@@ -196,7 +212,7 @@ function cookingReducer(state: CookingState, action: CookingAction): CookingStat
         scoreInput,
         session.recipe.ingredients.length,
       );
-      const finalScore = Math.max(0, dragDropScore + action.bonusScore);
+      const finalScore = Math.max(0, dragDropScore + session.comboBonus + action.bonusScore);
       const stars = calculateStars(
         finalScore,
         session.recipe.baseScore,

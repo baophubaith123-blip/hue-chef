@@ -37,6 +37,84 @@
 }
 
 /* Game stage: plum arena with the 3D Noi Noi pot as centrepiece */
+/* Combo streak badge (top-right of the stage) */
+.comboBadge {
+  position: absolute;
+  top: 0.9rem;
+  right: 0.9rem;
+  z-index: 3;
+  padding: 0.3rem 0.75rem;
+  border-radius: var(--radius-full);
+  background: linear-gradient(90deg, #f59e0b, #dc2626);
+  color: #ffffff;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  box-shadow: 0 4px 14px rgba(220, 38, 38, 0.45);
+  animation: comboPulse 0.9s ease-in-out infinite alternate;
+}
+
+@keyframes comboPulse {
+  from { transform: scale(1); }
+  to { transform: scale(1.07); }
+}
+
+/* Floating score popup + "added to pot" pill after a correct drop */
+.fxWrap {
+  position: absolute;
+  top: 0.9rem;
+  left: 0.9rem;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.4rem;
+  pointer-events: none;
+}
+
+.fxPoints {
+  padding: 0.3rem 0.7rem;
+  border-radius: var(--radius-full);
+  background: #22c55e;
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-weight: 800;
+  box-shadow: 0 6px 16px rgba(34, 197, 94, 0.5);
+  animation: fxFloat 1.3s ease-out forwards;
+}
+
+.fxPill {
+  padding: 0.3rem 0.7rem;
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.94);
+  color: var(--color-plum, #4a1525);
+  font-size: 0.8rem;
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  animation: fxFloat 1.3s ease-out forwards;
+}
+
+@keyframes fxFloat {
+  0% { opacity: 0; transform: translateY(10px) scale(0.85); }
+  15% { opacity: 1; transform: translateY(0) scale(1.05); }
+  30% { transform: translateY(-2px) scale(1); }
+  80% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(-14px) scale(0.98); }
+}
+
+/* Speech line: what the current step still needs */
+.needsLine {
+  margin: 0 0 0.6rem;
+  padding: 0.45rem 0.9rem;
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--color-plum, #4a1525);
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-align: center;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+}
+
 .pot {
   width: 100%;
   flex: 1;

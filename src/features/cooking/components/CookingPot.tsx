@@ -4,6 +4,12 @@ import { useTranslation } from '@/i18n/useTranslation';
 
 import styles from '@/features/cooking/components/CookingPot.module.css';
 
+export interface PotDropFx {
+  key: number;
+  ingredientName: string;
+  points: number;
+}
+
 interface CookingPotProps {
   disabled?: boolean;
   onDropOnPot: (ingredientId: string) => void;
@@ -13,6 +19,12 @@ interface CookingPotProps {
   requiredCount?: number;
   actionButtonLabel: string | null;
   onExecuteAction: () => void;
+  /** Current combo streak (badge shows from ×2). */
+  comboStreak?: number;
+  /** Comma-separated names the current step still needs, for the speech line. */
+  requiredNames?: string;
+  /** Transient "+points" popup + "added to pot" pill after a correct drop. */
+  dropFx?: PotDropFx | null;
 }
 
 export function CookingPot({
@@ -24,6 +36,9 @@ export function CookingPot({
   requiredCount = 0,
   actionButtonLabel,
   onExecuteAction,
+  comboStreak = 0,
+  requiredNames = '',
+  dropFx = null,
 }: CookingPotProps) {
   const { t } = useTranslation();
   const { potActive, potDropZoneProps } = useDragDrop({ onDropOnPot });
@@ -42,7 +57,25 @@ export function CookingPot({
           .join(' ')}
         {...(disabled ? {} : potDropZoneProps)}
       >
+        {comboStreak >= 2 ? (
+          <span className={styles.comboBadge} aria-live="polite">
+            🔥 {t('cooking.comboLabel')} ×{comboStreak}
+          </span>
+        ) : null}
+        {dropFx ? (
+          <div key={dropFx.key} className={styles.fxWrap} aria-hidden>
+            <span className={styles.fxPoints}>+{dropFx.points} ✓</span>
+            <span className={styles.fxPill}>
+              {t('cooking.addedToPot', { name: dropFx.ingredientName })}
+            </span>
+          </div>
+        ) : null}
         <div className={styles.potInner}>
+          {requiredNames && !disabled ? (
+            <p className={styles.needsLine}>
+              {t('cooking.stepNeedsNames', { names: requiredNames })}
+            </p>
+          ) : null}
           <div className={styles.potStage} aria-hidden>
             <span className={`${styles.steamPuff} ${styles.steamPuff1}`} />
             <span className={`${styles.steamPuff} ${styles.steamPuff2}`} />

@@ -28,6 +28,7 @@
   transform: translateX(-2px);
 }
 
+/* Game HUD bar: plum glass strip with dish, timer and score */
 .top {
   display: flex;
   flex-wrap: wrap;
@@ -35,16 +36,43 @@
   justify-content: space-between;
   gap: 1.25rem;
   margin-bottom: 1.25rem;
-  padding: 1.25rem 1.5rem;
-  background: var(--color-surface, #ffffff);
-  border: 1px solid var(--color-card-border, #e8dfd5);
+  padding: 1.1rem 1.5rem;
+  background: var(--gradient-banner);
+  border: 1px solid rgba(233, 162, 59, 0.4);
   border-radius: var(--radius-xl, 18px);
-  box-shadow: 0 4px 16px rgba(74, 21, 37, 0.04);
+  box-shadow: var(--shadow-glow-plum);
 }
 
-[data-theme='dark'] .top {
-  background: var(--color-surface, #2a201b);
-  border-color: var(--color-card-border, #4a3a31);
+.hudDish {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  min-width: 15rem;
+}
+
+.hudThumb {
+  width: 58px;
+  height: 58px;
+  flex-shrink: 0;
+  border-radius: 14px;
+  object-fit: cover;
+  border: 2px solid rgba(233, 162, 59, 0.65);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+}
+
+.hudDishText {
+  min-width: 0;
+}
+
+.hudTimer {
+  flex: 1 1 16rem;
+  min-width: 13rem;
+}
+
+.hudRight {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
 }
 
 .title {
@@ -52,17 +80,13 @@
   font-family: var(--font-display, Georgia, 'Times New Roman', serif);
   font-size: 1.75rem;
   font-weight: 700;
-  color: var(--color-plum, #4a1525);
+  color: #fdf6ec;
   letter-spacing: -0.01em;
-}
-
-[data-theme='dark'] .title {
-  color: var(--color-plum-text, #f8efea);
 }
 
 .subtitle {
   margin: 0;
-  color: var(--color-text-muted, #7c6c64);
+  color: rgba(248, 239, 234, 0.82);
   font-size: 0.95rem;
   line-height: 1.4;
 }
@@ -75,9 +99,9 @@
   padding: 0.75rem 1.25rem;
   border-radius: var(--radius-lg, 12px);
   border: 1.5px solid rgba(233, 162, 59, 0.45);
-  background: var(--gradient-banner);
-  min-width: 11rem;
-  box-shadow: var(--shadow-glow-plum);
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(6px);
+  min-width: 10rem;
 }
 
 .scoreLabel {

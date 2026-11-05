@@ -1,6 +1,7 @@
 import { useState } from 'react';
 
 import type { MinigameResultEntry } from '@/features/cooking/types';
+import { comboBonusForStreak } from '@/features/cooking/lib/combo';
 import type { Minigame } from '@/features/recipes/types';
 import { useTranslation } from '@/i18n/useTranslation';
 
@@ -18,6 +19,7 @@ export function MinigameRunner({ minigames, onAllComplete }: MinigameRunnerProps
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [results, setResults] = useState<MinigameResultEntry[]>([]);
   const [totalScore, setTotalScore] = useState<number>(0);
+  const [streak, setStreak] = useState<number>(0);
 
   if (!minigames || minigames.length === 0) {
     onAllComplete([], 0);
@@ -30,16 +32,22 @@ export function MinigameRunner({ minigames, onAllComplete }: MinigameRunnerProps
   const handleGameComplete = (success: boolean, earnedScore: number) => {
     if (!currentGame) return;
 
+    // Streak bonus: consecutive successful scenarios bank extra points
+    // (same curve as the cooking combo — see features/cooking/lib/combo).
+    const nextStreak = success ? streak + 1 : 0;
+    const streakBonus = success ? comboBonusForStreak(nextStreak) : 0;
+    setStreak(nextStreak);
+
     const newEntry: MinigameResultEntry = {
       minigameId: currentGame.id,
       title: currentGame.question,
       type: currentGame.type,
       success,
-      score: success ? earnedScore : 0,
+      score: success ? earnedScore + streakBonus : 0,
     };
 
     const nextResults = [...results, newEntry];
-    const nextScore = totalScore + (success ? earnedScore : 0);
+    const nextScore = totalScore + newEntry.score;
 
     setResults(nextResults);
     setTotalScore(nextScore);
@@ -67,6 +75,9 @@ export function MinigameRunner({ minigames, onAllComplete }: MinigameRunnerProps
             <span className={styles.scoreBonusBadge}>
               {dict.cooking.minigames.bonusPoints(totalScore)}
             </span>
+            {streak >= 2 ? (
+              <span className={styles.streakBadge}>🔥 {dict.cooking.minigames.streak(streak)}</span>
+            ) : null}
           </div>
         </div>
         <div className={styles.headerProgressTrack}>
@@ -87,6 +98,7 @@ export function MinigameRunner({ minigames, onAllComplete }: MinigameRunnerProps
             key={currentGame.id}
             minigame={currentGame}
             onComplete={handleGameComplete}
+            streak={streak}
           />
         )}
       </div>

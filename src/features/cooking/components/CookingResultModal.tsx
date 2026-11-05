@@ -115,6 +115,19 @@ export function CookingResultModal({
                 </div>
               </div>
 
+              {session.comboBonus > 0 ? (
+                <div className={styles.metricCard}>
+                  <span className={styles.metricIcon}>🔥</span>
+                  <div className={styles.metricDetails}>
+                    <span className={styles.metricLabel}>{dict.cooking.result.comboBonus}</span>
+                    <span className={styles.metricValueHighlight}>+{session.comboBonus}</span>
+                    <span className={styles.metricLabel}>
+                      {dict.cooking.result.maxCombo(session.maxCombo)}
+                    </span>
+                  </div>
+                </div>
+              ) : null}
+
               {typeof gainedXp === 'number' ? (
                 <div className={styles.metricCard}>
                   <span className={styles.metricIcon}>🌟</span>

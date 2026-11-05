@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Link, Navigate, useParams } from 'react-router-dom';
 
 import type { Achievement } from '@/data/types';
+import { getIngredientById } from '@/data/ingredients';
 import { Button } from '@/components/Button';
 import { EmptyState } from '@/components/EmptyState';
 import { Loading } from '@/components/Loading';
@@ -11,7 +12,7 @@ import { useNotification } from '@/contexts/NotificationContext';
 import { useRecipes } from '@/contexts/RecipeContext';
 import type { CookedRecipeEntry } from '@/features/auth/types';
 import type { CookingSession, MinigameResultEntry } from '@/features/cooking/types';
-import { CookingPot } from '@/features/cooking/components/CookingPot';
+import { CookingPot, type PotDropFx } from '@/features/cooking/components/CookingPot';
 import { CookingResultModal } from '@/features/cooking/components/CookingResultModal';
 import { CookingTimer } from '@/features/cooking/components/CookingTimer';
 import { IngredientTray } from '@/features/cooking/components/IngredientTray';
@@ -19,6 +20,7 @@ import { StepList } from '@/features/cooking/components/StepList';
 import { MinigameRunner } from '@/features/cooking/components/minigames/MinigameRunner';
 import { useCookingState } from '@/features/cooking/hooks/useCookingState';
 import { useDragDrop } from '@/features/cooking/hooks/useDragDrop';
+import { comboBonusForStreak } from '@/features/cooking/lib/combo';
 import { buildTrayIngredientIds } from '@/features/cooking/lib/tray-ingredients';
 import { shuffleArray } from '@/features/cooking/lib/shuffle';
 import { useTranslation } from '@/i18n/useTranslation';
@@ -47,6 +49,8 @@ export default function CookingPage() {
 
   const [shakePot, setShakePot] = useState(false);
   const [sparklePot, setSparklePot] = useState(false);
+  const [dropFx, setDropFx] = useState<PotDropFx | null>(null);
+  const fxTimerRef = useRef<number | null>(null);
   const [viewMinigames, setViewMinigames] = useState(false);
   const [appliedResult, setAppliedResult] = useState<{
     gainedXp: number;
@@ -63,6 +67,14 @@ export default function CookingPage() {
       return [];
     }
     return shuffleArray(buildTrayIngredientIds(recipe));
+  }, [recipe]);
+
+  const amountByIngredientId = useMemo(() => {
+    const map: Record<string, string> = {};
+    for (const ref of recipe?.ingredients ?? []) {
+      map[ref.ingredientId] = ref.amount;
+    }
+    return map;
   }, [recipe]);
 
   const clearAnimationTimer = useCallback(() => {
@@ -181,6 +193,11 @@ export default function CookingPage() {
     startCooking(current);
     return () => {
       clearAnimationTimer();
+      if (fxTimerRef.current !== null) {
+        window.clearTimeout(fxTimerRef.current);
+        fxTimerRef.current = null;
+      }
+      setDropFx(null);
       resetCooking();
       setAppliedResult(null);
     };
@@ -191,14 +208,39 @@ export default function CookingPage() {
       if (!session || session.phase !== 'running') {
         return;
       }
+      // Pre-compute the drop outcome from the current snapshot so the pot
+      // can show the floating "+points" popup in the same frame. The combo
+      // formula is shared with CookingContext via lib/combo.
+      const steps = session.recipe.steps ?? [];
+      const currentStep = steps[session.currentStepIndex];
+      const isFreshCorrect = Boolean(
+        currentStep &&
+          currentStep.requiredIngredients.includes(ingredientId) &&
+          !session.potIngredients.includes(ingredientId),
+      );
       const isCorrect = dropIngredient(ingredientId);
       if (isCorrect) {
         pulseAnimation('sparkle');
+        if (isFreshCorrect) {
+          const comboGain = comboBonusForStreak(session.comboStreak + 1);
+          if (fxTimerRef.current !== null) {
+            window.clearTimeout(fxTimerRef.current);
+          }
+          setDropFx({
+            key: Date.now(),
+            ingredientName: getIngredientById(ingredientId)?.name ?? ingredientId,
+            points: scoreRules.correctPoints + comboGain,
+          });
+          fxTimerRef.current = window.setTimeout(() => {
+            setDropFx(null);
+            fxTimerRef.current = null;
+          }, 1350);
+        }
       } else {
         pulseAnimation('shake');
       }
     },
-    [dropIngredient, pulseAnimation, session],
+    [dropIngredient, pulseAnimation, session, scoreRules],
   );
 
   const handleExecuteAction = useCallback(() => {
@@ -263,6 +305,12 @@ export default function CookingPage() {
     session.currentStepIndex,
     Math.max(0, sessionSteps.length - 1),
   );
+  const activeStep = sessionSteps[activeStepIndex];
+  const currentRequiredIds = activeStep?.requiredIngredients ?? [];
+  const requiredNames = currentRequiredIds
+    .filter((reqId) => !session.potIngredients.includes(reqId))
+    .map((reqId) => getIngredientById(reqId)?.name ?? reqId)
+    .join(', ');
 
   const showResult = session.phase === 'success' || session.phase === 'failed';
   const sessionEnded = session.phase !== 'running';
@@ -318,65 +366,82 @@ export default function CookingPage() {
         ← {t('cooking.recipeDetail')}
       </Link>
       <div className={styles.top}>
-        <div>
-          <h1 className={styles.title}>{recipe.name}</h1>
-          <p className={styles.subtitle}>
-            {t('cooking.stepInstruction', {
-              correct: scoreRules.correctPoints,
-              wrong: scoreRules.wrongPenalty,
-            })}
-          </p>
-        </div>
-        <div className={styles.scorePanel}>
-          <span className={styles.scoreLabel}>{t('cooking.score')}</span>
-          <span className={styles.scoreValue}>{displayScore}</span>
-          {session.phase === 'running' ? (
-            <p className={styles.scoreHint}>
-              {t('cooking.sessionDelta')} {session.runningScoreDelta >= 0 ? '+' : ''}
-              {session.runningScoreDelta}
+        <div className={styles.hudDish}>
+          <img src={recipe.image} alt="" className={styles.hudThumb} />
+          <div className={styles.hudDishText}>
+            <h1 className={styles.title}>{recipe.name}</h1>
+            <p className={styles.subtitle}>
+              {t('cooking.hudStepOf', {
+                current: Math.min(session.currentStepIndex + 1, sessionSteps.length),
+                total: sessionSteps.length,
+              })}
+              {activeStep ? ` · ${activeStep.title} · ` : ' · '}
+              {t('cooking.stepInstruction', {
+                correct: scoreRules.correctPoints,
+                wrong: scoreRules.wrongPenalty,
+              })}
             </p>
-          ) : null}
+          </div>
+        </div>
+        <div className={styles.hudTimer}>
+          <CookingTimer
+            timeRemainingSeconds={session.timeRemainingSeconds}
+            totalDurationSeconds={session.totalDurationSeconds}
+            isRunning={isRunning}
+            inHud
+          />
+        </div>
+        <div className={styles.hudRight}>
+          <div className={styles.scorePanel}>
+            <span className={styles.scoreLabel}>{t('cooking.score')}</span>
+            <span className={styles.scoreValue}>{displayScore}</span>
+            {session.phase === 'running' ? (
+              <p className={styles.scoreHint}>
+                {t('cooking.sessionDelta')} {session.runningScoreDelta >= 0 ? '+' : ''}
+                {session.runningScoreDelta}
+              </p>
+            ) : null}
+          </div>
           {(session.recipe.minigames?.length ?? 0) > 0 && (
             <Button
               type="button"
               variant="secondary"
               onClick={() => setViewMinigames(true)}
             >
-              🎮 Chơi Minigame ({session.recipe.minigames?.length})
+              🎮 Minigame ({session.recipe.minigames?.length})
             </Button>
           )}
         </div>
       </div>
 
-      <CookingTimer
-        timeRemainingSeconds={session.timeRemainingSeconds}
-        totalDurationSeconds={session.totalDurationSeconds}
-        isRunning={isRunning}
-      />
-
       <div className={styles.grid}>
-        <IngredientTray
-          trayIngredientIds={trayIngredientIds}
-          placedIngredientIds={placedIngredientIds}
-          draggingId={draggingId}
-          disabled={sessionEnded}
-          getTrayItemProps={getTrayItemProps}
-          onSelectIngredient={handleDropOnPot}
+        <StepList
+          steps={sessionSteps}
+          activeStepIndex={activeStepIndex}
+          completedStepIndexes={session.completedStepIndexes}
         />
         <CookingPot
           disabled={sessionEnded}
           onDropOnPot={handleDropOnPot}
           potIngredients={session.potIngredients}
-          requiredCount={sessionSteps[activeStepIndex]?.requiredIngredients.length ?? 0}
+          requiredCount={currentRequiredIds.length}
           actionButtonLabel={session.actionButtonLabel}
           onExecuteAction={handleExecuteAction}
           shake={shakePot}
           sparkle={sparklePot}
+          comboStreak={session.comboStreak}
+          requiredNames={requiredNames}
+          dropFx={dropFx}
         />
-        <StepList
-          steps={sessionSteps}
-          activeStepIndex={activeStepIndex}
-          completedStepIndexes={session.completedStepIndexes}
+        <IngredientTray
+          trayIngredientIds={trayIngredientIds}
+          placedIngredientIds={placedIngredientIds}
+          requiredIngredientIds={currentRequiredIds}
+          amountByIngredientId={amountByIngredientId}
+          draggingId={draggingId}
+          disabled={sessionEnded}
+          getTrayItemProps={getTrayItemProps}
+          onSelectIngredient={handleDropOnPot}
         />
       </div>
 

@@ -22,6 +22,12 @@ export interface CookingSession {
   actionButtonLabel: string | null;
   completedStepIndexes: number[];
   runningScoreDelta: number;
+  /** Consecutive correct drops right now (resets on a wrong drop). */
+  comboStreak: number;
+  /** Longest combo streak reached during this session. */
+  maxCombo: number;
+  /** Total combo bonus points banked (added on top of the lib/score total). */
+  comboBonus: number;
   finalScore: number;
   stars: 1 | 2 | 3 | 4 | 5;
   failReason?: 'timeout' | 'abandoned';

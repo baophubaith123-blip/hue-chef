@@ -7,12 +7,15 @@ interface CookingTimerProps {
   timeRemainingSeconds: number;
   totalDurationSeconds: number;
   isRunning: boolean;
+  /** Render borderless on the plum HUD bar of the cooking page. */
+  inHud?: boolean;
 }
 
 export function CookingTimer({
   timeRemainingSeconds,
   totalDurationSeconds,
   isRunning,
+  inHud = false,
 }: CookingTimerProps) {
   const { t } = useTranslation();
 
@@ -24,7 +27,7 @@ export function CookingTimer({
   const isUrgent = isRunning && timeRemainingSeconds <= 30;
 
   return (
-    <div className={styles.timer}>
+    <div className={[styles.timer, inHud ? styles.timerHud : ''].filter(Boolean).join(' ')}>
       <div className={styles.row}>
         <span className={styles.label}>{t('cooking.timeLeft')}</span>
         <span

@@ -9,6 +9,10 @@ interface IngredientTrayProps {
   trayIngredientIds: string[];
   disabled?: boolean;
   placedIngredientIds: string[];
+  /** Ingredients the current step needs — their cards glow with a NEED tag. */
+  requiredIngredientIds?: string[];
+  /** Display amounts for real recipe ingredients (decoys have none). */
+  amountByIngredientId?: Record<string, string>;
   draggingId: string | null;
   getTrayItemProps: (ingredientId: string) => {
     draggable?: boolean;
@@ -22,6 +26,8 @@ export function IngredientTray({
   trayIngredientIds,
   disabled = false,
   placedIngredientIds,
+  requiredIngredientIds = [],
+  amountByIngredientId = {},
   draggingId,
   getTrayItemProps,
   onSelectIngredient,
@@ -47,9 +53,11 @@ export function IngredientTray({
             return null;
           }
           const isUsed = placedIngredientIds.includes(ingredientId);
+          const isNeeded = !isUsed && requiredIngredientIds.includes(ingredientId);
           const dragProps = disabled || isUsed ? {} : getTrayItemProps(ingredientId);
           const categoryLabel =
             dict.cooking.categories[ingredient.category] ?? ingredient.category;
+          const amount = amountByIngredientId[ingredientId];
 
           return (
             <li key={ingredientId} className={`anim-fade-up anim-delay-${(index % 8) + 1}`}>
@@ -58,6 +66,7 @@ export function IngredientTray({
                 className={[
                   styles.chip,
                   isUsed ? styles.chipUsed : '',
+                  isNeeded ? styles.chipNeeded : '',
                   draggingId === ingredientId ? styles.chipDragging : '',
                 ]
                   .filter(Boolean)
@@ -70,6 +79,10 @@ export function IngredientTray({
                 }}
                 {...dragProps}
               >
+                <span className={styles.eyes} aria-hidden>
+                  <span className={styles.eyeDot} />
+                  <span className={styles.eyeDot} />
+                </span>
                 <span
                   className={[styles.medal, styles[`cat-${ingredient.category}`] ?? '']
                     .filter(Boolean)
@@ -80,7 +93,13 @@ export function IngredientTray({
                 </span>
                 <span className={styles.chipTexts}>
                   <span className={styles.chipName}>{ingredient.name}</span>
-                  <span className={styles.chipMeta}>{categoryLabel}</span>
+                  <span className={styles.chipMeta}>
+                    {categoryLabel}
+                    {amount ? ` · ${amount}` : ''}
+                  </span>
+                  {isNeeded ? (
+                    <span className={styles.neededTag}>{t('cooking.neededThisStep')}</span>
+                  ) : null}
                 </span>
               </button>
             </li>

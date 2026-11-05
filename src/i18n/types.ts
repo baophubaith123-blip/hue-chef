@@ -317,6 +317,11 @@ export interface I18nDictionary {
     supportSubject: string;
     supportReplyBody: string;
     typeLabels: Record<'broadcast' | 'ban-notice' | 'warning' | 'support' | 'recipe-approved' | 'recipe-rejected', string>;
+    relJustNow: string;
+    relMinutes: (n: number) => string;
+    relHours: (n: number) => string;
+    relYesterday: string;
+    relDays: (n: number) => string;
     inboxTitle: string;
     inboxEmpty: string;
     inboxHint: string;
@@ -376,6 +381,8 @@ export interface I18nDictionary {
     title: string;
     empty: string;
     hint: string;
+    emptyTitle: string;
+    emptyCook: string;
     detail: string;
     back: string;
     unread: string;
@@ -451,6 +458,8 @@ export interface I18nDictionary {
       backToRecipe: string;
       backToHome: string;
       minigamesSummary: string;
+      comboBonus: string;
+      maxCombo: (count: number) => string;
       gainedXp: (xp: number) => string;
       levelUp: (lvl: number) => string;
       achievementUnlockTitle: string;
@@ -481,6 +490,10 @@ export interface I18nDictionary {
       explanationLabel: string;
       correctWas: (ans: string) => string;
       quizInstruction: string;
+      streak: (count: number) => string;
+      rewardCorrect: string;
+      speedBonus: string;
+      correctBang: string;
     };
     recipeDetail: string;
     score: string;
@@ -495,6 +508,11 @@ export interface I18nDictionary {
     potEmpty: string;
     potProgress: string;
     stepNeeds: string;
+    comboLabel: string;
+    addedToPot: string;
+    neededThisStep: string;
+    stepNeedsNames: string;
+    hudStepOf: string;
     steps: string;
     preparingKitchen: string;
     cannotCook: string;
@@ -604,6 +622,15 @@ export interface I18nDictionary {
     techTitle: string;
     stackTitle: string;
     acknowledgements: string;
+    heroTitleA: string;
+    heroTitleGold: string;
+    heroTitleB: string;
+    authorRole: string;
+    projectType: string;
+    statRoutes: string;
+    statRoles: string;
+    statDishes: string;
+    archNote: string;
   };
   notFound: {
     title: string;
@@ -621,6 +648,10 @@ export interface I18nDictionary {
     level: string;
     empty: string;
     emptyHint: string;
+    cookToRank: string;
+    kingWeekly: string;
+    kingMonthly: string;
+    kingAllTime: string;
   };
   profile: {
     title: string;
@@ -644,6 +675,12 @@ export interface I18nDictionary {
     equip: string;
     equipped: string;
     locked: string;
+    expLine: string;
+    lockedShort: string;
+    joinedLabel: string;
+    useNoiNoi: string;
+    wearingLabel: string;
+    unlockedCount: string;
   };
   landing: {
     heroTitle: string;

@@ -70,3 +70,29 @@
   transition: width 1s linear;
   box-shadow: 0 0 8px rgba(233, 162, 59, 0.35);
 }
+
+/* Borderless variant inside the plum HUD bar */
+.timerHud {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0.25rem 0;
+}
+
+.timerHud .label {
+  color: rgba(248, 239, 234, 0.78);
+}
+
+.timerHud .value {
+  color: #ffffff;
+  font-size: 1.55rem;
+}
+
+.timerHud .valuePaused {
+  color: #fca5a5;
+}
+
+.timerHud .track {
+  background: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.28);
+}

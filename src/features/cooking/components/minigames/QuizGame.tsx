@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 
 import { Button } from '@/components/Button';
+import { speedBonusForQuiz } from '@/features/cooking/lib/combo';
 import type { QuizMinigame } from '@/features/recipes/types';
 import { useTranslation } from '@/i18n/useTranslation';
 import { playSound } from '@/lib/sound';
@@ -10,22 +11,28 @@ import styles from './QuizGame.module.css';
 export interface QuizGameProps {
   minigame: QuizMinigame;
   onComplete: (success: boolean, score: number) => void;
+  /** Consecutive correct minigames so far in this run (streak badge). */
+  streak?: number;
 }
 
 const OPTION_LETTERS = ['A', 'B', 'C', 'D'];
+const RING_RADIUS = 34;
+const RING_CIRCUMFERENCE = 2 * Math.PI * RING_RADIUS;
 
-export function QuizGame({ minigame, onComplete }: QuizGameProps) {
+export function QuizGame({ minigame, onComplete, streak = 0 }: QuizGameProps) {
   const { t, dict } = useTranslation();
   const [timeLeft, setTimeLeft] = useState<number>(minigame.timeLimit);
   const [isFinished, setIsFinished] = useState<boolean>(false);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [status, setStatus] = useState<'idle' | 'success' | 'error' | 'timeout'>('idle');
+  const [earned, setEarned] = useState<{ base: number; speed: number } | null>(null);
 
   const onCompleteRef = useRef(onComplete);
   onCompleteRef.current = onComplete;
 
   const options = minigame.data.options ?? [];
   const correctIdx = minigame.data.correctAnswerIndex;
+  const maxSpeedBonus = speedBonusForQuiz(minigame.scoreReward, minigame.timeLimit, minigame.timeLimit);
 
   // Countdown timer
   useEffect(() => {
@@ -61,9 +68,11 @@ export function QuizGame({ minigame, onComplete }: QuizGameProps) {
     if (isCorrect) {
       setStatus('success');
       playSound('success');
+      const speed = speedBonusForQuiz(minigame.scoreReward, timeLeft, minigame.timeLimit);
+      setEarned({ base: minigame.scoreReward, speed });
       setTimeout(() => {
-        onCompleteRef.current(true, minigame.scoreReward);
-      }, 1200);
+        onCompleteRef.current(true, minigame.scoreReward + speed);
+      }, 1400);
     } else {
       setStatus('error');
       playSound('error');
@@ -75,6 +84,7 @@ export function QuizGame({ minigame, onComplete }: QuizGameProps) {
 
   const progressPercent = Math.max(0, Math.min(100, (timeLeft / minigame.timeLimit) * 100));
   const isUrgent = timeLeft < 3;
+  const ringOffset = RING_CIRCUMFERENCE * (1 - progressPercent / 100);
 
   return (
     <div
@@ -90,18 +100,43 @@ export function QuizGame({ minigame, onComplete }: QuizGameProps) {
         </div>
       </div>
 
-      {/* Timer Bar */}
-      <div className={styles.timerWrapper}>
-        <div className={styles.timerMeta}>
-          <span>{t('cooking.actionMinigame.timeLeft')}</span>
-          <span className={styles.timerSeconds}>{timeLeft.toFixed(1)}s</span>
+      {/* Reward chips + countdown ring */}
+      <div className={styles.metaRow}>
+        <div className={styles.chipsCol}>
+          <span className={styles.chip}>
+            🏅 {dict.cooking.minigames.rewardCorrect}: <strong>+{minigame.scoreReward}</strong>
+          </span>
+          <span className={styles.chip}>
+            ⚡ {dict.cooking.minigames.speedBonus}:{' '}
+            <strong>+{earned ? earned.speed : maxSpeedBonus}</strong>
+          </span>
+          {streak >= 2 ? (
+            <span className={`${styles.chip} ${styles.chipStreak}`}>
+              🔥 {dict.cooking.minigames.streak(streak)}
+            </span>
+          ) : null}
         </div>
-        <div className={styles.progressBarTrack}>
-          <div
-            className={`${styles.progressBarFill} ${isUrgent ? styles.timerWarning : ''}`}
-            style={{ width: `${progressPercent}%` }}
-          />
+        <div className={styles.ringWrap} role="timer" aria-label={t('cooking.actionMinigame.timeLeft')}>
+          <svg className={styles.ring} viewBox="0 0 84 84" aria-hidden>
+            <circle className={styles.ringTrack} cx="42" cy="42" r={RING_RADIUS} />
+            <circle
+              className={`${styles.ringFill} ${isUrgent ? styles.ringUrgent : ''}`}
+              cx="42"
+              cy="42"
+              r={RING_RADIUS}
+              strokeDasharray={RING_CIRCUMFERENCE}
+              strokeDashoffset={ringOffset}
+            />
+          </svg>
+          <span className={`${styles.ringValue} ${isUrgent ? styles.ringValueUrgent : ''}`}>
+            {timeLeft.toFixed(1)}
+          </span>
         </div>
+        {earned ? (
+          <span className={styles.floatPoints} aria-hidden>
+            +{earned.base + earned.speed}
+          </span>
+        ) : null}
       </div>
 
       {/* Options Grid */}
@@ -131,7 +166,11 @@ export function QuizGame({ minigame, onComplete }: QuizGameProps) {
             >
               <span className={styles.optionIndexBadge}>{letter}</span>
               <span className={styles.optionText}>{optionText}</span>
-              {shouldHighlightCorrect ? <span>✓</span> : isWrong ? <span>✕</span> : null}
+              {shouldHighlightCorrect ? (
+                <span className={styles.correctBang}>{dict.cooking.minigames.correctBang}</span>
+              ) : isWrong ? (
+                <span>✕</span>
+              ) : null}
             </Button>
           );
         })}
@@ -150,7 +189,9 @@ export function QuizGame({ minigame, onComplete }: QuizGameProps) {
               <>
                 <span>✅</span>
                 <span>
-                  {dict.cooking.minigames.correctAnswer} (+{minigame.scoreReward} {t('cooking.score').toLowerCase()})
+                  {dict.cooking.minigames.correctAnswer} (+
+                  {(earned?.base ?? minigame.scoreReward) + (earned?.speed ?? 0)}{' '}
+                  {t('cooking.score').toLowerCase()})
                 </span>
               </>
             ) : status === 'error' ? (
@@ -171,6 +212,12 @@ export function QuizGame({ minigame, onComplete }: QuizGameProps) {
               </>
             )}
           </div>
+          {status === 'success' && earned ? (
+            <div className={styles.feedbackExplanation}>
+              {dict.cooking.minigames.rewardCorrect} +{earned.base} ·{' '}
+              {dict.cooking.minigames.speedBonus} +{earned.speed}
+            </div>
+          ) : null}
           {minigame.data.explanation ? (
             <div className={styles.feedbackExplanation}>
               <strong>{dict.cooking.minigames.explanationLabel}</strong> {minigame.data.explanation}
