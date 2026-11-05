@@ -210,16 +210,16 @@
 
 /* Route-change wrapper (applied in shells, keyed by pathname) */
 .page-transition {
-  animation: fadeSlideUp 0.45s ease both;
+  animation: fadeSlideUp 0.45s ease backwards;
 }
 
 /* Reusable entrance utilities */
 .anim-fade-up {
-  animation: fadeSlideUp 0.55s ease both;
+  animation: fadeSlideUp 0.55s ease backwards;
 }
 
 .anim-pop {
-  animation: popIn 0.4s ease both;
+  animation: popIn 0.4s ease backwards;
 }
 
 .anim-bounce-soft {
