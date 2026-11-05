@@ -47,6 +47,9 @@ export function loadUsers(): StoredUser[] {
   }
   const migrated = stored.map((u) => ({
     ...u,
+    // Seed accounts used external DiceBear avatars; when that host is
+    // unreachable they render as broken images, so fall back to initials.
+    avatar: typeof u.avatar === 'string' && u.avatar.includes('api.dicebear.com') ? '' : u.avatar,
     level: typeof u.level === 'number' ? u.level : 1,
     exp: typeof u.exp === 'number' ? u.exp : 0,
     maxExp: typeof u.maxExp === 'number' ? u.maxExp : 1000,
@@ -56,6 +59,18 @@ export function loadUsers(): StoredUser[] {
       : [],
     warningCount: typeof u.warningCount === 'number' ? u.warningCount : 0,
   }));
+  // Merge in any seed accounts this browser predates (e.g. the 40 leaderboard
+  // players) without touching progress already stored for existing users.
+  const knownIds = new Set(migrated.map((u) => u.id));
+  const knownEmails = new Set(migrated.map((u) => u.email.toLowerCase()));
+  const newcomers = SEED_USERS.filter(
+    (u) => !knownIds.has(u.id) && !knownEmails.has(u.email.toLowerCase()),
+  );
+  if (newcomers.length > 0) {
+    const merged = [...migrated, ...newcomers.map((u) => ({ ...u }))];
+    setJsonStorage(STORAGE_KEYS.users, merged);
+    return merged;
+  }
   return migrated;
 }
 

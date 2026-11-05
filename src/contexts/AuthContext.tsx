@@ -122,7 +122,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       email: email.trim().toLowerCase(),
       password,
       role: 'player' satisfies UserRole,
-      avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(email)}`,
+      avatar: '',
       status: 'active',
       createdAt: new Date().toISOString(),
       level: 1,
