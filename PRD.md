@@ -543,6 +543,7 @@ Hệ thống có **4 vai trò**:
 | Tài khoản BXH | Dữ liệu mẫu tĩnh | **40 tài khoản người chơi thật**, đăng nhập được, BXH lọc tuần/tháng/mọi thời đại |
 | Độ khó công thức | Chưa phân cấp thật | **5 cấp** (Dễ→Địa ngục), nguyên liệu đúng/nhiễu 6/4→20/20, bước cần 1–3 nguyên liệu, 182 câu hỏi quiz |
 | Điểm thưởng | Điểm nền + minigame | Thêm **combo thả đúng liên tiếp** (cửa sổ 2 giây, +10→+50/lần) và **bonus tốc độ quiz** (tới +50%); `lib/score.ts` vẫn 100% tự viết, combo cộng qua kênh bonus mở rộng |
+| Ván chơi | Chỉ kéo thả + minigame | **5 màn nối tiếp** (đi chợ ghi nhớ → bắt nguyên liệu rơi → kéo thả + nêm chuẩn vị → nấu hoàn thiện nhịp điệu → hỏi đáp), cấu hình được trong Editor (bật/tắt từng màn, chỉnh thời gian/tốc độ), điểm từng màn cộng qua kênh bonus và hiện bảng phân rã ở modal kết quả |
 | Bảng xếp hạng | Tĩnh, tải lại trang | **Thời gian thực**: tự làm mới khi có điểm mới, khi quay lại tab, heartbeat 5 giây; có mũi tên tăng/giảm hạng so với kỳ trước |
 | Cuộn danh sách | Cuộn toàn trang | **Bộ cuộn riêng** cho lưới công thức (tìm kiếm đứng im), danh sách BXH, cột bước nấu và khay nguyên liệu |
 | Lưu trữ | localStorage | Giữ nguyên & đã kiểm chứng: bộ sưu tập, thành tích, EXP, hộp thư, thông báo **không mất khi tắt máy/mở lại**; chỉ mất khi xoá dữ liệu trình duyệt hoặc đổi trình duyệt/máy (đồng bộ đa thiết bị cần backend — ngoài phạm vi PRD) |
