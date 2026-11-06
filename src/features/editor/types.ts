@@ -1,4 +1,9 @@
-import type { RecipeCategory, RecipeIngredientRef, CookingStep } from '@/data/types';
+import type {
+  RecipeCategory,
+  RecipeGameplayConfig,
+  RecipeIngredientRef,
+  CookingStep,
+} from '@/data/types';
 import type { Minigame } from '@/features/recipes/types';
 
 export interface RecipeFormValues {
@@ -11,6 +16,7 @@ export interface RecipeFormValues {
   ingredients: RecipeIngredientRef[];
   steps: Array<Omit<CookingStep, 'id' | 'order'>>;
   minigames?: Minigame[];
+  gameplay?: RecipeGameplayConfig;
 }
 
 export interface RecipeFormErrors {

@@ -147,6 +147,9 @@ export default function EditorRecipeDetailPage() {
         </h3>
         <MinigameSummary minigames={recipe.minigames} />
         <div className={styles.actions}>
+          <Link to={`/cooking/${recipe.id}?preview=1`}>
+            <Button variant="secondary">🎮 {t('editorGameplay.tryRun')}</Button>
+          </Link>
           {editable ? (
             <Link to={`/editor/recipes/${recipe.id}/edit`}>
               <Button variant="secondary">{t('common.edit')}</Button>

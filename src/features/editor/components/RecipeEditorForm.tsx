@@ -3,7 +3,7 @@ import { useMemo, useState, type FormEvent } from 'react';
 import { Button } from '@/components/Button';
 import { DynamicFormList } from '@/components/DynamicFormList';
 import { useIngredients } from '@/contexts/IngredientContext';
-import type { RecipeCategory } from '@/data/types';
+import type { RecipeCategory, RecipeGameplayConfig } from '@/data/types';
 import type { RecipeFormErrors, RecipeFormValues } from '@/features/editor/types';
 import {
   hasRecipeFormErrors,
@@ -45,6 +45,39 @@ export function RecipeEditorForm({
     return canSubmitForReview(values.minigames, values.difficulty, ingIds);
   }, [values.minigames, values.difficulty, values.ingredients]);
 
+  // The 5-stage run needs real step ingredients (market/catch/cook stages
+  // are generated from them) and at least one quiz for stage ⑤.
+  const hasStepIngredients = useMemo(
+    () => values.steps.some((step) => (step.requiredIngredients?.length ?? 0) > 0),
+    [values.steps],
+  );
+  const quizCount = useMemo(
+    () => (values.minigames ?? []).filter((m) => m.type === 'quiz').length,
+    [values.minigames],
+  );
+  const canSubmitForReviewNow = isMinigamesValid && hasStepIngredients && quizCount >= 1;
+
+  const gameplay = values.gameplay ?? {};
+  const setGameplay = (patch: Partial<RecipeGameplayConfig>) => {
+    setValues({ ...values, gameplay: { ...gameplay, ...patch } });
+  };
+  const setGameplayNumber = (
+    key: 'marketSeconds' | 'catchSpeed' | 'finishSeconds',
+    raw: string,
+  ) => {
+    setGameplay({ [key]: raw === '' ? undefined : Number(raw) });
+  };
+  const stageToggles: Array<{
+    key: 'marketEnabled' | 'catchEnabled' | 'seasonEnabled' | 'finishEnabled' | 'quizEnabled';
+    label: string;
+  }> = [
+    { key: 'marketEnabled', label: t('editorGameplay.stageMarket') },
+    { key: 'catchEnabled', label: t('editorGameplay.stageCatch') },
+    { key: 'seasonEnabled', label: t('editorGameplay.stageSeason') },
+    { key: 'finishEnabled', label: t('editorGameplay.stageFinish') },
+    { key: 'quizEnabled', label: t('editorGameplay.stageQuiz') },
+  ];
+
   const runValidation = (): boolean => {
     const nextErrors = validateRecipeForm(values);
     const translated: RecipeFormErrors = {};
@@ -69,7 +102,7 @@ export function RecipeEditorForm({
   };
 
   const handleSubmitForReview = async () => {
-    if (!runValidation() || !isMinigamesValid) return;
+    if (!runValidation() || !canSubmitForReviewNow) return;
     setSubmitting(true);
     try {
       await onSubmit(values, 'submit');
@@ -246,30 +279,68 @@ export function RecipeEditorForm({
         itemLabel={t('recipe.step')}
         minItems={3}
         renderItem={(item, _index, update) => (
-          <div className={styles.stepRow}>
-            <input
-              className={styles.input}
-              placeholder={t('recipe.title')}
-              value={item.title}
-              onChange={(event) => update({ title: event.target.value })}
-            />
-            <input
-              className={styles.input}
-              placeholder={t('recipe.description')}
-              value={item.description}
-              onChange={(event) => update({ description: event.target.value })}
-            />
-            <input
-              className={styles.input}
-              type="number"
-              min={1}
-              step={5}
-              value={item.duration ?? item.durationSeconds ?? 30}
-              onChange={(event) => {
-                const dur = Number(event.target.value) || 0;
-                update({ duration: dur, durationSeconds: dur });
-              }}
-            />
+          <div>
+            <div className={styles.stepRow}>
+              <input
+                className={styles.input}
+                placeholder={t('recipe.title')}
+                value={item.title}
+                onChange={(event) => update({ title: event.target.value })}
+              />
+              <input
+                className={styles.input}
+                placeholder={t('recipe.description')}
+                value={item.description}
+                onChange={(event) => update({ description: event.target.value })}
+              />
+              <input
+                className={styles.input}
+                type="number"
+                min={1}
+                step={5}
+                value={item.duration ?? item.durationSeconds ?? 30}
+                onChange={(event) => {
+                  const dur = Number(event.target.value) || 0;
+                  update({ duration: dur, durationSeconds: dur });
+                }}
+              />
+            </div>
+            <div className={styles.stepExtra}>
+              <input
+                className={styles.input}
+                placeholder={t('editorGameplay.stepActionLabel')}
+                value={item.actionLabel}
+                onChange={(event) => update({ actionLabel: event.target.value })}
+              />
+              <div className={styles.chipRow}>
+                <span className={styles.chipLabel}>{t('editorGameplay.stepIngredients')}:</span>
+                {values.ingredients
+                  .filter((ref) => ref.ingredientId)
+                  .map((ref) => {
+                    const ing = ingredients.find((i) => i.id === ref.ingredientId);
+                    const active = (item.requiredIngredients ?? []).includes(ref.ingredientId);
+                    return (
+                      <button
+                        key={ref.ingredientId}
+                        type="button"
+                        className={[styles.chip, active ? styles.chipOn : '']
+                          .filter(Boolean)
+                          .join(' ')}
+                        onClick={() => {
+                          const current = item.requiredIngredients ?? [];
+                          update({
+                            requiredIngredients: active
+                              ? current.filter((id) => id !== ref.ingredientId)
+                              : [...current, ref.ingredientId],
+                          });
+                        }}
+                      >
+                        {ing?.fallbackEmoji} {ing?.name ?? ref.ingredientId}
+                      </button>
+                    );
+                  })}
+              </div>
+            </div>
           </div>
         )}
       />
@@ -283,6 +354,69 @@ export function RecipeEditorForm({
         recipeIngredients={values.ingredients}
       />
 
+      <h3 className={styles.sectionTitle}>{t('editorGameplay.title')}</h3>
+      <p className={styles.label}>{t('editorGameplay.subtitle')}</p>
+      <div className={styles.toggleGrid}>
+        {stageToggles.map((toggle) => (
+          <label key={toggle.key} className={styles.toggleRow}>
+            <input
+              type="checkbox"
+              checked={gameplay[toggle.key] !== false}
+              onChange={(event) => setGameplay({ [toggle.key]: event.target.checked })}
+            />
+            {toggle.label}
+          </label>
+        ))}
+      </div>
+      <div className={styles.row}>
+        <div className={styles.field}>
+          <label className={styles.label} htmlFor="gameplay-market-seconds">
+            {t('editorGameplay.marketSeconds')}
+          </label>
+          <input
+            id="gameplay-market-seconds"
+            className={styles.input}
+            type="number"
+            min={10}
+            max={180}
+            placeholder={t('editorGameplay.autoPlaceholder')}
+            value={gameplay.marketSeconds ?? ''}
+            onChange={(event) => setGameplayNumber('marketSeconds', event.target.value)}
+          />
+        </div>
+        <div className={styles.field}>
+          <label className={styles.label} htmlFor="gameplay-catch-speed">
+            {t('editorGameplay.catchSpeed')}
+          </label>
+          <input
+            id="gameplay-catch-speed"
+            className={styles.input}
+            type="number"
+            min={0.5}
+            max={2}
+            step={0.1}
+            placeholder={t('editorGameplay.autoPlaceholder')}
+            value={gameplay.catchSpeed ?? ''}
+            onChange={(event) => setGameplayNumber('catchSpeed', event.target.value)}
+          />
+        </div>
+        <div className={styles.field}>
+          <label className={styles.label} htmlFor="gameplay-finish-seconds">
+            {t('editorGameplay.finishSeconds')}
+          </label>
+          <input
+            id="gameplay-finish-seconds"
+            className={styles.input}
+            type="number"
+            min={5}
+            max={60}
+            placeholder={t('editorGameplay.autoPlaceholder')}
+            value={gameplay.finishSeconds ?? ''}
+            onChange={(event) => setGameplayNumber('finishSeconds', event.target.value)}
+          />
+        </div>
+      </div>
+
       <div className={styles.actions}>
         <Button type="submit" disabled={submitting}>
           {submitting ? '…' : draftLabel}
@@ -291,7 +425,7 @@ export function RecipeEditorForm({
           <Button
             type="button"
             variant="secondary"
-            disabled={submitting || !isMinigamesValid}
+            disabled={submitting || !canSubmitForReviewNow}
             onClick={handleSubmitForReview}
             className={styles.submitBtn}
             title={
@@ -309,6 +443,12 @@ export function RecipeEditorForm({
           </Button>
         ) : null}
       </div>
+      {showSubmitButton && !hasStepIngredients ? (
+        <p className={styles.hint}>⚠ {t('editorGameplay.needsStepIngredients')}</p>
+      ) : null}
+      {showSubmitButton && quizCount < 1 ? (
+        <p className={styles.hint}>⚠ {t('editorGameplay.needsQuiz')}</p>
+      ) : null}
     </form>
   );
 }

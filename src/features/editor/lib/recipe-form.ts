@@ -42,6 +42,7 @@ export function recipeToFormValues(recipe: Recipe): RecipeFormValues {
       actionLabel: step.actionLabel || 'Thực hiện',
     })),
     minigames: recipe.minigames ? [...recipe.minigames] : [],
+    gameplay: recipe.gameplay ? { ...recipe.gameplay } : undefined,
   };
 }
 
@@ -103,6 +104,7 @@ export function formValuesToRecipe(
     ingredients,
     steps: buildSteps(id, values.steps, ingredients),
     minigames: values.minigames ?? existing?.minigames ?? [],
+    gameplay: values.gameplay ?? existing?.gameplay,
     status: existing?.status ?? 'draft',
     editorId,
     rejectionReason: existing?.rejectionReason,
