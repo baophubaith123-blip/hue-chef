@@ -554,6 +554,12 @@ Hệ thống có **4 vai trò**:
 | Bình luận món ăn | Chỉ có trang quản trị ở Admin | Người chơi **bình luận + chấm sao + báo cáo** ngay tại trang chi tiết món; Admin kiểm duyệt ở Bình luận/Báo cáo, xóa qua báo cáo là xóa chính bình luận (Phase 14) |
 | Minigame gõ phím | Có trong danh sách chọn nhưng chưa có màn chơi | **Chơi được**: gõ đúng câu mẫu theo ký tự, tính chính xác + thưởng tốc độ như các minigame khác (Phase 14) |
 | Nguyên liệu dùng lại giữa các bước | Khay khóa vĩnh viễn nguyên liệu đã thả ở bước trước (36/51 món không thể hoàn thành) | Khay tính theo **nồi của bước hiện tại** — nguyên liệu dùng lại ở bước sau thả lại bình thường (Phase 14) |
+| Tìm kiếm & lọc món | Dãy nút phân loại trải ngang, không lọc được độ khó, thứ tự món lộn xộn | 2 nút lọc **bấm-mở-chọn** (Phân loại · Độ khó) + Xoá lọc; lưới món xếp **dễ → Địa ngục** (Phase 15) |
+| Phân loại món | 5 loại cứng; 17/50 món bị xếp sai (vả trộn vào Cơm) | **8 loại đúng bản chất món** (thêm Gỏi·Trộn·Cuốn, Canh·Lẩu, Món mặn; Cơm → Cơm·Xôi), 16 món được phân loại lại, Editor **tự thêm loại mới** được (Phase 15) |
+| Dữ liệu phía Editor | Công thức mẫu không có chủ sở hữu → dashboard Editor toàn 0 | 50 món + 33 thành tích mẫu thuộc về **editor@hue.vn**, có migration cho dữ liệu đã lưu (Phase 15) |
+| Soạn công thức | Ô bước không nhãn gây khó hiểu; không xem trước được | Nhãn + chú thích từng ô, **Xem trước + checklist 7 mục + chạy thử** trước khi gửi duyệt, **Xem lại** mọi công thức của mình (Phase 15) |
+| Thành tích phía Editor | Editor không có mục thành tích | Editor tạo thành tích → **Admin duyệt** → người chơi thấy; dashboard Editor có số đếm thành tích (Phase 15) |
+| Danh sách nguyên liệu | Phân loại in thô tiếng Anh, không có đơn vị, cuộn chung trang | Nhãn tiếng Việt, **đơn vị đủ 83 loại**, nhóm Đậu·Hạt mới, **cuộn riêng**, bỏ cột Mô tả (Phase 15) |
 | Bảng xếp hạng | Tĩnh, tải lại trang | **Thời gian thực**: tự làm mới khi có điểm mới, khi quay lại tab, heartbeat 5 giây; có mũi tên tăng/giảm hạng so với kỳ trước |
 | Cuộn danh sách | Cuộn toàn trang | **Bộ cuộn riêng** cho lưới công thức (tìm kiếm đứng im), danh sách BXH, cột bước nấu và khay nguyên liệu |
 | Lưu trữ | localStorage | Giữ nguyên & đã kiểm chứng: bộ sưu tập, thành tích, EXP, hộp thư, thông báo **không mất khi tắt máy/mở lại**; chỉ mất khi xoá dữ liệu trình duyệt hoặc đổi trình duyệt/máy (đồng bộ đa thiết bị cần backend — ngoài phạm vi PRD) |
