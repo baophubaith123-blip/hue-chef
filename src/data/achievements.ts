@@ -10,6 +10,7 @@ export const SEED_ACHIEVEMENTS: Achievement[] = [
     icon: 'first-cook',
     rarity: 'common',
     condition: { type: 'cook_count', count: 1 },
+    perk: { kind: 'market-time-plus', value: 3 },
   },
   {
     id: 'bun-master',
@@ -20,6 +21,7 @@ export const SEED_ACHIEVEMENTS: Achievement[] = [
     icon: 'bun-master',
     rarity: 'rare',
     condition: { type: 'cook_count', category: 'bun', count: 5 },
+    perk: { kind: 'coin-bonus-pct', value: 10 },
   },
   {
     id: 'com-master',
@@ -30,6 +32,7 @@ export const SEED_ACHIEVEMENTS: Achievement[] = [
     icon: 'com-master',
     rarity: 'rare',
     condition: { type: 'cook_count', category: 'com', count: 3 },
+    perk: { kind: 'market-time-plus', value: 5 },
   },
   {
     id: 'banh-master',
@@ -40,6 +43,7 @@ export const SEED_ACHIEVEMENTS: Achievement[] = [
     icon: 'banh-master',
     rarity: 'epic',
     condition: { type: 'cook_count', category: 'banh', count: 5 },
+    perk: { kind: 'season-zone-plus', value: 25 },
   },
   {
     id: 'che-master',
@@ -50,6 +54,7 @@ export const SEED_ACHIEVEMENTS: Achievement[] = [
     icon: 'che-master',
     rarity: 'common',
     condition: { type: 'cook_count', category: 'che', count: 3 },
+    perk: { kind: 'season-zone-plus', value: 10 },
   },
   {
     id: 'nem-master',
@@ -60,6 +65,7 @@ export const SEED_ACHIEVEMENTS: Achievement[] = [
     icon: 'nem-master',
     rarity: 'epic',
     condition: { type: 'cook_count', category: 'nem', count: 3 },
+    perk: { kind: 'catch-radius-plus', value: 15 },
   },
   {
     id: 'perfect-score',
@@ -70,6 +76,7 @@ export const SEED_ACHIEVEMENTS: Achievement[] = [
     icon: 'perfect-score',
     rarity: 'epic',
     condition: { type: 'perfect_score' },
+    perk: { kind: 'finish-window-plus', value: 25 },
   },
   {
     id: 'no-mistake',
@@ -80,6 +87,7 @@ export const SEED_ACHIEVEMENTS: Achievement[] = [
     icon: 'no-mistake',
     rarity: 'rare',
     condition: { type: 'no_mistakes', count: 1 },
+    perk: { kind: 'finish-window-plus', value: 15 },
   },
   {
     id: 'all-categories',
@@ -90,6 +98,7 @@ export const SEED_ACHIEVEMENTS: Achievement[] = [
     icon: 'all-categories',
     rarity: 'rare',
     condition: { type: 'all_categories' },
+    perk: { kind: 'xp-bonus-pct', value: 10 },
   },
   {
     id: 'high-score',
@@ -100,6 +109,7 @@ export const SEED_ACHIEVEMENTS: Achievement[] = [
     icon: 'high-score',
     rarity: 'epic',
     condition: { type: 'score_threshold', score: 5000 },
+    perk: { kind: 'coin-bonus-pct', value: 15 },
   },
   {
     id: 'level-5',
@@ -110,6 +120,7 @@ export const SEED_ACHIEVEMENTS: Achievement[] = [
     icon: 'level-5',
     rarity: 'rare',
     condition: { type: 'level', level: 5 },
+    perk: { kind: 'quiz-time-plus', value: 2 },
   },
   {
     id: 'all-recipes',
@@ -120,6 +131,7 @@ export const SEED_ACHIEVEMENTS: Achievement[] = [
     icon: 'all-recipes',
     rarity: 'legendary',
     condition: { type: 'cook_count', count: 15 },
+    perk: { kind: 'coin-bonus-pct', value: 25 },
   },
 
   // ===== 15 thành tích bổ sung (GD4) — độ hiếm: common / rare / epic / legendary =====
@@ -132,6 +144,7 @@ export const SEED_ACHIEVEMENTS: Achievement[] = [
     icon: 'cook-3',
     rarity: 'common',
     condition: { type: 'cook_count', count: 3 },
+    perk: { kind: 'coin-bonus-pct', value: 5 },
   },
   {
     id: 'cook-10',
@@ -142,6 +155,7 @@ export const SEED_ACHIEVEMENTS: Achievement[] = [
     icon: 'cook-10',
     rarity: 'rare',
     condition: { type: 'cook_count', count: 10 },
+    perk: { kind: 'cook-time-plus', value: 5 },
   },
   {
     id: 'cook-25',
@@ -152,6 +166,7 @@ export const SEED_ACHIEVEMENTS: Achievement[] = [
     icon: 'cook-25',
     rarity: 'epic',
     condition: { type: 'cook_count', count: 25 },
+    perk: { kind: 'market-time-plus', value: 8 },
   },
   {
     id: 'score-2000',
@@ -162,6 +177,7 @@ export const SEED_ACHIEVEMENTS: Achievement[] = [
     icon: 'score-2000',
     rarity: 'common',
     condition: { type: 'score_threshold', score: 2000 },
+    perk: { kind: 'xp-bonus-pct', value: 5 },
   },
   {
     id: 'score-10000',
@@ -172,6 +188,7 @@ export const SEED_ACHIEVEMENTS: Achievement[] = [
     icon: 'score-10000',
     rarity: 'legendary',
     condition: { type: 'score_threshold', score: 10000 },
+    perk: { kind: 'xp-bonus-pct', value: 25 },
   },
   {
     id: 'level-3',
@@ -182,6 +199,7 @@ export const SEED_ACHIEVEMENTS: Achievement[] = [
     icon: 'level-3',
     rarity: 'common',
     condition: { type: 'level', level: 3 },
+    perk: { kind: 'cook-time-plus', value: 3 },
   },
   {
     id: 'level-8',
@@ -192,6 +210,7 @@ export const SEED_ACHIEVEMENTS: Achievement[] = [
     icon: 'level-8',
     rarity: 'epic',
     condition: { type: 'level', level: 8 },
+    perk: { kind: 'quiz-time-plus', value: 3 },
   },
   {
     id: 'no-mistake-3',
@@ -202,6 +221,7 @@ export const SEED_ACHIEVEMENTS: Achievement[] = [
     icon: 'no-mistake-3',
     rarity: 'rare',
     condition: { type: 'no_mistakes', count: 3 },
+    perk: { kind: 'season-zone-plus', value: 15 },
   },
   {
     id: 'no-mistake-5',
@@ -212,6 +232,7 @@ export const SEED_ACHIEVEMENTS: Achievement[] = [
     icon: 'no-mistake-5',
     rarity: 'epic',
     condition: { type: 'no_mistakes', count: 5 },
+    perk: { kind: 'combo-shield', value: 1 },
   },
   {
     id: 'perfect-3',
@@ -222,6 +243,7 @@ export const SEED_ACHIEVEMENTS: Achievement[] = [
     icon: 'perfect-3',
     rarity: 'rare',
     condition: { type: 'perfect_count', count: 3 },
+    perk: { kind: 'peek-cheaper', value: 2 },
   },
   {
     id: 'perfect-10',
@@ -232,6 +254,7 @@ export const SEED_ACHIEVEMENTS: Achievement[] = [
     icon: 'perfect-10',
     rarity: 'epic',
     condition: { type: 'perfect_count', count: 10 },
+    perk: { kind: 'peek-cheaper', value: 3 },
   },
   {
     id: 'difficulty-3',
@@ -242,6 +265,7 @@ export const SEED_ACHIEVEMENTS: Achievement[] = [
     icon: 'difficulty-3',
     rarity: 'common',
     condition: { type: 'cook_difficulty', difficulty: 3, count: 1 },
+    perk: { kind: 'catch-radius-plus', value: 5 },
   },
   {
     id: 'difficulty-4',
@@ -252,6 +276,7 @@ export const SEED_ACHIEVEMENTS: Achievement[] = [
     icon: 'difficulty-4',
     rarity: 'rare',
     condition: { type: 'cook_difficulty', difficulty: 4, count: 2 },
+    perk: { kind: 'catch-radius-plus', value: 10 },
   },
   {
     id: 'hell-1',
@@ -262,6 +287,7 @@ export const SEED_ACHIEVEMENTS: Achievement[] = [
     icon: 'hell-1',
     rarity: 'epic',
     condition: { type: 'cook_difficulty', difficulty: 5, count: 1 },
+    perk: { kind: 'cook-time-plus', value: 8 },
   },
   {
     id: 'hell-3',
@@ -272,5 +298,72 @@ export const SEED_ACHIEVEMENTS: Achievement[] = [
     icon: 'hell-3',
     rarity: 'legendary',
     condition: { type: 'cook_difficulty', difficulty: 5, count: 3 },
+    perk: { kind: 'combo-shield', value: 2 },
+  },
+  {
+    id: 'first-buy',
+    name: 'Khách quen đầu tiên',
+    description: 'Mua món đầu tiên bằng xu',
+    category: 'special',
+    story: 'Đồng xu đầu tiên rời túi luôn là đồng xu đáng nhớ nhất. Từ đây, tủ bếp của bạn không còn chỉ là những món miễn phí — nó là bộ sưu tập bạn tự tay gây dựng bằng chính mồ hôi nấu nướng của mình.',
+    icon: 'first-buy',
+    rarity: 'common',
+    condition: { type: 'own_count', count: 1 },
+    perk: { kind: 'coin-bonus-pct', value: 5 },
+  },
+  {
+    id: 'own-10',
+    name: 'Tủ bếp 10 món',
+    description: 'Sở hữu 10 món trong bộ sưu tập',
+    category: 'special',
+    story: 'Mười món ăn xếp ngay ngắn trong tủ bếp như mười tấm huy chương. Mỗi món là một lần bạn kiên trì nấu đi nấu lại để dành dụm đủ xu — thói quen của một đầu bếp thực thụ.',
+    icon: 'own-10',
+    rarity: 'rare',
+    condition: { type: 'own_count', count: 10 },
+    perk: { kind: 'market-time-plus', value: 5 },
+  },
+  {
+    id: 'own-25',
+    name: 'Tủ bếp 25 món',
+    description: 'Sở hữu 25 món trong bộ sưu tập',
+    category: 'special',
+    story: 'Nửa kho báu ẩm thực Cố đô đã nằm trong tay bạn. Người đi chợ ở chợ Đông Ba bắt đầu nhớ mặt vị khách quen cứ mua toàn món khó.',
+    icon: 'own-25',
+    rarity: 'epic',
+    condition: { type: 'own_count', count: 25 },
+    perk: { kind: 'coin-bonus-pct', value: 15 },
+  },
+  {
+    id: 'own-50',
+    name: 'Trọn bộ ngự trù',
+    description: 'Sở hữu toàn bộ 50 món của Huế Chef',
+    category: 'special',
+    story: 'Đủ năm mươi món — từ chén bánh bèo đầu ngõ đến nem công chả phượng tiến vua. Bộ sưu tập trọn vẹn này xứng đáng được đóng khung treo ở gian bếp trang trọng nhất.',
+    icon: 'own-50',
+    rarity: 'legendary',
+    condition: { type: 'own_count', count: 50 },
+    perk: { kind: 'quiz-second-chance', value: 1 },
+  },
+  {
+    id: 'coins-1000',
+    name: 'Túi xu đầu tiên đầy',
+    description: 'Kiếm tổng cộng 1.000 xu từ nấu ăn',
+    category: 'special',
+    story: 'Một nghìn xu tích góp từ từng ván nấu — không đồng nào từ trên trời rơi xuống. Túi xu đầy là minh chứng cho hàng chục giờ đứng bếp không ngơi tay.',
+    icon: 'coins-1000',
+    rarity: 'epic',
+    condition: { type: 'coins_earned', amount: 1000 },
+    perk: { kind: 'xp-bonus-pct', value: 15 },
+  },
+  {
+    id: 'buy-5star',
+    name: 'Chinh phục đỉnh cao',
+    description: 'Sở hữu một món 5 sao',
+    category: 'special',
+    story: 'Món 5 sao không dành cho người vội vàng — cái giá của nó bằng cả chặng đường dài tích xu. Cầm được nó trong tay nghĩa là bạn đã sẵn sàng đối mặt thử thách khó nhất của bếp Huế.',
+    icon: 'buy-5star',
+    rarity: 'legendary',
+    condition: { type: 'own_difficulty', difficulty: 5, count: 1 },
+    perk: { kind: 'finish-window-plus', value: 40 },
   },
 ];

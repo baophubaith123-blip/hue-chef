@@ -47,7 +47,6 @@ interface Floater {
 type CatchStatus = 'ready' | 'countdown' | 'playing' | 'done';
 
 const POT_ZONE_HEIGHT = 118;
-const CATCH_RADIUS_PX = 86;
 
 /**
  * Stage ② — Bắt nguyên liệu rơi: a fullscreen field where the dish's own
@@ -244,7 +243,7 @@ export function CatchStage({ recipe, config, maxPoints, onProgress, onComplete }
         const y = progress * (height + 90) - 45;
         const centerX = tok.xRatio * width;
         if (y >= potTopY && y <= height - 8) {
-          if (Math.abs(centerX - potCenterX) <= CATCH_RADIUS_PX) {
+          if (Math.abs(centerX - potCenterX) <= config.catchRadiusPx) {
             if (tok.isCorrect) {
               caughtRef.current.add(tok.ingredientId);
               setCaughtCount(caughtRef.current.size);
@@ -375,7 +374,7 @@ export function CatchStage({ recipe, config, maxPoints, onProgress, onComplete }
 
         <div
           className={[styles.pot, potShake ? styles.potShake : ''].filter(Boolean).join(' ')}
-          style={{ left: `${potX * 100}%` }}
+          style={{ left: `${potX * 100}%`, width: `${config.catchRadiusPx * 2}px` }}
         >
           <img src="/images/noi-noi.jpg" alt="" className={styles.potImg} />
         </div>

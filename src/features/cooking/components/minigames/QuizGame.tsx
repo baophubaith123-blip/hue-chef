@@ -13,15 +13,31 @@ export interface QuizGameProps {
   onComplete: (success: boolean, score: number) => void;
   /** Consecutive correct minigames so far in this run (streak badge). */
   streak?: number;
+  /** Equipped-perk extra seconds for this question. */
+  bonusSeconds?: number;
+  /** Equipped perk: one wrong pick may be retried instead of failing. */
+  secondChance?: boolean;
+  /** Called when the second chance is spent on a wrong pick. */
+  onSecondChanceUsed?: () => void;
 }
 
 const OPTION_LETTERS = ['A', 'B', 'C', 'D'];
 const RING_RADIUS = 34;
 const RING_CIRCUMFERENCE = 2 * Math.PI * RING_RADIUS;
 
-export function QuizGame({ minigame, onComplete, streak = 0 }: QuizGameProps) {
+export function QuizGame({
+  minigame,
+  onComplete,
+  streak = 0,
+  bonusSeconds = 0,
+  secondChance = false,
+  onSecondChanceUsed,
+}: QuizGameProps) {
   const { t, dict } = useTranslation();
-  const [timeLeft, setTimeLeft] = useState<number>(minigame.timeLimit);
+  const totalTime = minigame.timeLimit + bonusSeconds;
+  const [timeLeft, setTimeLeft] = useState<number>(totalTime);
+  const [eliminated, setEliminated] = useState<number[]>([]);
+  const chanceUsedRef = useRef(false);
   const [isFinished, setIsFinished] = useState<boolean>(false);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [status, setStatus] = useState<'idle' | 'success' | 'error' | 'timeout'>('idle');
@@ -58,12 +74,25 @@ export function QuizGame({ minigame, onComplete, streak = 0 }: QuizGameProps) {
   }, [isFinished]);
 
   const handleSelectOption = (idx: number) => {
-    if (isFinished) return;
+    if (isFinished || eliminated.includes(idx)) return;
+
+    const isCorrect = idx === correctIdx;
+
+    // Equipped perk — second chance: the first wrong pick only eliminates
+    // that option; the question (and its timer) keeps running.
+    if (!isCorrect && secondChance && !chanceUsedRef.current) {
+      chanceUsedRef.current = true;
+      onSecondChanceUsed?.();
+      setEliminated((prev) => [...prev, idx]);
+      setSelectedIndex(idx);
+      setStatus('error');
+      playSound('error');
+      window.setTimeout(() => setStatus('idle'), 650);
+      return;
+    }
 
     setIsFinished(true);
     setSelectedIndex(idx);
-
-    const isCorrect = idx === correctIdx;
 
     if (isCorrect) {
       setStatus('success');
@@ -82,7 +111,7 @@ export function QuizGame({ minigame, onComplete, streak = 0 }: QuizGameProps) {
     }
   };
 
-  const progressPercent = Math.max(0, Math.min(100, (timeLeft / minigame.timeLimit) * 100));
+  const progressPercent = Math.max(0, Math.min(100, (timeLeft / totalTime) * 100));
   const isUrgent = timeLeft < 3;
   const ringOffset = RING_CIRCUMFERENCE * (1 - progressPercent / 100);
 
@@ -145,12 +174,13 @@ export function QuizGame({ minigame, onComplete, streak = 0 }: QuizGameProps) {
           const isSelected = selectedIndex === idx;
           const isCorrect = idx === correctIdx;
           const isWrong = isSelected && !isCorrect;
+          const isEliminated = eliminated.includes(idx);
           const shouldHighlightCorrect = isFinished && isCorrect;
 
           let btnClass = styles.optionButton;
           if (shouldHighlightCorrect) {
             btnClass += ` ${styles.optionCorrect}`;
-          } else if (isWrong) {
+          } else if (isWrong || isEliminated) {
             btnClass += ` ${styles.optionWrong}`;
           }
 
@@ -161,14 +191,14 @@ export function QuizGame({ minigame, onComplete, streak = 0 }: QuizGameProps) {
               key={idx}
               variant={isSelected ? 'primary' : 'secondary'}
               className={btnClass}
-              disabled={isFinished}
+              disabled={isFinished || isEliminated}
               onClick={() => handleSelectOption(idx)}
             >
               <span className={styles.optionIndexBadge}>{letter}</span>
               <span className={styles.optionText}>{optionText}</span>
               {shouldHighlightCorrect ? (
                 <span className={styles.correctBang}>{dict.cooking.minigames.correctBang}</span>
-              ) : isWrong ? (
+              ) : isWrong || isEliminated ? (
                 <span>✕</span>
               ) : null}
             </Button>

@@ -27,6 +27,11 @@ import { useDragDrop } from '@/features/cooking/hooks/useDragDrop';
 import { COMBO_WINDOW_MS, comboBonusForStreak } from '@/features/cooking/lib/combo';
 import { SEASON_MAX_BONUS_RATIO } from '@/features/cooking/lib/stage-bonus';
 import { resolveStageConfig } from '@/features/cooking/lib/stage-config';
+import {
+  applyPerkToStageConfig,
+  perkValueOf,
+  resolveEquippedPerk,
+} from '@/features/achievements/lib/perks';
 import { isRecipeOwned } from '@/features/recipes/lib/ownership';
 import { buildTrayIngredientIds } from '@/features/cooking/lib/tray-ingredients';
 import { shuffleArray } from '@/features/cooking/lib/shuffle';
@@ -43,12 +48,13 @@ export default function CookingPage() {
   const { isLoading, getRecipeById } = useRecipes();
   const { user, addXp, addCoins, addCookedRecipe } = useAuth();
   const navigate = useNavigate();
-  const { checkAndUnlockForUser } = useAchievements();
+  const { checkAndUnlockForUser, allAchievements, isUnlocked } = useAchievements();
   const { push: pushNotification } = useNotification();
   const {
     session,
     isRunning,
     startCooking,
+    consumeQuizSecondChance,
     completeStage,
     addStageBonus,
     dropIngredient,
@@ -60,6 +66,17 @@ export default function CookingPage() {
   } = useCookingState();
   const [searchParams] = useSearchParams();
   const isPreview = searchParams.get('preview') === '1';
+
+  // Equip-one perk model: only the equipped achievement's perk is active,
+  // snapshotted into the run when it starts (preview runs get no perk).
+  const equippedPerk = useMemo(() => {
+    if (isPreview || !user) return null;
+    return resolveEquippedPerk(
+      user.equippedAchievementId,
+      allAchievements,
+      isUnlocked(user.id, user.equippedAchievementId ?? ''),
+    );
+  }, [isPreview, user, allAchievements, isUnlocked]);
 
   const [shakePot, setShakePot] = useState(false);
   const [sparklePot, setSparklePot] = useState(false);
@@ -155,7 +172,8 @@ export default function CookingPage() {
     if (isPreview) return;
     if (appliedResult) return;
 
-    const xp = calculateXpFromStars(session.stars);
+    const xpPerkPct = perkValueOf(session.perk, 'xp-bonus-pct');
+    const xp = Math.round(calculateXpFromStars(session.stars) * (1 + xpPerkPct / 100));
     const xpResult = addXp(xp);
     // Coins: 10 points = 1 xu, plus +50% the first time this dish is
     // completed. Must be computed before the cooked entry is recorded.
@@ -163,9 +181,11 @@ export default function CookingPage() {
       (entry) => entry.recipeId === session.recipe.id,
     );
     const baseCoins = coinsForScore(session.finalScore);
-    const gainedCoins = firstClear
-      ? Math.round(baseCoins * (1 + FIRST_CLEAR_BONUS_RATIO))
-      : baseCoins;
+    const coinPerkPct = perkValueOf(session.perk, 'coin-bonus-pct');
+    const gainedCoins = Math.floor(
+      (firstClear ? Math.round(baseCoins * (1 + FIRST_CLEAR_BONUS_RATIO)) : baseCoins) *
+        (1 + coinPerkPct / 100),
+    );
     if (gainedCoins > 0) {
       addCoins(gainedCoins);
     }
@@ -251,7 +271,7 @@ export default function CookingPage() {
       }
     }
     setAppliedResult(null);
-    startCooking(current);
+    startCooking(current, equippedPerk);
     return () => {
       clearAnimationTimer();
       if (fxTimerRef.current !== null) {
@@ -273,6 +293,7 @@ export default function CookingPage() {
     user?.id,
     user?.role,
     navigate,
+    equippedPerk,
   ]);
 
   const handleDropOnPot = useCallback(
@@ -326,8 +347,9 @@ export default function CookingPage() {
   );
 
   const stageConfig = useMemo(
-    () => (recipe ? resolveStageConfig(recipe) : null),
-    [recipe],
+    () =>
+      recipe ? applyPerkToStageConfig(resolveStageConfig(recipe), session?.perk ?? null) : null,
+    [recipe, session?.perk],
   );
 
   const handleExecuteAction = useCallback(() => {
@@ -499,6 +521,17 @@ export default function CookingPage() {
   const currentPhaseIdx = phaseOrder.indexOf(session.phase);
   const flowChips = (
     <div className={styles.stageFlow}>
+      {session.perk ? (
+        <span className={[styles.stageFlowChip, styles.perkChip].filter(Boolean).join(' ')}>
+          ⚡ {dict.perks.name[session.perk.kind]}: {dict.perks.describe[session.perk.kind](session.perk.value)}
+          {session.perk.kind === 'combo-shield' && session.comboShieldLeft > 0
+            ? ` (🛡️ ×${session.comboShieldLeft})`
+            : ''}
+          {session.perk.kind === 'quiz-second-chance' && session.quizSecondChanceLeft > 0
+            ? ` (↩️ ×${session.quizSecondChanceLeft})`
+            : ''}
+        </span>
+      ) : null}
       {flowSteps.map((step) => {
         const stepIdx = phaseOrder.indexOf(step.phase);
         const stateClass =
@@ -609,6 +642,9 @@ export default function CookingPage() {
         <MinigameRunner
           minigames={session.recipe.minigames ?? []}
           onAllComplete={handleMinigamesAllComplete}
+          quizBonusSeconds={perkValueOf(session.perk, 'quiz-time-plus')}
+          quizSecondChance={(session.quizSecondChanceLeft ?? 0) > 0}
+          onQuizSecondChanceUsed={consumeQuizSecondChance}
         />
       </PlayerShell>
     );
@@ -715,6 +751,7 @@ export default function CookingPage() {
           stepPoints={seasonVirtualStepPoints}
           difficulty={recipe.difficulty}
           ingredientCount={Math.max(1, currentRequiredIds.length)}
+          zoneScale={1 + perkValueOf(session.perk, 'season-zone-plus') / 100}
           onResult={handleSeasonResult}
         />
       ) : null}

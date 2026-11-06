@@ -1107,9 +1107,24 @@ function pickRotated(ids: string[], count: number, start: number): string[] {
       player.ownedRecipeIds = rank <= 35 ? pickRotated(ECONOMY_T2, 2, rank) : [];
     }
   });
+  // Lifetime earnings ≈ current balance + what the seeded owned dishes cost
+  // (tier mid-prices), so long-time players already qualify for the
+  // coin-earnings achievements while beginners do not.
+  const TIER_AVG_PRICE: Record<string, number> = { t2: 135, t3: 450, t4: 880 };
+  const spentOf = (ids: string[]): number =>
+    ids.reduce((sum, id) => {
+      if (ECONOMY_T2.includes(id)) return sum + TIER_AVG_PRICE.t2;
+      if (ECONOMY_T3.includes(id)) return sum + TIER_AVG_PRICE.t3;
+      if (ECONOMY_T4.includes(id)) return sum + TIER_AVG_PRICE.t4;
+      return sum;
+    }, 0);
+  for (const player of ranked) {
+    player.totalCoinsEarned = (player.coins ?? 0) + spentOf(player.ownedRecipeIds ?? []);
+  }
   const demo = SEED_USERS.find((u) => u.id === 'seed-player');
   if (demo) {
     demo.coins = 300;
     demo.ownedRecipeIds = [];
+    demo.totalCoinsEarned = 300;
   }
 })();

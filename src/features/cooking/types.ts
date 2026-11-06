@@ -1,4 +1,4 @@
-import type { Recipe } from '@/data/types';
+import type { AchievementPerk, Recipe } from '@/data/types';
 import type { ScoreComponentKey, ScorePlan } from '@/features/cooking/lib/score-rescale';
 
 export type CookingPhase =
@@ -53,6 +53,13 @@ export interface CookingSession {
   totalDropTargets: number;
   finalScore: number;
   stars: 1 | 2 | 3 | 4 | 5;
+  /** Snapshot of the player's equipped-achievement perk for this run
+   *  (null when nothing is equipped or the run is a preview). */
+  perk: AchievementPerk | null;
+  /** Combo-shield charges left (from the equipped perk, if any). */
+  comboShieldLeft: number;
+  /** Quiz second-chance charges left (from the equipped perk, if any). */
+  quizSecondChanceLeft: number;
   failReason?: 'timeout' | 'abandoned' | 'low-score';
   minigameResults?: MinigameResultEntry[];
 }

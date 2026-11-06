@@ -13,7 +13,7 @@ import type {
   MinigameResultEntry,
   RunStageKey,
 } from '@/features/cooking/types';
-import type { Recipe } from '@/data/types';
+import type { AchievementPerk, Recipe } from '@/data/types';
 import { COMBO_WINDOW_MS, comboBonusForStreak } from '@/features/cooking/lib/combo';
 import {
   clampRatio,
@@ -29,7 +29,8 @@ import { SCORE_RULES } from '@/lib/score';
 type StageCompletion = 'market' | 'catch' | 'finish';
 
 type CookingAction =
-  | { type: 'START'; recipe: Recipe }
+  | { type: 'START'; recipe: Recipe; perk?: AchievementPerk | null }
+  | { type: 'USE_QUIZ_SECOND_CHANCE' }
   | { type: 'COMPLETE_STAGE'; stage: StageCompletion; bonus: number }
   | { type: 'ADD_BONUS'; stage: RunStageKey; amount: number }
   | { type: 'DROP_INGREDIENT'; ingredientId: string; at: number }
@@ -41,7 +42,9 @@ type CookingAction =
 
 interface CookingContextValue {
   session: CookingSession | null;
-  startCooking: (recipe: Recipe) => void;
+  startCooking: (recipe: Recipe, perk?: AchievementPerk | null) => void;
+  /** Spend one quiz second-chance charge of the current run, if any. */
+  consumeQuizSecondChance: () => void;
   /** Bank a finished run stage's rescaled points and advance to the next stage. */
   completeStage: (stage: StageCompletion, bonus: number) => void;
   /** Bank rescaled points earned mid-stage (the seasoning bar during cooking). */
@@ -138,7 +141,9 @@ function cookingReducer(state: CookingState, action: CookingAction): CookingStat
   switch (action.type) {
     case 'START': {
       const recipe = action.recipe;
-      const totalDurationSeconds = recipe.duration;
+      const perk = action.perk ?? null;
+      const totalDurationSeconds =
+        recipe.duration + (perk?.kind === 'cook-time-plus' ? perk.value : 0);
       const cfg = resolveStageConfig(recipe);
       const steps = recipe.steps ?? [];
       // The dish's baseScore is split into weighted component shares; the
@@ -177,6 +182,9 @@ function cookingReducer(state: CookingState, action: CookingAction): CookingStat
         ),
         finalScore: 0,
         stars: 1,
+        perk,
+        comboShieldLeft: perk?.kind === 'combo-shield' ? perk.value : 0,
+        quizSecondChanceLeft: perk?.kind === 'quiz-second-chance' ? perk.value : 0,
       };
       return { session: nextSession };
     }
@@ -276,6 +284,9 @@ function cookingReducer(state: CookingState, action: CookingAction): CookingStat
       }
 
       const convertedPenalty = SCORE_RULES.wrongPenalty * cookFactor(session);
+      // Combo shield (equipped perk): a charge absorbs the streak break —
+      // the drop still counts as wrong, but the combo survives.
+      const shielded = session.comboShieldLeft > 0;
       return {
         session: {
           ...session,
@@ -283,10 +294,19 @@ function cookingReducer(state: CookingState, action: CookingAction): CookingStat
           cookEarnedExact: session.cookEarnedExact - convertedPenalty,
           runningScoreDelta: session.runningScoreDelta - convertedPenalty,
           actionButtonLabel: null,
+          comboShieldLeft: shielded ? session.comboShieldLeft - 1 : session.comboShieldLeft,
           // A wrong drop breaks the combo streak (banked bonus is kept).
-          comboStreak: 0,
-          lastComboAt: null,
+          comboStreak: shielded ? session.comboStreak : 0,
+          lastComboAt: shielded ? session.lastComboAt : null,
         },
+      };
+    }
+    case 'USE_QUIZ_SECOND_CHANCE': {
+      if (!session || session.quizSecondChanceLeft <= 0) {
+        return state;
+      }
+      return {
+        session: { ...session, quizSecondChanceLeft: session.quizSecondChanceLeft - 1 },
       };
     }
     case 'COMBO_EXPIRE': {
@@ -411,8 +431,12 @@ function cookingReducer(state: CookingState, action: CookingAction): CookingStat
 export function CookingProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(cookingReducer, initialState);
 
-  const startCooking = useCallback((recipe: Recipe) => {
-    dispatch({ type: 'START', recipe });
+  const startCooking = useCallback((recipe: Recipe, perk?: AchievementPerk | null) => {
+    dispatch({ type: 'START', recipe, perk: perk ?? null });
+  }, []);
+
+  const consumeQuizSecondChance = useCallback(() => {
+    dispatch({ type: 'USE_QUIZ_SECOND_CHANCE' });
   }, []);
 
   const completeStage = useCallback((stage: StageCompletion, bonus: number) => {
@@ -467,6 +491,7 @@ export function CookingProvider({ children }: { children: ReactNode }) {
     () => ({
       session: state.session,
       startCooking,
+      consumeQuizSecondChance,
       completeStage,
       addStageBonus,
       dropIngredient,
@@ -479,6 +504,7 @@ export function CookingProvider({ children }: { children: ReactNode }) {
     [
       state.session,
       startCooking,
+      consumeQuizSecondChance,
       completeStage,
       addStageBonus,
       dropIngredient,

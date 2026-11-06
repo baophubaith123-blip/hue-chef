@@ -92,6 +92,10 @@ export interface ResolvedStageConfig {
   catchFallMs: number;
   catchSpawnMs: number;
   catchDecoyRatio: number;
+  /** Half-width in px of the catch pot's catch zone (perk-adjustable). */
+  catchRadiusPx: number;
+  /** Multiplier for the finish stage's perfect/good timing windows. */
+  finishWindowScale: number;
   finishSeconds: number;
   finishRingGrowMs: number;
   finishSpawnMs: number;
@@ -117,6 +121,8 @@ export function resolveStageConfig(recipe: Recipe): ResolvedStageConfig {
     catchFallMs: Math.round((CATCH_FALL_MS_BY_DIFFICULTY[d] ?? 3600) / catchSpeed),
     catchSpawnMs: CATCH_SPAWN_MS_BY_DIFFICULTY[d] ?? 950,
     catchDecoyRatio: CATCH_DECOY_RATIO_BY_DIFFICULTY[d] ?? 0.45,
+    catchRadiusPx: 86,
+    finishWindowScale: 1,
     finishSeconds: g.finishSeconds ?? FINISH_SECONDS_BY_DIFFICULTY[d] ?? 12,
     finishRingGrowMs: FINISH_RING_GROW_MS_BY_DIFFICULTY[d] ?? 1400,
     finishSpawnMs: FINISH_SPAWN_MS_BY_DIFFICULTY[d] ?? 1100,

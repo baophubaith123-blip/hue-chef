@@ -12,9 +12,20 @@ import styles from './MinigameRunner.module.css';
 export interface MinigameRunnerProps {
   minigames: Minigame[];
   onAllComplete: (results: MinigameResultEntry[], totalScore: number) => void;
+  /** Equipped-perk extra seconds per quiz question. */
+  quizBonusSeconds?: number;
+  /** Equipped perk: a wrong quiz pick may be retried (charges tracked by the run session). */
+  quizSecondChance?: boolean;
+  onQuizSecondChanceUsed?: () => void;
 }
 
-export function MinigameRunner({ minigames, onAllComplete }: MinigameRunnerProps) {
+export function MinigameRunner({
+  minigames,
+  onAllComplete,
+  quizBonusSeconds = 0,
+  quizSecondChance = false,
+  onQuizSecondChanceUsed,
+}: MinigameRunnerProps) {
   const { dict } = useTranslation();
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [results, setResults] = useState<MinigameResultEntry[]>([]);
@@ -99,6 +110,9 @@ export function MinigameRunner({ minigames, onAllComplete }: MinigameRunnerProps
             minigame={currentGame}
             onComplete={handleGameComplete}
             streak={streak}
+            bonusSeconds={quizBonusSeconds}
+            secondChance={quizSecondChance}
+            onSecondChanceUsed={onQuizSecondChanceUsed}
           />
         )}
       </div>

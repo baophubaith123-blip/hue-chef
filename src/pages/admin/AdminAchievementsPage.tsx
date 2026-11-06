@@ -7,7 +7,8 @@ import { Modal } from '@/components/Modal';
 import { useAuth } from '@/contexts/AuthContext';
 import { useAdmin } from '@/contexts/AdminContext';
 import { SEED_ACHIEVEMENTS } from '@/data/achievements';
-import type { Achievement, AchievementCondition } from '@/data/types';
+import type { Achievement, AchievementCondition, PerkKind } from '@/data/types';
+import { PERK_KINDS } from '@/features/achievements/lib/perks';
 import { useTranslation } from '@/i18n/useTranslation';
 import { AdminShell } from '@/pages/admin/AdminShell';
 
@@ -26,7 +27,7 @@ function emptyForm(): Achievement {
 }
 
 export default function AdminAchievementsPage() {
-  const { t } = useTranslation();
+  const { t, dict } = useTranslation();
   const { user } = useAuth();
   const admin = useAdmin();
   const [refreshTick, setRefreshTick] = useState(0);
@@ -134,6 +135,15 @@ export default function AdminAchievementsPage() {
       case 'cook_difficulty':
         next = { type: 'cook_difficulty', difficulty: 5, count: 1 };
         break;
+      case 'own_count':
+        next = { type: 'own_count', count: 1 };
+        break;
+      case 'coins_earned':
+        next = { type: 'coins_earned', amount: 1000 };
+        break;
+      case 'own_difficulty':
+        next = { type: 'own_difficulty', difficulty: 5, count: 1 };
+        break;
     }
     setForm({ ...form, condition: next });
   };
@@ -141,6 +151,7 @@ export default function AdminAchievementsPage() {
   const condType = form.condition.type;
   const condCount = 'count' in form.condition ? (form.condition as { count: number }).count : 0;
   const condScore = 'score' in form.condition ? (form.condition as { score: number }).score : 0;
+  const condAmount = 'amount' in form.condition ? (form.condition as { amount: number }).amount : 0;
   const condLevel = 'level' in form.condition ? (form.condition as { level: number }).level : 0;
   const condDifficulty =
     'difficulty' in form.condition ? (form.condition as { difficulty: number }).difficulty : 0;
@@ -188,6 +199,11 @@ export default function AdminAchievementsPage() {
                     <td>{a.description}</td>
                     <td>
                       <code className={styles.code}>{describeCondition(a.condition)}</code>
+                      {a.perk ? (
+                        <div className={styles.code}>
+                          ⚡ {dict.perks.describe[a.perk.kind](a.perk.value)}
+                        </div>
+                      ) : null}
                     </td>
                     <td className={styles.actionsCell}>
                       <div className={styles.actionsGroup}>
@@ -272,6 +288,9 @@ export default function AdminAchievementsPage() {
               <option value="level">level</option>
               <option value="perfect_count">perfect_count</option>
               <option value="cook_difficulty">cook_difficulty</option>
+              <option value="own_count">own_count</option>
+              <option value="coins_earned">coins_earned</option>
+              <option value="own_difficulty">own_difficulty</option>
             </select>
           </div>
           {condType === 'cook_count' ? (
@@ -394,6 +413,69 @@ export default function AdminAchievementsPage() {
               </div>
             </>
           ) : null}
+          {condType === 'own_count' ? (
+            <div className={styles.field}>
+              <label className={styles.label}>Count</label>
+              <input
+                className={styles.input}
+                type="number"
+                min={1}
+                value={condCount}
+                onChange={(e) =>
+                  setForm({ ...form, condition: { type: 'own_count', count: Number(e.target.value) } })
+                }
+              />
+            </div>
+          ) : null}
+          {condType === 'coins_earned' ? (
+            <div className={styles.field}>
+              <label className={styles.label}>Amount (xu)</label>
+              <input
+                className={styles.input}
+                type="number"
+                min={1}
+                value={condAmount}
+                onChange={(e) =>
+                  setForm({ ...form, condition: { type: 'coins_earned', amount: Number(e.target.value) } })
+                }
+              />
+            </div>
+          ) : null}
+          {condType === 'own_difficulty' ? (
+            <>
+              <div className={styles.field}>
+                <label className={styles.label}>Difficulty</label>
+                <input
+                  className={styles.input}
+                  type="number"
+                  min={1}
+                  max={5}
+                  value={condDifficulty}
+                  onChange={(e) =>
+                    setForm({
+                      ...form,
+                      condition: { type: 'own_difficulty', difficulty: Number(e.target.value), count: condCount },
+                    })
+                  }
+                />
+              </div>
+              <div className={styles.field}>
+                <label className={styles.label}>Count</label>
+                <input
+                  className={styles.input}
+                  type="number"
+                  min={1}
+                  value={condCount}
+                  onChange={(e) =>
+                    setForm({
+                      ...form,
+                      condition: { type: 'own_difficulty', difficulty: condDifficulty, count: Number(e.target.value) },
+                    })
+                  }
+                />
+              </div>
+            </>
+          ) : null}
           {condType === 'level' ? (
             <div className={styles.field}>
               <label className={styles.label}>Level</label>
@@ -406,6 +488,49 @@ export default function AdminAchievementsPage() {
                   setForm({ ...form, condition: { type: 'level', level: Number(e.target.value) } })
                 }
               />
+            </div>
+          ) : null}
+          <div className={styles.field}>
+            <label className={styles.label}>{t('admin.perkKind')}</label>
+            <select
+              className={styles.input}
+              value={form.perk?.kind ?? ''}
+              onChange={(e) => {
+                const kind = e.target.value as PerkKind | '';
+                setForm({
+                  ...form,
+                  perk: kind ? { kind, value: form.perk?.value ?? 5 } : undefined,
+                });
+              }}
+            >
+              <option value="">{t('admin.perkNone')}</option>
+              {PERK_KINDS.map((kind) => (
+                <option key={kind} value={kind}>
+                  {dict.perks.name[kind]}
+                </option>
+              ))}
+            </select>
+          </div>
+          {form.perk ? (
+            <div className={styles.field}>
+              <label className={styles.label}>{t('admin.perkValue')}</label>
+              <input
+                className={styles.input}
+                type="number"
+                min={0}
+                value={form.perk.value}
+                onChange={(e) =>
+                  setForm({
+                    ...form,
+                    perk: form.perk
+                      ? { ...form.perk, value: Math.max(0, Number(e.target.value)) }
+                      : undefined,
+                  })
+                }
+              />
+              <span className={styles.code}>
+                ⚡ {dict.perks.describe[form.perk.kind](form.perk.value)} · {t('admin.perkValueHint')}
+              </span>
             </div>
           ) : null}
         </form>
@@ -432,5 +557,11 @@ function describeCondition(c: AchievementCondition): string {
       return `perfect_count: ${c.count}`;
     case 'cook_difficulty':
       return `cook_difficulty: ${c.count} x ${c.difficulty}★`;
+    case 'own_count':
+      return `own_count: ${c.count}`;
+    case 'coins_earned':
+      return `coins_earned: ${c.amount}`;
+    case 'own_difficulty':
+      return `own_difficulty: ${c.count} x ${c.difficulty}★`;
   }
 }

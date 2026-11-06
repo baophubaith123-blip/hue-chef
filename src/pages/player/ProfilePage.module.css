@@ -421,3 +421,8 @@
   display: flex;
   justify-content: flex-start;
 }
+
+.statPerk {
+  font-size: 0.82rem;
+  line-height: 1.35;
+}

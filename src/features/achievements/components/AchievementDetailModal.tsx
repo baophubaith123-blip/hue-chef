@@ -28,7 +28,7 @@ export function AchievementDetailModal({
   unlockedAt,
   onClose,
 }: AchievementDetailModalProps) {
-  const { t } = useTranslation();
+  const { t, dict } = useTranslation();
   const { user, updateProfile } = useAuth();
 
   const rarity = achievement.rarity ?? 'common';
@@ -100,6 +100,23 @@ export function AchievementDetailModal({
                 style={{ width: `${Math.min(100, progress.percent)}%` }}
               />
             </div>
+          </div>
+        ) : null}
+
+        {achievement.perk ? (
+          <div className={styles.perkBox}>
+            <span className={styles.perkLabel}>⚡ {dict.perks.perkLabel}</span>
+            <p className={styles.perkText}>
+              {dict.perks.name[achievement.perk.kind]} —{' '}
+              {dict.perks.describe[achievement.perk.kind](achievement.perk.value)}
+            </p>
+            <p className={styles.perkHint}>
+              {isEquipped
+                ? dict.perks.activeNow
+                : isUnlocked
+                  ? dict.perks.equipHint
+                  : dict.perks.lockedHint}
+            </p>
           </div>
         ) : null}
 

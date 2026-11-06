@@ -16,7 +16,7 @@ import styles from './ProfilePage.module.css';
 
 export default function ProfilePage() {
   const { id } = useParams<{ id?: string }>();
-  const { t } = useTranslation();
+  const { t, dict } = useTranslation();
   const navigate = useNavigate();
   const { user: currentUser, updateProfile } = useAuth();
   const { getApprovedRecipes } = useRecipes();
@@ -268,6 +268,14 @@ export default function ProfilePage() {
                 {getApprovedRecipes().length}
               </span>
               <span className={styles.statLbl}>{t('profile.ownedLabel')}</span>
+            </div>
+            <div className={styles.statBox}>
+              <span className={`${styles.statVal} ${styles.statPerk}`}>
+                {equippedAchievement?.perk
+                  ? `⚡ ${dict.perks.describe[equippedAchievement.perk.kind](equippedAchievement.perk.value)}`
+                  : '—'}
+              </span>
+              <span className={styles.statLbl}>{dict.perks.activeLabel}</span>
             </div>
           </div>
 

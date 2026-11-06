@@ -227,7 +227,7 @@ export function FinishStage({ config, maxPoints, onProgress, onComplete }: Finis
       for (const ring of ringsRef.current) {
         if (!ring.resolved) {
           const p = (gameNow - ring.bornAt) / ring.growMs;
-          if (p > 1 + FINISH_GOOD_WINDOW) {
+          if (p > 1 + FINISH_GOOD_WINDOW * config.finishWindowScale) {
             resolveRing(ring, 'miss', gameNow);
           }
         }
@@ -253,9 +253,9 @@ export function FinishStage({ config, maxPoints, onProgress, onComplete }: Finis
     const gameNow = gameNowRef.current;
     const p = (gameNow - ring.bornAt) / ring.growMs;
     const offset = Math.abs(p - 1);
-    if (offset <= PERFECT_WINDOW) {
+    if (offset <= PERFECT_WINDOW * config.finishWindowScale) {
       resolveRing(ring, 'perfect', gameNow);
-    } else if (offset <= FINISH_GOOD_WINDOW) {
+    } else if (offset <= FINISH_GOOD_WINDOW * config.finishWindowScale) {
       resolveRing(ring, 'good', gameNow);
     } else {
       resolveRing(ring, 'miss', gameNow);

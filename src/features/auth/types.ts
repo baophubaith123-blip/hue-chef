@@ -42,6 +42,8 @@ export interface StoredUser {
   exp?: number;
   maxExp?: number;
   coins?: number;
+  /** Lifetime coins ever earned (spending does not reduce it). */
+  totalCoinsEarned?: number;
   ownedRecipeIds?: string[];
   cookedRecipes?: CookedRecipeEntry[];
   unlockedAchievements?: string[];
@@ -67,6 +69,8 @@ export interface PublicUser {
   exp?: number;
   maxExp?: number;
   coins?: number;
+  /** Lifetime coins ever earned (spending does not reduce it). */
+  totalCoinsEarned?: number;
   ownedRecipeIds?: string[];
   cookedRecipes?: CookedRecipeEntry[];
   unlockedAchievements?: string[];

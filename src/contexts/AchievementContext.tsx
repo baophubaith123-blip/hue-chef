@@ -69,6 +69,12 @@ function categoriesFromEntries(entries: CookedRecipeEntry[]): Set<RecipeCategory
   return set;
 }
 
+function ownedRecipeIdSet(user: PublicUser, entries: CookedRecipeEntry[]): Set<string> {
+  const set = new Set<string>(user.ownedRecipeIds ?? []);
+  for (const entry of entries) set.add(entry.recipeId);
+  return set;
+}
+
 function sumTotalScore(entries: CookedRecipeEntry[]): number {
   let total = 0;
   for (const entry of entries) {
@@ -152,6 +158,28 @@ function evaluate(
       for (const entry of entries) {
         const recipe = getRecipeById(entry.recipeId);
         if (recipe && recipe.difficulty >= cond.difficulty) count += 1;
+      }
+      const target = cond.count;
+      const pct = Math.min(100, Math.round((count / target) * 100));
+      return { unlocked: count >= target, pct, current: count, target };
+    }
+    case 'own_count': {
+      const count = ownedRecipeIdSet(user, entries).size;
+      const target = cond.count;
+      const pct = Math.min(100, Math.round((count / target) * 100));
+      return { unlocked: count >= target, pct, current: count, target };
+    }
+    case 'coins_earned': {
+      const earned = user.totalCoinsEarned ?? 0;
+      const target = cond.amount;
+      const pct = Math.min(100, Math.round((earned / target) * 100));
+      return { unlocked: earned >= target, pct, current: earned, target };
+    }
+    case 'own_difficulty': {
+      let count = 0;
+      for (const id of ownedRecipeIdSet(user, entries)) {
+        const recipe = getRecipeById(id);
+        if (recipe && recipe.difficulty === cond.difficulty) count += 1;
       }
       const target = cond.count;
       const pct = Math.min(100, Math.round((count / target) * 100));

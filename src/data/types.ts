@@ -116,7 +116,33 @@ export type AchievementCondition =
   | { type: 'all_categories' }
   | { type: 'score_threshold'; score: number }
   | { type: 'level'; level: number }
-  | { type: 'cook_difficulty'; difficulty: number; count: number };
+  | { type: 'cook_difficulty'; difficulty: number; count: number }
+  | { type: 'own_count'; count: number }
+  | { type: 'coins_earned'; amount: number }
+  | { type: 'own_difficulty'; difficulty: number; count: number };
+
+/** Power granted while an achievement is the player's equipped one. Only the
+ * single equipped achievement's perk is active (equip-one model). */
+export type PerkKind =
+  | 'coin-bonus-pct'
+  | 'xp-bonus-pct'
+  | 'market-time-plus'
+  | 'peek-cheaper'
+  | 'catch-radius-plus'
+  | 'season-zone-plus'
+  | 'cook-time-plus'
+  | 'finish-window-plus'
+  | 'quiz-time-plus'
+  | 'combo-shield'
+  | 'quiz-second-chance';
+
+export interface AchievementPerk {
+  kind: PerkKind;
+  /** Percent for *-pct / *-plus kinds, seconds for time kinds, seconds of
+   * peek cost removed for 'peek-cheaper' (99 = free), charges per run for
+   * 'combo-shield' / 'quiz-second-chance'. */
+  value: number;
+}
 
 export type AchievementRarity = 'common' | 'rare' | 'epic' | 'legendary';
 
@@ -129,4 +155,6 @@ export interface Achievement {
   icon: string;
   rarity?: AchievementRarity;
   condition: AchievementCondition;
+  /** Power active while this achievement is equipped (exactly one equipped). */
+  perk?: AchievementPerk;
 }

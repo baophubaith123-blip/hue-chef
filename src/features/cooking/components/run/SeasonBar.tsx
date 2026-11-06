@@ -19,6 +19,8 @@ interface SeasonBarProps {
   stepPoints: number;
   difficulty: number;
   ingredientCount: number;
+  /** Equipped-perk multiplier for the gold zone width (1 = no perk). */
+  zoneScale?: number;
   onResult: (outcome: SeasonOutcome, bonus: number) => void;
 }
 
@@ -34,13 +36,14 @@ export function SeasonBar({
   stepPoints,
   difficulty,
   ingredientCount,
+  zoneScale = 1,
   onResult,
 }: SeasonBarProps) {
   const { dict } = useTranslation();
   const s = dict.cooking.stages;
 
   const sweepMs = seasonSweepMs(difficulty, ingredientCount);
-  const zoneRatio = seasonZoneRatio(difficulty, ingredientCount);
+  const zoneRatio = Math.min(0.6, seasonZoneRatio(difficulty, ingredientCount) * zoneScale);
   const zoneHalf = zoneRatio / 2;
   const [zoneCenter] = useState(() => 0.34 + Math.random() * 0.32);
   const [pos, setPos] = useState(0);

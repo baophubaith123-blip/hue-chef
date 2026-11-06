@@ -1,3 +1,5 @@
+import type { PerkKind } from '@/data/types';
+
 export type Locale = 'vi' | 'en';
 
 export interface I18nDictionary {
@@ -269,6 +271,10 @@ export interface I18nDictionary {
     achievementsTitle: string;
     achievementsIntro: string;
     addAchievement: string;
+    perkKind: string;
+    perkValue: string;
+    perkNone: string;
+    perkValueHint: string;
     editAchievement: string;
     commentsTitle: string;
     commentsIntro: string;
@@ -770,6 +776,16 @@ export interface I18nDictionary {
     suggest: string;
     freeNote: string;
     bandHint: (min: number, max: number) => string;
+  };
+  perks: {
+    name: Record<PerkKind, string>;
+    describe: Record<PerkKind, (value: number) => string>;
+    perkLabel: string;
+    equipHint: string;
+    activeNow: string;
+    lockedHint: string;
+    activeLabel: string;
+    noneLabel: string;
   };
   landing: {
     heroTitle: string;

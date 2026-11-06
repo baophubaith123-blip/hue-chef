@@ -185,7 +185,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const stored = findUserById(users, user.id);
       if (!stored) return null;
       const nextBalance = Math.max(0, (stored.coins ?? 0) + amount);
-      persistStoredUser(user.id, { coins: nextBalance });
+      if (amount > 0) {
+        persistStoredUser(user.id, {
+          coins: nextBalance,
+          totalCoinsEarned: (stored.totalCoinsEarned ?? 0) + amount,
+        });
+      } else {
+        persistStoredUser(user.id, { coins: nextBalance });
+      }
       return nextBalance;
     },
     [user, persistStoredUser],
