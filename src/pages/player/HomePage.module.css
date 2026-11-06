@@ -1054,3 +1054,54 @@
   color: var(--color-primary, #c8553d);
   font-weight: 800;
 }
+
+
+/* ===== Phase 17 — readable rows inside the two home panels (dark) =====
+   The panel cards are cream paper in both themes, but the inner rows
+   take the theme surface (dark plum-brown in dark mode), so their
+   text must switch to cream/gold in dark mode to stay readable. */
+[data-theme='dark'] .achievementItem,
+[data-theme='dark'] .leaderboardItem {
+  border-color: rgba(233, 162, 59, 0.35);
+}
+
+[data-theme='dark'] .achievementName,
+[data-theme='dark'] .leaderboardName {
+  color: #fff3da;
+}
+
+[data-theme='dark'] .achievementDesc {
+  color: #d9c39a;
+}
+
+[data-theme='dark'] .achievementPct {
+  color: #ffa25e;
+}
+
+[data-theme='dark'] .leaderboardScore {
+  color: #f6c453;
+}
+
+[data-theme='dark'] .leaderboardItemHighlight {
+  background: rgba(233, 162, 59, 0.16);
+  border-color: var(--color-gold, #e9a23b);
+}
+
+
+/* ===== Phase 17 — festival scene strip ===== */
+.dashboard::before {
+  content: '';
+  display: block;
+  height: 84px;
+  margin-bottom: 1.1rem;
+  border: var(--border-game, 3px solid #4a2c14);
+  border-radius: 20px;
+  background-image: url('/images/festival-day.webp');
+  background-size: cover;
+  background-position: center 16%;
+  box-shadow: var(--shadow-game-card, 0 12px 28px rgba(59, 42, 32, 0.12));
+}
+
+[data-theme='dark'] .dashboard::before {
+  background-image: url('/images/festival-night.webp');
+}

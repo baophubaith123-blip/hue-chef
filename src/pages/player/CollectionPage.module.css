@@ -240,3 +240,40 @@
   border: 2px solid var(--color-gold, #e9a23b);
   color: #ffd98a;
 }
+
+
+/* ===== Phase 17 — stats box synced with the paper card in both themes ===== */
+.stats {
+  background: var(--paper-deep, #f7e8c6);
+  border: 2px solid var(--wood, #b57e40);
+  box-shadow: inset 0 0 0 1px rgba(255, 246, 224, 0.5);
+}
+
+
+/* ===== Phase 17 — header becomes a festival scene board ===== */
+.header {
+  background-image:
+    linear-gradient(180deg, rgba(250, 245, 239, 0.5), rgba(250, 245, 239, 0.68)),
+    url('/images/festival-day.webp');
+  background-size: cover;
+  background-position: center 20%;
+  border: var(--border-game, 3px solid #4a2c14);
+  border-radius: 22px;
+  padding: 1.1rem 1.25rem;
+  box-shadow: var(--shadow-game-card, 0 12px 28px rgba(59, 42, 32, 0.12));
+}
+
+[data-theme='dark'] .header {
+  background-image:
+    linear-gradient(180deg, rgba(24, 8, 20, 0.42), rgba(24, 8, 20, 0.58)),
+    url('/images/festival-night.webp');
+}
+
+[data-theme='dark'] .header .title {
+  color: #ffe9b8;
+  text-shadow: 0 2px 8px rgba(24, 8, 20, 0.6);
+}
+
+[data-theme='dark'] .header p {
+  text-shadow: 0 1px 6px rgba(24, 8, 20, 0.85);
+}
