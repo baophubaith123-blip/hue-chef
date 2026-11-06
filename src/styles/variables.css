@@ -175,3 +175,46 @@
   --rarity-legendary: #f0b95b;
   --rarity-legendary-soft: rgba(240, 185, 91, 0.2);
 }
+
+/* ===== Phase 16 — Festival (theme D) tokens ===== */
+:root {
+  /* Light mode = "Lễ hội ban ngày" (day festival) */
+  --ink: #4a2c14;
+  --ink-soft: rgba(74, 44, 20, 0.45);
+  --wood: #b57e40;
+  --wood-light: #d9a05b;
+  --wood-dark: #8a5a2b;
+  --wood-gradient: linear-gradient(180deg, #ce9550 0%, #b57e40 55%, #9c6a30 100%);
+  --wood-gradient-soft: linear-gradient(180deg, #e3b06a 0%, #cd9a52 100%);
+  --paper: #fff6e0;
+  --paper-deep: #f7e8c6;
+  --paper-text: #43301b;
+  --paper-text-muted: #7a5c38;
+  --bar-bg: #fff6e0;
+  --border-game: 3px solid var(--ink);
+  --shadow-chunky: 0 4px 0 var(--ink-soft);
+  --shadow-game-card: 0 5px 0 rgba(74, 44, 20, 0.16), 0 18px 34px rgba(74, 21, 37, 0.13);
+  --glow-lantern: radial-gradient(circle at 6% -4%, rgba(233, 162, 59, 0.28) 0, transparent 180px),
+    radial-gradient(circle at 94% -4%, rgba(200, 85, 61, 0.2) 0, transparent 200px);
+}
+
+[data-theme='dark'] {
+  /* Dark mode = "Chợ đêm lễ hội" (night festival market) */
+  --ink: #200f04;
+  --ink-soft: rgba(0, 0, 0, 0.55);
+  --wood: #9c6a30;
+  --wood-light: #c08b45;
+  --wood-dark: #6e4520;
+  --wood-gradient: linear-gradient(180deg, #b57e40 0%, #96652c 55%, #7c5222 100%);
+  --wood-gradient-soft: linear-gradient(180deg, #cd9a52 0%, #b57e40 100%);
+  --paper: #f8efd4;
+  --paper-deep: #efdfb4;
+  --paper-text: #43301b;
+  --paper-text-muted: #7a5c38;
+  --bar-bg: #441223;
+  --border-game: 3px solid var(--ink);
+  --shadow-chunky: 0 4px 0 var(--ink-soft);
+  --shadow-game-card: 0 5px 0 rgba(0, 0, 0, 0.35), 0 18px 34px rgba(0, 0, 0, 0.4);
+  --glow-lantern: radial-gradient(circle at 6% -4%, rgba(240, 185, 91, 0.32) 0, transparent 190px),
+    radial-gradient(circle at 94% -4%, rgba(232, 136, 77, 0.26) 0, transparent 210px);
+}

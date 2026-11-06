@@ -12,10 +12,11 @@
 .panel {
   width: 100%;
   max-width: 440px;
-  background: var(--color-surface);
-  border: 1.5px solid rgba(233, 162, 59, 0.5);
+  background: var(--paper, #fff6e0);
+  color: var(--paper-text, #43301b);
+  border: var(--border-game, 3px solid #200f04);
   border-radius: var(--radius-2xl, 24px);
-  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.45);
+  box-shadow: 0 8px 0 rgba(0, 0, 0, 0.35), 0 24px 48px rgba(0, 0, 0, 0.45);
   padding: 2.25rem 2rem 1.75rem;
   animation: popIn 0.45s ease both;
 }
@@ -64,10 +65,10 @@
 
 .input {
   padding: 0.75rem 0.95rem;
-  border: 1.5px solid var(--color-card-border, #e8dfd5);
+  border: 2.5px solid var(--ink, #4a2c14);
   border-radius: var(--radius-lg, 12px);
-  background: var(--color-surface, #ffffff);
-  color: var(--color-text, #3b2a20) !important;
+  background: #fffdf4;
+  color: var(--paper-text, #43301b) !important;
   font-size: 0.95rem;
   transition: all 0.2s ease;
 }
@@ -88,8 +89,8 @@
 
 .input:focus {
   outline: none;
-  border-color: var(--color-plum, #4a1525);
-  box-shadow: 0 0 0 3px rgba(74, 21, 37, 0.12);
+  border-color: var(--color-gold, #e9a23b);
+  box-shadow: 0 0 0 3px rgba(233, 162, 59, 0.3);
 }
 
 .error {

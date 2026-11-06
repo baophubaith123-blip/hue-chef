@@ -1,8 +1,9 @@
 .card {
-  background: var(--color-surface, #ffffff);
-  border: 1.5px solid var(--color-card-border, #e8dfd5);
-  border-radius: var(--radius-xl, 16px);
-  box-shadow: 0 4px 16px rgba(74, 21, 37, 0.04);
+  background: var(--paper, #fff6e0);
+  color: var(--paper-text, #43301b);
+  border: var(--border-game, 3px solid #4a2c14);
+  border-radius: var(--radius-2xl, 24px);
+  box-shadow: var(--shadow-game-card, 0 12px 28px rgba(74, 21, 37, 0.12));
   padding: 1.25rem 1.5rem;
 }
 
@@ -10,16 +11,12 @@
   margin: 0 0 1rem;
   font-family: var(--font-display, Georgia, 'Times New Roman', serif);
   font-size: 1.35rem;
-  font-weight: 700;
-  color: var(--color-plum, #4a1525);
+  font-weight: 800;
+  color: var(--paper-text, #43301b);
   letter-spacing: -0.01em;
 }
 
-[data-theme='dark'] .title {
-  color: var(--color-plum-text, #f8efea);
-}
-
 .body {
-  color: var(--color-text-muted, #7c6c64);
+  color: var(--paper-text-muted, #7a5c38);
   line-height: 1.5;
 }

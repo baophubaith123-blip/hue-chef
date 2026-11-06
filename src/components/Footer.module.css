@@ -1,6 +1,6 @@
 .footer {
-  border-top: 1px solid var(--color-border);
-  background: var(--color-surface);
+  border-top: var(--border-game, 3px solid #200f04);
+  background: var(--color-plum-dark, #370e1b);
   margin-top: auto;
 }
 
@@ -13,7 +13,7 @@
   gap: 1rem;
   flex-wrap: wrap;
   justify-content: space-between;
-  color: var(--color-text-muted);
+  color: var(--color-plum-text-muted, #d1b3bc);
   font-size: 0.85rem;
 }
 
@@ -27,12 +27,12 @@
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
-  font-weight: 600;
-  color: var(--color-text);
+  font-weight: 700;
+  color: #fff6e0;
 }
 
 .madeIcon {
-  color: var(--color-accent);
+  color: var(--color-accent, #e9a23b);
 }
 
 .links {
@@ -42,14 +42,14 @@
 }
 
 .link {
-  color: var(--color-text-muted);
+  color: var(--color-plum-text-muted, #d1b3bc);
   text-decoration: none;
   font-weight: 600;
   transition: color 0.15s ease;
 }
 
 .link:hover {
-  color: var(--color-primary);
+  color: var(--color-gold, #e9a23b);
 }
 
 @media (max-width: 640px) {
