@@ -191,3 +191,52 @@
   font-weight: 600;
   color: var(--color-text-muted);
 }
+
+
+/* ===== Phase 16 — theme D overrides ===== */
+.card {
+  background: var(--paper, #fff6e0);
+  color: var(--paper-text, #43301b);
+  border: var(--border-game, 3px solid #4a2c14);
+  border-radius: 22px;
+  box-shadow: var(--shadow-game-card, 0 12px 28px rgba(59, 42, 32, 0.12));
+  overflow: hidden;
+}
+
+/* Real dish photo as a framed stamp in a wooden frame */
+.imageWrap {
+  border: 5px solid var(--wood-dark, #8a5a2b);
+  box-shadow: inset 0 0 0 2px rgba(233, 162, 59, 0.75);
+  border-radius: 12px;
+  margin: 10px 10px 0;
+  overflow: hidden;
+}
+
+.cardTitle {
+  color: var(--paper-text, #43301b);
+}
+
+.statLabel,
+.progressText,
+.notCookedText {
+  color: var(--paper-text-muted, #7a5c38);
+}
+
+.statValue {
+  color: var(--paper-text, #43301b);
+}
+
+.progressTrack {
+  border: 2px solid var(--ink, #4a2c14);
+  background: var(--paper-deep, #f7e8c6);
+}
+
+.progressFill {
+  background: var(--gradient-gold, linear-gradient(90deg, #f6c453, #e9a23b));
+}
+
+.lockBadge {
+  background: rgba(43, 14, 23, 0.88);
+  border: 2px solid var(--color-gold, #e9a23b);
+  color: #ffd98a;
+}

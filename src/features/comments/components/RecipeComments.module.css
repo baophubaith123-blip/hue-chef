@@ -164,3 +164,32 @@
   opacity: 0.55;
   cursor: default;
 }
+
+
+/* ===== Phase 16 — theme D overrides ===== */
+.item {
+  background: var(--paper, #fff6e0);
+  color: var(--paper-text, #43301b);
+  border: 2.5px solid var(--wood, #b57e40);
+  border-radius: 18px;
+}
+
+.author { color: var(--paper-text, #43301b); }
+.date { color: var(--paper-text-muted, #7a5c38); }
+.content { color: var(--paper-text, #43301b); }
+
+.textarea {
+  background: #fffdf4;
+  border: 2.5px solid var(--ink, #4a2c14);
+  border-radius: var(--radius-lg, 12px);
+  color: var(--paper-text, #43301b);
+}
+
+.avatar {
+  border: 2.5px solid var(--color-gold, #e9a23b);
+}
+
+.actionBtn {
+  color: var(--paper-text-muted, #7a5c38);
+  font-weight: 700;
+}

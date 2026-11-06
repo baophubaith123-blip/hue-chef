@@ -369,3 +369,50 @@
     height: 240px;
   }
 }
+
+
+/* ===== Phase 16 — theme D overrides ===== */
+.heroBannerImg {
+  border: 6px solid var(--wood-dark, #8a5a2b);
+  box-shadow: inset 0 0 0 2px rgba(233, 162, 59, 0.8), 0 24px 48px rgba(0, 0, 0, 0.45);
+}
+
+.badgeTag {
+  border: 2.5px solid var(--ink, #200f04);
+  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.4);
+}
+
+.stepCard,
+.statCard {
+  background: var(--paper, #fff6e0);
+  color: var(--paper-text, #43301b);
+  border: var(--border-game, 3px solid #4a2c14);
+  border-radius: 22px;
+  box-shadow: var(--shadow-game-card, 0 12px 28px rgba(59, 42, 32, 0.12));
+}
+
+.stepCard:hover {
+  border-color: var(--ink, #4a2c14);
+  box-shadow: 0 8px 0 rgba(74, 44, 20, 0.16), 0 22px 38px rgba(74, 21, 37, 0.18);
+}
+
+.stepBadge {
+  background: var(--gradient-gold, linear-gradient(135deg, #f6c453, #e9a23b));
+  border: 3px solid var(--ink, #4a2c14);
+  color: #43301b;
+  box-shadow: 0 3px 0 var(--ink-soft, rgba(74, 44, 20, 0.45));
+}
+
+.roleCardFront,
+.roleCardBack {
+  background: var(--paper, #fff6e0);
+  color: var(--paper-text, #43301b);
+  border: var(--border-game, 3px solid #4a2c14);
+  border-radius: 22px;
+  box-shadow: var(--shadow-game-card, 0 12px 28px rgba(59, 42, 32, 0.12));
+}
+
+.roleCardBack {
+  background: var(--wood-gradient, linear-gradient(180deg, #ce9550, #b57e40));
+  color: #fff6e0;
+}

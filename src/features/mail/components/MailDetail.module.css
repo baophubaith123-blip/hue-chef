@@ -159,3 +159,31 @@
   background: rgba(232, 69, 10, 0.22);
   text-decoration: none;
 }
+
+/* ===== Phase 16 — theme D overrides ===== */
+.wrap {
+  background: var(--paper, #fff6e0);
+  color: var(--paper-text, #43301b);
+  border: var(--border-game, 3px solid #4a2c14);
+  border-radius: 22px;
+  box-shadow: var(--shadow-game-card, 0 12px 28px rgba(59, 42, 32, 0.12));
+  padding: 1.5rem;
+}
+
+.subject { color: var(--paper-text, #43301b); }
+.date, .footerMeta { color: var(--paper-text-muted, #7a5c38); }
+.body, .bodyText { color: var(--paper-text, #43301b); }
+
+.typeChip {
+  background: var(--wood-gradient-soft, linear-gradient(180deg, #e3b06a, #cd9a52));
+  border: 1.5px solid var(--ink, #4a2c14);
+  color: #43301b;
+  font-weight: 700;
+}
+
+.icon {
+  border: 2.5px solid var(--ink, #4a2c14);
+  box-shadow: 0 3px 0 var(--ink-soft, rgba(74, 44, 20, 0.45));
+}
+
+.backLink { color: var(--color-primary, #c8553d); font-weight: 700; }

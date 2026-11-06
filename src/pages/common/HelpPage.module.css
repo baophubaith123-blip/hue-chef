@@ -82,3 +82,24 @@
   color: var(--color-text-muted);
   font-size: 0.95rem;
 }
+
+
+/* ===== Phase 16 — theme D overrides ===== */
+.card,
+.faqItem {
+  background: var(--paper, #fff6e0);
+  color: var(--paper-text, #43301b);
+  border: var(--border-game, 3px solid #4a2c14);
+  border-radius: 20px;
+  box-shadow: var(--shadow-game-card, 0 12px 28px rgba(59, 42, 32, 0.12));
+}
+
+.cardTitle,
+.faqQ {
+  color: var(--paper-text, #43301b);
+}
+
+.cardBody,
+.faqA {
+  color: var(--paper-text-muted, #7a5c38);
+}

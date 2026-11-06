@@ -180,3 +180,29 @@
   color: var(--color-primary);
   font-weight: 600;
 }
+
+
+/* ===== Phase 16 — theme D overrides ===== */
+.card {
+  background: var(--paper, #fff6e0);
+  color: var(--paper-text, #43301b);
+  border: var(--border-game, 3px solid #4a2c14);
+  border-radius: 20px;
+  box-shadow: var(--shadow-game-card, 0 12px 28px rgba(59, 42, 32, 0.12));
+}
+
+.optionItem {
+  background: var(--paper-deep, #f7e8c6);
+  border-color: var(--wood, #b57e40);
+  color: var(--paper-text, #43301b);
+}
+
+.targetTextQuote {
+  background: var(--paper-deep, #f7e8c6);
+  border-color: var(--wood, #b57e40);
+  color: var(--paper-text, #43301b);
+}
+
+.explanation {
+  color: var(--paper-text-muted, #7a5c38);
+}

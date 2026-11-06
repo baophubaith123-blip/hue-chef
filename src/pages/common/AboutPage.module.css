@@ -412,3 +412,73 @@
   line-height: 1.55;
   color: var(--color-text);
 }
+
+
+/* ===== Phase 16 — theme D overrides ===== */
+.heroBanner {
+  border: var(--border-game, 3px solid #200f04);
+  border-radius: 26px;
+  box-shadow: 0 8px 0 rgba(0, 0, 0, 0.3), 0 24px 44px rgba(74, 21, 37, 0.35);
+}
+
+.heroBtnPrimary {
+  background: var(--gradient-gold, linear-gradient(135deg, #f6c453, #e9a23b));
+  border: 3px solid var(--ink, #200f04);
+  color: #43301b;
+  box-shadow: 0 5px 0 rgba(0, 0, 0, 0.4);
+  border-radius: var(--radius-xl, 16px);
+  font-weight: 800;
+}
+
+.heroBtnSecondary {
+  background: var(--wood-gradient, linear-gradient(180deg, #b57e40, #96652c));
+  border: 3px solid var(--ink, #200f04);
+  color: #fff6e0;
+  box-shadow: 0 5px 0 rgba(0, 0, 0, 0.4);
+  border-radius: var(--radius-xl, 16px);
+  font-weight: 800;
+}
+
+.heroPotImg {
+  border: 5px solid var(--wood-dark, #8a5a2b);
+  box-shadow: 0 6px 0 rgba(0, 0, 0, 0.3);
+  border-radius: 22px;
+}
+
+.card,
+.journeyStep,
+.authorCard,
+.statBox {
+  background: var(--paper, #fff6e0);
+  color: var(--paper-text, #43301b);
+  border: var(--border-game, 3px solid #4a2c14);
+  border-radius: 22px;
+  box-shadow: var(--shadow-game-card, 0 12px 28px rgba(59, 42, 32, 0.12));
+}
+
+.cardTitle,
+.journeyStepTitle,
+.authorName,
+.statNum {
+  color: var(--paper-text, #43301b);
+}
+
+.journeyStepDesc,
+.authorMeta,
+.statLbl {
+  color: var(--paper-text-muted, #7a5c38);
+}
+
+.journeyNum {
+  background: var(--gradient-gold, linear-gradient(135deg, #f6c453, #e9a23b));
+  border: 2.5px solid var(--ink, #4a2c14);
+  color: #43301b;
+  box-shadow: 0 3px 0 var(--ink-soft, rgba(74, 44, 20, 0.45));
+}
+
+.techChip {
+  background: var(--wood-gradient-soft, linear-gradient(180deg, #e3b06a, #cd9a52));
+  border: 2px solid var(--ink, #4a2c14);
+  color: #43301b;
+  font-weight: 700;
+}

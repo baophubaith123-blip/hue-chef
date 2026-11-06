@@ -426,3 +426,90 @@
   font-size: 0.82rem;
   line-height: 1.35;
 }
+
+
+/* ===== Phase 16 — theme D overrides ===== */
+.profileCard,
+.formCard {
+  background: var(--paper, #fff6e0);
+  color: var(--paper-text, #43301b);
+  border: var(--border-game, 3px solid #4a2c14);
+  border-radius: 22px;
+  box-shadow: var(--shadow-game-card, 0 12px 28px rgba(59, 42, 32, 0.12));
+}
+
+.cover {
+  border-bottom: var(--border-game, 3px solid #4a2c14);
+}
+
+.lvChip {
+  background: var(--gradient-gold, linear-gradient(135deg, #f6c453, #e9a23b));
+  border: 2px solid var(--ink, #4a2c14);
+  color: #43301b;
+}
+
+.xpTrack {
+  border: 2.5px solid var(--ink, #4a2c14);
+  background: var(--paper-deep, #f7e8c6);
+}
+
+.xpFill {
+  background: var(--gradient-gold, linear-gradient(90deg, #f6c453, #e9a23b));
+}
+
+.xpText,
+.userEmail,
+.statLbl {
+  color: var(--paper-text-muted, #7a5c38);
+}
+
+.userName,
+.statVal,
+.formTitle {
+  color: var(--paper-text, #43301b);
+}
+
+.statBox {
+  background: var(--paper-deep, #f7e8c6);
+  border: 2px solid var(--wood, #b57e40);
+  border-radius: var(--radius-xl);
+}
+
+.badgeTile {
+  background: var(--paper-deep, #f7e8c6);
+  border: 2.5px solid var(--wood, #b57e40);
+  color: var(--paper-text, #43301b);
+}
+
+.badgeTileEquipped {
+  border-color: var(--color-gold, #e9a23b);
+  box-shadow: 0 0 0 2px rgba(233, 162, 59, 0.45), 0 4px 0 var(--ink-soft, rgba(74, 44, 20, 0.45));
+}
+
+.input,
+.select {
+  background: #fffdf4;
+  border: 2.5px solid var(--ink, #4a2c14);
+  border-radius: var(--radius-lg);
+  color: var(--paper-text, #43301b);
+}
+
+.input:focus,
+.select:focus {
+  border-color: var(--color-gold, #e9a23b);
+  box-shadow: 0 0 0 3px rgba(233, 162, 59, 0.3);
+  outline: none;
+}
+
+.saveButton {
+  background: var(--gradient-gold, linear-gradient(135deg, #f6c453, #e9a23b));
+  border: 3px solid var(--ink, #4a2c14);
+  border-radius: var(--radius-xl);
+  color: #43301b;
+  box-shadow: 0 4px 0 var(--ink-soft, rgba(74, 44, 20, 0.45));
+  font-weight: 800;
+}
+
+.avatarImage {
+  border: 3.5px solid var(--color-gold, #e9a23b);
+}

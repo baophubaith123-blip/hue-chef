@@ -246,3 +246,54 @@
   flex-direction: column;
   gap: 1rem;
 }
+
+
+/* ===== Phase 16 — theme D overrides ===== */
+.profileHeaderCard,
+.statBox,
+.badgePillCard {
+  background: var(--paper, #fff6e0);
+  color: var(--paper-text, #43301b);
+  border: var(--border-game, 3px solid #4a2c14);
+  border-radius: 22px;
+  box-shadow: var(--shadow-game-card, 0 12px 28px rgba(59, 42, 32, 0.12));
+}
+
+.avatarWrapper {
+  border: 3.5px solid var(--color-gold, #e9a23b);
+  box-shadow: 0 4px 0 var(--ink-soft, rgba(74, 44, 20, 0.45));
+}
+
+.userName {
+  color: var(--paper-text, #43301b);
+}
+
+.levelBadge {
+  background: var(--gradient-gold, linear-gradient(135deg, #f6c453, #e9a23b));
+  border: 2px solid var(--ink, #4a2c14);
+  color: #43301b;
+}
+
+.expTrack {
+  border: 2.5px solid var(--ink, #4a2c14);
+  background: var(--paper-deep, #f7e8c6);
+}
+
+.expFill {
+  background: var(--gradient-gold, linear-gradient(90deg, #f6c453, #e9a23b));
+}
+
+.expText,
+.statLabel {
+  color: var(--paper-text-muted, #7a5c38);
+}
+
+.statNumber,
+.badgeName {
+  color: var(--paper-text, #43301b);
+}
+
+.badgeIconCircle {
+  border: 2.5px solid var(--ink, #4a2c14);
+  box-shadow: 0 3px 0 var(--ink-soft, rgba(74, 44, 20, 0.45));
+}

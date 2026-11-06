@@ -92,3 +92,40 @@
 .successBody {
   margin: 0;
 }
+
+
+/* ===== Phase 16 — theme D overrides ===== */
+.form,
+.successCard {
+  background: var(--paper, #fff6e0);
+  color: var(--paper-text, #43301b);
+  border: var(--border-game, 3px solid #4a2c14);
+  border-radius: 22px;
+  box-shadow: var(--shadow-game-card, 0 12px 28px rgba(59, 42, 32, 0.12));
+}
+
+.input,
+.select,
+.textarea {
+  background: #fffdf4;
+  border: 2.5px solid var(--ink, #4a2c14);
+  border-radius: var(--radius-lg, 12px);
+  color: var(--paper-text, #43301b);
+}
+
+.input:focus,
+.select:focus,
+.textarea:focus {
+  border-color: var(--color-gold, #e9a23b);
+  box-shadow: 0 0 0 3px rgba(233, 162, 59, 0.3);
+  outline: none;
+}
+
+.label,
+.successBody {
+  color: var(--paper-text-muted, #7a5c38);
+}
+
+.successTitle {
+  color: var(--paper-text, #43301b);
+}

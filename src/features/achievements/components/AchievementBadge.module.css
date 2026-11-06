@@ -136,3 +136,31 @@
   border-color: var(--rarity-legendary);
   box-shadow: var(--shadow-glow-gold);
 }
+
+
+/* ===== Phase 16 — theme D overrides ===== */
+.badge {
+  background: var(--paper, #fff6e0);
+  color: var(--paper-text, #43301b);
+  border: var(--border-game, 3px solid #4a2c14);
+  border-radius: 20px;
+  box-shadow: var(--shadow-game-card, 0 12px 28px rgba(59, 42, 32, 0.12));
+}
+
+.name {
+  color: var(--paper-text, #43301b);
+}
+
+.description {
+  color: var(--paper-text-muted, #7a5c38);
+}
+
+.iconWrap {
+  border: 2.5px solid var(--ink, #4a2c14);
+  box-shadow: 0 3px 0 var(--ink-soft, rgba(74, 44, 20, 0.45));
+}
+
+.progressBar {
+  border: 2px solid var(--ink, #4a2c14);
+  background: var(--paper-deep, #f7e8c6);
+}

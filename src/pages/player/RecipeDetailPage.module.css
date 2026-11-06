@@ -368,3 +368,109 @@
   margin: 0;
   line-height: 1.6;
 }
+
+
+/* ===== Phase 16 — theme D overrides ===== */
+.recipeCard {
+  background: var(--paper, #fff6e0);
+  color: var(--paper-text, #43301b);
+  border: var(--border-game, 3px solid #4a2c14);
+  border-radius: 24px;
+  box-shadow: var(--shadow-game-card, 0 12px 28px rgba(59, 42, 32, 0.12));
+}
+
+/* Real photo in a chunky wooden frame (Cách A) */
+.imageWrap {
+  border: 6px solid var(--wood-dark, #8a5a2b);
+  border-radius: 16px;
+  box-shadow: inset 0 0 0 2px rgba(233, 162, 59, 0.75), 0 4px 0 rgba(74, 44, 20, 0.3);
+}
+
+.categoryBadge {
+  background: var(--wood-gradient, linear-gradient(180deg, #ce9550, #b57e40));
+  border: 2.5px solid var(--ink, #200f04);
+  color: #fff6e0;
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.35);
+  text-shadow: 0 1px 0 rgba(32, 15, 4, 0.4);
+}
+
+.metricsBox {
+  background: var(--paper-deep, #f7e8c6);
+  border: 2.5px solid var(--ink, #4a2c14);
+  border-radius: var(--radius-xl);
+  color: var(--paper-text, #43301b);
+}
+
+.metricLabel {
+  color: var(--paper-text-muted, #7a5c38);
+}
+
+.title {
+  color: var(--paper-text, #43301b);
+}
+
+.description {
+  color: var(--paper-text-muted, #7a5c38);
+}
+
+.sectionTitle {
+  color: var(--paper-text, #43301b);
+}
+
+.ingredientPill {
+  background: var(--paper-deep, #f7e8c6);
+  border: 2px solid var(--wood, #b57e40);
+  border-radius: var(--radius-xl);
+  color: var(--paper-text, #43301b);
+}
+
+.ingredientAmount {
+  color: var(--paper-text-muted, #7a5c38);
+}
+
+.stepItem {
+  background: var(--paper-deep, #f7e8c6);
+  border: 2px solid var(--wood, #b57e40);
+  color: var(--paper-text, #43301b);
+}
+
+.stepNum {
+  background: var(--gradient-gold, linear-gradient(135deg, #f6c453, #e9a23b));
+  border: 2.5px solid var(--ink, #4a2c14);
+  color: #43301b;
+  box-shadow: 0 2px 0 var(--ink-soft, rgba(74, 44, 20, 0.45));
+}
+
+.stepDesc {
+  color: var(--paper-text-muted, #7a5c38);
+}
+
+.stepIngredientChip {
+  background: var(--wood-gradient-soft, linear-gradient(180deg, #e3b06a, #cd9a52));
+  border: 1.5px solid var(--ink, #4a2c14);
+  color: #43301b;
+  font-weight: 700;
+}
+
+.cookNowBtn {
+  background: var(--gradient-gold, linear-gradient(135deg, #f6c453, #e9a23b));
+  border: 3px solid var(--ink, #4a2c14);
+  border-radius: var(--radius-xl);
+  color: #43301b;
+  box-shadow: 0 5px 0 var(--ink-soft, rgba(74, 44, 20, 0.45));
+  text-shadow: 0 1px 0 rgba(255, 246, 224, 0.5);
+}
+
+.cookNowBtn:hover {
+  background: var(--gradient-gold, linear-gradient(135deg, #f6c453, #e9a23b));
+  transform: translateY(-1px);
+}
+
+.buyPrice {
+  color: var(--paper-text, #43301b);
+}
+
+.buyHint,
+.buyBalance {
+  color: var(--paper-text-muted, #7a5c38);
+}

@@ -5,15 +5,16 @@
   padding-bottom: 3rem;
 }
 
+/* Page head — big hanging wooden sign */
 .head {
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
-  background: var(--gradient-banner);
-  border: 1.5px solid rgba(233, 162, 59, 0.4);
+  background: var(--wood-gradient, linear-gradient(180deg, #ce9550, #b57e40));
+  border: var(--border-game, 3px solid #4a2c14);
   border-radius: var(--radius-2xl);
-  box-shadow: var(--shadow-glow-plum);
-  padding: 1.5rem 1.75rem;
+  box-shadow: var(--shadow-chunky, 0 4px 0 rgba(74, 44, 20, 0.45));
+  padding: 1.4rem 1.75rem;
 }
 
 .titleRow {
@@ -30,14 +31,16 @@
   margin: 0;
   font-family: var(--font-serif);
   font-size: 1.85rem;
-  font-weight: 700;
-  color: #f8efea;
+  font-weight: 800;
+  color: #fff6e0;
+  text-shadow: 0 2px 0 rgba(32, 15, 4, 0.45);
 }
 
 .subtitle {
   margin: 0;
   font-size: 0.95rem;
-  color: rgba(248, 239, 234, 0.82);
+  font-weight: 600;
+  color: #ffe9bd;
 }
 
 /* The search/filter stays put while the recipe grid scrolls on its own */
