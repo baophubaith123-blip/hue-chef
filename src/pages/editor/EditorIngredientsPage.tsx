@@ -8,26 +8,30 @@ import { Button } from '@/components/Button';
 import { FileUpload } from '@/components/FileUpload';
 import { Modal } from '@/components/Modal';
 import { Toast } from '@/components/Toast';
+import { useAuth } from '@/contexts/AuthContext';
 import { isEmoji, useIngredients } from '@/contexts/IngredientContext';
+import { useTaxonomy } from '@/contexts/TaxonomyContext';
 import type { Ingredient } from '@/data/types';
+import { AddNewSelect } from '@/features/editor/components/AddNewSelect';
+import { TaxonomyManager } from '@/features/editor/components/TaxonomyManager';
 import type { ChatAttachment } from '@/features/support/types';
 import { useTranslation } from '@/i18n/useTranslation';
 import { EditorShell } from '@/pages/editor/EditorShell';
 
 import styles from '@/pages/editor/EditorIngredientsPage.module.css';
 
-const CATEGORIES: Ingredient['category'][] = [
-  'protein',
-  'vegetable',
-  'spice',
-  'grain',
-  'other',
-];
-
 type FilterType = 'all' | 'has-image' | 'emoji-only';
 
 export default function EditorIngredientsPage() {
-  const { t, dict } = useTranslation();
+  const { t } = useTranslation();
+  const { user } = useAuth();
+  const {
+    ingredientCategoryOptions,
+    ingredientCategoryLabel,
+    addCategory,
+    units,
+    addUnit,
+  } = useTaxonomy();
   const {
     ingredients,
     addIngredient,
@@ -251,33 +255,48 @@ export default function EditorIngredientsPage() {
                 <label className={styles.label} htmlFor="ing-category">
                   {t('editor.ingredientCategory')}
                 </label>
-                <select
+                <AddNewSelect
                   id="ing-category"
-                  className={styles.select}
+                  selectClassName={styles.select}
                   value={category}
-                  onChange={(e) =>
-                    setCategory(e.target.value as Ingredient['category'])
-                  }
-                >
-                  {CATEGORIES.map((cat) => (
-                    <option key={cat} value={cat}>
-                      {dict.editor.ingredientCategoryLabels[cat]}
-                    </option>
-                  ))}
-                </select>
+                  options={ingredientCategoryOptions.map((option) => ({
+                    value: option.id,
+                    label: ingredientCategoryLabel(option.id),
+                  }))}
+                  addOptionLabel={t('taxonomy.addCategoryOption')}
+                  newPlaceholder={t('taxonomy.newCategoryPlaceholder')}
+                  onChange={(value) => setCategory(value)}
+                  onAddNew={(name) => {
+                    try {
+                      return addCategory('ingredient', name, user?.id ?? 'seed-editor').id;
+                    } catch {
+                      return null;
+                    }
+                  }}
+                />
+                <TaxonomyManager kind="ingredient" />
               </div>
 
               <div className={styles.field}>
                 <label className={styles.label} htmlFor="ing-unit">
                   {t('editor.ingredientUnit')}
                 </label>
-                <input
+                <AddNewSelect
                   id="ing-unit"
-                  type="text"
-                  className={styles.input}
+                  selectClassName={styles.select}
                   value={unit}
-                  onChange={(e) => setUnit(e.target.value)}
-                  placeholder={t('editor.ingredientUnitPlaceholder')}
+                  options={[
+                    { value: '', label: '—' },
+                    ...units.map((u) => ({ value: u, label: u })),
+                    ...(unit && !units.includes(unit) ? [{ value: unit, label: unit }] : []),
+                  ]}
+                  addOptionLabel={t('taxonomy.addUnitOption')}
+                  newPlaceholder={t('taxonomy.newUnitPlaceholder')}
+                  onChange={(value) => setUnit(value)}
+                  onAddNew={(name) => {
+                    addUnit(name);
+                    return name.trim();
+                  }}
                 />
               </div>
 
@@ -362,7 +381,6 @@ export default function EditorIngredientsPage() {
                       <th className={styles.th}>{t('editor.ingredientName')}</th>
                       <th className={styles.th}>{t('editor.ingredientCategory')}</th>
                       <th className={styles.th}>{t('editor.ingredientUnit')}</th>
-                      <th className={styles.th}>{t('common.description')}</th>
                       <th className={styles.th}>{t('common.actions')}</th>
                     </tr>
                   </thead>
@@ -388,19 +406,12 @@ export default function EditorIngredientsPage() {
                           </td>
                           <td className={styles.td}>
                             <span className={styles.categoryBadge}>
-                              {item.category}
+                              {ingredientCategoryLabel(item.category)}
                             </span>
                           </td>
                           <td className={styles.td}>
                             {item.unit ? (
                               item.unit
-                            ) : (
-                              <span className={styles.dimText}>—</span>
-                            )}
-                          </td>
-                          <td className={styles.td}>
-                            {item.description ? (
-                              item.description
                             ) : (
                               <span className={styles.dimText}>—</span>
                             )}
