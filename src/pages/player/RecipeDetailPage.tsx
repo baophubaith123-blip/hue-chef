@@ -7,6 +7,7 @@ import { Loading } from '@/components/Loading';
 import { Modal } from '@/components/Modal';
 import { getIngredientById } from '@/data/ingredients';
 import { difficultyName } from '@/features/recipes/lib/difficulty';
+import { RecipeComments } from '@/features/comments/components/RecipeComments';
 import { isRecipeOwned } from '@/features/recipes/lib/ownership';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRecipes } from '@/contexts/RecipeContext';
@@ -218,6 +219,8 @@ export default function RecipeDetailPage() {
           </div>
         </article>
       </div>
+
+      <RecipeComments recipeId={recipe.id} />
 
       <Modal
         isOpen={buyConfirmOpen}
