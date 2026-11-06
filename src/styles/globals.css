@@ -128,3 +128,43 @@ select:-webkit-autofill {
     transition-duration: 0.01ms;
   }
 }
+
+
+/* ===== Phase 17 — fading scrollbars everywhere =====
+   No arrows, no visible track. The slim thumb stays transparent and
+   only fades in (soft wood tone) while the area is hovered or while
+   it is actively scrolling (.is-scrolling is toggled from App). */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+}
+
+*:hover,
+*.is-scrolling {
+  scrollbar-color: rgba(150, 101, 44, 0.55) transparent;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 999px;
+}
+
+:hover::-webkit-scrollbar-thumb,
+.is-scrolling::-webkit-scrollbar-thumb {
+  background: rgba(150, 101, 44, 0.5);
+}
+
+::-webkit-scrollbar-button {
+  display: none;
+  width: 0;
+  height: 0;
+}

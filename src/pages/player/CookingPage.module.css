@@ -276,3 +276,112 @@
   border: 2.5px solid var(--ink, #200f04);
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
 }
+
+
+/* ===== Phase 17 — real festival scene backdrop ===== */
+.gridWrap {
+  background-image:
+    linear-gradient(180deg, rgba(250, 245, 239, 0.6), rgba(250, 245, 239, 0.72)),
+    url('/images/kitchen-day.webp');
+  background-size: cover;
+  background-position: center;
+  border: var(--border-game, 3px solid #4a2c14);
+  border-radius: 24px;
+  padding: 1rem;
+}
+
+[data-theme='dark'] .gridWrap {
+  background-image:
+    linear-gradient(180deg, rgba(24, 8, 20, 0.42), rgba(24, 8, 20, 0.55)),
+    url('/images/kitchen-night.webp');
+}
+
+
+/* ===== Phase 17 — the whole run fits one frame, no page scroll ===== */
+.runFrame {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  height: calc(100dvh - 8.55rem);
+  min-height: 0;
+}
+
+.runFrame > a,
+.runFrame > .top,
+.runFrame > .stageFlow,
+.runFrame > .seasonToast,
+.runFrame > span {
+  flex-shrink: 0;
+}
+
+.grid > * {
+  min-height: 0;
+  min-width: 0;
+}
+
+.runFrame > section {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.gridWrap {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.grid {
+  flex: 1 1 auto;
+  min-height: 0;
+  margin-top: 0;
+  align-items: stretch;
+}
+
+@media (max-width: 1024px) {
+  .runFrame {
+    height: calc(100dvh - 7.35rem);
+  }
+}
+
+@media (max-width: 1023px) {
+  /* Stacked layout: the grid itself scrolls inside the frame */
+  .grid {
+    overflow-y: auto;
+  }
+}
+
+/* Frame-scoped header compaction: one row, no extra margins */
+.runFrame {
+  position: relative;
+}
+
+.runFrame .top {
+  margin-bottom: 0;
+  padding: 0.8rem 1.1rem;
+  flex-wrap: nowrap;
+}
+
+.runFrame .hudDish {
+  min-width: 0;
+}
+
+.runFrame .subtitle {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.runFrame .hudTimer,
+.runFrame .hudRight {
+  flex-shrink: 0;
+}
+
+.runFrame .previewBadge {
+  position: absolute;
+  top: 0.1rem;
+  right: 0;
+  z-index: 5;
+  margin: 0;
+}

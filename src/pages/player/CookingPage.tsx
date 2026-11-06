@@ -586,6 +586,7 @@ export default function CookingPage() {
   if (session.phase === 'market' && stageConfig) {
     return (
       <PlayerShell>
+        <div className={styles.runFrame}>
         {stageHeader}
         <MarketStage
           recipe={recipe}
@@ -594,6 +595,7 @@ export default function CookingPage() {
           onProgress={setLiveStagePoints}
           onComplete={(bonus) => completeStage('market', bonus)}
         />
+        </div>
       </PlayerShell>
     );
   }
@@ -601,6 +603,7 @@ export default function CookingPage() {
   if (session.phase === 'catch' && stageConfig) {
     return (
       <PlayerShell>
+        <div className={styles.runFrame}>
         {stageHeader}
         <CatchStage
           recipe={recipe}
@@ -609,6 +612,7 @@ export default function CookingPage() {
           onProgress={setLiveStagePoints}
           onComplete={(bonus) => completeStage('catch', bonus)}
         />
+        </div>
       </PlayerShell>
     );
   }
@@ -616,6 +620,7 @@ export default function CookingPage() {
   if (session.phase === 'finish' && stageConfig) {
     return (
       <PlayerShell>
+        <div className={styles.runFrame}>
         {stageHeader}
         <FinishStage
           recipe={recipe}
@@ -624,6 +629,7 @@ export default function CookingPage() {
           onProgress={setLiveStagePoints}
           onComplete={(bonus) => completeStage('finish', bonus)}
         />
+        </div>
       </PlayerShell>
     );
   }
@@ -631,6 +637,7 @@ export default function CookingPage() {
   if (session.phase === 'minigames') {
     return (
       <PlayerShell>
+        <div className={styles.runFrame}>
         <Link className={styles.back} to={`/recipes/${recipe.id}`}>
           ← {t('cooking.recipeDetail')}
         </Link>
@@ -653,12 +660,14 @@ export default function CookingPage() {
           quizSecondChance={(session.quizSecondChanceLeft ?? 0) > 0}
           onQuizSecondChanceUsed={consumeQuizSecondChance}
         />
+        </div>
       </PlayerShell>
     );
   }
 
   return (
     <PlayerShell>
+      <div className={styles.runFrame}>
       <Link className={styles.back} to={`/recipes/${recipe.id}`}>
         ← {t('cooking.recipeDetail')}
       </Link>
@@ -776,6 +785,7 @@ export default function CookingPage() {
           unlockedAchievements={appliedResult?.unlockedAchievements}
         />
       ) : null}
+      </div>
     </PlayerShell>
   );
 }

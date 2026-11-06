@@ -354,3 +354,15 @@
 }
 
 .pagerDotActive { background: var(--color-gold, #e9a23b); }
+
+
+/* ===== Phase 17 — one-frame fit ===== */
+.tray {
+  height: 100%;
+}
+
+.list {
+  flex: 1 1 auto;
+  max-height: none;
+  min-height: 0;
+}

@@ -179,3 +179,10 @@
 .stepNeeds {
   color: var(--paper-text-muted, #7a5c38);
 }
+
+
+/* ===== Phase 17 — one-frame fit ===== */
+.steps {
+  height: 100%;
+  max-height: none;
+}

@@ -117,3 +117,11 @@
   border: 2.5px solid var(--ink, #4a2c14);
   box-shadow: 0 3px 0 var(--ink-soft, rgba(74, 44, 20, 0.45));
 }
+
+
+/* ===== Phase 17 — one-frame fit ===== */
+.runnerContainer {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+}
