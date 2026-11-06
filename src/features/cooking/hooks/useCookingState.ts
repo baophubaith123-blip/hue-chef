@@ -6,6 +6,8 @@ export function useCookingState() {
   const {
     session,
     startCooking,
+    completeStage,
+    addStageBonus,
     dropIngredient,
     expireCombo,
     executeStepAction,
@@ -29,6 +31,8 @@ export function useCookingState() {
     liveScore,
     scoreRules: SCORE_RULES,
     startCooking,
+    completeStage,
+    addStageBonus,
     dropIngredient,
     expireCombo,
     executeStepAction,

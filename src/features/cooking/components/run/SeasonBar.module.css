@@ -1,0 +1,121 @@
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  background: rgba(24, 5, 12, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+}
+
+.card {
+  width: min(560px, 100%);
+  background: #fffaf0;
+  border: 3.5px solid var(--color-plum, #4a1525);
+  border-radius: 20px;
+  padding: 20px 22px 22px;
+  text-align: center;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+  animation: season-pop 0.2s ease;
+}
+
+@keyframes season-pop {
+  from { opacity: 0; transform: scale(0.93); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.title {
+  color: var(--color-plum, #4a1525);
+  font-size: 19px;
+  margin-bottom: 4px;
+}
+
+.prompt {
+  font-size: 14px;
+  color: var(--color-text-muted, #7a6455);
+  margin-bottom: 18px;
+}
+
+.track {
+  position: relative;
+  height: 40px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #d9c7ae, #cbb694);
+  border: 3px solid var(--color-plum, #4a1525);
+  overflow: hidden;
+  margin-bottom: 18px;
+}
+
+.zone {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  background: linear-gradient(180deg, #ffd873, #f2b63c);
+  border-left: 2px dashed rgba(74, 21, 37, 0.55);
+  border-right: 2px dashed rgba(74, 21, 37, 0.55);
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+}
+
+.zoneCore {
+  width: 34%;
+  background: rgba(255, 255, 255, 0.45);
+  border-left: 2px solid rgba(74, 21, 37, 0.35);
+  border-right: 2px solid rgba(74, 21, 37, 0.35);
+}
+
+.needle {
+  position: absolute;
+  top: -2px;
+  bottom: -2px;
+  width: 6px;
+  margin-left: -3px;
+  background: var(--color-plum, #4a1525);
+  border-radius: 3px;
+  box-shadow: 0 0 0 2px #fff8e6;
+}
+
+.needlePerfect {
+  background: #b97e10;
+  box-shadow: 0 0 12px 4px rgba(255, 200, 60, 0.9);
+}
+
+.needleMiss {
+  background: var(--color-danger, #b42318);
+}
+
+.stopBtn {
+  background: var(--color-gold, #e9a23b);
+  color: #3a2405;
+  font-weight: 900;
+  font-size: 18px;
+  letter-spacing: 0.04em;
+  border: 3px solid var(--color-plum, #4a1525);
+  border-radius: 999px;
+  padding: 12px 42px;
+  cursor: pointer;
+  box-shadow: 0 5px 0 var(--color-plum, #4a1525);
+}
+
+.stopBtn:hover {
+  filter: brightness(1.05);
+}
+
+.outcome {
+  font-size: 17px;
+  font-weight: 900;
+  min-height: 47px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.outcomeGood {
+  color: #b97e10;
+}
+
+.outcomeMiss {
+  color: var(--color-danger, #b42318);
+}

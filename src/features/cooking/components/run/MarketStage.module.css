@@ -1,0 +1,234 @@
+.stage {
+  position: relative;
+  border: 3px solid var(--color-plum, #4a1525);
+  border-radius: 20px;
+  background: linear-gradient(180deg, #fdf3d8, #fbe3ae);
+  padding: 16px 16px 76px;
+  overflow: hidden;
+}
+
+.topBar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.stageChip {
+  background: var(--color-plum, #4a1525);
+  color: #ffe9be;
+  font-weight: 800;
+  font-size: 14px;
+  border-radius: 999px;
+  padding: 6px 14px;
+}
+
+.chip {
+  background: rgba(74, 21, 37, 0.85);
+  color: #fff7e8;
+  font-size: 13.5px;
+  font-weight: 700;
+  border-radius: 999px;
+  padding: 6px 12px;
+}
+
+.chipDanger {
+  background: var(--color-danger, #b42318);
+}
+
+.listPanel {
+  border: 2.5px dashed var(--color-gold, #e9a23b);
+  background: #fff8e6;
+  border-radius: 14px;
+  padding: 12px 14px;
+  margin-bottom: 14px;
+}
+
+.listHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.listTitle {
+  font-weight: 800;
+  color: #4a1525;
+  font-size: 15px;
+}
+
+.viewChip {
+  background: var(--color-warning-soft, #fff4e5);
+  color: var(--color-warning, #9a5b00);
+  font-weight: 800;
+  font-size: 13px;
+  border-radius: 999px;
+  padding: 4px 10px;
+}
+
+.listItems {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.listItem,
+.listItemGot {
+  background: #fff;
+  border: 1.5px solid var(--color-border, #e8d9c4);
+  border-radius: 999px;
+  padding: 4px 11px;
+  font-size: 13.5px;
+  font-weight: 600;
+}
+
+.listItem small,
+.listItemGot small {
+  color: var(--color-text-muted, #7a6455);
+  margin-left: 5px;
+}
+
+.listItemGot {
+  background: var(--color-success-soft, #e4f8ec);
+  border-color: var(--color-success, #15803d);
+  color: var(--color-success, #15803d);
+}
+
+.listHiddenPanel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border: 2.5px dashed rgba(74, 21, 37, 0.4);
+  background: rgba(255, 248, 230, 0.65);
+  border-radius: 14px;
+  padding: 16px 14px;
+  margin-bottom: 14px;
+  font-weight: 700;
+  color: #6b4356;
+  font-size: 15px;
+}
+
+.hiddenEmoji {
+  font-size: 24px;
+}
+
+.stall {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(118px, 1fr));
+  gap: 10px;
+}
+
+.item {
+  background: #fffdf9;
+  border: 2.5px solid var(--color-border, #e8d9c4);
+  border-radius: 16px;
+  padding: 12px 6px 9px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  cursor: pointer;
+  font: inherit;
+  transition: transform 0.12s ease, border-color 0.12s ease;
+}
+
+.item:hover:not(:disabled) {
+  transform: translateY(-3px);
+  border-color: var(--color-gold, #e9a23b);
+}
+
+.itemEmoji {
+  font-size: 30px;
+  line-height: 1.1;
+}
+
+.itemName {
+  font-weight: 700;
+  font-size: 14px;
+  color: #33231f;
+}
+
+.itemSub {
+  font-size: 12px;
+  color: var(--color-text-muted, #7a6455);
+  min-height: 15px;
+}
+
+.itemPicked {
+  border-color: var(--color-success, #15803d);
+  background: var(--color-success-soft, #e4f8ec);
+}
+
+.itemWrong {
+  border-color: var(--color-danger, #b42318);
+  background: var(--color-danger-soft, #fdecea);
+  animation: market-shake 0.4s ease;
+}
+
+@keyframes market-shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+.toast {
+  position: absolute;
+  left: 50%;
+  bottom: 128px;
+  transform: translateX(-50%);
+  background: var(--color-plum, #4a1525);
+  color: #ffe9be;
+  font-weight: 800;
+  font-size: 14.5px;
+  padding: 9px 18px;
+  border-radius: 999px;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.3);
+  animation: market-toast 0.25s ease;
+  white-space: nowrap;
+  z-index: 20;
+}
+
+@keyframes market-toast {
+  from { opacity: 0; transform: translate(-50%, 8px); }
+  to { opacity: 1; transform: translate(-50%, 0); }
+}
+
+.footer {
+  position: absolute;
+  right: 16px;
+  bottom: 14px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.peekBtn {
+  background: #fffdf9;
+  color: var(--color-plum, #4a1525);
+  font-weight: 800;
+  font-size: 15px;
+  border: 3px solid var(--color-plum, #4a1525);
+  border-radius: 999px;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.goBtn {
+  background: var(--color-gold, #e9a23b);
+  color: #3a2405;
+  font-weight: 900;
+  font-size: 16.5px;
+  border: 3px solid var(--color-plum, #4a1525);
+  border-radius: 999px;
+  padding: 11px 26px;
+  cursor: pointer;
+  box-shadow: 0 5px 0 var(--color-plum, #4a1525);
+}
+
+.goBtn:hover,
+.peekBtn:hover {
+  filter: brightness(1.05);
+}

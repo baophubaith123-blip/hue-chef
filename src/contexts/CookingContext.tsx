@@ -7,14 +7,24 @@ import {
   type ReactNode,
 } from 'react';
 
-import type { CookingSession, CookingState, MinigameResultEntry } from '@/features/cooking/types';
+import type {
+  CookingSession,
+  CookingState,
+  MinigameResultEntry,
+  StageResultEntry,
+} from '@/features/cooking/types';
 import type { Recipe } from '@/data/types';
 import { COMBO_WINDOW_MS, comboBonusForStreak } from '@/features/cooking/lib/combo';
+import { firstStagePhase, resolveStageConfig } from '@/features/cooking/lib/stage-config';
 import { AppError } from '@/lib/errors';
 import { calculateScoreResult, calculateStars, SCORE_RULES, type ScoreInput } from '@/lib/score';
 
+type StageCompletion = 'market' | 'catch' | 'finish';
+
 type CookingAction =
   | { type: 'START'; recipe: Recipe }
+  | { type: 'COMPLETE_STAGE'; stage: StageCompletion; bonus: number }
+  | { type: 'ADD_BONUS'; stage: StageResultEntry['stage']; amount: number }
   | { type: 'DROP_INGREDIENT'; ingredientId: string; at: number }
   | { type: 'COMBO_EXPIRE'; at: number }
   | { type: 'EXECUTE_STEP_ACTION' }
@@ -25,12 +35,31 @@ type CookingAction =
 interface CookingContextValue {
   session: CookingSession | null;
   startCooking: (recipe: Recipe) => void;
+  /** Bank a finished run stage's bonus and advance to the next stage. */
+  completeStage: (stage: StageCompletion, bonus: number) => void;
+  /** Bank bonus points earned mid-stage (the seasoning bar during cooking). */
+  addStageBonus: (stage: StageResultEntry['stage'], amount: number) => void;
   dropIngredient: (ingredientId: string) => boolean; // returns true if correct drag, false if wrong drag
   expireCombo: (at: number) => void;
   executeStepAction: () => void;
   completeMinigames: (bonusScore: number, minigameResults: MinigameResultEntry[]) => void;
   tickTimer: () => void;
   resetCooking: () => void;
+}
+
+/** Merge a stage's points into the per-stage breakdown (one row per stage). */
+function mergeStageResult(
+  results: StageResultEntry[],
+  stage: StageResultEntry['stage'],
+  score: number,
+): StageResultEntry[] {
+  const existing = results.find((entry) => entry.stage === stage);
+  if (!existing) {
+    return [...results, { stage, score }];
+  }
+  return results.map((entry) =>
+    entry.stage === stage ? { ...entry, score: entry.score + score } : entry,
+  );
 }
 
 const initialState: CookingState = { session: null };
@@ -65,9 +94,9 @@ function finalizeSession(session: CookingSession, timedOut: boolean): CookingSes
     };
   }
 
-  // Combo bonus is an extension layer on top of the lib/score total
-  // (same channel as minigame bonus points); lib/score.ts stays untouched.
-  const finalScore = Math.max(0, totalScore + session.comboBonus);
+  // Combo + run-stage bonuses are extension layers on top of the lib/score
+  // total (same channel as minigame bonus points); lib/score.ts is untouched.
+  const finalScore = Math.max(0, totalScore + session.comboBonus + session.stageBonus);
   const stars = calculateStars(finalScore, session.recipe.baseScore, session.recipe.ingredients.length);
 
   return {
@@ -87,7 +116,7 @@ function cookingReducer(state: CookingState, action: CookingAction): CookingStat
       const totalDurationSeconds = recipe.duration;
       const nextSession: CookingSession = {
         recipe,
-        phase: 'running',
+        phase: firstStagePhase(recipe),
         timeRemainingSeconds: totalDurationSeconds,
         totalDurationSeconds,
         correctCount: 0,
@@ -101,10 +130,48 @@ function cookingReducer(state: CookingState, action: CookingAction): CookingStat
         lastComboAt: null,
         maxCombo: 0,
         comboBonus: 0,
+        stageBonus: 0,
+        stageResults: [],
         finalScore: 0,
         stars: 1,
       };
       return { session: nextSession };
+    }
+    case 'COMPLETE_STAGE': {
+      if (!session || session.phase !== action.stage) {
+        return state;
+      }
+      const cfg = resolveStageConfig(session.recipe);
+      const banked: CookingSession = {
+        ...session,
+        stageBonus: session.stageBonus + action.bonus,
+        runningScoreDelta: session.runningScoreDelta + action.bonus,
+        stageResults: mergeStageResult(session.stageResults, action.stage, action.bonus),
+      };
+      if (action.stage === 'market') {
+        return { session: { ...banked, phase: cfg.catchEnabled ? 'catch' : 'running' } };
+      }
+      if (action.stage === 'catch') {
+        return { session: { ...banked, phase: 'running' } };
+      }
+      // finish → quiz minigames when the recipe has any and the stage is on.
+      if (cfg.quizEnabled && (session.recipe.minigames?.length ?? 0) > 0) {
+        return { session: { ...banked, phase: 'minigames' } };
+      }
+      return { session: finalizeSession(banked, false) };
+    }
+    case 'ADD_BONUS': {
+      if (!session) {
+        return state;
+      }
+      return {
+        session: {
+          ...session,
+          stageBonus: session.stageBonus + action.amount,
+          runningScoreDelta: session.runningScoreDelta + action.amount,
+          stageResults: mergeStageResult(session.stageResults, action.stage, action.amount),
+        },
+      };
     }
     case 'TICK': {
       if (!session || session.phase !== 'running') {
@@ -210,7 +277,18 @@ function cookingReducer(state: CookingState, action: CookingAction): CookingStat
       };
 
       if (nextStepIndex >= steps.length) {
-        if (session.recipe.minigames && session.recipe.minigames.length > 0) {
+        // The 5-stage run continues with the finishing rhythm stage before
+        // the quiz; without it, fall back to the classic minigame flow.
+        const cfg = resolveStageConfig(session.recipe);
+        if (cfg.finishEnabled) {
+          return {
+            session: {
+              ...updated,
+              phase: 'finish',
+            },
+          };
+        }
+        if (cfg.quizEnabled && session.recipe.minigames && session.recipe.minigames.length > 0) {
           return {
             session: {
               ...updated,
@@ -231,7 +309,10 @@ function cookingReducer(state: CookingState, action: CookingAction): CookingStat
         scoreInput,
         session.recipe.ingredients.length,
       );
-      const finalScore = Math.max(0, dragDropScore + session.comboBonus + action.bonusScore);
+      const finalScore = Math.max(
+        0,
+        dragDropScore + session.comboBonus + session.stageBonus + action.bonusScore,
+      );
       const stars = calculateStars(
         finalScore,
         session.recipe.baseScore,
@@ -259,6 +340,14 @@ export function CookingProvider({ children }: { children: ReactNode }) {
 
   const startCooking = useCallback((recipe: Recipe) => {
     dispatch({ type: 'START', recipe });
+  }, []);
+
+  const completeStage = useCallback((stage: StageCompletion, bonus: number) => {
+    dispatch({ type: 'COMPLETE_STAGE', stage, bonus });
+  }, []);
+
+  const addStageBonus = useCallback((stage: StageResultEntry['stage'], amount: number) => {
+    dispatch({ type: 'ADD_BONUS', stage, amount });
   }, []);
 
   const dropIngredient = useCallback(
@@ -305,6 +394,8 @@ export function CookingProvider({ children }: { children: ReactNode }) {
     () => ({
       session: state.session,
       startCooking,
+      completeStage,
+      addStageBonus,
       dropIngredient,
       expireCombo,
       executeStepAction,
@@ -315,6 +406,8 @@ export function CookingProvider({ children }: { children: ReactNode }) {
     [
       state.session,
       startCooking,
+      completeStage,
+      addStageBonus,
       dropIngredient,
       expireCombo,
       executeStepAction,

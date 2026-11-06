@@ -63,6 +63,25 @@ export interface TypingMinigame extends MinigameBase {
 
 export type Minigame = QuizMinigame | ActionCookingMinigame | TypingMinigame;
 
+/**
+ * Optional per-recipe configuration for the 5-stage game run
+ * (market → catch → cook+season → finish → quiz). Every field is optional:
+ * a missing toggle means "on" and a missing number means "auto by ★".
+ */
+export interface RecipeGameplayConfig {
+  marketEnabled?: boolean;
+  catchEnabled?: boolean;
+  seasonEnabled?: boolean;
+  finishEnabled?: boolean;
+  quizEnabled?: boolean;
+  /** Override for the market stage length in seconds. */
+  marketSeconds?: number;
+  /** Multiplier on the catch stage fall speed (1 = auto by ★). */
+  catchSpeed?: number;
+  /** Override for the finishing stage length in seconds. */
+  finishSeconds?: number;
+}
+
 export type RecipeStatus = 'draft' | 'pending' | 'approved' | 'rejected';
 
 export interface Recipe {
@@ -78,6 +97,8 @@ export interface Recipe {
   /** @deprecated – xóa ở Phase D */
   steps?: CookingStep[];
   minigames: Minigame[];
+  /** 5-stage run configuration; absent = all stages on, timings auto by ★. */
+  gameplay?: RecipeGameplayConfig;
   status?: RecipeStatus;
   editorId?: string;
   rejectionReason?: string;

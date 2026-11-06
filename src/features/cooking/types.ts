@@ -1,6 +1,20 @@
 import type { Recipe } from '@/data/types';
 
-export type CookingPhase = 'idle' | 'running' | 'minigames' | 'success' | 'failed';
+export type CookingPhase =
+  | 'idle'
+  | 'market'
+  | 'catch'
+  | 'running'
+  | 'finish'
+  | 'minigames'
+  | 'success'
+  | 'failed';
+
+/** One scored stage of the 5-stage run (points flow through the bonus channel). */
+export interface StageResultEntry {
+  stage: 'market' | 'catch' | 'season' | 'finish';
+  score: number;
+}
 
 export interface MinigameResultEntry {
   minigameId: string;
@@ -30,6 +44,10 @@ export interface CookingSession {
   maxCombo: number;
   /** Total combo bonus points banked (added on top of the lib/score total). */
   comboBonus: number;
+  /** Total bonus banked by the new run stages (market / catch / season / finish). */
+  stageBonus: number;
+  /** Per-stage breakdown of stageBonus, shown on the result modal. */
+  stageResults: StageResultEntry[];
   finalScore: number;
   stars: 1 | 2 | 3 | 4 | 5;
   failReason?: 'timeout' | 'abandoned';

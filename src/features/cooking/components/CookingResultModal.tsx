@@ -152,6 +152,38 @@ export function CookingResultModal({
               </div>
             ) : null}
 
+            {/* 5-stage run breakdown */}
+            {session.stageResults.length > 0 && (
+              <div className={styles.minigamesSection}>
+                <h4 className={styles.minigamesTitle}>{dict.cooking.result.stagesSummary}</h4>
+                <ul className={styles.minigamesList}>
+                  {session.stageResults.map((entry) => {
+                    const stageMeta = {
+                      market: { icon: '🧺', name: dict.cooking.stages.marketName },
+                      catch: { icon: '🎯', name: dict.cooking.stages.catchName },
+                      season: { icon: '🧂', name: dict.cooking.stages.seasonName },
+                      finish: { icon: '🍲', name: dict.cooking.stages.finishName },
+                    }[entry.stage];
+                    return (
+                      <li key={entry.stage} className={styles.minigameItem}>
+                        <div className={styles.minigameInfo}>
+                          <span>{stageMeta.icon}</span>
+                          <span className={styles.minigameTitle}>{stageMeta.name}</span>
+                        </div>
+                        <span
+                          className={`${styles.minigameScore} ${
+                            entry.score >= 0 ? styles.minigamePassed : styles.minigameFailed
+                          }`}
+                        >
+                          {entry.score >= 0 ? `+${entry.score}` : entry.score}
+                        </span>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            )}
+
             {/* Minigames Summary */}
             {session.minigameResults && session.minigameResults.length > 0 && (
               <div className={styles.minigamesSection}>
