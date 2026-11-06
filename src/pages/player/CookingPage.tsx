@@ -10,6 +10,7 @@ import { useAchievements } from '@/contexts/AchievementContext';
 import { useNotification } from '@/contexts/NotificationContext';
 import { useRecipes } from '@/contexts/RecipeContext';
 import type { CookedRecipeEntry } from '@/features/auth/types';
+import { getDefaultPathForRole } from '@/features/auth/types';
 import type { CookingSession, MinigameResultEntry } from '@/features/cooking/types';
 import { CookingPot, type PotDropFx } from '@/features/cooking/components/CookingPot';
 import { CookingResultModal } from '@/features/cooking/components/CookingResultModal';
@@ -107,6 +108,12 @@ export default function CookingPage() {
     recipe &&
     (recipe.editorId === user?.id || user?.role === 'admin');
   const canCook = Boolean(approved || previewAllowed);
+
+  // Editors/admins reach this route only to PREVIEW a dish (no progress is
+  // applied in preview). Without ?preview=1 they belong to their own area.
+  if (user && user.role !== 'player' && !previewAllowed) {
+    return <Navigate to={getDefaultPathForRole(user.role)} replace />;
+  }
 
   const trayIngredientIds = useMemo(() => {
     if (!recipe) {
@@ -415,13 +422,13 @@ export default function CookingPage() {
 
   const { draggingId, getTrayItemProps } = useDragDrop({ onDropOnPot: handleDropOnPot });
 
+  // "Used" is per-step: the pot empties when a step's action runs
+  // (EXECUTE_STEP_ACTION resets potIngredients), so an ingredient a later
+  // step needs again must be droppable again. Counting completed steps
+  // here disabled its only tray chip and made such recipes unfinishable.
   const placedIngredientIds = useMemo(() => {
     if (!session) return [];
-    const steps = session.recipe.steps ?? [];
-    const usedInCompleted = session.completedStepIndexes.flatMap(
-      (idx) => steps[idx]?.requiredIngredients ?? [],
-    );
-    return [...usedInCompleted, ...session.potIngredients];
+    return [...session.potIngredients];
   }, [session]);
 
   if (!id) {
