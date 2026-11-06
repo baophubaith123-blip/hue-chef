@@ -143,7 +143,7 @@ export default function AdminCommentsPage() {
                         </div>
                       </td>
                       <td>
-                        <span className={styles.rating}>{'★'.repeat(c.rating)}{'☆'.repeat(5 - c.rating)}</span>
+                        <span className={styles.rating}>{'★'.repeat(Math.max(0, Math.min(5, c.rating)))}{'☆'.repeat(Math.max(0, 5 - Math.min(5, c.rating)))}</span>
                       </td>
                       <td>
                         <span className={`${styles.reportCount} ${reportCount > 0 ? styles.reportHot : ''}`}>

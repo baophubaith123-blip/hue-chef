@@ -29,7 +29,7 @@ export default function AdminBroadcastPage() {
   const [success, setSuccess] = useState<{ count: number } | null>(null);
 
   const hasContent = useMemo(
-    () => subject.trim().length > 0 || body.trim().length > 0,
+    () => subject.trim().length > 0 && body.trim().length > 0,
     [subject, body],
   );
 
@@ -82,7 +82,7 @@ export default function AdminBroadcastPage() {
     } catch (err) {
       if (err instanceof AppError) {
         if (err.code === 'BROADCAST_EMPTY') {
-          setError(t('mail.broadcastEmpty') as unknown as string);
+          setError(t('errors.broadcastEmpty'));
         } else {
           setError(err.message);
         }
@@ -177,9 +177,7 @@ export default function AdminBroadcastPage() {
 
               <div className={styles.actions}>
                 <Button type="button" variant="secondary" onClick={handleReset}>
-                  {(t('common.reset') as unknown as string) === 'common.reset'
-                    ? 'Làm lại'
-                    : (t('common.reset') as unknown as string)}
+                  {t('common.reset')}
                 </Button>
                 <Button type="submit" variant="primary">
                   📤 {t('common.send')}

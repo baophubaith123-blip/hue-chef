@@ -6,7 +6,6 @@ import { EmptyState } from '@/components/EmptyState';
 import { Modal } from '@/components/Modal';
 import { useAuth } from '@/contexts/AuthContext';
 import { useAdmin } from '@/contexts/AdminContext';
-import { SEED_ACHIEVEMENTS } from '@/data/achievements';
 import type { Achievement, AchievementCondition, PerkKind } from '@/data/types';
 import { PERK_KINDS } from '@/features/achievements/lib/perks';
 import { useTranslation } from '@/i18n/useTranslation';
@@ -34,9 +33,8 @@ export default function AdminAchievementsPage() {
   const refresh = () => setRefreshTick((x) => x + 1);
 
   const achievements = useMemo<Achievement[]>(() => {
-    const custom = admin.listAdminAchievements();
-    if (custom.length > 0) return custom;
-    return SEED_ACHIEVEMENTS.slice();
+    void refreshTick;
+    return admin.listAdminAchievements();
   }, [admin, refreshTick]);
 
   const [showModal, setShowModal] = useState(false);

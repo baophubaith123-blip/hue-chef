@@ -12,6 +12,7 @@ import { MailProvider } from '@/contexts/MailContext';
 import { NotificationProvider } from '@/contexts/NotificationContext';
 import { RecipeProvider } from '@/contexts/RecipeContext';
 import { SupportProvider } from '@/contexts/SupportContext';
+import { MaintenanceGate } from '@/components/MaintenanceGate';
 import { ThemeProvider } from '@/contexts/ThemeContext';
 
 export function AppProviders({ children }: { children: ReactNode }) {
@@ -19,6 +20,7 @@ export function AppProviders({ children }: { children: ReactNode }) {
     <ThemeProvider>
       <LanguageContextProvider>
         <AuthProvider>
+          <MaintenanceGate>
           <AdminProvider>
             <RecipeProvider>
               <IngredientProvider>
@@ -38,6 +40,7 @@ export function AppProviders({ children }: { children: ReactNode }) {
               </IngredientProvider>
             </RecipeProvider>
           </AdminProvider>
+          </MaintenanceGate>
         </AuthProvider>
       </LanguageContextProvider>
     </ThemeProvider>

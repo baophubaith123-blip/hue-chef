@@ -2,11 +2,13 @@ import {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
+  useState,
   type ReactNode,
 } from 'react';
 
-import { SEED_ACHIEVEMENTS } from '@/data/achievements';
+import { mergeAchievementCatalogue } from '@/features/achievements/lib/catalogue';
 import { getRecipeById } from '@/data/recipes';
 import type { Achievement, RecipeCategory } from '@/data/types';
 import { findUserById, loadUsers, saveUsers, updateStoredUserById } from '@/features/auth/store';
@@ -189,6 +191,16 @@ function evaluate(
 }
 
 export function AchievementProvider({ children }: { children: ReactNode }) {
+  // Effective catalogue = seed achievements merged with the admin-managed
+  // overrides/deletions (features/achievements/lib/catalogue). Refreshed on
+  // focus so admin edits reach players without a full reload.
+  const [catalogue, setCatalogue] = useState<Achievement[]>(() => mergeAchievementCatalogue());
+  useEffect(() => {
+    const refresh = () => setCatalogue(mergeAchievementCatalogue());
+    window.addEventListener('focus', refresh);
+    return () => window.removeEventListener('focus', refresh);
+  }, []);
+
   const unlockedForUser = useCallback((userId: string): UnlockedAchievement[] => {
     const store = loadStore();
     return store.byUser[userId] ?? [];
@@ -207,7 +219,7 @@ export function AchievementProvider({ children }: { children: ReactNode }) {
       const store = loadStore();
       const current = new Set((store.byUser[user.id] ?? []).map((a) => a.id));
       const unlockedNow: Achievement[] = [];
-      for (const achievement of SEED_ACHIEVEMENTS) {
+      for (const achievement of catalogue) {
         if (current.has(achievement.id)) continue;
         const { unlocked } = evaluate(achievement, user, progress);
         if (unlocked) {
@@ -237,16 +249,16 @@ export function AchievementProvider({ children }: { children: ReactNode }) {
       }
       return unlockedNow;
     },
-    [],
+    [catalogue],
   );
 
   const getProgressPct = useCallback(
     (user: PublicUser, achievementId: string, progress: Partial<PlayerAchievementProgress>): number => {
-      const achievement = SEED_ACHIEVEMENTS.find((a) => a.id === achievementId);
+      const achievement = catalogue.find((a) => a.id === achievementId);
       if (!achievement) return 0;
       return evaluate(achievement, user, progress).pct;
     },
-    [],
+    [catalogue],
   );
 
   const getProgressDetail = useCallback(
@@ -255,24 +267,24 @@ export function AchievementProvider({ children }: { children: ReactNode }) {
       achievementId: string,
       progress: Partial<PlayerAchievementProgress>,
     ): { current: number; target: number; pct: number } => {
-      const achievement = SEED_ACHIEVEMENTS.find((a) => a.id === achievementId);
+      const achievement = catalogue.find((a) => a.id === achievementId);
       if (!achievement) return { current: 0, target: 0, pct: 0 };
       const result = evaluate(achievement, user, progress);
       return { current: result.current, target: result.target, pct: result.pct };
     },
-    [],
+    [catalogue],
   );
 
   const value = useMemo<AchievementContextValue>(
     () => ({
-      allAchievements: SEED_ACHIEVEMENTS,
+      allAchievements: catalogue,
       unlockedForUser,
       isUnlocked,
       checkAndUnlockForUser,
       getProgressPct,
       getProgressDetail,
     }),
-    [unlockedForUser, isUnlocked, checkAndUnlockForUser, getProgressPct, getProgressDetail],
+    [catalogue, unlockedForUser, isUnlocked, checkAndUnlockForUser, getProgressPct, getProgressDetail],
   );
 
   return <AchievementContext.Provider value={value}>{children}</AchievementContext.Provider>;

@@ -5,7 +5,8 @@ import { Card } from '@/components/Card';
 import { useAuth } from '@/contexts/AuthContext';
 import { useAdmin } from '@/contexts/AdminContext';
 import type { StoredUser } from '@/features/auth/types';
-import type { Recipe } from '@/data/types';
+import type { Achievement, Recipe } from '@/data/types';
+import type { AdminSettings } from '@/features/admin/types';
 import { AppError } from '@/lib/errors';
 import { useTranslation } from '@/i18n/useTranslation';
 import { AdminShell } from '@/pages/admin/AdminShell';
@@ -15,11 +16,19 @@ import styles from '@/pages/admin/AdminBackupPage.module.css';
 interface BackupPayload {
   users?: StoredUser[];
   recipes?: Recipe[];
+  adminAchievements?: Achievement[];
+  deletedAchievementIds?: string[];
+  settings?: AdminSettings;
   timestamp?: string;
 }
 
+function describeError(err: unknown, fallback: string, invalidBackup: string): string {
+  if (err instanceof AppError && err.code === 'INVALID_BACKUP') return invalidBackup;
+  return err instanceof Error ? err.message : fallback;
+}
+
 export default function AdminBackupPage() {
-  const { t } = useTranslation();
+  const { t, dict } = useTranslation();
   const { user } = useAuth();
   const admin = useAdmin();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -44,7 +53,7 @@ export default function AdminBackupPage() {
       setErrorMsg(null);
       setSuccessMsg(t('admin.exportJson') + ' ✓');
     } catch (err) {
-      const msg = err instanceof Error ? err.message : String(err);
+      const msg = describeError(err, String(err), t('errors.backupInvalid'));
       setErrorMsg(msg);
       setSuccessMsg(null);
       window.alert(msg);
@@ -61,9 +70,7 @@ export default function AdminBackupPage() {
       if (fileInputRef.current) fileInputRef.current.value = '';
       return;
     }
-    const confirmed = window.confirm(
-      'Warning: Import will overwrite current data. Continue?',
-    );
+    const confirmed = window.confirm(t('admin.backupImportConfirm'));
     if (!confirmed) {
       if (fileInputRef.current) fileInputRef.current.value = '';
       return;
@@ -73,14 +80,21 @@ export default function AdminBackupPage() {
       try {
         const raw = String(reader.result ?? '');
         const parsed = JSON.parse(raw) as BackupPayload;
-        admin.importAll(
-          { users: parsed.users, recipes: parsed.recipes },
+        const counts = admin.importAll(
+          {
+            users: parsed.users,
+            recipes: parsed.recipes,
+            adminAchievements: parsed.adminAchievements,
+            deletedAchievementIds: parsed.deletedAchievementIds,
+            settings: parsed.settings,
+          },
           user,
         );
         setErrorMsg(null);
-        setSuccessMsg(t('admin.importJson') + ' ✓');
+        setSuccessMsg(dict.admin.backupImported(counts.userCount, counts.recipeCount));
+        window.setTimeout(() => window.location.reload(), 1200);
       } catch (err) {
-        const msg = err instanceof Error ? err.message : String(err);
+        const msg = describeError(err, String(err), t('errors.backupInvalid'));
         setErrorMsg(msg);
         setSuccessMsg(null);
         window.alert(msg);
@@ -89,7 +103,7 @@ export default function AdminBackupPage() {
       }
     };
     reader.onerror = () => {
-      const msg = 'Failed to read file';
+      const msg = t('errors.fileReadFailed');
       setErrorMsg(msg);
       setSuccessMsg(null);
       window.alert(msg);
@@ -125,7 +139,7 @@ export default function AdminBackupPage() {
         </div>
 
         <div className={styles.warningBox}>
-          <strong>⚠ Warning:</strong> Import will overwrite current data — please confirm before importing.
+          <strong>{t('admin.backupWarning')}</strong>
         </div>
 
         {errorMsg ? <div className={styles.error} role="alert">{errorMsg}</div> : null}

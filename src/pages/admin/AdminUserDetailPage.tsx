@@ -6,6 +6,7 @@ import { Card } from '@/components/Card';
 import { EmptyState } from '@/components/EmptyState';
 import { useAuth } from '@/contexts/AuthContext';
 import { useAdmin } from '@/contexts/AdminContext';
+import { useMail } from '@/contexts/MailContext';
 import { AuditLogTable } from '@/features/admin/components/AuditLogTable';
 import type { AuditLogEntry } from '@/features/admin/types';
 import { AppError } from '@/lib/errors';
@@ -22,6 +23,7 @@ export default function AdminUserDetailPage() {
   const { id } = useParams<{ id: string }>();
   const { user } = useAuth();
   const admin = useAdmin();
+  const { sendBanNoticeMail } = useMail();
   const navigate = useNavigate();
   const [refreshTick, setRefreshTick] = useState(0);
 
@@ -41,7 +43,7 @@ export default function AdminUserDetailPage() {
 
   const userAudit: AuditLogEntry[] = useMemo(() => {
     if (!id) return [];
-    return admin.listAuditLog({ actorId: id }).slice(0, 200);
+    return admin.listAuditLog({ targetId: id }).slice(0, 200);
   }, [admin, id, refreshTick]);
 
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -88,6 +90,7 @@ export default function AdminUserDetailPage() {
         const reason = window.prompt(t('admin.banReason')) ?? '';
         if (!reason.trim()) return;
         admin.banUser({ id: target.id, reason, until: 'permanent', actor: user });
+        sendBanNoticeMail(target.id, reason);
       }
       setErrorMsg(null);
       refresh();
@@ -156,7 +159,7 @@ export default function AdminUserDetailPage() {
             </div>
             <InfoRow
               label={t('common.status')}
-              value={isBanned ? dict.roles.banned : dict.roles.player}
+              value={isBanned ? dict.roles.banned : dict.roles[target.role]}
               tone={isBanned ? 'danger' : 'ok'}
             />
             <InfoRow label={t('admin.colCreatedAt')} value={new Date(target.createdAt).toLocaleString()} />

@@ -29,7 +29,7 @@ interface ReportRow {
 export default function AdminReportsPage() {
   const { t } = useTranslation();
   const { user } = useAuth();
-  const { listReports, resolveReport } = useComment();
+  const { listReports, resolveReport, deleteComment } = useComment();
   const admin = useAdmin();
   const [refreshTick, setRefreshTick] = useState(0);
   const refresh = () => setRefreshTick((x) => x + 1);
@@ -73,12 +73,14 @@ export default function AdminReportsPage() {
     }
   };
 
-  const handleDelete = (id: string) => {
+  const handleDelete = (row: ReportRow) => {
     if (!user) return;
     const confirmed = window.confirm(t('common.confirm'));
     if (!confirmed) return;
     try {
-      resolveReport(id, user.id, true);
+      // "Delete" must remove the reported comment itself; deleting it also
+      // dismisses every open report about it (see CommentContext).
+      deleteComment(row.targetId, user);
       setErrorMsg(null);
       refresh();
     } catch (err) {
@@ -176,7 +178,7 @@ export default function AdminReportsPage() {
                           <Button
                             variant="ghost"
                             className={`${styles.btnSm} ${styles.deleteBtn}`}
-                            onClick={() => handleDelete(r.id)}
+                            onClick={() => handleDelete(r)}
                           >
                             {t('common.delete')}
                           </Button>

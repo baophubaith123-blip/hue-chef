@@ -1,0 +1,60 @@
+.wrap {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-cream, #faf5ef);
+  padding: 1.5rem;
+}
+
+.card {
+  background: #fff;
+  border: 2px solid var(--color-gold, #e9a23b);
+  border-radius: 18px;
+  padding: 2.5rem 2rem;
+  max-width: 480px;
+  text-align: center;
+  box-shadow: 0 18px 40px rgba(74, 21, 37, 0.16);
+}
+
+.icon {
+  font-size: 3rem;
+  margin-bottom: 0.75rem;
+}
+
+.title {
+  font-family: 'Playfair Display', serif;
+  color: var(--color-plum, #4a1525);
+  margin: 0 0 0.75rem;
+}
+
+.body {
+  color: var(--color-text-muted, #6b7280);
+  line-height: 1.6;
+  margin: 0 0 1.5rem;
+}
+
+.actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+}
+
+.loginLink {
+  background: var(--color-brick, #c8553d);
+  color: #fff;
+  text-decoration: none;
+  font-weight: 700;
+  padding: 0.6rem 1.2rem;
+  border-radius: 999px;
+}
+
+.logoutBtn {
+  background: transparent;
+  border: 1.5px solid var(--color-plum, #4a1525);
+  color: var(--color-plum, #4a1525);
+  font-weight: 700;
+  padding: 0.6rem 1.2rem;
+  border-radius: 999px;
+  cursor: pointer;
+}

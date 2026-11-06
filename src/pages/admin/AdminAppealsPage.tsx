@@ -1,5 +1,4 @@
 import { useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
 
 import { Button } from '@/components/Button';
 import { Card } from '@/components/Card';
@@ -83,7 +82,9 @@ export default function AdminAppealsPage() {
 
   const doReject = (appeal: Appeal) => {
     if (!user) return;
-    const resolution = window.prompt(t('admin.rejectAppeal')) ?? '';
+    const prompted = window.prompt(t('admin.rejectAppeal'));
+    if (prompted === null) return;
+    const resolution = prompted;
     try {
       const nextStatus: AppealStatus = 'rejected';
       updateStatus(appeal.id, nextStatus, {
@@ -195,9 +196,7 @@ export default function AdminAppealsPage() {
                         </span>
                       </td>
                       <td>
-                        <Link to={`/support/chat`} className={styles.link}>
-                          {a.threadId.slice(0, 14)}
-                        </Link>
+                        <span className={styles.link}>{a.threadId.slice(0, 14)}</span>
                       </td>
                       <td className={styles.dateCell}>
                         {new Date(a.createdAt).toLocaleDateString()}

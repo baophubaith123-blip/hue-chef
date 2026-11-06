@@ -54,7 +54,7 @@ export default function AdminSettingsPage() {
       admin.updateSettings(form, user);
       setDirty(false);
       setErrorMsg(null);
-      setSuccessMsg(t('common.submit'));
+      setSuccessMsg(t('admin.settingsSaved'));
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);
       setErrorMsg(msg);

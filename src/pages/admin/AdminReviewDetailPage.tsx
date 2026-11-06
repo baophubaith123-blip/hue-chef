@@ -2,6 +2,7 @@ import { Navigate, useParams } from 'react-router-dom';
 
 import { Card } from '@/components/Card';
 import { Loading } from '@/components/Loading';
+import { useAuth } from '@/contexts/AuthContext';
 import { useMail } from '@/contexts/MailContext';
 import { useRecipes } from '@/contexts/RecipeContext';
 import { ReviewDetail } from '@/features/admin/components/ReviewDetail';
@@ -15,6 +16,7 @@ export default function AdminReviewDetailPage() {
   const { id } = useParams<{ id: string }>();
   const { isLoading, getRecipeById, approveRecipe, rejectRecipe } = useRecipes();
   const { sendRecipeApprovedMail, sendRecipeRejectedMail } = useMail();
+  const { user } = useAuth();
 
   if (!id) {
     return <Navigate to="/admin/review" replace />;
@@ -86,12 +88,20 @@ export default function AdminReviewDetailPage() {
         recipe={recipe}
         minigamesSlot={<MinigameSummary minigames={recipe.minigames} />}
         onApprove={() => {
-          const updated = approveRecipe(recipe.id);
-          sendRecipeApprovedMail(editorId, updated.id, updated.name);
+          try {
+            const updated = approveRecipe(recipe.id, user ?? undefined);
+            sendRecipeApprovedMail(editorId, updated.id, updated.name);
+          } catch (err) {
+            window.alert(err instanceof Error ? err.message : String(err));
+          }
         }}
         onReject={(reason) => {
-          const updated = rejectRecipe(recipe.id, reason);
-          sendRecipeRejectedMail(editorId, updated.id, updated.name, reason);
+          try {
+            const updated = rejectRecipe(recipe.id, reason, user ?? undefined);
+            sendRecipeRejectedMail(editorId, updated.id, updated.name, reason);
+          } catch (err) {
+            window.alert(err instanceof Error ? err.message : String(err));
+          }
         }}
       />
     </AdminShell>

@@ -6,8 +6,9 @@ import { Button } from '@/components/Button';
 import { EmptyState } from '@/components/EmptyState';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRecipes } from '@/contexts/RecipeContext';
-import { SEED_ACHIEVEMENTS } from '@/data/achievements';
+import { useAchievements } from '@/contexts/AchievementContext';
 import { findUserById, loadUsers } from '@/features/auth/store';
+import { getJsonStorage, STORAGE_KEYS } from '@/lib/storage';
 import { countOwnedRecipes } from '@/features/recipes/lib/ownership';
 import { useTranslation } from '@/i18n/useTranslation';
 import { PlayerShell } from '@/pages/player/PlayerShell';
@@ -20,6 +21,7 @@ export default function ProfilePage() {
   const navigate = useNavigate();
   const { user: currentUser, updateProfile } = useAuth();
   const { getApprovedRecipes } = useRecipes();
+  const { allAchievements } = useAchievements();
 
   const isOwnProfile = !id || id === currentUser?.id;
 
@@ -62,7 +64,7 @@ export default function ProfilePage() {
   const maxExpValue = targetUser.maxExp ?? 1000;
   const xpPercent =
     maxExpValue > 0 ? Math.min(100, Math.round((expValue / maxExpValue) * 100)) : 0;
-  const equippedAchievement = SEED_ACHIEVEMENTS.find(
+  const equippedAchievement = allAchievements.find(
     (b) => b.id === (equippedBadgeId ?? targetUser.equippedAchievementId ?? ''),
   );
   const joinedDate = targetUser.createdAt ? new Date(targetUser.createdAt) : null;
@@ -84,8 +86,13 @@ export default function ProfilePage() {
       return;
     }
 
-    if (file.size > 10 * 1024 * 1024) {
-      setAvatarError(t('profile.maxAvatarSize'));
+    const uploadSettings = getJsonStorage<{ maxUploadMB?: number }>(STORAGE_KEYS.adminSettings);
+    const maxMB =
+      typeof uploadSettings?.maxUploadMB === 'number' && uploadSettings.maxUploadMB > 0
+        ? uploadSettings.maxUploadMB
+        : 5;
+    if (file.size > maxMB * 1024 * 1024) {
+      setAvatarError(dict.profile.maxAvatarSize(maxMB));
       return;
     }
 
@@ -283,11 +290,11 @@ export default function ProfilePage() {
             <span className={styles.label}>
               {t('profile.unlockedCount', {
                 unlocked: unlockedBadges.length,
-                total: SEED_ACHIEVEMENTS.length,
+                total: allAchievements.length,
               })}
             </span>
             <div className={styles.badgeTiles}>
-              {SEED_ACHIEVEMENTS.map((b) => {
+              {allAchievements.map((b) => {
                 const isUnlocked = unlockedBadges.includes(b.id);
                 const isEquipped =
                   (equippedBadgeId ?? targetUser.equippedAchievementId) === b.id;
@@ -379,7 +386,7 @@ export default function ProfilePage() {
                     }
                   >
                     <option value="">-- {t('profile.noBadge')} --</option>
-                    {SEED_ACHIEVEMENTS.map((b) => {
+                    {allAchievements.map((b) => {
                       const isUnlocked = unlockedBadges.includes(b.id);
                       return (
                         <option key={b.id} value={b.id} disabled={!isUnlocked}>

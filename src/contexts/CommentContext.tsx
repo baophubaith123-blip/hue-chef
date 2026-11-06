@@ -9,6 +9,7 @@ import {
 import type { CommentReport, RecipeComment } from '@/features/comments/types';
 import type { PublicUser } from '@/features/auth/types';
 import { AppError } from '@/lib/errors';
+import { appendAudit } from '@/features/admin/lib/audit';
 import { getJsonStorage, setJsonStorage, STORAGE_KEYS } from '@/lib/storage';
 
 export interface CommentContextValue {
@@ -153,10 +154,29 @@ export function CommentProvider({ children }: { children: ReactNode }) {
         }
         list.splice(idx, 1);
         store.byRecipe[recipeId] = list;
+        // Reports about this comment are moot once it is gone.
+        store.reports = store.reports.map((r) =>
+          r.commentId === commentId && r.status === 'open'
+            ? { ...r, status: 'dismissed' as const, resolvedAt: new Date().toISOString(), resolvedBy: deleter.id }
+            : r,
+        );
         saveStore(store);
+        const fallback = loadReportsFallback();
+        const nextFallback = fallback.map((r) =>
+          r.commentId === commentId && r.status === 'open'
+            ? { ...r, status: 'dismissed' as const, resolvedAt: new Date().toISOString(), resolvedBy: deleter.id }
+            : r,
+        );
+        if (nextFallback !== fallback) saveReportsFallback(nextFallback);
+        appendAudit(deleter, 'comment.delete', {
+          targetId: commentId,
+          targetType: 'comment',
+          detail: { recipeId },
+        });
         return;
       }
     }
+    throw new AppError('Comment not found', 'COMMENT_NOT_FOUND');
   }, []);
 
   const toggleLike = useCallback((commentId: string, userId: string): RecipeComment | null => {
@@ -233,6 +253,11 @@ export function CommentProvider({ children }: { children: ReactNode }) {
           resolvedBy: resolverId,
         };
       }
+      appendAudit({ id: resolverId, role: 'admin' }, 'report.resolve', {
+        targetId: reportId,
+        targetType: 'report',
+        detail: { dismissed },
+      });
       const fallbackList = loadReportsFallback();
       const idx2 = fallbackList.findIndex((r) => r.id === reportId);
       if (idx2 !== -1) {

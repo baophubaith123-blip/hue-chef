@@ -81,7 +81,11 @@ export default function AdminDashboardPage() {
             highlight={pendingCount > 0}
           />
           <StatCard label={t('editor.statApproved')} value={totalApproved} tone="success" />
-          <StatCard label={t('editor.statDraft')} value={recipes.length} tone="muted" />
+          <StatCard
+            label={t('editor.statDraft')}
+            value={recipes.filter((r) => (r.status ?? 'draft') === 'draft').length}
+            tone="muted"
+          />
         </div>
         <div className={styles.actions}>
           <Link to="/admin/review">

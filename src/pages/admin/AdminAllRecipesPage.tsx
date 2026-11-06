@@ -6,6 +6,7 @@ import { Card } from '@/components/Card';
 import { EmptyState } from '@/components/EmptyState';
 import { useAuth } from '@/contexts/AuthContext';
 import { useAdmin } from '@/contexts/AdminContext';
+import { useMail } from '@/contexts/MailContext';
 import { useRecipes } from '@/contexts/RecipeContext';
 import { useTranslation } from '@/i18n/useTranslation';
 import { AdminShell } from '@/pages/admin/AdminShell';
@@ -16,8 +17,9 @@ import styles from '@/pages/admin/AdminAllRecipesPage.module.css';
 
 export default function AdminAllRecipesPage() {
   const { t, dict } = useTranslation();
-  useAuth();
+  const { user } = useAuth();
   const { recipes, approveRecipe, rejectRecipe } = useRecipes();
+  const { sendRecipeApprovedMail, sendRecipeRejectedMail } = useMail();
   const admin = useAdmin();
   const [refreshTick, setRefreshTick] = useState(0);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -35,7 +37,10 @@ export default function AdminAllRecipesPage() {
 
   const handleApprove = (id: string) => {
     try {
-      approveRecipe(id);
+      const updated = approveRecipe(id, user ?? undefined);
+      if (updated.editorId) {
+        sendRecipeApprovedMail(updated.editorId, updated.id, updated.name);
+      }
       setErrorMsg(null);
       refresh();
     } catch (err) {
@@ -49,7 +54,10 @@ export default function AdminAllRecipesPage() {
     const reason = window.prompt(t('admin.rejectionLabel')) ?? '';
     if (!reason.trim()) return;
     try {
-      rejectRecipe(id, reason.trim());
+      const updated = rejectRecipe(id, reason.trim(), user ?? undefined);
+      if (updated.editorId) {
+        sendRecipeRejectedMail(updated.editorId, updated.id, updated.name, reason.trim());
+      }
       setErrorMsg(null);
       refresh();
     } catch (err) {

@@ -97,6 +97,22 @@ export function AdminShell({ children }: AdminShellProps) {
             className={({ isActive }) =>
               [styles.navLink, isActive ? styles.navLinkActive : ''].filter(Boolean).join(' ')
             }
+            to="/admin/comments"
+          >
+            {t('admin.commentsTitle')}
+          </NavLink>
+          <NavLink
+            className={({ isActive }) =>
+              [styles.navLink, isActive ? styles.navLinkActive : ''].filter(Boolean).join(' ')
+            }
+            to="/admin/reports"
+          >
+            {t('admin.reportsTitle')}
+          </NavLink>
+          <NavLink
+            className={({ isActive }) =>
+              [styles.navLink, isActive ? styles.navLinkActive : ''].filter(Boolean).join(' ')
+            }
             to="/admin/appeals"
           >
             {t('nav.appeals')}

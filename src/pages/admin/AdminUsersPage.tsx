@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Card } from '@/components/Card';
 import { useAuth } from '@/contexts/AuthContext';
 import { useAdmin } from '@/contexts/AdminContext';
+import { useMail } from '@/contexts/MailContext';
 import { BanUserModal } from '@/features/admin/components/BanUserModal';
 import { UserManagementTable } from '@/features/admin/components/UserManagementTable';
 import { AppError } from '@/lib/errors';
@@ -17,6 +18,7 @@ export default function AdminUsersPage() {
   const { t } = useTranslation();
   const { user } = useAuth();
   const admin = useAdmin();
+  const { sendBanNoticeMail } = useMail();
   const navigate = useNavigate();
 
   const [banTargetId, setBanTargetId] = useState<string | null>(null);
@@ -92,6 +94,7 @@ export default function AdminUsersPage() {
     if (!user || !banTargetId) return;
     try {
       admin.banUser({ id: banTargetId, reason, until, actor: user });
+      sendBanNoticeMail(banTargetId, reason, until === 'permanent' ? undefined : until);
       setBanTargetId(null);
       setErrorMsg(null);
       refresh();
@@ -104,7 +107,6 @@ export default function AdminUsersPage() {
     }
   };
 
-  const totalUsers = users.length;
 
   return (
     <AdminShell>
@@ -122,7 +124,7 @@ export default function AdminUsersPage() {
           <StatCard label={t('admin.statSupports')} value={stats.supportCount} tone="muted" />
           <StatCard label={t('admin.statAdmins')} value={stats.adminCount} tone="success" />
           <StatCard label={t('admin.statBanned')} value={stats.bannedCount} tone="warning" />
-          <StatCard label={t('admin.statRecipes')} value={totalUsers} tone="muted" />
+          <StatCard label={t('admin.statRecipes')} value={stats.recipeCount} tone="muted" />
         </div>
       </Card>
 

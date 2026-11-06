@@ -8,6 +8,13 @@ import {
 
 import type { Recipe } from '@/data/types';
 import { loadAuditLog, appendAudit } from '@/features/admin/lib/audit';
+import {
+  loadAchievementOverrides,
+  loadDeletedAchievementIds,
+  mergeAchievementCatalogue,
+  saveAchievementOverrides,
+  saveDeletedAchievementIds,
+} from '@/features/achievements/lib/catalogue';
 import type { AdminDashboardStats, AdminSettings, AuditAction, AuditLogEntry } from '@/features/admin/types';
 import { findUserById, loadUsers, saveUsers } from '@/features/auth/store';
 import type { PublicUser, StoredUser, UserRole } from '@/features/auth/types';
@@ -23,15 +30,31 @@ export interface AdminContextValue {
   banUser: (args: { id: string; reason: string; until: string | 'permanent'; actor: PublicUser }) => PublicUser;
   unbanUser: (id: string, actor: PublicUser) => PublicUser;
   deleteUser: (id: string, actor: PublicUser) => void;
-  listAuditLog: (options?: { action?: AuditAction; actorId?: string }) => AuditLogEntry[];
+  listAuditLog: (options?: { action?: AuditAction; actorId?: string; targetId?: string }) => AuditLogEntry[];
   getDashboardStats: () => AdminDashboardStats;
   upsertAchievement: (achievement: Achievement, actor: PublicUser) => void;
   deleteAchievement: (id: string, actor: PublicUser) => void;
   listAdminAchievements: () => Achievement[];
   getSettings: () => AdminSettings;
   updateSettings: (patch: Partial<AdminSettings>, actor: PublicUser) => AdminSettings;
-  exportAll: (actor: PublicUser) => { users: StoredUser[]; recipes: Recipe[]; timestamp: string };
-  importAll: (payload: { users?: StoredUser[]; recipes?: Recipe[] }, actor: PublicUser) => void;
+  exportAll: (actor: PublicUser) => {
+    users: StoredUser[];
+    recipes: Recipe[];
+    adminAchievements: Achievement[];
+    deletedAchievementIds: string[];
+    settings: AdminSettings;
+    timestamp: string;
+  };
+  importAll: (
+    payload: {
+      users?: StoredUser[];
+      recipes?: Recipe[];
+      adminAchievements?: Achievement[];
+      deletedAchievementIds?: string[];
+      settings?: AdminSettings;
+    },
+    actor: PublicUser,
+  ) => { userCount: number; recipeCount: number };
 }
 
 const AdminContext = createContext<AdminContextValue | null>(null);
@@ -45,15 +68,11 @@ const DEFAULT_SETTINGS: AdminSettings = {
 };
 
 function loadAchievementsStore(): Achievement[] {
-  const data = getJsonStorage<Achievement[]>(STORAGE_KEYS.achievements);
-  if (Array.isArray(data) && data.length > 0 && typeof data[0] === 'object' && 'condition' in (data[0] as object)) {
-    return data;
-  }
-  return [];
+  return loadAchievementOverrides();
 }
 
 function saveAchievementsStore(list: Achievement[]): void {
-  setJsonStorage(STORAGE_KEYS.achievements, list);
+  saveAchievementOverrides(list);
 }
 
 function loadSettings(): AdminSettings {
@@ -114,7 +133,12 @@ export function AdminProvider({ children }: { children: ReactNode }) {
     if (users[idx].role === 'admin') {
       throw new AppError('Cannot ban admin user', 'BAN_ADMIN');
     }
-    users[idx] = { ...users[idx], status: 'banned' };
+    users[idx] = {
+      ...users[idx],
+      status: 'banned',
+      banReason: reason,
+      banUntil: until === 'permanent' || !until ? null : until,
+    };
     saveUsers(users);
     appendAudit(actor, 'user.ban', { targetId: id, targetType: 'user', detail: { reason, until } });
     return toPublicUser(users[idx]);
@@ -124,7 +148,7 @@ export function AdminProvider({ children }: { children: ReactNode }) {
     const users = loadUsers();
     const idx = users.findIndex((u) => u.id === id);
     if (idx === -1) throw new AppError('User not found', 'USER_NOT_FOUND');
-    users[idx] = { ...users[idx], status: 'active' };
+    users[idx] = { ...users[idx], status: 'active', banReason: undefined, banUntil: undefined };
     if (typeof users[idx].warningCount === 'number') {
       users[idx].warningCount = 0;
     }
@@ -157,6 +181,7 @@ export function AdminProvider({ children }: { children: ReactNode }) {
     return log.filter((e) => {
       if (options.action && e.action !== options.action) return false;
       if (options.actorId && e.actorId !== options.actorId) return false;
+      if (options.targetId && e.targetId !== options.targetId) return false;
       return true;
     });
   }, []);
@@ -192,7 +217,7 @@ export function AdminProvider({ children }: { children: ReactNode }) {
       recipeCount: recipes.length,
       pendingRecipeCount: recipes.filter((r) => r.status === 'pending').length,
       appealCount: appeals.length,
-      openAppealCount: appeals.filter((a) => a.status !== 'accepted' && a.status !== 'rejected').length,
+      openAppealCount: appeals.filter((a) => a.status === 'open' || a.status === 'recommended').length,
       unlockedAchievementsSum: unlockedSum,
       reportCount: reports.length,
       openReportCount: reports.filter((r) => r.status === 'open').length,
@@ -200,9 +225,7 @@ export function AdminProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const listAdminAchievements = useCallback((): Achievement[] => {
-    const custom = loadAchievementsStore();
-    if (custom.length > 0) return custom;
-    return [];
+    return mergeAchievementCatalogue();
   }, []);
 
   const upsertAchievement = useCallback<AdminContextValue['upsertAchievement']>((achievement, actor) => {
@@ -211,6 +234,11 @@ export function AdminProvider({ children }: { children: ReactNode }) {
     if (idx === -1) list.push(achievement);
     else list[idx] = achievement;
     saveAchievementsStore(list);
+    // Re-adding an id that was previously deleted revives it.
+    const deleted = loadDeletedAchievementIds();
+    if (deleted.includes(achievement.id)) {
+      saveDeletedAchievementIds(deleted.filter((id) => id !== achievement.id));
+    }
     appendAudit(actor, idx === -1 ? 'achievement.create' : 'achievement.update', {
       targetId: achievement.id,
       targetType: 'achievement',
@@ -221,6 +249,12 @@ export function AdminProvider({ children }: { children: ReactNode }) {
   const deleteAchievement = useCallback<AdminContextValue['deleteAchievement']>((id, actor) => {
     const list = loadAchievementsStore().filter((a) => a.id !== id);
     saveAchievementsStore(list);
+    // Seed achievements are hidden via the deleted-ids list so the delete
+    // actually sticks (previously the seed fallback resurrected them).
+    const deleted = loadDeletedAchievementIds();
+    if (!deleted.includes(id)) {
+      saveDeletedAchievementIds([...deleted, id]);
+    }
     appendAudit(actor, 'achievement.delete', { targetId: id, targetType: 'achievement' });
   }, []);
 
@@ -238,25 +272,54 @@ export function AdminProvider({ children }: { children: ReactNode }) {
     const users = loadUsers();
     const recipes = (getJsonStorage<Recipe[]>(STORAGE_KEYS.recipes) ?? []);
     appendAudit(actor, 'backup.export', { targetType: 'user', detail: { userCount: users.length, recipeCount: recipes.length } });
-    return { users, recipes, timestamp: new Date().toISOString() };
+    return {
+      users,
+      recipes,
+      adminAchievements: loadAchievementOverrides(),
+      deletedAchievementIds: loadDeletedAchievementIds(),
+      settings: loadSettings(),
+      timestamp: new Date().toISOString(),
+    };
   }, []);
 
   const importAll = useCallback<AdminContextValue['importAll']>((payload, actor) => {
-    if (payload.users) {
-      const existing = loadUsers();
-      const idMap = new Map(existing.map((u) => [u.id, u]));
-      for (const u of payload.users) idMap.set(u.id, u);
-      const merged: StoredUser[] = [];
-      idMap.forEach((v) => merged.push(v));
-      saveUsers(merged);
+    const hasUsers = Array.isArray(payload.users);
+    const hasRecipes = Array.isArray(payload.recipes);
+    if (!hasUsers && !hasRecipes) {
+      throw new AppError('Backup file has no users or recipes data', 'INVALID_BACKUP');
     }
-    if (payload.recipes) {
+    let userCount = 0;
+    let recipeCount = 0;
+    if (hasUsers) {
+      // True overwrite (matching the page warning) — except the acting
+      // admin's own record is preserved if the backup predates it, so an
+      // import can never lock the operator out.
+      const next = [...(payload.users as StoredUser[])];
+      if (!next.some((u) => u.id === actor.id)) {
+        const self = loadUsers().find((u) => u.id === actor.id);
+        if (self) next.push(self);
+      }
+      saveUsers(next);
+      userCount = next.length;
+    }
+    if (hasRecipes) {
       setJsonStorage(STORAGE_KEYS.recipes, payload.recipes);
+      recipeCount = (payload.recipes as Recipe[]).length;
+    }
+    if (Array.isArray(payload.adminAchievements)) {
+      saveAchievementOverrides(payload.adminAchievements);
+    }
+    if (Array.isArray(payload.deletedAchievementIds)) {
+      saveDeletedAchievementIds(payload.deletedAchievementIds);
+    }
+    if (payload.settings) {
+      saveSettings(payload.settings);
     }
     appendAudit(actor, 'backup.import', {
       targetType: 'user',
-      detail: { userCount: payload.users?.length ?? 0, recipeCount: payload.recipes?.length ?? 0 },
+      detail: { userCount, recipeCount },
     });
+    return { userCount, recipeCount };
   }, []);
 
   const value = useMemo<AdminContextValue>(
