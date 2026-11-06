@@ -119,7 +119,11 @@ export function MinigameFormList({
         scoreReward: curr.scoreReward || 50,
         type: 'quiz',
         data: {
-          options: ['Đáp án A', 'Đáp án B', 'Đáp án C'],
+          options: [
+            dict.editorMinigames.defaultOption1,
+            dict.editorMinigames.defaultOption2,
+            dict.editorMinigames.defaultOption3,
+          ],
           correctAnswerIndex: 0,
           explanation: '',
         },
@@ -318,10 +322,13 @@ export function MinigameFormList({
                             variant="ghost"
                             onClick={() => {
                               const nextOptions = mg.data.options.filter((_, i) => i !== optIdx);
-                              const nextCorrect =
-                                mg.data.correctAnswerIndex >= nextOptions.length
-                                  ? nextOptions.length - 1
+                              // Removing an option BEFORE the correct one shifts
+                              // the correct answer one position earlier.
+                              const shifted =
+                                optIdx < mg.data.correctAnswerIndex
+                                  ? mg.data.correctAnswerIndex - 1
                                   : mg.data.correctAnswerIndex;
+                              const nextCorrect = Math.min(shifted, nextOptions.length - 1);
                               handleUpdate(index, {
                                 ...mg,
                                 data: {
@@ -348,13 +355,13 @@ export function MinigameFormList({
                               ...mg.data,
                               options: [
                                 ...mg.data.options,
-                                `Lựa chọn ${mg.data.options.length + 1}`,
+                                dict.editorMinigames.newOption(mg.data.options.length + 1),
                               ],
                             },
                           })
                         }
                       >
-                        + Thêm lựa chọn
+                        {t('editorMinigames.addOption')}
                       </Button>
                     )}
                   </div>
@@ -391,7 +398,7 @@ export function MinigameFormList({
                       })
                     }
                   >
-                    <option value="">— Chọn nguyên liệu —</option>
+                    <option value="">{t('editorMinigames.selectIngredient')}</option>
                     {ingredients.map((ing) => (
                       <option key={ing.id} value={ing.id}>
                         {ing.fallbackEmoji} {ing.name}

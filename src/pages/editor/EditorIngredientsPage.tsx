@@ -27,7 +27,7 @@ const CATEGORIES: Ingredient['category'][] = [
 type FilterType = 'all' | 'has-image' | 'emoji-only';
 
 export default function EditorIngredientsPage() {
-  const { t } = useTranslation();
+  const { t, dict } = useTranslation();
   const {
     ingredients,
     addIngredient,
@@ -228,7 +228,7 @@ export default function EditorIngredientsPage() {
                   className={styles.input}
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  placeholder="Bột gạo"
+                  placeholder={t('editor.ingredientNamePlaceholder')}
                 />
               </div>
 
@@ -261,7 +261,7 @@ export default function EditorIngredientsPage() {
                 >
                   {CATEGORIES.map((cat) => (
                     <option key={cat} value={cat}>
-                      {cat}
+                      {dict.editor.ingredientCategoryLabels[cat]}
                     </option>
                   ))}
                 </select>
@@ -277,7 +277,7 @@ export default function EditorIngredientsPage() {
                   className={styles.input}
                   value={unit}
                   onChange={(e) => setUnit(e.target.value)}
-                  placeholder="g, ml, muỗng..."
+                  placeholder={t('editor.ingredientUnitPlaceholder')}
                 />
               </div>
 

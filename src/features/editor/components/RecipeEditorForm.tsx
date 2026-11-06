@@ -62,11 +62,23 @@ export function RecipeEditorForm({
   const setGameplay = (patch: Partial<RecipeGameplayConfig>) => {
     setValues({ ...values, gameplay: { ...gameplay, ...patch } });
   };
+  const GAMEPLAY_RANGES: Record<'marketSeconds' | 'catchSpeed' | 'finishSeconds', [number, number]> = {
+    marketSeconds: [10, 180],
+    catchSpeed: [0.5, 2],
+    finishSeconds: [5, 60],
+  };
   const setGameplayNumber = (
     key: 'marketSeconds' | 'catchSpeed' | 'finishSeconds',
     raw: string,
   ) => {
-    setGameplay({ [key]: raw === '' ? undefined : Number(raw) });
+    if (raw === '') {
+      setGameplay({ [key]: undefined });
+      return;
+    }
+    const value = Number(raw);
+    if (!Number.isFinite(value)) return;
+    const [min, max] = GAMEPLAY_RANGES[key];
+    setGameplay({ [key]: Math.min(max, Math.max(min, value)) });
   };
   const stageToggles: Array<{
     key: 'marketEnabled' | 'catchEnabled' | 'seasonEnabled' | 'finishEnabled' | 'quizEnabled';
@@ -352,7 +364,7 @@ export function RecipeEditorForm({
           duration: 30,
           durationSeconds: 30,
           requiredIngredients: [],
-          actionLabel: 'Thực hiện',
+          actionLabel: dict.cooking.defaultActionLabel,
         })}
         addLabel={t('recipe.addStep')}
         itemLabel={t('recipe.step')}

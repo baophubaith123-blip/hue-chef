@@ -56,6 +56,13 @@ function loadStoredIngredients(): Ingredient[] {
     description: item.description,
   }));
 
+  // Merge in seed ingredients the stored list predates (same pattern as
+  // recipes): returning users must see newly added seeds in the pickers.
+  const storedIds = new Set(result.map((i) => i.id));
+  for (const seed of SEED_INGREDIENTS) {
+    if (!storedIds.has(seed.id)) result.push({ ...seed });
+  }
+
   setJsonStorage(STORAGE_KEYS.ingredients, result);
   return result;
 }
@@ -125,8 +132,8 @@ export function IngredientProvider({ children }: { children: ReactNode }) {
       const matchedRecipeNames: string[] = [];
 
       for (const r of recipes) {
-        const inIngredients = r.ingredients.some((i) => i.ingredientId === id);
-        const inSteps = (r.steps ?? []).some((s) => s.requiredIngredients.includes(id));
+        const inIngredients = (r.ingredients ?? []).some((i) => i.ingredientId === id);
+        const inSteps = (r.steps ?? []).some((s) => (s.requiredIngredients ?? []).includes(id));
         const inMinigames = (r.minigames ?? []).some(
           (m) => m.type === 'action-cooking' && m.data.ingredientId === id,
         );

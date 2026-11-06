@@ -101,9 +101,8 @@ export function canSubmitForReview(
   stars: 1 | 2 | 3 | 4 | 5,
   availableIngredientIds?: string[],
 ): boolean {
+  // Every validation error blocks submission — including the required
+  // action-cooking count for the tier, which used to slip through.
   const result = validateMinigames(minigames, stars, availableIngredientIds);
-  const hasStructuralErrors = result.errors.some(
-    (e) => !e.includes('insufficientActionCooking'),
-  );
-  return !hasStructuralErrors && (minigames?.length ?? 0) > 0;
+  return result.valid;
 }

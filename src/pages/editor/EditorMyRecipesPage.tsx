@@ -6,6 +6,7 @@ import { Card } from '@/components/Card';
 import { EmptyState } from '@/components/EmptyState';
 import { Loading } from '@/components/Loading';
 import { useRecipes } from '@/contexts/RecipeContext';
+import { loadUsers, saveUsers } from '@/features/auth/store';
 import { MyRecipeCard } from '@/features/editor/components/MyRecipeCard';
 import { useEditorRecipes } from '@/features/editor/hooks/useEditorRecipes';
 import { AppError } from '@/lib/errors';
@@ -22,8 +23,16 @@ export default function EditorMyRecipesPage() {
 
   const handleDelete = (recipeId: string) => {
     setError(null);
+    if (!window.confirm(t('common.confirm'))) return;
     try {
       deleteRecipeAsEditor(recipeId, editorId);
+      const users = loadUsers();
+      const next = users.map((u) =>
+        u.id === editorId
+          ? { ...u, recipeCount: Math.max(0, (u.recipeCount ?? 0) - 1) }
+          : u,
+      );
+      saveUsers(next);
     } catch (err) {
       if (err instanceof AppError) {
         setError(

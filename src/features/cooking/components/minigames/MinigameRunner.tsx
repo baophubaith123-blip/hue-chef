@@ -7,6 +7,7 @@ import { useTranslation } from '@/i18n/useTranslation';
 
 import { ActionCookingGame } from './ActionCookingGame';
 import { QuizGame } from './QuizGame';
+import { TypingGame } from './TypingGame';
 import styles from './MinigameRunner.module.css';
 
 export interface MinigameRunnerProps {
@@ -99,6 +100,13 @@ export function MinigameRunner({
       <div className={styles.gameWrapper}>
         {currentGame && currentGame.type === 'action-cooking' && (
           <ActionCookingGame
+            key={currentGame.id}
+            minigame={currentGame}
+            onComplete={handleGameComplete}
+          />
+        )}
+        {currentGame && currentGame.type === 'typing-speed' && (
+          <TypingGame
             key={currentGame.id}
             minigame={currentGame}
             onComplete={handleGameComplete}

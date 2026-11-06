@@ -1,5 +1,6 @@
 import type { RecipeFormErrors, RecipeFormValues } from '@/features/editor/types';
 import { SCORE_BANDS } from '@/lib/pricing';
+import { getJsonStorage, STORAGE_KEYS } from '@/lib/storage';
 
 export const VALIDATION_KEYS = {
   nameRequired: 'errors.required',
@@ -9,7 +10,9 @@ export const VALIDATION_KEYS = {
   minIngredients: 'errors.minIngredients',
   minSteps: 'errors.minSteps',
   scoreOutOfBand: 'errors.scoreOutOfBand',
+  scoreAboveMax: 'errors.scoreAboveMax',
   priceNegative: 'errors.priceNegative',
+  duplicateIngredient: 'errors.duplicateIngredient',
 } as const;
 
 export function validateRecipeForm(values: RecipeFormValues): RecipeFormErrors {
@@ -45,11 +48,28 @@ export function validateRecipeForm(values: RecipeFormValues): RecipeFormErrors {
     }
   }
 
+  // Admin-wide cap (Settings page): no dish may score above maxRecipeScore.
+  const settings = getJsonStorage<{ maxRecipeScore?: number }>(STORAGE_KEYS.adminSettings);
+  if (
+    !errors.baseScore &&
+    typeof settings?.maxRecipeScore === 'number' &&
+    settings.maxRecipeScore > 0 &&
+    Number.isFinite(values.baseScore) &&
+    values.baseScore > settings.maxRecipeScore
+  ) {
+    errors.baseScore = VALIDATION_KEYS.scoreAboveMax;
+  }
+
   const validIngredients = values.ingredients.filter(
     (item) => item.ingredientId.trim() && item.amount.trim(),
   );
   if (validIngredients.length < 3) {
     errors.ingredients = VALIDATION_KEYS.minIngredients;
+  } else {
+    const ids = validIngredients.map((item) => item.ingredientId);
+    if (new Set(ids).size !== ids.length) {
+      errors.ingredients = VALIDATION_KEYS.duplicateIngredient;
+    }
   }
 
   const validSteps = values.steps.filter(

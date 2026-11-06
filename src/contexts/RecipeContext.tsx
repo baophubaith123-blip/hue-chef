@@ -20,8 +20,10 @@ import {
 
 import { SEED_RECIPES } from '@/data/recipes';
 import type { Recipe, RecipeStatus } from '@/data/types';
+import type { PublicUser } from '@/features/auth/types';
 import { validateMinigames } from '@/features/recipes/validation';
 import { AppError } from '@/lib/errors';
+import { appendAudit } from '@/features/admin/lib/audit';
 import { suggestPriceCoins } from '@/lib/pricing';
 import { getJsonStorage, setJsonStorage, STORAGE_KEYS } from '@/lib/storage';
 
@@ -65,9 +67,9 @@ interface RecipeContextValue {
 
   submitRecipeForReview: (id: string, editorId: string) => void;
 
-  approveRecipe: (id: string) => Recipe;
+  approveRecipe: (id: string, actor?: PublicUser) => Recipe;
 
-  rejectRecipe: (id: string, reason: string) => Recipe;
+  rejectRecipe: (id: string, reason: string, actor?: PublicUser) => Recipe;
 
 }
 
@@ -119,10 +121,14 @@ function loadInitialRecipes(): Recipe[] {
   const result = validStored.map((r) => {
     const seedVersion = updatedSeedMap.get(r.id);
     if (seedVersion) {
-      return {
+      // The stored copy wins: edits an admin/editor made to a seed recipe
+      // must survive reloads (previously only its status did). Seed fields
+      // only backfill values the stored copy predates entirely.
+      return withDefaultStatus({
         ...seedVersion,
+        ...r,
         status: r.status ?? seedVersion.status,
-      };
+      });
     }
     return withDefaultStatus(r);
   });
@@ -375,6 +381,22 @@ export function RecipeProvider({ children }: { children: ReactNode }) {
 
       }
 
+      // Content gate enforced HERE (not only in the form): the detail page
+      // submits through this same path, so a dish must be complete no
+      // matter which screen sends it for review.
+      const hasStepIngredients = (recipe.steps ?? []).some(
+        (s) => (s.requiredIngredients ?? []).length > 0,
+      );
+      const quizCount = (recipe.minigames ?? []).filter((m) => m.type === 'quiz').length;
+      const minigameCheck = validateMinigames(
+        recipe.minigames,
+        recipe.difficulty,
+        recipe.ingredients.map((i) => i.ingredientId),
+      );
+      if (!hasStepIngredients || quizCount < 1 || !minigameCheck.valid) {
+        throw new AppError('Recipe content is incomplete', 'RECIPE_INCOMPLETE');
+      }
+
       updateRecipe(id, {
 
         status: 'pending',
@@ -395,7 +417,7 @@ export function RecipeProvider({ children }: { children: ReactNode }) {
 
   const approveRecipe = useCallback(
 
-    (id: string): Recipe => {
+    (id: string, actor?: PublicUser): Recipe => {
 
       const recipe = getRecipeById(id);
 
@@ -425,6 +447,16 @@ export function RecipeProvider({ children }: { children: ReactNode }) {
 
       updateRecipe(id, updated);
 
+      appendAudit(actor ?? null, 'recipe.approve', {
+
+        targetId: id,
+
+        targetType: 'recipe',
+
+        detail: { name: updated.name },
+
+      });
+
       return updated;
 
     },
@@ -437,7 +469,7 @@ export function RecipeProvider({ children }: { children: ReactNode }) {
 
   const rejectRecipe = useCallback(
 
-    (id: string, reason: string): Recipe => {
+    (id: string, reason: string, actor?: PublicUser): Recipe => {
 
       const trimmed = reason.trim();
 
@@ -474,6 +506,16 @@ export function RecipeProvider({ children }: { children: ReactNode }) {
       };
 
       updateRecipe(id, updated);
+
+      appendAudit(actor ?? null, 'recipe.reject', {
+
+        targetId: id,
+
+        targetType: 'recipe',
+
+        detail: { name: updated.name, reason: trimmed },
+
+      });
 
       return updated;
 

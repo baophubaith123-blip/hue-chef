@@ -22,7 +22,7 @@ import { EditorShell } from '@/pages/editor/EditorShell';
 export default function EditorRecipeFormPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { t } = useTranslation();
+  const { t, dict } = useTranslation();
   const { isLoading, getRecipeById, addRecipe, updateRecipeAsEditor, submitRecipeForReview } =
     useRecipes();
   const { editorId, assertCanEditRecipe, canEditRecipe } = useEditorRecipes();
@@ -60,7 +60,19 @@ export default function EditorRecipeFormPage() {
     }
   }
 
-  const initialValues = existing ? recipeToFormValues(existing) : defaultRecipeFormValues();
+  const rawInitialValues = existing ? recipeToFormValues(existing) : defaultRecipeFormValues();
+  // The form lib seeds new steps with the Vietnamese default action label;
+  // swap it for the active locale's label so EN editors don't save
+  // Vietnamese button text into their dishes.
+  const initialValues = existing
+    ? rawInitialValues
+    : {
+        ...rawInitialValues,
+        steps: rawInitialValues.steps.map((s) => ({
+          ...s,
+          actionLabel: dict.cooking.defaultActionLabel,
+        })),
+      };
   const canSubmitDirectly = !existing || canEditRecipe(existing);
 
   const persistRecipeFromValues = (values: RecipeFormValues, mode: RecipeFormSubmitMode = 'draft') => {

@@ -83,10 +83,6 @@ export const router = createBrowserRouter([
         element: <RecipeDetailPage />,
       },
       {
-        path: '/cooking/:id',
-        element: <CookingPage />,
-      },
-      {
         path: '/inbox',
         element: <InboxPage />,
       },
@@ -113,6 +109,17 @@ export const router = createBrowserRouter([
       {
         path: '/profile/:id',
         element: <ProfilePage />,
+      },
+    ],
+  },
+  {
+    // Cooking is playable by players; editors/admins may open it only in
+    // ?preview=1 mode (enforced inside CookingPage) to test a dish.
+    element: <ProtectedRoute allowedRoles={['player', 'editor', 'admin']} />,
+    children: [
+      {
+        path: '/cooking/:id',
+        element: <CookingPage />,
       },
     ],
   },

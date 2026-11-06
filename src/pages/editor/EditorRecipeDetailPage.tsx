@@ -6,6 +6,7 @@ import { Card } from '@/components/Card';
 import { Loading } from '@/components/Loading';
 import { getIngredientById } from '@/data/ingredients';
 import { useRecipes } from '@/contexts/RecipeContext';
+import { loadUsers, saveUsers } from '@/features/auth/store';
 import { RecipeStatusBadge } from '@/features/editor/components/RecipeStatusBadge';
 import { useEditorRecipes } from '@/features/editor/hooks/useEditorRecipes';
 import { MinigameSummary } from '@/features/recipes/components/MinigameSummary';
@@ -63,15 +64,30 @@ export default function EditorRecipeDetailPage() {
       setMessage(t('editor.submittedForReview'));
     } catch (err) {
       if (err instanceof AppError) {
-        setError(err.code === 'INVALID_STATUS' ? t('errors.onlyDraftSubmit') : err.message);
+        setError(
+          err.code === 'INVALID_STATUS'
+            ? t('errors.onlyDraftSubmit')
+            : err.code === 'RECIPE_INCOMPLETE'
+              ? t('errors.recipeIncomplete')
+              : err.message,
+        );
       }
     }
   };
 
   const handleDelete = () => {
     setError(null);
+    if (!window.confirm(t('common.confirm'))) return;
     try {
       deleteRecipeAsEditor(recipe.id, editorId);
+      const users = loadUsers();
+      saveUsers(
+        users.map((u) =>
+          u.id === editorId
+            ? { ...u, recipeCount: Math.max(0, (u.recipeCount ?? 0) - 1) }
+            : u,
+        ),
+      );
       navigate('/editor/recipes');
     } catch (err) {
       if (err instanceof AppError) {
