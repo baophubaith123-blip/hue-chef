@@ -122,7 +122,7 @@ export function QuizGame({
       aria-label={minigame.question}
     >
       <div className={styles.hostRow}>
-        <img src="/images/noi-noi.jpg" alt="" className={styles.hostAvatar} aria-hidden />
+        <img src="/images/noi-noi-2d.webp" alt="" className={styles.hostAvatar} aria-hidden />
         <div className={styles.speechBubble}>
           <h2 className={styles.question}>{minigame.question}</h2>
           <p className={styles.instruction}>{dict.cooking.minigames.quizInstruction}</p>

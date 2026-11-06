@@ -376,7 +376,7 @@ export function CatchStage({ recipe, config, maxPoints, onProgress, onComplete }
           className={[styles.pot, potShake ? styles.potShake : ''].filter(Boolean).join(' ')}
           style={{ left: `${potX * 100}%`, width: `${config.catchRadiusPx * 2}px` }}
         >
-          <img src="/images/noi-noi.jpg" alt="" className={styles.potImg} />
+          <img src="/images/noi-noi-2d.webp" alt="" className={styles.potImg} />
         </div>
         <div className={styles.floorLine} aria-hidden />
 

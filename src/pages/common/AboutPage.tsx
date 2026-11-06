@@ -59,7 +59,7 @@ export default function AboutPage() {
           </div>
 
           <div className={styles.heroArtwork} aria-hidden="true">
-            <img src="/images/noi-noi.jpg" alt="" className={styles.heroPotImg} />
+            <img src="/images/noi-noi-2d.webp" alt="" className={styles.heroPotImg} />
           </div>
         </section>
 

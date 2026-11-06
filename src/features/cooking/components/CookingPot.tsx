@@ -84,7 +84,7 @@ export function CookingPot({
             <span className={`${styles.steamPuff} ${styles.steamPuff1}`} />
             <span className={`${styles.steamPuff} ${styles.steamPuff2}`} />
             <span className={`${styles.steamPuff} ${styles.steamPuff3}`} />
-            <img src="/images/noi-noi.jpg" alt="" className={styles.potImg} />
+            <img src="/images/noi-noi-2d.webp" alt="" className={styles.potImg} />
           </div>
           <p className={styles.potHint}>
             {disabled ? t('cooking.sessionEnded') : t('cooking.dropIngredientsHere')}

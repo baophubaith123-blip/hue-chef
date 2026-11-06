@@ -198,7 +198,7 @@ export default function ProfilePage() {
         {/* Profile Card Summary */}
         <div className={styles.profileCard}>
           <div className={styles.cover} aria-hidden>
-            <img src="/images/noi-noi.jpg" alt="" className={styles.coverPot} />
+            <img src="/images/noi-noi-2d.webp" alt="" className={styles.coverPot} />
           </div>
           <div className={styles.avatarContainer}>
             {avatar || targetUser.avatar ? (
@@ -356,7 +356,7 @@ export default function ProfilePage() {
                       type="button"
                       className={styles.fileUploadBtn}
                       onClick={() => {
-                        setAvatar('/images/noi-noi.jpg');
+                        setAvatar('/images/noi-noi-2d.webp');
                         setAvatarError('');
                       }}
                     >

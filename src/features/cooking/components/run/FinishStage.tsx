@@ -294,7 +294,7 @@ export function FinishStage({ config, maxPoints, onProgress, onComplete }: Finis
         <div className={[styles.pot, moodClass].filter(Boolean).join(' ')}>
           <span className={`${styles.steam} ${styles.steam1}`} />
           <span className={`${styles.steam} ${styles.steam2}`} />
-          <img src="/images/noi-noi.jpg" alt="" className={styles.potImg} />
+          <img src="/images/noi-noi-2d.webp" alt="" className={styles.potImg} />
           {potMood === 'dizzy' ? <span className={styles.dizzyEyes}>😵</span> : null}
         </div>
 

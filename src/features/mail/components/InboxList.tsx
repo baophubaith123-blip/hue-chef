@@ -135,7 +135,7 @@ export function InboxList({
   if (allItems.length === 0) {
     return (
       <div className={styles.emptyWrap}>
-        <img src="/images/noi-noi.jpg" alt="" className={styles.emptyPot} aria-hidden />
+        <img src="/images/noi-noi-2d.webp" alt="" className={styles.emptyPot} aria-hidden />
         <h2 className={styles.emptyTitle}>{t('inbox.emptyTitle')}</h2>
         <p className={styles.emptyHint}>{emptyHint ?? t('inbox.hint')}</p>
         {emptyAction}
