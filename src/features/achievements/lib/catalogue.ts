@@ -42,3 +42,28 @@ export function mergeAchievementCatalogue(): Achievement[] {
   }
   return merged;
 }
+
+/**
+ * Editor-submitted achievements live in their own store with a review
+ * status. They only join the player catalogue when an admin approves them
+ * (AdminContext copies the achievement into the overrides store), mirroring
+ * the recipe draft → pending → approved flow.
+ */
+export type EditorAchievementStatus = 'pending' | 'approved' | 'rejected';
+
+export interface EditorAchievementSubmission {
+  achievement: Achievement;
+  status: EditorAchievementStatus;
+  submittedBy: string;
+  submittedAt: string;
+  reviewedAt?: string;
+}
+
+export function loadEditorAchievementSubmissions(): EditorAchievementSubmission[] {
+  const data = getJsonStorage<EditorAchievementSubmission[]>(STORAGE_KEYS.editorAchievements);
+  return Array.isArray(data) ? data : [];
+}
+
+export function saveEditorAchievementSubmissions(list: EditorAchievementSubmission[]): void {
+  setJsonStorage(STORAGE_KEYS.editorAchievements, list);
+}

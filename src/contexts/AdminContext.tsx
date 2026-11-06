@@ -11,10 +11,18 @@ import { loadAuditLog, appendAudit } from '@/features/admin/lib/audit';
 import {
   loadAchievementOverrides,
   loadDeletedAchievementIds,
+  loadEditorAchievementSubmissions,
   mergeAchievementCatalogue,
   saveAchievementOverrides,
   saveDeletedAchievementIds,
+  saveEditorAchievementSubmissions,
+  type EditorAchievementSubmission,
 } from '@/features/achievements/lib/catalogue';
+import {
+  loadTaxonomy,
+  saveTaxonomy,
+  type TaxonomyData,
+} from '@/lib/taxonomy';
 import type { AdminDashboardStats, AdminSettings, AuditAction, AuditLogEntry } from '@/features/admin/types';
 import { findUserById, loadUsers, saveUsers } from '@/features/auth/store';
 import type { PublicUser, StoredUser, UserRole } from '@/features/auth/types';
@@ -35,6 +43,9 @@ export interface AdminContextValue {
   upsertAchievement: (achievement: Achievement, actor: PublicUser) => void;
   deleteAchievement: (id: string, actor: PublicUser) => void;
   listAdminAchievements: () => Achievement[];
+  listEditorAchievementSubmissions: () => EditorAchievementSubmission[];
+  approveEditorAchievement: (achievementId: string, actor: PublicUser) => void;
+  rejectEditorAchievement: (achievementId: string, actor: PublicUser) => void;
   getSettings: () => AdminSettings;
   updateSettings: (patch: Partial<AdminSettings>, actor: PublicUser) => AdminSettings;
   exportAll: (actor: PublicUser) => {
@@ -42,6 +53,8 @@ export interface AdminContextValue {
     recipes: Recipe[];
     adminAchievements: Achievement[];
     deletedAchievementIds: string[];
+    editorAchievements: EditorAchievementSubmission[];
+    taxonomy: TaxonomyData;
     settings: AdminSettings;
     timestamp: string;
   };
@@ -51,6 +64,8 @@ export interface AdminContextValue {
       recipes?: Recipe[];
       adminAchievements?: Achievement[];
       deletedAchievementIds?: string[];
+      editorAchievements?: EditorAchievementSubmission[];
+      taxonomy?: TaxonomyData;
       settings?: AdminSettings;
     },
     actor: PublicUser,
@@ -228,6 +243,69 @@ export function AdminProvider({ children }: { children: ReactNode }) {
     return mergeAchievementCatalogue();
   }, []);
 
+  const listEditorAchievementSubmissions = useCallback((): EditorAchievementSubmission[] => {
+    return loadEditorAchievementSubmissions();
+  }, []);
+
+  const approveEditorAchievement = useCallback<AdminContextValue['approveEditorAchievement']>(
+    (achievementId, actor) => {
+      const submissions = loadEditorAchievementSubmissions();
+      const target = submissions.find(
+        (sub) => sub.achievement.id === achievementId && sub.status === 'pending',
+      );
+      if (!target) {
+        throw new AppError('Editor achievement submission not found or not pending', 'NOT_FOUND');
+      }
+      const overrides = loadAchievementsStore();
+      const idx = overrides.findIndex((a) => a.id === achievementId);
+      if (idx === -1) overrides.push(target.achievement);
+      else overrides[idx] = target.achievement;
+      saveAchievementsStore(overrides);
+      const deleted = loadDeletedAchievementIds();
+      if (deleted.includes(achievementId)) {
+        saveDeletedAchievementIds(deleted.filter((id) => id !== achievementId));
+      }
+      saveEditorAchievementSubmissions(
+        submissions.map((sub) =>
+          sub === target
+            ? { ...sub, status: 'approved' as const, reviewedAt: new Date().toISOString() }
+            : sub,
+        ),
+      );
+      appendAudit(actor, 'achievement.approve', {
+        targetId: achievementId,
+        targetType: 'achievement',
+        detail: { name: target.achievement.name, submittedBy: target.submittedBy },
+      });
+    },
+    [],
+  );
+
+  const rejectEditorAchievement = useCallback<AdminContextValue['rejectEditorAchievement']>(
+    (achievementId, actor) => {
+      const submissions = loadEditorAchievementSubmissions();
+      const target = submissions.find(
+        (sub) => sub.achievement.id === achievementId && sub.status === 'pending',
+      );
+      if (!target) {
+        throw new AppError('Editor achievement submission not found or not pending', 'NOT_FOUND');
+      }
+      saveEditorAchievementSubmissions(
+        submissions.map((sub) =>
+          sub === target
+            ? { ...sub, status: 'rejected' as const, reviewedAt: new Date().toISOString() }
+            : sub,
+        ),
+      );
+      appendAudit(actor, 'achievement.reject', {
+        targetId: achievementId,
+        targetType: 'achievement',
+        detail: { name: target.achievement.name, submittedBy: target.submittedBy },
+      });
+    },
+    [],
+  );
+
   const upsertAchievement = useCallback<AdminContextValue['upsertAchievement']>((achievement, actor) => {
     const list = loadAchievementsStore();
     const idx = list.findIndex((a) => a.id === achievement.id);
@@ -277,6 +355,8 @@ export function AdminProvider({ children }: { children: ReactNode }) {
       recipes,
       adminAchievements: loadAchievementOverrides(),
       deletedAchievementIds: loadDeletedAchievementIds(),
+      editorAchievements: loadEditorAchievementSubmissions(),
+      taxonomy: loadTaxonomy(),
       settings: loadSettings(),
       timestamp: new Date().toISOString(),
     };
@@ -312,6 +392,12 @@ export function AdminProvider({ children }: { children: ReactNode }) {
     if (Array.isArray(payload.deletedAchievementIds)) {
       saveDeletedAchievementIds(payload.deletedAchievementIds);
     }
+    if (Array.isArray(payload.editorAchievements)) {
+      saveEditorAchievementSubmissions(payload.editorAchievements);
+    }
+    if (payload.taxonomy && Array.isArray(payload.taxonomy.categories)) {
+      saveTaxonomy(payload.taxonomy);
+    }
     if (payload.settings) {
       saveSettings(payload.settings);
     }
@@ -335,6 +421,9 @@ export function AdminProvider({ children }: { children: ReactNode }) {
       upsertAchievement,
       deleteAchievement,
       listAdminAchievements,
+      listEditorAchievementSubmissions,
+      approveEditorAchievement,
+      rejectEditorAchievement,
       getSettings,
       updateSettings,
       exportAll,

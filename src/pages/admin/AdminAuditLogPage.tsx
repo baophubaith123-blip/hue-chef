@@ -26,6 +26,8 @@ const ACTION_OPTIONS: AuditAction[] = [
   'achievement.create',
   'achievement.update',
   'achievement.delete',
+  'achievement.approve',
+  'achievement.reject',
   'achievement.unlock',
   'comment.delete',
   'report.resolve',

@@ -5,6 +5,7 @@ import { Card } from '@/components/Card';
 import { Loading } from '@/components/Loading';
 import { useAuth } from '@/contexts/AuthContext';
 import { useMail } from '@/contexts/MailContext';
+import { useEditorAchievements } from '@/features/editor/hooks/useEditorAchievements';
 import { useEditorRecipes } from '@/features/editor/hooks/useEditorRecipes';
 import { useTranslation } from '@/i18n/useTranslation';
 import { EditorShell } from '@/pages/editor/EditorShell';
@@ -16,6 +17,8 @@ export default function EditorDashboardPage() {
   const { t } = useTranslation();
   const { user } = useAuth();
   const { stats, isLoading } = useEditorRecipes();
+  const { createdCount: achievementCreated, pendingCount: achievementPending } =
+    useEditorAchievements();
   const { getInboxForUser, getUnreadCount, markAsRead } = useMail();
 
   const inbox = user ? getInboxForUser(user.id).slice(0, 5) : [];
@@ -33,12 +36,19 @@ export default function EditorDashboardPage() {
           <Stat label={t('editor.statApproved')} value={stats.approved} tone="success" />
           <Stat label={t('editor.statRejected')} value={stats.rejected} tone="danger" />
         </div>
+        <div className={styles.stats}>
+          <Stat label={t('editor.statAchievementsCreated')} value={achievementCreated} tone="muted" />
+          <Stat label={t('editor.statAchievementsPending')} value={achievementPending} tone="warning" />
+        </div>
         <div className={styles.actions}>
           <Link to="/editor/recipes/new">
             <Button>{t('nav.newRecipe')}</Button>
           </Link>
           <Link to="/editor/recipes">
             <Button variant="secondary">{t('nav.myRecipes')}</Button>
+          </Link>
+          <Link to="/editor/achievements">
+            <Button variant="secondary">{t('editor.viewAchievements')}</Button>
           </Link>
         </div>
       </Card>

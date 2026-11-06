@@ -22,6 +22,7 @@ import FeedbackPage from '@/pages/common/FeedbackPage';
 import HelpPage from '@/pages/common/HelpPage';
 import LandingPage from '@/pages/common/LandingPage';
 import NotFoundPage from '@/pages/common/NotFoundPage';
+import EditorAchievementsPage from '@/pages/editor/EditorAchievementsPage';
 import EditorDashboardPage from '@/pages/editor/EditorDashboardPage';
 import EditorIngredientsPage from '@/pages/editor/EditorIngredientsPage';
 import EditorMyRecipesPage from '@/pages/editor/EditorMyRecipesPage';
@@ -171,6 +172,10 @@ export const router = createBrowserRouter([
       {
         path: '/editor/recipes/:id/edit',
         element: <EditorRecipeFormPage />,
+      },
+      {
+        path: '/editor/achievements',
+        element: <EditorAchievementsPage />,
       },
       {
         path: '/editor/ingredients',

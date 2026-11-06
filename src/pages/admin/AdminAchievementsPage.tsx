@@ -6,6 +6,7 @@ import { EmptyState } from '@/components/EmptyState';
 import { Modal } from '@/components/Modal';
 import { useAuth } from '@/contexts/AuthContext';
 import { useAdmin } from '@/contexts/AdminContext';
+import { useTaxonomy } from '@/contexts/TaxonomyContext';
 import type { Achievement, AchievementCondition, PerkKind } from '@/data/types';
 import { PERK_KINDS } from '@/features/achievements/lib/perks';
 import { useTranslation } from '@/i18n/useTranslation';
@@ -29,6 +30,7 @@ export default function AdminAchievementsPage() {
   const { t, dict } = useTranslation();
   const { user } = useAuth();
   const admin = useAdmin();
+  const { recipeCategoryOptions, recipeCategoryLabel } = useTaxonomy();
   const [refreshTick, setRefreshTick] = useState(0);
   const refresh = () => setRefreshTick((x) => x + 1);
 
@@ -36,6 +38,35 @@ export default function AdminAchievementsPage() {
     void refreshTick;
     return admin.listAdminAchievements();
   }, [admin, refreshTick]);
+
+  const editorPending = useMemo(() => {
+    void refreshTick;
+    return admin
+      .listEditorAchievementSubmissions()
+      .filter((sub) => sub.status === 'pending');
+  }, [admin, refreshTick]);
+
+  const handleApproveEditorAchievement = (achievementId: string) => {
+    if (!user) return;
+    try {
+      admin.approveEditorAchievement(achievementId, user);
+      setErrorMsg(null);
+      refresh();
+    } catch (err) {
+      setErrorMsg(err instanceof Error ? err.message : String(err));
+    }
+  };
+
+  const handleRejectEditorAchievement = (achievementId: string) => {
+    if (!user) return;
+    try {
+      admin.rejectEditorAchievement(achievementId, user);
+      setErrorMsg(null);
+      refresh();
+    } catch (err) {
+      setErrorMsg(err instanceof Error ? err.message : String(err));
+    }
+  };
 
   const [showModal, setShowModal] = useState(false);
   const [form, setForm] = useState<Achievement>(emptyForm());
@@ -175,6 +206,34 @@ export default function AdminAchievementsPage() {
       ) : null}
 
       <Card>
+        <section className={styles.editorPendingSection}>
+          <h2 className={styles.sectionTitle}>{t('editorAchievements.adminSectionTitle')}</h2>
+          {editorPending.length === 0 ? (
+            <p className={styles.intro}>{t('editorAchievements.adminEmpty')}</p>
+          ) : (
+            <ul className={styles.editorPendingList}>
+              {editorPending.map((sub) => (
+                <li key={sub.achievement.id} className={styles.editorPendingItem}>
+                  <span>{sub.achievement.icon}</span>
+                  <div className={styles.editorPendingMain}>
+                    <strong>{sub.achievement.name}</strong>
+                    <span>{sub.achievement.description}</span>
+                  </div>
+                  <Button onClick={() => handleApproveEditorAchievement(sub.achievement.id)}>
+                    {t('common.approve')}
+                  </Button>
+                  <Button
+                    variant="secondary"
+                    onClick={() => handleRejectEditorAchievement(sub.achievement.id)}
+                  >
+                    {t('common.reject')}
+                  </Button>
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
+
         {achievements.length === 0 ? (
           <EmptyState title={t('admin.achievementsTitle')} />
         ) : (
@@ -325,11 +384,14 @@ export default function AdminAchievementsPage() {
                   }
                 >
                   <option value="">All</option>
-                  <option value="bun">bun</option>
-                  <option value="com">com</option>
-                  <option value="banh">banh</option>
-                  <option value="che">che</option>
-                  <option value="nem">nem</option>
+                  <option value="bun">{recipeCategoryLabel('bun')}</option>
+                  <option value="com">{recipeCategoryLabel('com')}</option>
+                  <option value="banh">{recipeCategoryLabel('banh')}</option>
+                  <option value="che">{recipeCategoryLabel('che')}</option>
+                  <option value="nem">{recipeCategoryLabel('nem')}</option>
+                {recipeCategoryOptions.filter((o) => o.custom).map((o) => (
+                    <option key={o.id} value={o.id}>{recipeCategoryLabel(o.id)}</option>
+                  ))}
                 </select>
               </div>
             </>
