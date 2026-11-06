@@ -108,8 +108,13 @@ export function SupportChat({ threadId, showCreateAppeal = false }: SupportChatP
       if (!thread) throw new AppError('Thread not found', 'THREAD_NOT_FOUND');
       if (!appealSummary.trim()) throw new AppError('Need summary', 'REQUIRED');
       if (!user) throw new AppError('Not logged in', 'AUTH');
+      // The appellant is the player the appeal is ABOUT: when support files
+      // it from a thread, that is the non-support participant; when a player
+      // files it themselves, it is the player.
       const appellantId =
-        thread.participantIds.find((id) => id !== user.id) ?? thread.participantIds[0];
+        user.role === 'support'
+          ? (thread.participantIds.find((id) => id !== user.id) ?? thread.participantIds[0])
+          : user.id;
       const appeal = createAppealFromThread({
         threadId: thread.id,
         appellantId,
@@ -118,12 +123,21 @@ export function SupportChat({ threadId, showCreateAppeal = false }: SupportChatP
         summary: appealSummary.trim(),
         supportId: user.role === 'support' ? user.id : undefined,
       });
-      sendSupportMail(
-        appellantId,
-        `Tạo khiếu nại mới: ${dict.support.typeLabels[appealType]}`,
-        `Nhân viên hỗ trợ đã tạo khiếu nại cho bạn:\n${appeal.summary}\n\nQuản trị viên sẽ xem xét và trả lời trong thời gian sớm nhất.`,
-        { appealId: appeal.id, threadId: appeal.threadId },
-      );
+      if (user.role === 'support') {
+        sendSupportMail(
+          appellantId,
+          `Tạo khiếu nại mới: ${dict.support.typeLabels[appealType]}`,
+          `Nhân viên hỗ trợ đã tạo khiếu nại cho bạn:\n${appeal.summary}\n\nQuản trị viên sẽ xem xét và trả lời trong thời gian sớm nhất.`,
+          { appealId: appeal.id, threadId: appeal.threadId },
+        );
+      } else {
+        sendSupportMail(
+          user.id,
+          `Đã ghi nhận khiếu nại: ${dict.support.typeLabels[appealType]}`,
+          `Khiếu nại của bạn đã được ghi nhận và đang chờ xử lý:\n${appeal.summary}`,
+          { appealId: appeal.id, threadId: appeal.threadId },
+        );
+      }
       setSuccess(t('support.appealCreated'));
       setAppealSummary('');
     } catch (err) {

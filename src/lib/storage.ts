@@ -9,6 +9,8 @@ export const STORAGE_KEYS = {
   auditLog: 'hue-chef-audit-log',
   broadcast: 'hue-chef-broadcast',
   achievements: 'hue-chef-achievements',
+  adminAchievements: 'hue-chef-admin-achievements',
+  adminAchievementsDeleted: 'hue-chef-admin-achievements-deleted',
   notifications: 'hue-chef-notifications',
   comments: 'hue-chef-comments',
   reports: 'hue-chef-reports',

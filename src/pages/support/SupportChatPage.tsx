@@ -8,19 +8,25 @@ import { SupportChat } from '@/features/support/components/SupportChat';
 import { useAuth } from '@/contexts/AuthContext';
 import { useSupport } from '@/contexts/SupportContext';
 import { useTranslation } from '@/i18n/useTranslation';
-import { useMail } from '@/contexts/MailContext';
+import { isBanActive } from '@/features/auth/types';
 import { SupportShell } from '@/pages/support/SupportShell';
 
 import styles from '@/pages/support/SupportChatPage.module.css';
 
 export default function SupportChatPage() {
-  const { t } = useTranslation();
+  const { t, dict } = useTranslation();
   const { user } = useAuth();
-  const { listThreadsByParticipant, listThreadsForSupport, findUserById, getOrCreateThreadWithSupport } =
-    useSupport();
+  const {
+    listThreadsByParticipant,
+    listThreadsForSupport,
+    findUserById,
+    getOrCreateThreadWithSupport,
+    getMessages,
+    closeThread,
+  } = useSupport();
   const [params] = useSearchParams();
   const [activeThreadId, setActiveThreadId] = useState<string | undefined>(params.get('threadId') ?? undefined);
-  const { getUnreadCount } = useMail();
+  const banned = user ? isBanActive(user) : false;
 
   useEffect(() => {
     const fromUrl = params.get('threadId');
@@ -32,6 +38,8 @@ export default function SupportChatPage() {
     if (user.role === 'support') return listThreadsForSupport();
     return listThreadsByParticipant(user.id);
   }, [listThreadsByParticipant, listThreadsForSupport, user]);
+
+  const activeThread = threads.find((th) => th.id === activeThreadId);
 
   const startNewThread = () => {
     if (!user) return;
@@ -46,6 +54,13 @@ export default function SupportChatPage() {
 
   const content = (
     <div className={styles.wrap}>
+      {banned && user ? (
+        <div className={styles.banBanner}>
+          🚫 <strong>{dict.ban.noticeTitle}</strong> — {dict.ban.reasonLabel}:{' '}
+          {user.banReason ?? '-'} · {dict.ban.untilLabel}:{' '}
+          {user.banUntil ?? dict.ban.permanent}. {dict.ban.noticeBody}
+        </div>
+      ) : null}
       <header className={styles.header}>
         <h1 className={styles.title}>💬 {t('support.chatTitle')}</h1>
         {user?.role !== 'support' && threads.length === 0 ? (
@@ -75,7 +90,9 @@ export default function SupportChatPage() {
                 const otherId =
                   th.participantIds.find((id) => id !== user?.id) ?? th.participantIds[0];
                 const other = findUserById(otherId);
-                const unread = user ? getUnreadCount(otherId) : 0;
+                const unread = user
+                  ? getMessages(th.id).filter((m) => !m.read && m.senderId !== user.id).length
+                  : 0;
                 const isActive = activeThreadId === th.id;
                 return (
                   <li key={th.id}>
@@ -92,7 +109,7 @@ export default function SupportChatPage() {
                         <span className={styles.threadMeta}>
                           {(other?.name ?? otherId).slice(0, 32)}
                           {th.closed ? (
-                            <span className={styles.tagClosed}> • Đã đóng</span>
+                            <span className={styles.tagClosed}> • {t('support.threadClosed')}</span>
                           ) : null}
                         </span>
                         <span className={styles.threadMeta}>
@@ -111,8 +128,21 @@ export default function SupportChatPage() {
         </aside>
 
         <section className={styles.chatCol}>
+          {user?.role === 'support' && activeThread && !activeThread.closed ? (
+            <div className={styles.chatActions}>
+              <Button
+                variant="secondary"
+                onClick={() => user && closeThread(activeThread.id, user.id)}
+              >
+                🔒 {t('support.closeThread')}
+              </Button>
+            </div>
+          ) : null}
           {activeThreadId ? (
-            <SupportChat threadId={activeThreadId} showCreateAppeal={user?.role === 'support'} />
+            <SupportChat
+              threadId={activeThreadId}
+              showCreateAppeal={user?.role === 'support' || banned}
+            />
           ) : (
             <Card>
               <EmptyState

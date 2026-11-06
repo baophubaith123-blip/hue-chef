@@ -1049,6 +1049,28 @@ export const SEED_USERS: StoredUser[] = [
     status: 'active',
     createdAt: now,
   },
+  {
+    // Demo account for the ban-appeal flow: locked after 3 warnings, has an
+    // open appeal + support thread seeded in data/support-seed.ts.
+    id: 'seed-banned-player',
+    name: 'Đặng Văn Đức',
+    email: 'duc@hue.vn',
+    password: 'player123',
+    role: 'player',
+    avatar: '',
+    status: 'banned',
+    banReason: 'Nghi ngờ sử dụng phần mềm gian lận điểm số',
+    banUntil: null,
+    createdAt: '2026-10-18T08:00:00.000Z',
+    level: 2,
+    exp: 300,
+    maxExp: 1000,
+    coins: 120,
+    ownedRecipeIds: [],
+    cookedRecipes: [],
+    unlockedAchievements: [],
+    warningCount: 3,
+  },
 ];
 
 // ---------------------------------------------------------------------------

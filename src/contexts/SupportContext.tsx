@@ -17,6 +17,7 @@ import type {
 } from '@/features/support/types';
 import { useTranslation } from '@/i18n/useTranslation';
 import { AppError } from '@/lib/errors';
+import { SEED_MESSAGES, SEED_THREADS } from '@/data/support-seed';
 import { getJsonStorage, setJsonStorage, STORAGE_KEYS } from '@/lib/storage';
 
 interface SupportContextValue {
@@ -43,12 +44,16 @@ const SupportContext = createContext<SupportContextValue | null>(null);
 
 function loadThreads(): ChatThread[] {
   const stored = getJsonStorage<ChatThread[]>(STORAGE_KEYS.chatThreads);
-  return Array.isArray(stored) ? stored : [];
+  if (Array.isArray(stored)) return stored;
+  setJsonStorage(STORAGE_KEYS.chatThreads, SEED_THREADS);
+  return [...SEED_THREADS];
 }
 
 function loadMessages(): ChatMessage[] {
   const stored = getJsonStorage<ChatMessage[]>(STORAGE_KEYS.chatMessages);
-  return Array.isArray(stored) ? stored : [];
+  if (Array.isArray(stored)) return stored;
+  setJsonStorage(STORAGE_KEYS.chatMessages, SEED_MESSAGES);
+  return [...SEED_MESSAGES];
 }
 
 function makeThreadId(): string {
@@ -176,10 +181,18 @@ export function SupportProvider({ children }: { children: ReactNode }) {
 
   const markThreadRead = useCallback(
     (threadId: string, readerId: string) => {
-      const next = messages.map((m) =>
-        m.threadId === threadId && m.senderId !== readerId ? { ...m, read: true } : m,
-      );
-      persistMessages(next);
+      // Only persist when something was actually unread: persisting a fresh
+      // array unconditionally re-created this callback forever and looped
+      // the chat screen's read effect.
+      let changed = false;
+      const next = messages.map((m) => {
+        if (m.threadId === threadId && m.senderId !== readerId && !m.read) {
+          changed = true;
+          return { ...m, read: true };
+        }
+        return m;
+      });
+      if (changed) persistMessages(next);
     },
     [messages, persistMessages],
   );

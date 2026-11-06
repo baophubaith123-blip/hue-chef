@@ -79,7 +79,7 @@ export function AppealList({ filters, onSelect, compact = false, limit }: Appeal
                 </span>
               </div>
               <div className={styles.createdCell}>
-                {new Date(appeal.updatedAt).toLocaleDateString()}
+                {new Date(appeal.createdAt).toLocaleDateString()}
               </div>
               {onSelect ? (
                 <button

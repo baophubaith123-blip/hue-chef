@@ -51,6 +51,10 @@ export interface StoredUser {
   bio?: string;
   recipeCount?: number;
   equippedAchievementId?: string | null;
+  /** Why the account is banned (set when status === 'banned'). */
+  banReason?: string;
+  /** Ban expiry date (yyyy-mm-dd); null/undefined = permanent ban. */
+  banUntil?: string | null;
 }
 
 export interface AuthSession {
@@ -78,6 +82,20 @@ export interface PublicUser {
   bio?: string;
   recipeCount?: number;
   equippedAchievementId?: string | null;
+  /** Why the account is banned (set when status === 'banned'). */
+  banReason?: string;
+  /** Ban expiry date (yyyy-mm-dd); null/undefined = permanent ban. */
+  banUntil?: string | null;
+}
+
+/** True while a ban is in force; a dated ban stops applying after its last day. */
+export function isBanActive(
+  user: Pick<StoredUser, 'status' | 'banUntil'>,
+  now: Date = new Date(),
+): boolean {
+  if (user.status !== 'banned') return false;
+  if (!user.banUntil) return true;
+  return new Date(`${user.banUntil}T23:59:59`) >= now;
 }
 
 export function toPublicUser(user: StoredUser): PublicUser {

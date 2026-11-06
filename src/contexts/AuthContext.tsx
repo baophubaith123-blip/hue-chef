@@ -15,6 +15,7 @@ import {
   saveUsers,
   updateStoredUserById,
 } from '@/features/auth/store';
+import { isBanActive } from '@/features/auth/types';
 import type {
   AuthSession,
   CookedRecipeEntry,
@@ -64,6 +65,20 @@ function createPlayerId(): string {
   return `player-${crypto.randomUUID()}`;
 }
 
+/** If a dated ban has expired, lift it in the users store and return the fresh record. */
+function liftExpiredBan(users: StoredUser[], stored: StoredUser): StoredUser {
+  if (stored.status === 'banned' && !isBanActive(stored)) {
+    const updated = updateStoredUserById(users, stored.id, {
+      status: 'active',
+      banReason: undefined,
+      banUntil: undefined,
+    });
+    saveUsers(updated);
+    return updated.find((u) => u.id === stored.id) ?? stored;
+  }
+  return stored;
+}
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<PublicUser | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -80,6 +95,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       removeStorageItem(STORAGE_KEYS.auth);
       setUser(null);
     } else {
+      stored = liftExpiredBan(users, stored);
       const achStore = getJsonStorage<{ byUser?: Record<string, { id: string }[]> }>(STORAGE_KEYS.achievements);
       const targetId = stored.id;
       const storeIds = achStore?.byUser?.[targetId]?.map((e) => e.id) ?? [];
@@ -93,6 +109,58 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setUser(toPublicUser(stored));
     }
     setIsLoading(false);
+  }, []);
+
+  // Idle auto-logout: the admin settings define how long a session may sit
+  // unused (afkTimeoutSeconds). Activity resets the clock.
+  useEffect(() => {
+    if (!user) return;
+    let lastActivity = Date.now();
+    const mark = () => {
+      lastActivity = Date.now();
+    };
+    const events = ['mousedown', 'keydown', 'touchstart', 'click'] as const;
+    events.forEach((e) => window.addEventListener(e, mark, { passive: true }));
+    const timer = window.setInterval(() => {
+      const settings = getJsonStorage<{ afkTimeoutSeconds?: number }>(STORAGE_KEYS.adminSettings);
+      const seconds = settings?.afkTimeoutSeconds;
+      if (typeof seconds !== 'number' || seconds <= 0) return;
+      if (Date.now() - lastActivity >= seconds * 1000) {
+        removeStorageItem(STORAGE_KEYS.auth);
+        setUser(null);
+      }
+    }, 15000);
+    return () => {
+      events.forEach((e) => window.removeEventListener(e, mark));
+      window.clearInterval(timer);
+    };
+  }, [user]);
+
+  // Keep the in-memory snapshot in sync with the users store: an admin may
+  // ban/unban or re-role this account from another tab or page.
+  useEffect(() => {
+    const resync = () => {
+      const session = readSession();
+      if (!session) return;
+      const users = loadUsers();
+      const stored = findUserById(users, session.userId);
+      if (!stored) {
+        removeStorageItem(STORAGE_KEYS.auth);
+        setUser(null);
+        return;
+      }
+      const fresh = liftExpiredBan(users, stored);
+      setUser((prev) => {
+        const next = toPublicUser(fresh);
+        return JSON.stringify(prev) === JSON.stringify(next) ? prev : next;
+      });
+    };
+    window.addEventListener('focus', resync);
+    window.addEventListener('storage', resync);
+    return () => {
+      window.removeEventListener('focus', resync);
+      window.removeEventListener('storage', resync);
+    };
   }, []);
 
   const persistSession = useCallback((stored: StoredUser) => {
@@ -109,8 +177,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (found.password !== password) {
       throw new AppError('Incorrect password', 'INVALID_PASSWORD');
     }
-    persistSession(found);
-    return toPublicUser(found);
+    const fresh = liftExpiredBan(loadUsers(), found);
+    persistSession(fresh);
+    return toPublicUser(fresh);
   }, [persistSession]);
 
   const register = useCallback(async (name: string, email: string, password: string): Promise<PublicUser> => {

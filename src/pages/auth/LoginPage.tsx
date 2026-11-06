@@ -4,7 +4,7 @@ import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/Button';
 import { Card } from '@/components/Card';
 import { useAuth } from '@/contexts/AuthContext';
-import { getDefaultPathForRole } from '@/features/auth/types';
+import { getDefaultPathForRole, isBanActive } from '@/features/auth/types';
 import { AppError } from '@/lib/errors';
 import { useTranslation } from '@/i18n/useTranslation';
 import {
@@ -18,6 +18,7 @@ import authStyles from '@/pages/auth/AuthLayout.module.css';
 export default function LoginPage() {
   const { t } = useTranslation();
   const { user, login } = useAuth();
+  const userBanned = user ? isBanActive(user) : false;
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -26,7 +27,9 @@ export default function LoginPage() {
   const [submitting, setSubmitting] = useState(false);
 
   if (user) {
-    return <Navigate to={getDefaultPathForRole(user.role)} replace />;
+    return (
+      <Navigate to={userBanned ? '/support/chat' : getDefaultPathForRole(user.role)} replace />
+    );
   }
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -40,7 +43,9 @@ export default function LoginPage() {
     setSubmitting(true);
     try {
       const loggedIn = await login(email, password);
-      navigate(getDefaultPathForRole(loggedIn.role), { replace: true });
+      navigate(isBanActive(loggedIn) ? '/support/chat' : getDefaultPathForRole(loggedIn.role), {
+        replace: true,
+      });
     } catch (error) {
       if (error instanceof AppError) {
         switch (error.code) {

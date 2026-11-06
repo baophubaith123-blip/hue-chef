@@ -73,10 +73,7 @@ export function BanNoticePopup({
           <dd className={until === dict.ban.permanent ? styles.permanent : ''}>{until}</dd>
         </dl>
 
-        <p className={styles.hint}>
-          💡 Nếu bạn cho rằng đây là lỗi, bấm <strong>{dict.ban.contactSupport}</strong> bên dưới để trò chuyện
-          trực tiếp với nhân viên hỗ trợ. Họ sẽ tạo phiếu khiếu nại và gửi cho quản trị viên xem xét.
-        </p>
+        <p className={styles.hint}>💡 {dict.ban.appealHint}</p>
 
         {extraContent}
       </div>

@@ -13,6 +13,7 @@ import { loadUsers, saveUsers } from '@/features/auth/store';
 import type { MailMessage, MailType } from '@/features/mail/types';
 import { useTranslation } from '@/i18n/useTranslation';
 import { AppError } from '@/lib/errors';
+import { appendAudit } from '@/features/admin/lib/audit';
 import { getJsonStorage, setJsonStorage, STORAGE_KEYS } from '@/lib/storage';
 
 export type BroadcastTarget = 'player' | 'editor' | 'support' | 'all';
@@ -108,6 +109,12 @@ function buildMail(
 
 const THREE_WARNINGS_LIMIT = 3;
 
+function warningsLimit(): number {
+  const settings = getJsonStorage<{ autoBanAfterWarnings?: number }>(STORAGE_KEYS.adminSettings);
+  const value = settings?.autoBanAfterWarnings;
+  return typeof value === 'number' && value >= 1 ? Math.floor(value) : THREE_WARNINGS_LIMIT;
+}
+
 export function MailProvider({ children }: { children: ReactNode }) {
   const [mails, setMails] = useState<MailMessage[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -125,9 +132,11 @@ export function MailProvider({ children }: { children: ReactNode }) {
 
   const appendMails = useCallback(
     (newMails: MailMessage[]) => {
-      persist([...newMails, ...mails]);
+      // Read the store fresh: several sends inside one handler must not
+      // overwrite each other through a stale render closure.
+      persist([...newMails, ...loadMails()]);
     },
-    [mails, persist],
+    [persist],
   );
 
   const getInboxForUser = useCallback(
@@ -203,8 +212,9 @@ export function MailProvider({ children }: { children: ReactNode }) {
         throw new AppError('Broadcast empty', 'BROADCAST_EMPTY');
       }
       const users = loadUsers();
-      const recipients: StoredUser[] =
-        target === 'all' ? users : users.filter((u) => u.role === (target as UserRole));
+      const recipients: StoredUser[] = (
+        target === 'all' ? users : users.filter((u) => u.role === (target as UserRole))
+      ).filter((u) => u.status !== 'banned' && u.id !== senderId);
       const prefixedSubject = (t('mail.broadcastSubjectPrefix') || '') + subject;
       const mailsToAdd = recipients.map((u) =>
         buildMail(u.id, 'broadcast', prefixedSubject, body, {
@@ -213,6 +223,10 @@ export function MailProvider({ children }: { children: ReactNode }) {
         }),
       );
       appendMails(mailsToAdd);
+      appendAudit({ id: senderId, role: 'admin' }, 'broadcast.send', {
+        targetType: 'user',
+        detail: { target, count: recipients.length, subject },
+      });
       return { count: recipients.length, recipients: recipients.map((u) => u.id) };
     },
     [appendMails, t],
@@ -267,7 +281,7 @@ export function MailProvider({ children }: { children: ReactNode }) {
       const user = users[idx];
       const currentCount = user.warningCount ?? 0;
       const newCount = currentCount + 1;
-      const banned = newCount >= THREE_WARNINGS_LIMIT;
+      const banned = newCount >= warningsLimit();
       users[idx] = {
         ...user,
         warningCount: newCount,

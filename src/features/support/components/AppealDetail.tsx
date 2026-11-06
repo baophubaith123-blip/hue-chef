@@ -1,4 +1,4 @@
-import { useMemo, useState, type FormEvent } from 'react';
+import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import { Button } from '@/components/Button';
@@ -24,7 +24,7 @@ export function AppealDetail({ appealId, onBack, onUpdated }: AppealDetailProps)
   const { getAppeal, updateStatus } = useAppeals();
   const { findUserById } = useSupport();
   const { user } = useAuth();
-  const { sendSupportMail, unbanUser, banUser, sendBanNoticeMail } = useMail();
+  const { sendSupportMail } = useMail();
   const [resolution, setResolution] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
@@ -44,65 +44,43 @@ export function AppealDetail({ appealId, onBack, onUpdated }: AppealDetailProps)
   const appealTypeLabel = dict.support.typeLabels[appeal.type as AppealType];
   const statusLabel = dict.appeal.statusLabels[appeal.status as AppealStatus];
 
-  const canAct = user && (user.role === 'support' || user.role === 'admin');
+  const isFinal = appeal.status === 'resolved' || appeal.status === 'rejected';
+  const canAct = Boolean(user && user.role === 'support') && !isFinal;
 
-  const handleAction = (event: FormEvent<HTMLFormElement>, nextStatus: AppealStatus) => {
-    event.preventDefault();
+  const handleAction = (nextStatus: AppealStatus) => {
     setError(null);
     setSuccess(null);
     try {
-      if (nextStatus !== 'open' && !resolution.trim()) {
+      if (!resolution.trim()) {
         throw new AppError('Need resolution', 'REQUIRED');
       }
-      const opts: {
-        supportId?: string;
-        adminId?: string;
-        resolution?: string;
-      } = { resolution: resolution.trim() || undefined };
-      if (user?.role === 'support') opts.supportId = user.id;
-      if (user?.role === 'admin') opts.adminId = user.id;
-
-      const updated = updateStatus(appeal.id, nextStatus, opts);
-
-      if (user?.role === 'admin') {
-        if (nextStatus === 'resolved' && appeal.type === 'ban') {
-          try {
-            unbanUser(appeal.appellantId, user.id);
-          } catch {
-            // might not be banned, ignore
-          }
-        }
-        if (nextStatus === 'rejected' && appeal.type === 'ban') {
-          try {
-            banUser(appeal.appellantId, 'Appeal rejected', undefined, user.id);
-            sendBanNoticeMail(appeal.appellantId, 'Appeal rejected');
-          } catch {
-            // ignore
-          }
-        }
-      }
+      const updated = updateStatus(appeal.id, nextStatus, {
+        supportId: user?.id,
+        resolution: resolution.trim(),
+      });
 
       if (appellant) {
+        const newLabel = dict.appeal.statusLabels[updated.status];
         sendSupportMail(
           appellant.id,
-          `Kết quả khiếu nại: ${statusLabel}`,
-          `Khiếu nại "${appeal.subject}" của bạn đã được xử lý.\nTrạng thái: ${dict.appeal.statusLabels[updated.status]}\n${updated.resolution ? `\nGiải pháp:\n${updated.resolution}` : ''}`,
+          dict.support.appealMailSubject(newLabel),
+          nextStatus === 'recommended'
+            ? dict.support.appealMailRecommendedBody(updated.resolution)
+            : dict.support.appealMailBody(newLabel, updated.resolution),
           { appealId: appeal.id, threadId: appeal.threadId },
         );
       }
 
       setSuccess(
         nextStatus === 'recommended'
-          ? t('support.appealCreated')
-          : nextStatus === 'resolved'
-            ? 'Đã giải quyết khiếu nại.'
-            : 'Đã từ chối khiếu nại.',
+          ? t('support.appealRecommended')
+          : t('support.appealRejectedMsg'),
       );
       setResolution('');
       onUpdated?.();
     } catch (err) {
       if (err instanceof AppError && err.code === 'REQUIRED') {
-        setError('Vui lòng nhập giải thích cho quyết định của bạn.');
+        setError(t('support.resolutionRequired'));
       } else {
         setError(err instanceof Error ? err.message : String(err));
       }
@@ -148,15 +126,15 @@ export function AppealDetail({ appealId, onBack, onUpdated }: AppealDetailProps)
             <strong>{appellant?.name ?? appeal.appellantId}</strong>
             <span className={styles.muted}> &lt;{appellant?.email ?? '-'}&gt;</span>
           </dd>
-          <dt>Thread</dt>
+          <dt>{t('support.threadLabel')}</dt>
           <dd>
             <Link to={`/support/chat?threadId=${appeal.threadId}`} className={styles.link}>
-              Mở đoạn hội thoại →
+              {t('support.openThread')}
             </Link>
           </dd>
           {supportUser ? (
             <>
-              <dt>Hỗ trợ xử lý</dt>
+              <dt>{t('support.handledBy')}</dt>
               <dd>
                 {supportUser.avatar ? (
                   <img src={supportUser.avatar} alt="" className={styles.miniAvatar} />
@@ -178,7 +156,10 @@ export function AppealDetail({ appealId, onBack, onUpdated }: AppealDetailProps)
         {canAct ? (
           <form
             className={styles.actionForm}
-            onSubmit={(e) => handleAction(e, appeal.status === 'resolved' ? 'resolved' : 'recommended')}
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleAction('recommended');
+            }}
           >
             <label className={styles.label} htmlFor="resolution">
               {t('common.reason')} / {t('appeal.resolution')}
@@ -192,48 +173,12 @@ export function AppealDetail({ appealId, onBack, onUpdated }: AppealDetailProps)
               onChange={(e) => setResolution(e.target.value)}
             />
             <div className={styles.buttons}>
-              {appeal.status !== 'resolved' ? (
-                <Button
-                  type="submit"
-                  onClick={(e) =>
-                    ((e as unknown as { currentTarget: { form: { requestSubmit: () => void } } }).currentTarget.form.requestSubmit())
-                  }
-                  formAction="post"
-                  variant="primary"
-                  onClickCapture={(e) => {
-                    e.preventDefault();
-                    const ev = { ...e, preventDefault: () => {} } as unknown as FormEvent<HTMLFormElement>;
-                    handleAction(ev, 'recommended');
-                  }}
-                >
-                  {t('support.recommendToAdmin')}
-                </Button>
-              ) : null}
-              {appeal.status !== 'resolved' ? (
-                <Button
-                  type="button"
-                  variant="secondary"
-                  onClick={(e) => {
-                    const ev = e as unknown as FormEvent<HTMLFormElement>;
-                    handleAction(ev, 'rejected');
-                  }}
-                >
-                  {t('support.rejectAppeal')}
-                </Button>
-              ) : null}
-              {appeal.status !== 'resolved' && user?.role === 'admin' ? (
-                <Button
-                  type="button"
-                  variant="primary"
-                  className={styles.resolveBtn}
-                  onClick={(e) => {
-                    const ev = e as unknown as FormEvent<HTMLFormElement>;
-                    handleAction(ev, 'resolved');
-                  }}
-                >
-                  {t('appeal.resolved')}
-                </Button>
-              ) : null}
+              <Button type="submit" variant="primary">
+                {t('support.recommendToAdmin')}
+              </Button>
+              <Button type="button" variant="secondary" onClick={() => handleAction('rejected')}>
+                {t('support.rejectAppeal')}
+              </Button>
             </div>
           </form>
         ) : null}

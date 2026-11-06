@@ -10,6 +10,7 @@ import {
 
 import type { Appeal, AppealStatus, AppealType } from '@/features/support/types';
 import { AppError } from '@/lib/errors';
+import { SEED_APPEALS } from '@/data/support-seed';
 import { getJsonStorage, setJsonStorage, STORAGE_KEYS } from '@/lib/storage';
 
 interface AppealContextValue {
@@ -40,7 +41,9 @@ const AppealContext = createContext<AppealContextValue | null>(null);
 
 function loadAppeals(): Appeal[] {
   const stored = getJsonStorage<Appeal[]>(STORAGE_KEYS.appeals);
-  return Array.isArray(stored) ? stored : [];
+  if (Array.isArray(stored)) return stored;
+  setJsonStorage(STORAGE_KEYS.appeals, SEED_APPEALS);
+  return [...SEED_APPEALS];
 }
 
 function makeAppealId(): string {
