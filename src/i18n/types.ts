@@ -570,6 +570,9 @@ export interface I18nDictionary {
       marketViewLeft: (seconds: number) => string;
       marketTimeLeft: (seconds: number) => string;
       marketCollected: (picked: number, total: number) => string;
+      marketStallPage: (current: number, total: number) => string;
+      pagerPrev: string;
+      pagerNext: string;
       marketPeek: string;
       marketPeekShowing: (seconds: number) => string;
       marketGo: string;
@@ -628,6 +631,9 @@ export interface I18nDictionary {
     comboLabel: string;
     addedToPot: string;
     neededThisStep: string;
+    trayPage: string;
+    pagerPrev: string;
+    pagerNext: string;
     stepNeedsNames: string;
     hudStepOf: string;
     steps: string;

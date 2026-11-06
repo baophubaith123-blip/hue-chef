@@ -100,3 +100,43 @@
   background: linear-gradient(90deg, var(--color-gold, #e9a23b), var(--color-brick, #c8553d));
   transition: width 0.25s linear;
 }
+
+
+/* ===== Phase 16 — theme D overrides ===== */
+.wrap {
+  background: var(--paper, #fff6e0);
+  color: var(--paper-text, #43301b);
+  border: var(--border-game, 3px solid #4a2c14);
+  border-radius: 24px;
+  box-shadow: var(--shadow-game-card, 0 12px 28px rgba(59, 42, 32, 0.12));
+}
+
+.targetBox {
+  background: var(--paper-deep, #f7e8c6);
+  border: 2.5px solid var(--wood, #b57e40);
+  color: var(--paper-text, #43301b);
+}
+
+.input {
+  background: #fffdf4;
+  border: 3px solid var(--ink, #4a2c14);
+  border-radius: var(--radius-xl, 16px);
+  color: var(--paper-text, #43301b);
+}
+
+.input:focus {
+  border-color: var(--color-gold, #e9a23b);
+  box-shadow: 0 0 0 3px rgba(233, 162, 59, 0.35);
+  outline: none;
+}
+
+.hint { color: var(--paper-text-muted, #7a5c38); }
+
+.timerTrack {
+  border: 2px solid var(--ink, #4a2c14);
+  background: var(--paper-deep, #f7e8c6);
+}
+
+.metaChip {
+  border: 2px solid var(--ink, #4a2c14);
+}

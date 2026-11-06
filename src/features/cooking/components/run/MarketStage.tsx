@@ -56,6 +56,7 @@ export function MarketStage({ recipe, config, maxPoints, onProgress, onComplete 
       .map((item) => item.id);
     return shuffleArray([...correctIds, ...decoys]);
   });
+  const [stallPage, setStallPage] = useState(0);
   const [picked, setPicked] = useState<ReadonlySet<string>>(new Set());
   const [wrong, setWrong] = useState<ReadonlySet<string>>(new Set());
   const [bonus, setBonus] = useState(0);
@@ -175,6 +176,16 @@ export function MarketStage({ recipe, config, maxPoints, onProgress, onComplete 
     [correctIds.length, correctSet, maxPoints, picked, rawMax, s, showToast, wrong],
   );
 
+  // Stall paging (presentation only): 8 stalls per page, picks persist
+  // across pages and reshuffles redistribute over all pages.
+  const STALL_PAGE_SIZE = 8;
+  const stallPageCount = Math.max(1, Math.ceil(stallIds.length / STALL_PAGE_SIZE));
+  const safeStallPage = Math.min(stallPage, stallPageCount - 1);
+  const visibleStallIds = stallIds.slice(
+    safeStallPage * STALL_PAGE_SIZE,
+    safeStallPage * STALL_PAGE_SIZE + STALL_PAGE_SIZE,
+  );
+
   const listVisible = listState !== 'hidden';
   const secondsDisplay = Math.ceil(secondsLeft);
   const phaseDisplay = Math.ceil(phaseSeconds);
@@ -229,7 +240,7 @@ export function MarketStage({ recipe, config, maxPoints, onProgress, onComplete 
       )}
 
       <div className={styles.stall}>
-        {stallIds.map((id) => {
+        {visibleStallIds.map((id) => {
           const ing = getIngredientById(id);
           const isPicked = picked.has(id);
           const isWrong = wrong.has(id);
@@ -256,6 +267,42 @@ export function MarketStage({ recipe, config, maxPoints, onProgress, onComplete 
           );
         })}
       </div>
+
+      {stallPageCount > 1 ? (
+        <div className={styles.pager}>
+          <button
+            type="button"
+            className={styles.pagerBtn}
+            aria-label={s.pagerPrev}
+            disabled={safeStallPage === 0}
+            onClick={() => setStallPage(safeStallPage - 1)}
+          >
+            ◀
+          </button>
+          <div className={styles.pagerCenter}>
+            <span className={styles.pagerSign}>
+              🪧 {s.marketStallPage(safeStallPage + 1, stallPageCount)}
+            </span>
+            <span className={styles.pagerDots}>
+              {Array.from({ length: stallPageCount }, (_, i) => (
+                <span
+                  key={i}
+                  className={i === safeStallPage ? styles.pagerDotActive : styles.pagerDot}
+                />
+              ))}
+            </span>
+          </div>
+          <button
+            type="button"
+            className={styles.pagerBtn}
+            aria-label={s.pagerNext}
+            disabled={safeStallPage >= stallPageCount - 1}
+            onClick={() => setStallPage(safeStallPage + 1)}
+          >
+            ▶
+          </button>
+        </div>
+      ) : null}
 
       {toast ? <div className={styles.toast}>{toast}</div> : null}
 

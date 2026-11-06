@@ -230,3 +230,49 @@
   margin-bottom: 12px;
   text-align: center;
 }
+
+
+/* ===== Phase 16 — theme D overrides ===== */
+.scorePanel {
+  background: var(--paper, #fff6e0);
+  color: var(--paper-text, #43301b);
+  border: var(--border-game, 3px solid #4a2c14);
+  border-radius: 20px;
+  box-shadow: var(--shadow-game-card, 0 12px 28px rgba(59, 42, 32, 0.12));
+}
+
+.scoreValue { color: var(--paper-text, #43301b); }
+.scoreLabel, .scoreHint { color: var(--paper-text-muted, #7a5c38); }
+
+.stageFlowChip {
+  border: 2.5px solid var(--ink, #4a2c14);
+  background: var(--paper, #fff6e0);
+  color: var(--paper-text-muted, #7a5c38);
+  font-weight: 700;
+}
+
+.stageFlowChipActive {
+  background: var(--gradient-gold, linear-gradient(135deg, #f6c453, #e9a23b));
+  color: #43301b;
+  font-weight: 800;
+}
+
+.stageFlowChipDone {
+  background: var(--wood-gradient-soft, linear-gradient(180deg, #e3b06a, #cd9a52));
+  color: #43301b;
+}
+
+.perkChip {
+  border: 2px solid var(--wood-dark, #8a5a2b);
+  background: rgba(233, 162, 59, 0.16);
+  color: var(--paper-text, #43301b);
+}
+
+.previewBadge {
+  border: 2px solid var(--ink, #4a2c14);
+}
+
+.seasonToast {
+  border: 2.5px solid var(--ink, #200f04);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+}

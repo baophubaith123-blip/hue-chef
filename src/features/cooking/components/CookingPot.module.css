@@ -322,3 +322,33 @@
   50% { transform: scale(1.04); filter: brightness(1.25); }
   100% { transform: scale(1); filter: brightness(1); }
 }
+
+
+/* ===== Phase 16 — theme D overrides ===== */
+.comboBadge {
+  border: 2.5px solid var(--ink, #4a2c14);
+  box-shadow: 0 3px 0 var(--ink-soft, rgba(74, 44, 20, 0.45));
+}
+
+.slot {
+  border: 2.5px dashed var(--wood-dark, #8a5a2b);
+  background: rgba(255, 246, 224, 0.5);
+}
+
+.chip {
+  background: var(--paper, #fff6e0);
+  border: 2px solid var(--wood-dark, #8a5a2b);
+  color: var(--paper-text, #43301b);
+}
+
+.actionButton {
+  border: 3px solid var(--ink, #4a2c14) !important;
+  box-shadow: 0 5px 0 var(--ink-soft, rgba(74, 44, 20, 0.45)) !important;
+  border-radius: var(--radius-xl, 16px) !important;
+  font-weight: 900;
+}
+
+.actionButton:active:not(:disabled) {
+  transform: translateY(3px);
+  box-shadow: 0 2px 0 var(--ink-soft, rgba(74, 44, 20, 0.45)) !important;
+}

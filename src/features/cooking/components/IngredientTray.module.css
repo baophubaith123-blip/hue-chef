@@ -235,3 +235,122 @@
   letter-spacing: 0.04em;
   white-space: nowrap;
 }
+
+
+/* ===== Phase 16 — theme D overrides (tray panel + paging) ===== */
+.tray {
+  background: var(--paper, #fff6e0);
+  color: var(--paper-text, #43301b);
+  border: var(--border-game, 3px solid #4a2c14);
+  border-radius: 20px;
+  box-shadow: var(--shadow-game-card, 0 12px 28px rgba(59, 42, 32, 0.12));
+}
+
+[data-theme='dark'] .tray {
+  background: var(--paper, #f8efd4);
+  border-color: var(--ink, #200f04);
+  color: var(--paper-text, #43301b);
+}
+
+.title {
+  border: 2.5px solid var(--ink, #200f04);
+  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.35);
+}
+
+.remainingBadge {
+  background: rgba(233, 162, 59, 0.18);
+  border: 2px solid var(--wood-dark, #8a5a2b);
+  color: var(--paper-text, #43301b);
+}
+
+.chip {
+  background: #fffdf4;
+  border: 2.5px solid rgba(138, 90, 43, 0.55);
+  border-radius: var(--radius-xl, 16px);
+  color: var(--paper-text, #43301b);
+  box-shadow: 0 3px 0 rgba(74, 44, 20, 0.18);
+}
+
+.chip:hover:not(:disabled) {
+  border-color: var(--color-gold, #e9a23b);
+}
+
+.medal {
+  border: 2px solid var(--ink, #4a2c14);
+  border-radius: 14px;
+}
+
+.chipName { color: var(--paper-text, #43301b); }
+.chipMeta { color: var(--paper-text-muted, #7a5c38); }
+
+.chipNeeded {
+  border-color: var(--color-gold, #e9a23b);
+  box-shadow: 0 0 0 2px rgba(233, 162, 59, 0.45), 0 3px 0 rgba(74, 44, 20, 0.18);
+}
+
+.neededTag {
+  background: var(--color-primary, #c8553d);
+  border: 1.5px solid var(--ink, #4a2c14);
+  color: #fff;
+}
+
+.chipUsed {
+  background: var(--paper-deep, #f7e8c6);
+}
+
+.pager {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 0.35rem;
+}
+
+.pagerBtn {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 3px solid var(--ink, #4a2c14);
+  background: var(--wood-gradient, linear-gradient(180deg, #ce9550, #b57e40));
+  color: #fff6e0;
+  font-size: 15px;
+  font-weight: 900;
+  cursor: pointer;
+  box-shadow: 0 3px 0 var(--ink-soft, rgba(74, 44, 20, 0.45));
+  text-shadow: 0 1px 0 rgba(32, 15, 4, 0.4);
+  transition: transform 0.12s ease, opacity 0.15s ease;
+}
+
+.pagerBtn:hover:not(:disabled) { transform: translateY(-1px); }
+.pagerBtn:disabled { opacity: 0.4; cursor: not-allowed; box-shadow: none; }
+
+.pagerCenter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.pagerSign {
+  background: var(--wood-gradient, linear-gradient(180deg, #ce9550, #b57e40));
+  border: 2.5px solid var(--ink, #4a2c14);
+  border-radius: var(--radius-full);
+  color: #fff6e0;
+  font-weight: 800;
+  font-size: 13.5px;
+  padding: 4px 14px;
+  text-shadow: 0 1px 0 rgba(32, 15, 4, 0.4);
+}
+
+.pagerDots { display: flex; gap: 5px; }
+
+.pagerDot,
+.pagerDotActive {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: 2px solid var(--ink, #4a2c14);
+  background: #fff6e0;
+}
+
+.pagerDotActive { background: var(--color-gold, #e9a23b); }

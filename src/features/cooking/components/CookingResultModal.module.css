@@ -362,3 +362,41 @@
   font-weight: 600;
   font-size: 0.85em;
 }
+
+
+/* ===== Phase 16 — theme D overrides ===== */
+.trophyBadge {
+  border: 3.5px solid var(--ink, #4a2c14);
+  box-shadow: 0 5px 0 var(--ink-soft, rgba(74, 44, 20, 0.45)), 0 0 26px rgba(233, 162, 59, 0.45);
+}
+
+.recipeName,
+.scoreHeroValue,
+.metricValue,
+.minigameTitle,
+.achievementName {
+  color: var(--paper-text, #43301b);
+}
+
+.scoreHeroLabel,
+.metricLabel,
+.minigameScore {
+  color: var(--paper-text-muted, #7a5c38);
+}
+
+.metricCard,
+.minigameItem,
+.achievementBadge {
+  background: var(--paper-deep, #f7e8c6);
+  border: 2.5px solid var(--wood, #b57e40);
+  border-radius: var(--radius-xl, 16px);
+  color: var(--paper-text, #43301b);
+}
+
+.levelUpCard {
+  border: 3px solid var(--color-gold, #e9a23b);
+  border-radius: var(--radius-xl, 16px);
+}
+
+.failTitle { color: var(--paper-text, #43301b); }
+.failSubtitle { color: var(--paper-text-muted, #7a5c38); }

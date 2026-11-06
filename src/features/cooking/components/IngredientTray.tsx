@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import type { DragEvent } from 'react';
 
 import { useTaxonomy } from '@/contexts/TaxonomyContext';
@@ -40,6 +41,20 @@ export function IngredientTray({
     (id) => !placedIngredientIds.includes(id),
   ).length;
 
+  // Tray paging (presentation only): at most 3 trays, chips already in
+  // the pot keep their locked state on every tray.
+  const [trayPage, setTrayPage] = useState(0);
+  const trayPageSize =
+    trayIngredientIds.length > 14
+      ? Math.ceil(trayIngredientIds.length / 3)
+      : Math.max(1, trayIngredientIds.length);
+  const trayPageCount = Math.max(1, Math.ceil(trayIngredientIds.length / trayPageSize));
+  const safeTrayPage = Math.min(trayPage, trayPageCount - 1);
+  const visibleIngredientIds = trayIngredientIds.slice(
+    safeTrayPage * trayPageSize,
+    safeTrayPage * trayPageSize + trayPageSize,
+  );
+
   return (
     <section className={styles.tray} aria-label={t('cooking.ingredients')}>
       <div className={styles.headerRow}>
@@ -49,7 +64,7 @@ export function IngredientTray({
         </span>
       </div>
       <ul className={`${styles.list} scroll-slim`}>
-        {trayIngredientIds.map((ingredientId, index) => {
+        {visibleIngredientIds.map((ingredientId, index) => {
           const ingredient = getIngredientById(ingredientId);
           if (!ingredient) {
             return null;
@@ -107,6 +122,41 @@ export function IngredientTray({
           );
         })}
       </ul>
+      {trayPageCount > 1 ? (
+        <div className={styles.pager}>
+          <button
+            type="button"
+            className={styles.pagerBtn}
+            aria-label={t('cooking.pagerPrev')}
+            disabled={safeTrayPage === 0}
+            onClick={() => setTrayPage(safeTrayPage - 1)}
+          >
+            ◀
+          </button>
+          <div className={styles.pagerCenter}>
+            <span className={styles.pagerSign}>
+              🧺 {t('cooking.trayPage', { current: safeTrayPage + 1, total: trayPageCount })}
+            </span>
+            <span className={styles.pagerDots}>
+              {Array.from({ length: trayPageCount }, (_, i) => (
+                <span
+                  key={i}
+                  className={i === safeTrayPage ? styles.pagerDotActive : styles.pagerDot}
+                />
+              ))}
+            </span>
+          </div>
+          <button
+            type="button"
+            className={styles.pagerBtn}
+            aria-label={t('cooking.pagerNext')}
+            disabled={safeTrayPage >= trayPageCount - 1}
+            onClick={() => setTrayPage(safeTrayPage + 1)}
+          >
+            ▶
+          </button>
+        </div>
+      ) : null}
     </section>
   );
 }

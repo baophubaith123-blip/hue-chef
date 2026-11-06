@@ -249,3 +249,43 @@
   padding: 12px 28px;
   box-shadow: 0 14px 30px rgba(0, 0, 0, 0.35);
 }
+
+
+/* ===== Phase 16 — theme D overrides ===== */
+.stage {
+  border: var(--border-game, 3px solid #200f04);
+}
+
+.stageChip {
+  border: 2.5px solid var(--ink, #200f04);
+  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.35);
+}
+
+.chip,
+.comboChip {
+  border: 2px solid rgba(32, 15, 4, 0.65);
+}
+
+.readyCard {
+  background: var(--paper, #fff6e0);
+  color: var(--paper-text, #43301b);
+  border: var(--border-game, 3px solid #4a2c14);
+  border-radius: 24px;
+  box-shadow: 0 8px 0 rgba(0, 0, 0, 0.35), 0 24px 44px rgba(0, 0, 0, 0.4);
+}
+
+.readyTitle { color: var(--paper-text, #43301b); }
+.readyBody, .readyHint { color: var(--paper-text-muted, #7a5c38); }
+
+.startBtn {
+  background: var(--gradient-gold, linear-gradient(135deg, #f6c453, #e9a23b));
+  border: 3px solid var(--ink, #4a2c14);
+  color: #43301b;
+  box-shadow: 0 5px 0 var(--ink-soft, rgba(74, 44, 20, 0.45));
+  border-radius: var(--radius-full);
+  font-weight: 900;
+}
+
+.doneBadge {
+  border: 3px solid var(--ink, #200f04);
+}

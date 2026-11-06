@@ -219,3 +219,23 @@
   font-size: 52px;
   animation: finish-burst 0.6s ease;
 }
+
+
+/* ===== Phase 16 — theme D overrides ===== */
+.stage {
+  border: var(--border-game, 3px solid #200f04);
+}
+
+.stageChip {
+  border: 2.5px solid var(--ink, #200f04);
+  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.35);
+}
+
+.chip,
+.comboChip {
+  border: 2px solid rgba(32, 15, 4, 0.65);
+}
+
+.doneBadge {
+  border: 3px solid var(--ink, #200f04);
+}

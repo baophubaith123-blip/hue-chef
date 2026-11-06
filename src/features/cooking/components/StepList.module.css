@@ -155,3 +155,27 @@
   font-weight: 700;
   color: var(--color-primary, #c8553d);
 }
+
+
+/* ===== Phase 16 — theme D overrides ===== */
+.item {
+  border: 2.5px solid rgba(138, 90, 43, 0.4);
+  border-radius: var(--radius-xl, 16px);
+  background: var(--paper, #fff6e0);
+  color: var(--paper-text, #43301b);
+}
+
+.item.active {
+  border-color: var(--color-gold, #e9a23b);
+  background: var(--paper-deep, #f7e8c6);
+  box-shadow: 0 0 0 2px rgba(233, 162, 59, 0.4), 0 4px 0 rgba(74, 44, 20, 0.16);
+}
+
+.order {
+  border: 2px solid var(--ink, #4a2c14);
+}
+
+.stepDesc,
+.stepNeeds {
+  color: var(--paper-text-muted, #7a5c38);
+}

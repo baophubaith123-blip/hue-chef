@@ -96,3 +96,14 @@
   background: rgba(255, 255, 255, 0.18);
   border-color: rgba(255, 255, 255, 0.28);
 }
+
+
+/* ===== Phase 16 — theme D overrides ===== */
+.track {
+  border: 2.5px solid var(--ink, #4a2c14);
+}
+
+.timerHud {
+  border: 2.5px solid var(--ink, #4a2c14);
+  box-shadow: 0 3px 0 var(--ink-soft, rgba(74, 44, 20, 0.45));
+}

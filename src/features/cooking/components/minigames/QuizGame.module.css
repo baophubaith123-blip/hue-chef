@@ -402,3 +402,55 @@
     transition: none;
   }
 }
+
+
+/* ===== Phase 16 — theme D overrides ===== */
+.container {
+  background: var(--paper, #fff6e0);
+  color: var(--paper-text, #43301b);
+  border: var(--border-game, 3px solid #4a2c14);
+  border-radius: 24px;
+  box-shadow: var(--shadow-game-card, 0 12px 28px rgba(59, 42, 32, 0.12));
+}
+
+.speechBubble {
+  background: #fffdf4;
+  border: 2.5px solid var(--ink, #4a2c14);
+  color: var(--paper-text, #43301b);
+}
+
+.hostAvatar {
+  border: 3px solid var(--color-gold, #e9a23b);
+  box-shadow: 0 3px 0 var(--ink-soft, rgba(74, 44, 20, 0.45));
+}
+
+.question { color: var(--paper-text, #43301b); }
+.instruction { color: var(--paper-text-muted, #7a5c38); }
+
+.optionButton {
+  background: #fffdf4;
+  border: 3px solid var(--wood-dark, #8a5a2b);
+  border-radius: var(--radius-xl, 16px);
+  color: var(--paper-text, #43301b);
+  box-shadow: 0 4px 0 rgba(74, 44, 20, 0.25);
+}
+
+.optionButton:hover:not(:disabled) {
+  border-color: var(--color-gold, #e9a23b);
+  transform: translateY(-2px);
+}
+
+.optionIndexBadge {
+  background: var(--wood-gradient, linear-gradient(180deg, #ce9550, #b57e40));
+  border: 2px solid var(--ink, #4a2c14);
+  color: #fff6e0;
+}
+
+.progressBarTrack {
+  border: 2.5px solid var(--ink, #4a2c14);
+  background: var(--paper-deep, #f7e8c6);
+}
+
+.chip {
+  border: 2px solid var(--ink, #4a2c14);
+}

@@ -98,3 +98,27 @@
 .closeBtn:hover {
   filter: brightness(1.05);
 }
+
+
+/* ===== Phase 16 — theme D overrides ===== */
+.helpBtn {
+  border: 3px solid var(--ink, #200f04);
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.4);
+}
+
+.card {
+  background: var(--paper, #fff6e0);
+  color: var(--paper-text, #43301b);
+  border: var(--border-game, 3px solid #4a2c14);
+  border-radius: 22px;
+}
+
+.ruleList { color: var(--paper-text-muted, #7a5c38); }
+
+.closeBtn {
+  background: var(--gradient-gold, linear-gradient(135deg, #f6c453, #e9a23b));
+  border: 3px solid var(--ink, #4a2c14);
+  color: #43301b;
+  box-shadow: 0 3px 0 var(--ink-soft, rgba(74, 44, 20, 0.45));
+  font-weight: 800;
+}
