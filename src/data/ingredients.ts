@@ -74,6 +74,18 @@ export const SEED_INGREDIENTS: Ingredient[] = [
   { id: 'pearl-tapioca', name: 'Trân châu', category: 'other', fallbackEmoji: '🧋' },
   { id: 'banana', name: 'Chuối', category: 'other', fallbackEmoji: '🍌' },
   { id: 'jackfruit', name: 'Mít chín', category: 'other', fallbackEmoji: '🍈' },
+  // Mở rộng cho 35 món mới (đợt tiền tệ): đặc sản bổ sung
+  { id: 'birds-nest', name: 'Tổ yến', category: 'other', fallbackEmoji: '🪹' },
+  { id: 'grass-jelly', name: 'Sương sa', category: 'other', fallbackEmoji: '🍮' },
+  { id: 'young-jackfruit', name: 'Mít non', category: 'vegetable', fallbackEmoji: '🍈' },
+  { id: 'tuna', name: 'Cá ngừ', category: 'protein', fallbackEmoji: '🐠' },
+  { id: 'snakehead', name: 'Cá lóc', category: 'protein', fallbackEmoji: '🐟' },
+  { id: 'fig', name: 'Quả vả', category: 'vegetable', fallbackEmoji: '🍐' },
+  { id: 'chao', name: 'Chao', category: 'spice', fallbackEmoji: '🫙' },
+  { id: 'duck', name: 'Thịt vịt', category: 'protein', fallbackEmoji: '🦆' },
+  { id: 'tamarind', name: 'Me chua', category: 'spice', fallbackEmoji: '🫒' },
+  { id: 'sticky-rice', name: 'Gạo nếp', category: 'grain', fallbackEmoji: '🍙' },
+  { id: 'sticky-rice-flour', name: 'Bột nếp', category: 'grain', fallbackEmoji: '🍘' },
 ];
 
 export function getIngredientById(id: string): Ingredient | undefined {

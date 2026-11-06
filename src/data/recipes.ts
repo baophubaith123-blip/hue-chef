@@ -1,75 +1,11 @@
-import type {
-  ActionCookingMinigame,
-  CookingAction,
-  QuizMinigame,
-  Recipe,
-} from '@/data/types';
+import type { Recipe } from '@/data/types';
 
-interface StepSeedItem {
-  title: string;
-  description: string;
-  duration: number;
-  requiredIngredients: string[];
-  actionLabel: string;
-}
-
-function steps(recipeId: string, items: StepSeedItem[]) {
-  return items.map((item, index) => ({
-    id: `${recipeId}-step-${index + 1}`,
-    order: index + 1,
-    title: item.title,
-    description: item.description,
-    duration: item.duration,
-    requiredIngredients: item.requiredIngredients,
-    actionLabel: item.actionLabel,
-  }));
-}
-
-function actionGame(
-  id: string,
-  question: string,
-  ingredientId: string,
-  correctAction: CookingAction,
-  actions: CookingAction[] = ['steam', 'stir-fry', 'fry', 'grill', 'boil'],
-  timeLimit = 15,
-  scoreReward = 50,
-): ActionCookingMinigame {
-  return {
-    id,
-    type: 'action-cooking',
-    question,
-    timeLimit,
-    scoreReward,
-    data: {
-      ingredientId,
-      correctAction,
-      actions,
-    },
-  };
-}
-
-function quizGame(
-  id: string,
-  question: string,
-  options: string[],
-  correctAnswerIndex: number,
-  explanation: string,
-  timeLimit = 20,
-  scoreReward = 50,
-): QuizMinigame {
-  return {
-    id,
-    type: 'quiz',
-    question,
-    timeLimit,
-    scoreReward,
-    data: {
-      options,
-      correctAnswerIndex,
-      explanation,
-    },
-  };
-}
+import { actionGame, quizGame, steps } from '@/data/recipe-builders';
+import { RECIPES_GD2_A } from '@/data/recipes-gd2-a';
+import { RECIPES_GD2_B } from '@/data/recipes-gd2-b';
+import { RECIPES_GD2_C } from '@/data/recipes-gd2-c';
+import { RECIPES_GD2_D } from '@/data/recipes-gd2-d';
+import { RECIPES_GD2_E } from '@/data/recipes-gd2-e';
 
 export const SEED_RECIPES: Recipe[] = [
   // ============ CẤP 1★ DỄ — 6 nguyên liệu đúng + 4 nhiễu, 10 câu hỏi ============
@@ -2739,6 +2675,12 @@ export const SEED_RECIPES: Recipe[] = [
       ),
     ],
   },
+  // ============ 35 MÓN MỚI (đợt tiền tệ xu) — 5/10/14/16/5 theo cấp sao ============
+  ...RECIPES_GD2_A,
+  ...RECIPES_GD2_B,
+  ...RECIPES_GD2_C,
+  ...RECIPES_GD2_D,
+  ...RECIPES_GD2_E,
 ];
 
 export function getRecipeById(id: string) {
