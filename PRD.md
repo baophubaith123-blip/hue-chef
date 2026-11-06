@@ -564,6 +564,11 @@ Hệ thống có **4 vai trò**:
 | Ảnh món ăn | Ảnh thật hiển thị phẳng | Ảnh thật **đóng khung gỗ viền vàng** — giữ đúng món thật và dễ thêm món mới (Phase 16) |
 | Chợ nguyên liệu khi món nhiều nguyên liệu | Toàn bộ ô chợ dồn vào một lưới dài | **Chia sạp 8 ô/trang** ('Sạp x/y' + mũi tên + chấm trang), lựa chọn giữ nguyên khi lật sạp (Phase 16) |
 | Khay nguyên liệu khi nấu | Toàn bộ chip (tối đa 40) dồn một khay cuộn dài | **Chia tối đa 3 khay**, chip đã dùng giữ khóa ở mọi khay, thanh lật khay riêng với dialog Nêm (Phase 16) |
+| Khung cảnh trong game | Các màn chơi nền phẳng đơn sắc | **Tranh cảnh vẽ thật theo từng màn** (chợ Huế, bếp lửa, sân hứng, lễ hội ngày/đêm) lưu thành file ảnh trong project, phủ sau giao diện mọi màn chơi và đầu các trang Player (Phase 17) |
+| Bố cục ván chơi | Trang bị kéo dài, cuộn xuống thì mất đồng hồ và tên món | **Gói trọn 1 khung hình**: tên món, điểm, đồng hồ luôn hiện; các cột cuộn bên trong khung (Phase 17) |
+| Thanh cuộn | Thanh cuộn hệ thống thô, có nút mũi tên | **Tàn hình**: mảnh 6px, chỉ hiện mờ khi đang cuộn hoặc rê chuột, toàn app (Phase 17) |
+| Chữ trong thẻ Trang chủ (theme tối) | Hàng thành tích/vinh danh nền tối nhưng chữ cũng tối, gần như không đọc được | Chữ kem/vàng tương phản rõ trên nền hàng tối (Phase 17) |
+| Hộp thống kê Bộ sưu tập | Lật đen (theme tối) / trắng (theme sáng) lạc tông với thân thẻ kem | Bảng giấy đậm viền gỗ **giống hệt ở cả 2 theme** (Phase 17) |
 | Linh vật Nồi Nồi | Ảnh mascot kiểu cũ, lệch phong cách game | **Vẽ lại 2D** nét lễ hội, dùng thống nhất ở nồi nấu, MC hỏi đáp, hứng nguyên liệu, hoàn thiện, hộp thư trống, giới thiệu và trang cá nhân (Phase 16) |
 | Bảng xếp hạng | Tĩnh, tải lại trang | **Thời gian thực**: tự làm mới khi có điểm mới, khi quay lại tab, heartbeat 5 giây; có mũi tên tăng/giảm hạng so với kỳ trước |
 | Cuộn danh sách | Cuộn toàn trang | **Bộ cuộn riêng** cho lưới công thức (tìm kiếm đứng im), danh sách BXH, cột bước nấu và khay nguyên liệu |
