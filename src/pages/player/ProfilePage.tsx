@@ -5,8 +5,10 @@ import { AchievementIcon } from '@/components/AchievementIcon';
 import { Button } from '@/components/Button';
 import { EmptyState } from '@/components/EmptyState';
 import { useAuth } from '@/contexts/AuthContext';
+import { useRecipes } from '@/contexts/RecipeContext';
 import { SEED_ACHIEVEMENTS } from '@/data/achievements';
 import { findUserById, loadUsers } from '@/features/auth/store';
+import { countOwnedRecipes } from '@/features/recipes/lib/ownership';
 import { useTranslation } from '@/i18n/useTranslation';
 import { PlayerShell } from '@/pages/player/PlayerShell';
 
@@ -17,6 +19,7 @@ export default function ProfilePage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { user: currentUser, updateProfile } = useAuth();
+  const { getApprovedRecipes } = useRecipes();
 
   const isOwnProfile = !id || id === currentUser?.id;
 
@@ -254,6 +257,17 @@ export default function ProfilePage() {
             <div className={styles.statBox}>
               <span className={styles.statVal}>{totalScore}</span>
               <span className={styles.statLbl}>Tổng điểm</span>
+            </div>
+            <div className={styles.statBox}>
+              <span className={styles.statVal}>🪙 {(targetUser.coins ?? 0).toLocaleString()}</span>
+              <span className={styles.statLbl}>{t('profile.coinsLabel')}</span>
+            </div>
+            <div className={styles.statBox}>
+              <span className={styles.statVal}>
+                {countOwnedRecipes(targetUser, getApprovedRecipes())}/
+                {getApprovedRecipes().length}
+              </span>
+              <span className={styles.statLbl}>{t('profile.ownedLabel')}</span>
             </div>
           </div>
 

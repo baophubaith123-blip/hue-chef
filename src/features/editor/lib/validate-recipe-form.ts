@@ -1,4 +1,5 @@
 import type { RecipeFormErrors, RecipeFormValues } from '@/features/editor/types';
+import { SCORE_BANDS } from '@/lib/pricing';
 
 export const VALIDATION_KEYS = {
   nameRequired: 'errors.required',
@@ -7,6 +8,8 @@ export const VALIDATION_KEYS = {
   imageRequired: 'errors.required',
   minIngredients: 'errors.minIngredients',
   minSteps: 'errors.minSteps',
+  scoreOutOfBand: 'errors.scoreOutOfBand',
+  priceNegative: 'errors.priceNegative',
 } as const;
 
 export function validateRecipeForm(values: RecipeFormValues): RecipeFormErrors {
@@ -26,6 +29,20 @@ export function validateRecipeForm(values: RecipeFormValues): RecipeFormErrors {
 
   if (!values.image.trim()) {
     errors.image = VALIDATION_KEYS.imageRequired;
+  }
+
+  if (values.difficulty > 1) {
+    const band = SCORE_BANDS[values.difficulty];
+    if (
+      !Number.isFinite(values.baseScore) ||
+      values.baseScore < band.min ||
+      values.baseScore > band.max
+    ) {
+      errors.baseScore = VALIDATION_KEYS.scoreOutOfBand;
+    }
+    if (!Number.isFinite(values.priceCoins) || values.priceCoins < 0) {
+      errors.priceCoins = VALIDATION_KEYS.priceNegative;
+    }
   }
 
   const validIngredients = values.ingredients.filter(

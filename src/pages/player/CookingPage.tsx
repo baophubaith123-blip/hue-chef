@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Link, Navigate, useParams, useSearchParams } from 'react-router-dom';
+import { Link, Navigate, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 
 import type { Achievement } from '@/data/types';
 import { getIngredientById } from '@/data/ingredients';
@@ -27,9 +27,11 @@ import { useDragDrop } from '@/features/cooking/hooks/useDragDrop';
 import { COMBO_WINDOW_MS, comboBonusForStreak } from '@/features/cooking/lib/combo';
 import { SEASON_MAX_BONUS_RATIO } from '@/features/cooking/lib/stage-bonus';
 import { resolveStageConfig } from '@/features/cooking/lib/stage-config';
+import { isRecipeOwned } from '@/features/recipes/lib/ownership';
 import { buildTrayIngredientIds } from '@/features/cooking/lib/tray-ingredients';
 import { shuffleArray } from '@/features/cooking/lib/shuffle';
 import { useTranslation } from '@/i18n/useTranslation';
+import { FIRST_CLEAR_BONUS_RATIO, coinsForScore } from '@/lib/pricing';
 import { calculateXpFromStars } from '@/lib/score';
 import { PlayerShell } from '@/pages/player/PlayerShell';
 
@@ -39,7 +41,8 @@ export default function CookingPage() {
   const { id } = useParams<{ id: string }>();
   const { t, dict } = useTranslation();
   const { isLoading, getRecipeById } = useRecipes();
-  const { user, addXp, addCookedRecipe } = useAuth();
+  const { user, addXp, addCoins, addCookedRecipe } = useAuth();
+  const navigate = useNavigate();
   const { checkAndUnlockForUser } = useAchievements();
   const { push: pushNotification } = useNotification();
   const {
@@ -70,10 +73,13 @@ export default function CookingPage() {
   const seasonToastTimerRef = useRef<number | null>(null);
   const [appliedResult, setAppliedResult] = useState<{
     gainedXp: number;
+    gainedCoins: number;
+    firstClear: boolean;
     newLevel?: number;
     unlockedAchievements: Achievement[];
   } | null>(null);
   const animationTimerRef = useRef<number | null>(null);
+  const guardCheckedIdRef = useRef<string | null>(null);
 
   const recipe = id ? getRecipeById(id) : undefined;
   const approved = recipe && (recipe.status ?? 'approved') === 'approved';
@@ -151,6 +157,18 @@ export default function CookingPage() {
 
     const xp = calculateXpFromStars(session.stars);
     const xpResult = addXp(xp);
+    // Coins: 10 points = 1 xu, plus +50% the first time this dish is
+    // completed. Must be computed before the cooked entry is recorded.
+    const firstClear = !(user.cookedRecipes ?? []).some(
+      (entry) => entry.recipeId === session.recipe.id,
+    );
+    const baseCoins = coinsForScore(session.finalScore);
+    const gainedCoins = firstClear
+      ? Math.round(baseCoins * (1 + FIRST_CLEAR_BONUS_RATIO))
+      : baseCoins;
+    if (gainedCoins > 0) {
+      addCoins(gainedCoins);
+    }
     const entry = buildCookedEntry(session);
     addCookedRecipe(entry);
 
@@ -190,6 +208,8 @@ export default function CookingPage() {
 
     setAppliedResult({
       gainedXp: xp,
+      gainedCoins,
+      firstClear,
       newLevel: xpResult?.leveledUp ? xpResult.level : undefined,
       unlockedAchievements: unlocked,
     });
@@ -198,6 +218,7 @@ export default function CookingPage() {
     user,
     appliedResult,
     addXp,
+    addCoins,
     addCookedRecipe,
     buildCookedEntry,
     checkAndUnlockForUser,
@@ -217,6 +238,17 @@ export default function CookingPage() {
       (current.editorId === user?.id || user?.role === 'admin');
     if (!current || (!currentApproved && !currentPreview)) {
       return undefined;
+    }
+    // Shop guard: a locked dish cannot be cooked by direct URL — send the
+    // player to its detail page where the buy panel lives. Checked once per
+    // recipe mount: the user object changes when progress is applied at the
+    // end of a run, and re-running this effect would restart the session.
+    if (!currentPreview && user && guardCheckedIdRef.current !== current.id) {
+      guardCheckedIdRef.current = current.id;
+      if (!isRecipeOwned(user, current)) {
+        navigate(`/recipes/${current.id}`, { replace: true });
+        return undefined;
+      }
     }
     setAppliedResult(null);
     startCooking(current);
@@ -240,6 +272,7 @@ export default function CookingPage() {
     isPreview,
     user?.id,
     user?.role,
+    navigate,
   ]);
 
   const handleDropOnPot = useCallback(
@@ -693,6 +726,8 @@ export default function CookingPage() {
           onRetry={() => startCooking(recipe)}
           onApplyProgress={handleApplyProgress}
           gainedXp={appliedResult?.gainedXp}
+          gainedCoins={appliedResult?.gainedCoins}
+          firstClear={appliedResult?.firstClear}
           newLevel={appliedResult?.newLevel}
           unlockedAchievements={appliedResult?.unlockedAchievements}
         />

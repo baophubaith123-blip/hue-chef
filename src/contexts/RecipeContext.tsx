@@ -22,6 +22,7 @@ import { SEED_RECIPES } from '@/data/recipes';
 import type { Recipe, RecipeStatus } from '@/data/types';
 import { validateMinigames } from '@/features/recipes/validation';
 import { AppError } from '@/lib/errors';
+import { suggestPriceCoins } from '@/lib/pricing';
 import { getJsonStorage, setJsonStorage, STORAGE_KEYS } from '@/lib/storage';
 
 if (import.meta.env.DEV) {
@@ -90,6 +91,11 @@ function withDefaultStatus(recipe: Recipe): Recipe {
     ...recipe,
     status: recipe.status ?? 'approved',
     minigames: Array.isArray(recipe.minigames) ? recipe.minigames : [],
+    // Recipes stored before the coin economy existed get a suggested price.
+    priceCoins:
+      typeof recipe.priceCoins === 'number'
+        ? recipe.priceCoins
+        : suggestPriceCoins(recipe.difficulty, recipe.baseScore),
   };
 }
 

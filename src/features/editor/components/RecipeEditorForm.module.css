@@ -191,3 +191,15 @@
   font-weight: 600;
   margin-top: 6px;
 }
+
+.suggestBtn {
+  margin-top: 6px;
+  padding: 4px 10px;
+  border-radius: var(--radius-full, 999px);
+  border: 1px dashed var(--color-accent, #e9a23b);
+  background: transparent;
+  color: var(--color-primary, #c8553d);
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+}

@@ -128,6 +128,8 @@ export const vi: I18nDictionary = {
     durationMin60: 'Thời gian phải ít nhất 60 giây',
     minIngredients: 'Cần ít nhất 3 nguyên liệu',
     minSteps: 'Cần ít nhất 3 bước',
+    scoreOutOfBand: 'Điểm công thức nằm ngoài dải điểm của số sao đã chọn',
+    priceNegative: 'Giá xu không được âm',
     recipeNotFound: 'Không tìm thấy công thức',
     forbiddenEdit: 'Bạn không thể sửa công thức của người khác',
     invalidStatusEdit: 'Công thức ở trạng thái này không thể sửa',
@@ -496,6 +498,12 @@ export const vi: I18nDictionary = {
       partQuiz: 'Hỏi đáp',
       partTime: 'Thưởng nấu nhanh',
       comboBonus: 'Combo',
+      coinsEarned: 'Xu nhận được',
+      firstClearBonus: 'Đã gồm thưởng hoàn thành lần đầu +50%',
+      lowScoreTitle: 'Chưa đạt chuẩn đầu bếp!',
+      lowScoreBody: (score: number, needed: number) =>
+        `Ván này được ${score} điểm — cần tối thiểu ${needed} điểm (40% giá trị món) mới tính là hoàn thành. Chưa đạt nên không có xu, không tính EXP và không ghi nhận đã nấu.`,
+      failSubtitle: 'Đừng nản lòng! Hãy chuẩn bị lại nguyên liệu và thử sức lần nữa nhé.',
       maxCombo: (count: number) => `Combo cao nhất ×${count}`,
       gainedXp: (xp: number) => `Đã nhận ${xp} kinh nghiệm`,
       levelUp: (lvl: number) => `🎉 Chúc mừng, bạn đã lên cấp ${lvl}!`,
@@ -781,6 +789,8 @@ export const vi: I18nDictionary = {
     useNoiNoi: 'Dùng mặt Nồi Nồi làm avatar',
     wearingLabel: 'Đang đeo',
     unlockedCount: 'Thành tích đã mở khoá ({unlocked}/{total})',
+    coinsLabel: 'Xu đang có',
+    ownedLabel: 'Món đã sở hữu',
   },
   landing: {
     heroTitle: 'Tinh Hoa Ẩm Thực Cố Đô Huế',
@@ -922,6 +932,27 @@ export const vi: I18nDictionary = {
     readyBadge: 'Đủ 5 màn ✓',
     readyDetail: (stages: number, quiz: number) =>
       `Ván chơi: ${stages}/5 màn đang bật · ${quiz} câu hỏi đáp`,
+  },
+  shop: {
+    walletTitle: 'Ví xu của bạn — bấm để xem các món có thể mua',
+    buyButton: 'Mua công thức',
+    yourBalance: (balance: string) => `Số xu đang có: 🪙 ${balance} xu`,
+    needMore: (amount: string) => `Còn thiếu ${amount} xu — nấu thêm món để kiếm xu nhé!`,
+    confirmTitle: 'Mua công thức này?',
+    confirmBody: (name: string, price: string, remaining: string) =>
+      `Mở khoá vĩnh viễn món “${name}” với giá ${price} xu. Sau khi mua, bạn còn lại ${remaining} xu.`,
+    confirmBuy: 'Mua ngay',
+    cancel: 'Để sau',
+    ownedNote: '✓ Bạn đã sở hữu món này — nấu bao nhiêu lần tuỳ thích.',
+    justBought: '🎉 Mua thành công! Món này là của bạn mãi mãi.',
+    freeNote: 'Món 1★ miễn phí cho mọi đầu bếp.',
+  },
+  editorPricing: {
+    baseScore: 'Điểm công thức (trần điểm của ván)',
+    priceCoins: 'Giá mua bằng xu',
+    suggest: 'Giá gợi ý',
+    freeNote: 'Món 1★ luôn miễn phí và cố định 400 điểm.',
+    bandHint: (min: number, max: number) => `Dải điểm của cấp sao này: ${min} – ${max}`,
   },
   minigameValidation: {
     noMinigames: 'Cần ít nhất 1 minigame cho công thức.',

@@ -7,6 +7,7 @@ import { Modal } from '@/components/Modal';
 import type { CookingSession } from '@/features/cooking/types';
 import { useTranslation } from '@/i18n/useTranslation';
 import { formatDuration } from '@/lib/format';
+import { winThreshold } from '@/lib/pricing';
 
 import styles from './CookingResultModal.module.css';
 
@@ -16,6 +17,8 @@ interface CookingResultModalProps {
   onRetry: () => void;
   onApplyProgress?: () => void;
   gainedXp?: number;
+  gainedCoins?: number;
+  firstClear?: boolean;
   newLevel?: number;
   unlockedAchievements?: Achievement[];
 }
@@ -26,6 +29,8 @@ export function CookingResultModal({
   onRetry,
   onApplyProgress,
   gainedXp,
+  gainedCoins,
+  firstClear,
   newLevel,
   unlockedAchievements = [],
 }: CookingResultModalProps) {
@@ -137,6 +142,21 @@ export function CookingResultModal({
                   </div>
                 </div>
               ) : null}
+
+              {typeof gainedCoins === 'number' ? (
+                <div className={styles.metricCard}>
+                  <span className={styles.metricIcon}>🪙</span>
+                  <div className={styles.metricDetails}>
+                    <span className={styles.metricLabel}>{dict.cooking.result.coinsEarned}</span>
+                    <span className={styles.metricValueHighlight}>+{gainedCoins} xu</span>
+                    {firstClear ? (
+                      <span className={styles.metricLabel}>
+                        {dict.cooking.result.firstClearBonus}
+                      </span>
+                    ) : null}
+                  </div>
+                </div>
+              ) : null}
             </div>
 
             {/* Level Up Banner */}
@@ -240,19 +260,28 @@ export function CookingResultModal({
         ) : (
           <div className={styles.failContainer}>
             <div className={styles.failIcon} aria-hidden="true">
-              ⏱️
+              {session.failReason === 'low-score' ? '📉' : '⏱️'}
             </div>
             <h3 className={styles.failTitle}>
               {session.failReason === 'timeout'
                 ? t('cooking.result.timeout')
-                : t('cooking.result.unknownError')}
+                : session.failReason === 'low-score'
+                  ? dict.cooking.result.lowScoreTitle
+                  : t('cooking.result.unknownError')}
             </h3>
             <p className={styles.failSubtitle}>
-              Đừng nản lòng! Hãy chuẩn bị lại nguyên liệu và thử sức lần nữa nhé.
+              {session.failReason === 'low-score'
+                ? dict.cooking.result.lowScoreBody(
+                    session.finalScore,
+                    winThreshold(session.recipe.baseScore),
+                  )
+                : dict.cooking.result.failSubtitle}
             </p>
             <div className={styles.failScore}>
               <span>{t('cooking.result.score')}: </span>
-              <strong>0</strong>
+              <strong>
+                {session.failReason === 'low-score' ? session.finalScore.toLocaleString() : 0}
+              </strong>
             </div>
           </div>
         )}

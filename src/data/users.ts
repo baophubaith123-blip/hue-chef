@@ -1050,3 +1050,66 @@ export const SEED_USERS: StoredUser[] = [
     createdAt: now,
   },
 ];
+
+// ---------------------------------------------------------------------------
+// Economy seed: starting coin balances + purchased dishes per player,
+// assigned by leaderboard strength (sum of cooked scores) so the seeded
+// world already looks like a live game economy. Dishes a player has cooked
+// count as owned regardless (grandfather rule in the ownership helper).
+// ---------------------------------------------------------------------------
+
+const ECONOMY_T2 = [
+  'banh-nam', 'banh-bot-loc', 'banh-loc', 'banh-cuon', 'che-troi-nuoc',
+  'banh-dap', 'va-tron', 'bun-rieu', 'mi-quang', 'cao-lau',
+];
+const ECONOMY_T3 = [
+  'nem-lui', 'banh-xeo', 'bun-mam', 'banh-it-tran', 'banh-duc',
+  'mit-tron', 'xoi-ga', 'goi-cuon', 'che-suong-sa', 'banh-phu-the',
+  'tom-chua', 'bun-nghe', 'banh-trang-cuon', 'com-ga-hoi-an',
+];
+const ECONOMY_T4 = [
+  'bun-thit-nuong', 'banh-khoai', 'banh-canh', 'ca-kho-to', 'thit-kho-tau',
+  'canh-chua-ca', 'bo-kho', 'muc-rim-me', 'bun-ca-ngu', 'vit-nau-chao',
+  'tom-su-nuong', 'heo-quay', 'ga-nuong-muoi-ot', 'lau-bo', 'cha-tom',
+  'che-to-yen',
+];
+
+function pickRotated(ids: string[], count: number, start: number): string[] {
+  const out: string[] = [];
+  for (let i = 0; i < Math.min(count, ids.length); i += 1) {
+    out.push(ids[(start + i) % ids.length]);
+  }
+  return out;
+}
+
+(function seedEconomy(): void {
+  const players = SEED_USERS.filter((u) => u.role === 'player' && u.id !== 'seed-player');
+  const totalOf = (u: StoredUser): number =>
+    (u.cookedRecipes ?? []).reduce((sum, entry) => sum + entry.score, 0);
+  const ranked = [...players].sort((a, b) => totalOf(b) - totalOf(a));
+  ranked.forEach((player, index) => {
+    const rank = index + 1;
+    if (rank <= 5) {
+      player.coins = 2400 - rank * 250;
+      player.ownedRecipeIds = [
+        ...ECONOMY_T2,
+        ...ECONOMY_T3,
+        ...pickRotated(ECONOMY_T4, 4, rank),
+      ];
+    } else if (rank <= 15) {
+      player.coins = 950 - (rank - 6) * 60;
+      player.ownedRecipeIds = [...ECONOMY_T2, ...pickRotated(ECONOMY_T3, 4, rank)];
+    } else if (rank <= 30) {
+      player.coins = 380 - (rank - 16) * 20;
+      player.ownedRecipeIds = pickRotated(ECONOMY_T2, 5, rank);
+    } else {
+      player.coins = Math.max(0, (40 - rank) * 8);
+      player.ownedRecipeIds = rank <= 35 ? pickRotated(ECONOMY_T2, 2, rank) : [];
+    }
+  });
+  const demo = SEED_USERS.find((u) => u.id === 'seed-player');
+  if (demo) {
+    demo.coins = 300;
+    demo.ownedRecipeIds = [];
+  }
+})();

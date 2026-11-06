@@ -309,3 +309,62 @@
 [data-theme='dark'] .stepIngredientChip {
   color: var(--color-plum-text);
 }
+
+.ownedNote {
+  margin: 10px 0 0;
+  text-align: center;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #2e7d4f;
+}
+
+.buyPanel {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+}
+
+.buyPriceRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.buyLockIcon {
+  font-size: 1.3rem;
+}
+
+.buyPrice {
+  font-family: var(--font-heading, 'Playfair Display', serif);
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--color-primary, #c8553d);
+}
+
+.buyBalance {
+  margin: 0;
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--color-text-muted, #8a7460);
+}
+
+.buyHint {
+  margin: 0;
+  text-align: center;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #b3261e;
+}
+
+.buyModalFooter {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.buyModalBody {
+  margin: 0;
+  line-height: 1.6;
+}

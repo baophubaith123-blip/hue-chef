@@ -43,6 +43,8 @@ interface AuthContextValue {
   register: (name: string, email: string, password: string) => Promise<PublicUser>;
   logout: () => void;
   addXp: (xp: number) => AddXpResult | null;
+  addCoins: (amount: number) => number | null;
+  purchaseRecipe: (recipeId: string, price: number) => boolean;
   addCookedRecipe: (entry: CookedRecipeEntry) => void;
   updateProfile: (patch: Partial<Pick<StoredUser, 'name' | 'avatar' | 'password' | 'equippedAchievementId'>>) => PublicUser | null;
 }
@@ -128,6 +130,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       level: 1,
       exp: 0,
       maxExp: 1000,
+      coins: 0,
+      ownedRecipeIds: [],
       cookedRecipes: [],
       unlockedAchievements: [],
       warningCount: 0,
@@ -174,6 +178,38 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     [user, persistStoredUser],
   );
 
+  const addCoins = useCallback(
+    (amount: number): number | null => {
+      if (!user || amount === 0) return null;
+      const users = loadUsers();
+      const stored = findUserById(users, user.id);
+      if (!stored) return null;
+      const nextBalance = Math.max(0, (stored.coins ?? 0) + amount);
+      persistStoredUser(user.id, { coins: nextBalance });
+      return nextBalance;
+    },
+    [user, persistStoredUser],
+  );
+
+  const purchaseRecipe = useCallback(
+    (recipeId: string, price: number): boolean => {
+      if (!user) return false;
+      const users = loadUsers();
+      const stored = findUserById(users, user.id);
+      if (!stored) return false;
+      const owned = stored.ownedRecipeIds ?? [];
+      if (owned.includes(recipeId)) return true;
+      const balance = stored.coins ?? 0;
+      if (balance < price) return false;
+      persistStoredUser(user.id, {
+        coins: balance - price,
+        ownedRecipeIds: [...owned, recipeId],
+      });
+      return true;
+    },
+    [user, persistStoredUser],
+  );
+
   const addCookedRecipe = useCallback(
     (entry: CookedRecipeEntry): void => {
       if (!user) return;
@@ -197,8 +233,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   );
 
   const value = useMemo(
-    () => ({ user, isLoading, login, register, logout, addXp, addCookedRecipe, updateProfile }),
-    [user, isLoading, login, register, logout, addXp, addCookedRecipe, updateProfile],
+    () => ({
+      user,
+      isLoading,
+      login,
+      register,
+      logout,
+      addXp,
+      addCoins,
+      purchaseRecipe,
+      addCookedRecipe,
+      updateProfile,
+    }),
+    [user, isLoading, login, register, logout, addXp, addCoins, purchaseRecipe, addCookedRecipe, updateProfile],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

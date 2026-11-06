@@ -17,6 +17,8 @@ export interface PlayerProfile {
   level: number;
   exp: number;
   maxExp: number;
+  coins: number;
+  ownedRecipeIds: string[];
   cookedRecipes: CookedRecipeEntry[];
   unlockedAchievements: string[];
   warningCount: number;
@@ -39,6 +41,8 @@ export interface StoredUser {
   level?: number;
   exp?: number;
   maxExp?: number;
+  coins?: number;
+  ownedRecipeIds?: string[];
   cookedRecipes?: CookedRecipeEntry[];
   unlockedAchievements?: string[];
   warningCount?: number;
@@ -62,6 +66,8 @@ export interface PublicUser {
   level?: number;
   exp?: number;
   maxExp?: number;
+  coins?: number;
+  ownedRecipeIds?: string[];
   cookedRecipes?: CookedRecipeEntry[];
   unlockedAchievements?: string[];
   warningCount?: number;

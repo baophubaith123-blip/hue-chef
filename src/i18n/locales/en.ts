@@ -128,6 +128,8 @@ export const en: I18nDictionary = {
     durationMin60: 'Duration must be at least 60 seconds',
     minIngredients: 'Add at least 3 ingredients',
     minSteps: 'Add at least 3 steps',
+    scoreOutOfBand: 'The dish score is outside the band for the chosen star tier',
+    priceNegative: 'The coin price cannot be negative',
     recipeNotFound: 'Recipe not found',
     forbiddenEdit: 'You cannot modify another editor’s recipe',
     invalidStatusEdit: 'Recipe cannot be edited in its current status',
@@ -495,6 +497,12 @@ export const en: I18nDictionary = {
       partQuiz: 'Quiz',
       partTime: 'Speed bonus',
       comboBonus: 'Combo',
+      coinsEarned: 'Coins earned',
+      firstClearBonus: 'Includes the +50% first-completion bonus',
+      lowScoreTitle: 'Not up to chef standard yet!',
+      lowScoreBody: (score: number, needed: number) =>
+        `This run scored ${score} points — a run only counts at ${needed} points or more (40% of the dish's value). No coins, no XP and no cooked record this time.`,
+      failSubtitle: 'Do not give up! Restock your ingredients and try once more.',
       maxCombo: (count: number) => `Best combo ×${count}`,
       gainedXp: (xp: number) => `+${xp} XP gained`,
       levelUp: (lvl: number) => `🎉 Level up! You reached level ${lvl}.`,
@@ -780,6 +788,8 @@ export const en: I18nDictionary = {
     useNoiNoi: 'Use Noi Noi as my avatar',
     wearingLabel: 'Wearing',
     unlockedCount: 'Unlocked achievements ({unlocked}/{total})',
+    coinsLabel: 'Coins on hand',
+    ownedLabel: 'Dishes owned',
   },
   landing: {
     heroTitle: 'The Essence of Hue Royal Cuisine',
@@ -921,6 +931,27 @@ export const en: I18nDictionary = {
     readyBadge: 'All 5 stages ✓',
     readyDetail: (stages: number, quiz: number) =>
       `Run: ${stages}/5 stages on · ${quiz} quiz questions`,
+  },
+  shop: {
+    walletTitle: 'Your coin wallet — tap to browse dishes you can buy',
+    buyButton: 'Buy this recipe',
+    yourBalance: (balance: string) => `Your balance: 🪙 ${balance} xu`,
+    needMore: (amount: string) => `You need ${amount} more xu — cook more dishes to earn coins!`,
+    confirmTitle: 'Buy this recipe?',
+    confirmBody: (name: string, price: string, remaining: string) =>
+      `Unlock "${name}" forever for ${price} xu. After buying, ${remaining} xu will remain.`,
+    confirmBuy: 'Buy now',
+    cancel: 'Not yet',
+    ownedNote: '✓ You own this dish — cook it as often as you like.',
+    justBought: '🎉 Purchase complete! This dish is yours forever.',
+    freeNote: '1-star dishes are free for every chef.',
+  },
+  editorPricing: {
+    baseScore: 'Dish score (the run ceiling)',
+    priceCoins: 'Buy price in xu',
+    suggest: 'Suggested price',
+    freeNote: '1-star dishes are always free and fixed at 400 points.',
+    bandHint: (min: number, max: number) => `Score band for this tier: ${min} – ${max}`,
   },
   minigameValidation: {
     noMinigames: 'At least 1 minigame scenario is required.',

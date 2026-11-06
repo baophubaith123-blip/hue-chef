@@ -53,7 +53,7 @@ export interface CookingSession {
   totalDropTargets: number;
   finalScore: number;
   stars: 1 | 2 | 3 | 4 | 5;
-  failReason?: 'timeout' | 'abandoned';
+  failReason?: 'timeout' | 'abandoned' | 'low-score';
   minigameResults?: MinigameResultEntry[];
 }
 

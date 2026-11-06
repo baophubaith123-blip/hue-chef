@@ -122,6 +122,8 @@ export interface I18nDictionary {
     durationMin60: string;
     minIngredients: string;
     minSteps: string;
+    scoreOutOfBand: string;
+    priceNegative: string;
     recipeNotFound: string;
     forbiddenEdit: string;
     invalidStatusEdit: string;
@@ -463,6 +465,11 @@ export interface I18nDictionary {
       partQuiz: string;
       partTime: string;
       comboBonus: string;
+      coinsEarned: string;
+      firstClearBonus: string;
+      lowScoreTitle: string;
+      lowScoreBody: (score: number, needed: number) => string;
+      failSubtitle: string;
       maxCombo: (count: number) => string;
       gainedXp: (xp: number) => string;
       levelUp: (lvl: number) => string;
@@ -741,6 +748,28 @@ export interface I18nDictionary {
     useNoiNoi: string;
     wearingLabel: string;
     unlockedCount: string;
+    coinsLabel: string;
+    ownedLabel: string;
+  };
+  shop: {
+    walletTitle: string;
+    buyButton: string;
+    yourBalance: (balance: string) => string;
+    needMore: (amount: string) => string;
+    confirmTitle: string;
+    confirmBody: (name: string, price: string, remaining: string) => string;
+    confirmBuy: string;
+    cancel: string;
+    ownedNote: string;
+    justBought: string;
+    freeNote: string;
+  };
+  editorPricing: {
+    baseScore: string;
+    priceCoins: string;
+    suggest: string;
+    freeNote: string;
+    bandHint: (min: number, max: number) => string;
   };
   landing: {
     heroTitle: string;

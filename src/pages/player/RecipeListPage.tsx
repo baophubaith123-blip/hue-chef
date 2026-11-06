@@ -1,13 +1,16 @@
 import { useMemo, useState } from 'react';
 
 import { Loading } from '@/components/Loading';
+import { useAuth } from '@/contexts/AuthContext';
 import { useRecipes } from '@/contexts/RecipeContext';
+import type { Recipe } from '@/data/types';
 import {
   RecipeFilter,
   type RecipeFilterState,
 } from '@/features/recipes/components/RecipeFilter';
 import { RecipeGrid } from '@/features/recipes/components/RecipeGrid';
 import { filterAndSortRecipes } from '@/features/recipes/lib/filter-recipes';
+import { isRecipeOwned } from '@/features/recipes/lib/ownership';
 import { PlayerShell } from '@/pages/player/PlayerShell';
 
 import styles from '@/pages/player/RecipeListPage.module.css';
@@ -21,7 +24,11 @@ const DEFAULT_FILTERS: RecipeFilterState = {
 
 export default function RecipeListPage() {
   const { isLoading, getApprovedRecipes } = useRecipes();
+  const { user } = useAuth();
   const [filters, setFilters] = useState<RecipeFilterState>(DEFAULT_FILTERS);
+
+  const lockedPriceFor = (recipe: Recipe): number | undefined =>
+    isRecipeOwned(user, recipe) ? undefined : recipe.priceCoins;
 
   const visibleRecipes = useMemo(() => {
     const approved = getApprovedRecipes();
@@ -47,7 +54,7 @@ export default function RecipeListPage() {
           <Loading label="Đang chuẩn bị công thức ẩm thực..." />
         ) : (
           <div className={`${styles.gridScroll} scroll-slim`}>
-            <RecipeGrid recipes={visibleRecipes} />
+            <RecipeGrid recipes={visibleRecipes} lockedPriceFor={lockedPriceFor} />
           </div>
         )}
       </div>

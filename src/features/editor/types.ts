@@ -13,6 +13,8 @@ export interface RecipeFormValues {
   duration: number;
   description: string;
   image: string;
+  baseScore: number;
+  priceCoins: number;
   ingredients: RecipeIngredientRef[];
   steps: Array<Omit<CookingStep, 'id' | 'order'>>;
   minigames?: Minigame[];
@@ -24,6 +26,8 @@ export interface RecipeFormErrors {
   description?: string;
   duration?: string;
   image?: string;
+  baseScore?: string;
+  priceCoins?: string;
   ingredients?: string;
   steps?: string;
   minigames?: string;

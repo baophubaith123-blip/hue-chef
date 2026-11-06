@@ -93,6 +93,8 @@ export interface Recipe {
   description: string;
   image: string;
   baseScore: number;
+  /** Buy price in xu (coins) to unlock this dish; 0 = free (all 1★ dishes). */
+  priceCoins: number;
   ingredients: RecipeIngredientRef[];
   /** @deprecated – xóa ở Phase D */
   steps?: CookingStep[];

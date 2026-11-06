@@ -10,9 +10,11 @@ import styles from '@/features/recipes/components/RecipeCard.module.css';
 
 interface RecipeCardProps {
   recipe: Recipe;
+  /** When set, the dish is locked for the current player: show this price. */
+  lockedPrice?: number;
 }
 
-export function RecipeCard({ recipe }: RecipeCardProps) {
+export function RecipeCard({ recipe, lockedPrice }: RecipeCardProps) {
   const { dict } = useTranslation();
   const [tilt, setTilt] = useState<{ rotateX: number; rotateY: number } | null>(null);
 
@@ -71,6 +73,11 @@ export function RecipeCard({ recipe }: RecipeCardProps) {
           <div className={styles.timeBadge}>
             ⏱ {formatDuration(recipe.duration)}
           </div>
+          {lockedPrice !== undefined ? (
+            <div className={styles.lockBadge}>
+              🔒 {lockedPrice.toLocaleString()} xu
+            </div>
+          ) : null}
           <div
             className={[styles.difficultyBadge, styles[`tier${recipe.difficulty}`] ?? '']
               .filter(Boolean)

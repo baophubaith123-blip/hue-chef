@@ -11,6 +11,7 @@ import {
 } from '@/features/editor/lib/validate-recipe-form';
 import { canSubmitForReview, REQUIRED_ACTION_BY_STARS } from '@/features/recipes/validation';
 import { useTranslation } from '@/i18n/useTranslation';
+import { SCORE_BANDS, suggestPriceCoins } from '@/lib/pricing';
 
 import { MinigameFormList } from './MinigameFormList';
 import styles from '@/features/editor/components/RecipeEditorForm.module.css';
@@ -169,12 +170,26 @@ export function RecipeEditorForm({
             id="recipe-difficulty"
             className={styles.select}
             value={values.difficulty}
-            onChange={(event) =>
+            onChange={(event) => {
+              const difficulty = Number(
+                event.target.value,
+              ) as RecipeFormValues['difficulty'];
+              if (difficulty === 1) {
+                setValues({ ...values, difficulty, baseScore: 400, priceCoins: 0 });
+                return;
+              }
+              const band = SCORE_BANDS[difficulty];
+              const baseScore = Math.min(
+                band.max,
+                Math.max(band.min, values.baseScore || band.min),
+              );
               setValues({
                 ...values,
-                difficulty: Number(event.target.value) as RecipeFormValues['difficulty'],
-              })
-            }
+                difficulty,
+                baseScore,
+                priceCoins: suggestPriceCoins(difficulty, baseScore),
+              });
+            }}
           >
             {[1, 2, 3, 4, 5].map((level) => (
               <option key={level} value={level}>
@@ -199,6 +214,70 @@ export function RecipeEditorForm({
             }
           />
           {errors.duration ? <p className={styles.error}>{errors.duration}</p> : null}
+        </div>
+      </div>
+
+      <div className={styles.row}>
+        <div className={styles.field}>
+          <label className={styles.label} htmlFor="recipe-base-score">
+            {dict.editorPricing.baseScore}
+          </label>
+          <input
+            id="recipe-base-score"
+            className={styles.input}
+            type="number"
+            min={0}
+            step={25}
+            disabled={values.difficulty === 1}
+            value={values.difficulty === 1 ? 400 : values.baseScore}
+            onChange={(event) =>
+              setValues({ ...values, baseScore: Number(event.target.value) || 0 })
+            }
+          />
+          {values.difficulty === 1 ? (
+            <p className={styles.hint}>{dict.editorPricing.freeNote}</p>
+          ) : (
+            <p className={styles.hint}>
+              {dict.editorPricing.bandHint(
+                SCORE_BANDS[values.difficulty].min,
+                SCORE_BANDS[values.difficulty].max,
+              )}
+            </p>
+          )}
+          {errors.baseScore ? <p className={styles.error}>{errors.baseScore}</p> : null}
+        </div>
+        <div className={styles.field}>
+          <label className={styles.label} htmlFor="recipe-price-coins">
+            {dict.editorPricing.priceCoins}
+          </label>
+          <input
+            id="recipe-price-coins"
+            className={styles.input}
+            type="number"
+            min={0}
+            step={5}
+            disabled={values.difficulty === 1}
+            value={values.difficulty === 1 ? 0 : values.priceCoins}
+            onChange={(event) =>
+              setValues({ ...values, priceCoins: Number(event.target.value) || 0 })
+            }
+          />
+          {values.difficulty > 1 ? (
+            <button
+              type="button"
+              className={styles.suggestBtn}
+              onClick={() =>
+                setValues({
+                  ...values,
+                  priceCoins: suggestPriceCoins(values.difficulty, values.baseScore),
+                })
+              }
+            >
+              ↻ {dict.editorPricing.suggest} (
+              {suggestPriceCoins(values.difficulty, values.baseScore).toLocaleString()} xu)
+            </button>
+          ) : null}
+          {errors.priceCoins ? <p className={styles.error}>{errors.priceCoins}</p> : null}
         </div>
       </div>
 

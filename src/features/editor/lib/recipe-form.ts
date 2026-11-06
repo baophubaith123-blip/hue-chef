@@ -1,5 +1,6 @@
 import type { Recipe } from '@/data/types';
 import type { RecipeFormValues } from '@/features/editor/types';
+import { suggestPriceCoins } from '@/lib/pricing';
 import { createRecipeSlugId } from '@/lib/slug';
 
 export function defaultRecipeFormValues(): RecipeFormValues {
@@ -10,6 +11,8 @@ export function defaultRecipeFormValues(): RecipeFormValues {
     duration: 120,
     description: '',
     image: '/images/banh-beo.jpg',
+    baseScore: 950,
+    priceCoins: suggestPriceCoins(2, 950),
     ingredients: [
       { ingredientId: '', amount: '' },
       { ingredientId: '', amount: '' },
@@ -32,6 +35,8 @@ export function recipeToFormValues(recipe: Recipe): RecipeFormValues {
     duration: recipe.duration,
     description: recipe.description,
     image: recipe.image,
+    baseScore: recipe.baseScore,
+    priceCoins: recipe.priceCoins ?? suggestPriceCoins(recipe.difficulty, recipe.baseScore),
     ingredients: recipe.ingredients.map((item) => ({ ...item })),
     steps: (recipe.steps ?? []).map((step) => ({
       title: step.title,
@@ -44,10 +49,6 @@ export function recipeToFormValues(recipe: Recipe): RecipeFormValues {
     minigames: recipe.minigames ? [...recipe.minigames] : [],
     gameplay: recipe.gameplay ? { ...recipe.gameplay } : undefined,
   };
-}
-
-function baseScoreFromDifficulty(difficulty: Recipe['difficulty']): number {
-  return difficulty * 200;
 }
 
 function buildSteps(
@@ -100,7 +101,11 @@ export function formValuesToRecipe(
     duration: values.duration,
     description: values.description.trim(),
     image: values.image.trim(),
-    baseScore: existing?.baseScore ?? baseScoreFromDifficulty(values.difficulty),
+    // 1★ dishes are locked to the free 400-point standard; higher tiers use
+    // the editor-provided score/price (validated against the tier band).
+    baseScore: values.difficulty === 1 ? 400 : Math.max(0, Math.round(values.baseScore) || 0),
+    priceCoins:
+      values.difficulty === 1 ? 0 : Math.max(0, Math.round(values.priceCoins) || 0),
     ingredients,
     steps: buildSteps(id, values.steps, ingredients),
     minigames: values.minigames ?? existing?.minigames ?? [],

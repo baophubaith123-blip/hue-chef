@@ -227,6 +227,11 @@ export function PlayerShell({ children }: PlayerShellProps) {
           </div>
 
           <div className={styles.topBarActions}>
+            <Link to="/recipes" className={styles.coinPill} title={dict.shop.walletTitle}>
+              <span aria-hidden="true">🪙</span>
+              <span>{(user?.coins ?? 0).toLocaleString()}</span>
+              <span className={styles.coinUnit}>xu</span>
+            </Link>
             <NotificationBell />
             <LanguageSwitcher />
             <Button variant="secondary" className={styles.logoutBtn} onClick={handleLogout}>

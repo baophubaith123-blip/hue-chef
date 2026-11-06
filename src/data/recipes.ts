@@ -84,6 +84,7 @@ export const SEED_RECIPES: Recipe[] = [
     description: 'Chè sen thanh mát cung đình, ngọt dịu đường phèn và lá dứa.',
     image: '/images/che-hat-sen.jpg',
     baseScore: 400,
+    priceCoins: 0,
     ingredients: [
       { ingredientId: 'lotus-seed', amount: '200g' },
       { ingredientId: 'pandan-leaf', amount: '3 lá' },
@@ -227,6 +228,7 @@ export const SEED_RECIPES: Recipe[] = [
     description: 'Chè bắp non ngọt thơm, sánh nhẹ bột năng, béo cốt dừa và vừng rang.',
     image: '/images/che-bap.jpg',
     baseScore: 400,
+    priceCoins: 0,
     ingredients: [
       { ingredientId: 'corn', amount: '3 trái' },
       { ingredientId: 'pandan-leaf', amount: '3 lá' },
@@ -370,6 +372,7 @@ export const SEED_RECIPES: Recipe[] = [
     description: 'Bánh bèo chén mỏng dai, tôm cháy, da heo giòn và mỡ hành thơm phức.',
     image: '/images/banh-beo.jpg',
     baseScore: 400,
+    priceCoins: 0,
     ingredients: [
       { ingredientId: 'rice-flour', amount: '250g' },
       { ingredientId: 'dried-shrimp', amount: '50g' },
@@ -514,7 +517,8 @@ export const SEED_RECIPES: Recipe[] = [
     duration: 240,
     description: 'Bánh nậm gói lá chuối, bột gạo mềm mịn, nhân tôm thịt và mỡ hành dầu điều.',
     image: '/images/banh-nam.jpg',
-    baseScore: 600,
+    baseScore: 1000,
+    priceCoins: 130,
     ingredients: [
       { ingredientId: 'rice-flour', amount: '300g' },
       { ingredientId: 'shrimp', amount: '150g' },
@@ -667,7 +671,8 @@ export const SEED_RECIPES: Recipe[] = [
     duration: 240,
     description: 'Bánh bột lọc trần trong veo, dai giòn, nhân tôm thịt rim, mỡ hành và tóp mỡ.',
     image: '/images/banh-bot-loc.jpg',
-    baseScore: 600,
+    baseScore: 1075,
+    priceCoins: 140,
     ingredients: [
       { ingredientId: 'tapioca', amount: '300g' },
       { ingredientId: 'shrimp', amount: '150g' },
@@ -820,7 +825,8 @@ export const SEED_RECIPES: Recipe[] = [
     duration: 240,
     description: 'Bánh lọc gói lá chuối, bột năng trong dai, nhân tôm thịt nấm, ăn kèm mỡ hành.',
     image: '/images/banh-loc.jpg',
-    baseScore: 600,
+    baseScore: 1150,
+    priceCoins: 150,
     ingredients: [
       { ingredientId: 'tapioca', amount: '300g' },
       { ingredientId: 'shrimp', amount: '150g' },
@@ -975,7 +981,8 @@ export const SEED_RECIPES: Recipe[] = [
     duration: 300,
     description: 'Nem lụi nướng than thơm sả, cuốn bánh tráng rau sống, chấm nước lèo đậu phộng.',
     image: '/images/nem-lui.jpg',
-    baseScore: 800,
+    baseScore: 1400,
+    priceCoins: 420,
     ingredients: [
       { ingredientId: 'pork-mince', amount: '400g' },
       { ingredientId: 'lemongrass', amount: '8 cây' },
@@ -1145,7 +1152,8 @@ export const SEED_RECIPES: Recipe[] = [
     duration: 300,
     description: 'Bánh xèo Huế nhỏ giòn rụm, nhân tôm thịt giá nấm, chấm nước mắm tỏi ớt.',
     image: '/images/banh-xeo.jpg',
-    baseScore: 800,
+    baseScore: 1500,
+    priceCoins: 450,
     ingredients: [
       { ingredientId: 'crispy-pancake-batter', amount: '300g' },
       { ingredientId: 'turmeric', amount: '1 muỗng' },
@@ -1315,7 +1323,8 @@ export const SEED_RECIPES: Recipe[] = [
     duration: 300,
     description: 'Bún mắm nêm đậm đà miền Trung: heo luộc, tai heo giòn, mít non và mắm nêm sả ớt.',
     image: '/images/bun-mam.jpg',
-    baseScore: 800,
+    baseScore: 1600,
+    priceCoins: 480,
     ingredients: [
       { ingredientId: 'pork-belly', amount: '300g' },
       { ingredientId: 'pork-ear', amount: '200g' },
@@ -1487,7 +1496,8 @@ export const SEED_RECIPES: Recipe[] = [
     duration: 390,
     description: 'Bún thịt nướng than hoa thơm sả, mỡ hành, đồ chua và nước mắm chanh ớt.',
     image: '/images/bun-thit-nuong.jpg',
-    baseScore: 900,
+    baseScore: 1900,
+    priceCoins: 835,
     ingredients: [
       { ingredientId: 'pork-belly', amount: '400g' },
       { ingredientId: 'lemongrass', amount: '4 cây' },
@@ -1682,7 +1692,8 @@ export const SEED_RECIPES: Recipe[] = [
     duration: 390,
     description: 'Bánh khoái đúc khuôn dày xốp, nhân tôm thịt chả trứng, chấm nước lèo đậu phộng.',
     image: '/images/banh-khoai.jpg',
-    baseScore: 900,
+    baseScore: 2050,
+    priceCoins: 900,
     ingredients: [
       { ingredientId: 'crispy-pancake-batter', amount: '300g' },
       { ingredientId: 'turmeric', amount: '1 muỗng' },
@@ -1877,7 +1888,8 @@ export const SEED_RECIPES: Recipe[] = [
     duration: 390,
     description: 'Bánh canh Nam Phổ sợi nấu trong nước dùng sánh, gạch cua, chả cua, giò heo.',
     image: '/images/banh-canh.jpg',
-    baseScore: 900,
+    baseScore: 2150,
+    priceCoins: 945,
     ingredients: [
       { ingredientId: 'rice-flour', amount: '250g' },
       { ingredientId: 'tapioca', amount: '100g' },
@@ -2074,7 +2086,8 @@ export const SEED_RECIPES: Recipe[] = [
     duration: 480,
     description: 'Bún bò Huế trứ danh: bắp bò, gân, giò heo, chả cua, mắm ruốc và sả thơm nức.',
     image: '/images/bun-bo.jpg',
-    baseScore: 1000,
+    baseScore: 3000,
+    priceCoins: 1800,
     ingredients: [
       { ingredientId: 'beef-shank', amount: '500g' },
       { ingredientId: 'pork-hock', amount: '400g' },
@@ -2294,7 +2307,8 @@ export const SEED_RECIPES: Recipe[] = [
     duration: 480,
     description: 'Cơm hến Cồn Hến: cơm nguội, hến xào, tóp mỡ, bánh đa và chén nước hến nóng.',
     image: '/images/com-hen.jpg',
-    baseScore: 1000,
+    baseScore: 2750,
+    priceCoins: 1650,
     ingredients: [
       { ingredientId: 'clams', amount: '500g' },
       { ingredientId: 'ginger', amount: '1 củ' },
@@ -2514,7 +2528,8 @@ export const SEED_RECIPES: Recipe[] = [
     duration: 480,
     description: 'Cơm âm phủ huyền thoại: cơm trắng giữa mâm, vây quanh tôm rim, thịt băm, chả, trứng.',
     image: '/images/com-am-phu.jpg',
-    baseScore: 1000,
+    baseScore: 2850,
+    priceCoins: 1710,
     ingredients: [
       { ingredientId: 'rice', amount: '400g' },
       { ingredientId: 'scallion', amount: '40g' },

@@ -351,3 +351,24 @@
     z-index: 45;
   }
 }
+
+.coinPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 12px;
+  border-radius: var(--radius-full, 999px);
+  background: linear-gradient(135deg, #fdf0d5, #f7d774);
+  border: 1px solid #e9a23b;
+  color: #6b4e00;
+  font-weight: 800;
+  font-size: 0.9rem;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.coinUnit {
+  font-size: 0.75rem;
+  font-weight: 700;
+  opacity: 0.75;
+}

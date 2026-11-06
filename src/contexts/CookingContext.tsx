@@ -23,6 +23,7 @@ import {
 } from '@/features/cooking/lib/score-rescale';
 import { firstStagePhase, resolveStageConfig } from '@/features/cooking/lib/stage-config';
 import { AppError } from '@/lib/errors';
+import { winThreshold } from '@/lib/pricing';
 import { SCORE_RULES } from '@/lib/score';
 
 type StageCompletion = 'market' | 'catch' | 'finish';
@@ -122,7 +123,13 @@ function finalizeSession(session: CookingSession, timedOut: boolean): CookingSes
       stars: 1,
     };
   }
-  return { ...assembleFinal(session, {}), phase: 'success' };
+  const finished = assembleFinal(session, {});
+  // Author's win rule: a run only counts as a win at >= 40% of the dish's
+  // value — below that the run fails and earns no xu / XP / cooked mark.
+  if (finished.finalScore < winThreshold(finished.recipe.baseScore)) {
+    return { ...finished, phase: 'failed', failReason: 'low-score' };
+  }
+  return { ...finished, phase: 'success' };
 }
 
 function cookingReducer(state: CookingState, action: CookingAction): CookingState {
@@ -374,6 +381,18 @@ function cookingReducer(state: CookingState, action: CookingAction): CookingStat
         score: Math.max(0, Math.round(entry.score * rescaleFactor)),
       }));
       const assembled = assembleFinal(session, { quiz: quizPoints });
+      // Same 40% win rule as finalizeSession: below the threshold the run
+      // fails even though every stage was played through.
+      if (assembled.finalScore < winThreshold(assembled.recipe.baseScore)) {
+        return {
+          session: {
+            ...assembled,
+            phase: 'failed',
+            failReason: 'low-score' as const,
+            minigameResults: rescaledResults,
+          },
+        };
+      }
       return {
         session: {
           ...assembled,

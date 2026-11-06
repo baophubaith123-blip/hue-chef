@@ -73,6 +73,14 @@ export default function AdminReviewDetailPage() {
           {!hasStepIngredients ? ` · ⚠ ${dict.editorGameplay.needsStepIngredients}` : ''}
           {quizCount < 1 ? ` · ⚠ ${dict.editorGameplay.needsQuiz}` : ''}
         </p>
+        <p>
+          {dict.editorPricing.baseScore}: <strong>{recipe.baseScore.toLocaleString()}</strong>
+          {' · '}
+          {dict.editorPricing.priceCoins}:{' '}
+          <strong>
+            {recipe.priceCoins > 0 ? `${recipe.priceCoins.toLocaleString()} xu` : '0 (free)'}
+          </strong>
+        </p>
       </Card>
       <ReviewDetail
         recipe={recipe}
