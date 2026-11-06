@@ -6,13 +6,14 @@ export const RECIPES_GD2_D: Recipe[] = [
   {
     id: 'canh-chua-ca',
     name: 'Canh chua cá lóc',
-    category: 'com',
+    category: 'canh-lau',
     difficulty: 4,
     duration: 390,
     description: 'Canh chua cá lóc miền Tây chua thanh, cá chắc ngọt, rau vườn giòn mát chan cơm nóng.',
     image: '/images/canh-chua-ca.jpg',
     baseScore: 1850,
     priceCoins: 815,
+    editorId: 'seed-editor',
     ingredients: [
       { ingredientId: 'snakehead', amount: '1 con khoảng 600g' },
       { ingredientId: 'straw-mushroom', amount: '150g' },
@@ -200,13 +201,14 @@ export const RECIPES_GD2_D: Recipe[] = [
   {
     id: 'bo-kho',
     name: 'Bò kho',
-    category: 'com',
+    category: 'mon-man',
     difficulty: 4,
     duration: 390,
     description: 'Bò kho sả ớt hầm mềm thơm hoa hồi quế, nước sốt sánh đỏ ăn bánh mì hay bún đều mê.',
     image: '/images/bo-kho.jpg',
     baseScore: 1875,
     priceCoins: 825,
+    editorId: 'seed-editor',
     ingredients: [
       { ingredientId: 'beef-shank', amount: '700g' },
       { ingredientId: 'beef-tendon', amount: '300g' },
@@ -394,13 +396,14 @@ export const RECIPES_GD2_D: Recipe[] = [
   {
     id: 'muc-rim-me',
     name: 'Mực rim me',
-    category: 'com',
+    category: 'mon-man',
     difficulty: 4,
     duration: 390,
     description: 'Mực rim sốt chua ngọt keo sánh, thịt mực giòn dai thấm vị, rắc đậu phộng bùi thơm.',
     image: '/images/muc-rim-me.jpg',
     baseScore: 1925,
     priceCoins: 845,
+    editorId: 'seed-editor',
     ingredients: [
       { ingredientId: 'squid', amount: '500g' },
       { ingredientId: 'tamarind', amount: '2 quả' },
@@ -595,6 +598,7 @@ export const RECIPES_GD2_D: Recipe[] = [
     image: '/images/bun-ca-ngu.jpg',
     baseScore: 1950,
     priceCoins: 860,
+    editorId: 'seed-editor',
     ingredients: [
       { ingredientId: 'tuna', amount: '600g' },
       { ingredientId: 'rice-noodle', amount: '500g' },
@@ -782,13 +786,14 @@ export const RECIPES_GD2_D: Recipe[] = [
   {
     id: 'vit-nau-chao',
     name: 'Vịt nấu chao',
-    category: 'com',
+    category: 'canh-lau',
     difficulty: 4,
     duration: 390,
     description: 'Vịt nấu chao miền Tây béo thơm, khoai môn bở ngậy, nước sốt chao sánh mịn chấm rau muống.',
     image: '/images/vit-nau-chao.jpg',
     baseScore: 2000,
     priceCoins: 880,
+    editorId: 'seed-editor',
     ingredients: [
       { ingredientId: 'duck', amount: '1 con khoảng 1,5kg' },
       { ingredientId: 'chao', amount: '1 hũ nhỏ khoảng 8 viên' },
@@ -976,13 +981,14 @@ export const RECIPES_GD2_D: Recipe[] = [
   {
     id: 'tom-su-nuong',
     name: 'Tôm sú nướng muối ớt',
-    category: 'com',
+    category: 'mon-man',
     difficulty: 4,
     duration: 390,
     description: 'Tôm sú nướng than hoa ướp muối ớt cay thơm, thịt tôm chắc ngọt chấm muối tiêu chanh.',
     image: '/images/tom-su-nuong.jpg',
     baseScore: 2025,
     priceCoins: 890,
+    editorId: 'seed-editor',
     ingredients: [
       { ingredientId: 'shrimp', amount: '1kg' },
       { ingredientId: 'salt', amount: '2 muỗng canh' },
@@ -1170,13 +1176,14 @@ export const RECIPES_GD2_D: Recipe[] = [
   {
     id: 'heo-quay',
     name: 'Heo quay giòn bì',
-    category: 'com',
+    category: 'mon-man',
     difficulty: 4,
     duration: 390,
     description: 'Heo quay bì nổ giòn rụm, thịt ba chỉ mềm mọng thơm ngũ vị, cuốn bánh tráng rau sống.',
     image: '/images/heo-quay.jpg',
     baseScore: 2075,
     priceCoins: 915,
+    editorId: 'seed-editor',
     ingredients: [
       { ingredientId: 'pork-belly', amount: '1,2kg' },
       { ingredientId: 'salt', amount: '2 muỗng canh' },

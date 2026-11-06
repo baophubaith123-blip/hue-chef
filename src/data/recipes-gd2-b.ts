@@ -13,6 +13,7 @@ export const RECIPES_GD2_B: Recipe[] = [
     image: '/images/banh-it-tran.jpg',
     baseScore: 1300,
     priceCoins: 390,
+    editorId: 'seed-editor',
     ingredients: [
       { ingredientId: 'sticky-rice-flour', amount: '300g' },
       { ingredientId: 'mung-bean', amount: '150g' },
@@ -182,6 +183,7 @@ export const RECIPES_GD2_B: Recipe[] = [
     image: '/images/banh-duc.jpg',
     baseScore: 1325,
     priceCoins: 400,
+    editorId: 'seed-editor',
     ingredients: [
       { ingredientId: 'rice-flour', amount: '500g' },
       { ingredientId: 'shrimp', amount: '200g' },
@@ -344,13 +346,14 @@ export const RECIPES_GD2_B: Recipe[] = [
   {
     id: 'mit-tron',
     name: 'Mít trộn',
-    category: 'com',
+    category: 'goi-tron-cuon',
     difficulty: 3,
     duration: 300,
     description: 'Mít non luộc xé sợi trộn tôm thịt, đậu phộng rang và rau răm chua cay, xúc bánh đa nướng giòn rụm.',
     image: '/images/mit-tron.jpg',
     baseScore: 1350,
     priceCoins: 405,
+    editorId: 'seed-editor',
     ingredients: [
       { ingredientId: 'young-jackfruit', amount: '500g' },
       { ingredientId: 'pork-belly', amount: '200g' },
@@ -520,6 +523,7 @@ export const RECIPES_GD2_B: Recipe[] = [
     image: '/images/xoi-ga.jpg',
     baseScore: 1425,
     priceCoins: 430,
+    editorId: 'seed-editor',
     ingredients: [
       { ingredientId: 'sticky-rice', amount: '600g' },
       { ingredientId: 'chicken', amount: '1 con khoảng 1,2kg' },
@@ -682,13 +686,14 @@ export const RECIPES_GD2_B: Recipe[] = [
   {
     id: 'goi-cuon',
     name: 'Gỏi cuốn',
-    category: 'banh',
+    category: 'goi-tron-cuon',
     difficulty: 3,
     duration: 300,
     description: 'Cuốn bánh tráng trong veo ôm tôm đỏ, thịt ba chỉ, bún và rau thơm tươi mát, chấm tương đậu phộng béo bùi.',
     image: '/images/goi-cuon.jpg',
     baseScore: 1450,
     priceCoins: 435,
+    editorId: 'seed-editor',
     ingredients: [
       { ingredientId: 'rice-paper', amount: '12 lá' },
       { ingredientId: 'shrimp', amount: '300g' },
@@ -858,6 +863,7 @@ export const RECIPES_GD2_B: Recipe[] = [
     image: '/images/che-suong-sa.jpg',
     baseScore: 1475,
     priceCoins: 445,
+    editorId: 'seed-editor',
     ingredients: [
       { ingredientId: 'grass-jelly', amount: '200g' },
       { ingredientId: 'pearl-tapioca', amount: '100g' },

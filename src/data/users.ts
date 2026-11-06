@@ -1037,7 +1037,7 @@ export const SEED_USERS: StoredUser[] = [
     status: 'active',
     createdAt: now,
     bio: 'Đầu bếp sáng tạo công thức Huế',
-    recipeCount: 0,
+    recipeCount: 50,
   },
   {
     id: 'seed-admin',

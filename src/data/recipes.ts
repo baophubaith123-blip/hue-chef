@@ -21,6 +21,7 @@ export const SEED_RECIPES: Recipe[] = [
     image: '/images/che-hat-sen.jpg',
     baseScore: 400,
     priceCoins: 0,
+    editorId: 'seed-editor',
     ingredients: [
       { ingredientId: 'lotus-seed', amount: '200g' },
       { ingredientId: 'pandan-leaf', amount: '3 lá' },
@@ -165,6 +166,7 @@ export const SEED_RECIPES: Recipe[] = [
     image: '/images/che-bap.jpg',
     baseScore: 400,
     priceCoins: 0,
+    editorId: 'seed-editor',
     ingredients: [
       { ingredientId: 'corn', amount: '3 trái' },
       { ingredientId: 'pandan-leaf', amount: '3 lá' },
@@ -309,6 +311,7 @@ export const SEED_RECIPES: Recipe[] = [
     image: '/images/banh-beo.jpg',
     baseScore: 400,
     priceCoins: 0,
+    editorId: 'seed-editor',
     ingredients: [
       { ingredientId: 'rice-flour', amount: '250g' },
       { ingredientId: 'dried-shrimp', amount: '50g' },
@@ -455,6 +458,7 @@ export const SEED_RECIPES: Recipe[] = [
     image: '/images/banh-nam.jpg',
     baseScore: 1000,
     priceCoins: 130,
+    editorId: 'seed-editor',
     ingredients: [
       { ingredientId: 'rice-flour', amount: '300g' },
       { ingredientId: 'shrimp', amount: '150g' },
@@ -609,6 +613,7 @@ export const SEED_RECIPES: Recipe[] = [
     image: '/images/banh-bot-loc.jpg',
     baseScore: 1075,
     priceCoins: 140,
+    editorId: 'seed-editor',
     ingredients: [
       { ingredientId: 'tapioca', amount: '300g' },
       { ingredientId: 'shrimp', amount: '150g' },
@@ -763,6 +768,7 @@ export const SEED_RECIPES: Recipe[] = [
     image: '/images/banh-loc.jpg',
     baseScore: 1150,
     priceCoins: 150,
+    editorId: 'seed-editor',
     ingredients: [
       { ingredientId: 'tapioca', amount: '300g' },
       { ingredientId: 'shrimp', amount: '150g' },
@@ -919,6 +925,7 @@ export const SEED_RECIPES: Recipe[] = [
     image: '/images/nem-lui.jpg',
     baseScore: 1400,
     priceCoins: 420,
+    editorId: 'seed-editor',
     ingredients: [
       { ingredientId: 'pork-mince', amount: '400g' },
       { ingredientId: 'lemongrass', amount: '8 cây' },
@@ -1090,6 +1097,7 @@ export const SEED_RECIPES: Recipe[] = [
     image: '/images/banh-xeo.jpg',
     baseScore: 1500,
     priceCoins: 450,
+    editorId: 'seed-editor',
     ingredients: [
       { ingredientId: 'crispy-pancake-batter', amount: '300g' },
       { ingredientId: 'turmeric', amount: '1 muỗng' },
@@ -1261,6 +1269,7 @@ export const SEED_RECIPES: Recipe[] = [
     image: '/images/bun-mam.jpg',
     baseScore: 1600,
     priceCoins: 480,
+    editorId: 'seed-editor',
     ingredients: [
       { ingredientId: 'pork-belly', amount: '300g' },
       { ingredientId: 'pork-ear', amount: '200g' },
@@ -1434,6 +1443,7 @@ export const SEED_RECIPES: Recipe[] = [
     image: '/images/bun-thit-nuong.jpg',
     baseScore: 1900,
     priceCoins: 835,
+    editorId: 'seed-editor',
     ingredients: [
       { ingredientId: 'pork-belly', amount: '400g' },
       { ingredientId: 'lemongrass', amount: '4 cây' },
@@ -1630,6 +1640,7 @@ export const SEED_RECIPES: Recipe[] = [
     image: '/images/banh-khoai.jpg',
     baseScore: 2050,
     priceCoins: 900,
+    editorId: 'seed-editor',
     ingredients: [
       { ingredientId: 'crispy-pancake-batter', amount: '300g' },
       { ingredientId: 'turmeric', amount: '1 muỗng' },
@@ -1826,6 +1837,7 @@ export const SEED_RECIPES: Recipe[] = [
     image: '/images/banh-canh.jpg',
     baseScore: 2150,
     priceCoins: 945,
+    editorId: 'seed-editor',
     ingredients: [
       { ingredientId: 'rice-flour', amount: '250g' },
       { ingredientId: 'tapioca', amount: '100g' },
@@ -2024,6 +2036,7 @@ export const SEED_RECIPES: Recipe[] = [
     image: '/images/bun-bo.jpg',
     baseScore: 3000,
     priceCoins: 1800,
+    editorId: 'seed-editor',
     ingredients: [
       { ingredientId: 'beef-shank', amount: '500g' },
       { ingredientId: 'pork-hock', amount: '400g' },
@@ -2245,6 +2258,7 @@ export const SEED_RECIPES: Recipe[] = [
     image: '/images/com-hen.jpg',
     baseScore: 2750,
     priceCoins: 1650,
+    editorId: 'seed-editor',
     ingredients: [
       { ingredientId: 'clams', amount: '500g' },
       { ingredientId: 'ginger', amount: '1 củ' },
@@ -2466,6 +2480,7 @@ export const SEED_RECIPES: Recipe[] = [
     image: '/images/com-am-phu.jpg',
     baseScore: 2850,
     priceCoins: 1710,
+    editorId: 'seed-editor',
     ingredients: [
       { ingredientId: 'rice', amount: '400g' },
       { ingredientId: 'scallion', amount: '40g' },

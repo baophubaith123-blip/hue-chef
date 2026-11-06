@@ -6,7 +6,7 @@ export const RECIPES_GD2_E: Recipe[] = [
   {
     id: 'ga-nuong-muoi-ot',
     name: 'Gà nướng muối ớt',
-    category: 'com',
+    category: 'mon-man',
     difficulty: 4,
     duration: 390,
     description:
@@ -14,6 +14,7 @@ export const RECIPES_GD2_E: Recipe[] = [
     image: '/images/ga-nuong-muoi-ot.jpg',
     baseScore: 2100,
     priceCoins: 925,
+    editorId: 'seed-editor',
     ingredients: [
       { ingredientId: 'chicken', amount: '1 con khoảng 1,2kg' },
       { ingredientId: 'salt', amount: '2 muỗng canh' },
@@ -273,7 +274,7 @@ export const RECIPES_GD2_E: Recipe[] = [
   {
     id: 'lau-bo',
     name: 'Lẩu bò nhúng giấm',
-    category: 'com',
+    category: 'canh-lau',
     difficulty: 4,
     duration: 390,
     description:
@@ -281,6 +282,7 @@ export const RECIPES_GD2_E: Recipe[] = [
     image: '/images/lau-bo.jpg',
     baseScore: 2125,
     priceCoins: 935,
+    editorId: 'seed-editor',
     ingredients: [
       { ingredientId: 'beef-shank', amount: '600g' },
       { ingredientId: 'beef-tendon', amount: '200g' },
@@ -548,6 +550,7 @@ export const RECIPES_GD2_E: Recipe[] = [
     image: '/images/cha-tom.jpg',
     baseScore: 2175,
     priceCoins: 955,
+    editorId: 'seed-editor',
     ingredients: [
       { ingredientId: 'shrimp', amount: '500g' },
       { ingredientId: 'pork-belly', amount: '200g' },
@@ -810,6 +813,7 @@ export const RECIPES_GD2_E: Recipe[] = [
     image: '/images/che-to-yen.jpg',
     baseScore: 2200,
     priceCoins: 970,
+    editorId: 'seed-editor',
     ingredients: [
       { ingredientId: 'birds-nest', amount: '10g' },
       { ingredientId: 'rock-sugar', amount: '100g' },
@@ -1077,6 +1081,7 @@ export const RECIPES_GD2_E: Recipe[] = [
     image: '/images/nem-cong.jpg',
     baseScore: 2500,
     priceCoins: 1500,
+    editorId: 'seed-editor',
     ingredients: [
       { ingredientId: 'chicken', amount: '500g' },
       { ingredientId: 'pork-mince', amount: '200g' },
@@ -1380,6 +1385,7 @@ export const RECIPES_GD2_E: Recipe[] = [
     image: '/images/cha-phuong.jpg',
     baseScore: 2600,
     priceCoins: 1560,
+    editorId: 'seed-editor',
     ingredients: [
       { ingredientId: 'shrimp', amount: '400g' },
       { ingredientId: 'pork-mince', amount: '200g' },

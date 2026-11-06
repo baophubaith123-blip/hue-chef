@@ -3,6 +3,7 @@ import type { Achievement } from '@/data/types';
 export const SEED_ACHIEVEMENTS: Achievement[] = [
   {
     id: 'first-cook',
+    createdBy: 'seed-editor',
     name: 'Đầu bếp tập sự',
     description: 'Nấu món đầu tiên',
     category: 'special',
@@ -14,6 +15,7 @@ export const SEED_ACHIEVEMENTS: Achievement[] = [
   },
   {
     id: 'bun-master',
+    createdBy: 'seed-editor',
     name: 'Bún bò chuyên gia',
     description: 'Nấu 5 món bún',
     category: 'bun',
@@ -25,6 +27,7 @@ export const SEED_ACHIEVEMENTS: Achievement[] = [
   },
   {
     id: 'com-master',
+    createdBy: 'seed-editor',
     name: 'Cơm hến thần thánh',
     description: 'Nấu 3 món cơm',
     category: 'com',
@@ -36,6 +39,7 @@ export const SEED_ACHIEVEMENTS: Achievement[] = [
   },
   {
     id: 'banh-master',
+    createdBy: 'seed-editor',
     name: 'Bánh Huế chính gốc',
     description: 'Nấu 5 món bánh',
     category: 'banh',
@@ -47,6 +51,7 @@ export const SEED_ACHIEVEMENTS: Achievement[] = [
   },
   {
     id: 'che-master',
+    createdBy: 'seed-editor',
     name: 'Chè ngọt ngào',
     description: 'Nấu 3 món chè',
     category: 'che',
@@ -58,6 +63,7 @@ export const SEED_ACHIEVEMENTS: Achievement[] = [
   },
   {
     id: 'nem-master',
+    createdBy: 'seed-editor',
     name: 'Nem lụi thần sầu',
     description: 'Nấu 3 món nem',
     category: 'nem',
@@ -69,6 +75,7 @@ export const SEED_ACHIEVEMENTS: Achievement[] = [
   },
   {
     id: 'perfect-score',
+    createdBy: 'seed-editor',
     name: 'Điểm tuyệt đối',
     description: 'Đạt 5 sao món bất kỳ',
     category: 'special',
@@ -80,6 +87,7 @@ export const SEED_ACHIEVEMENTS: Achievement[] = [
   },
   {
     id: 'no-mistake',
+    createdBy: 'seed-editor',
     name: 'Không sai bước nào',
     description: 'Nấu 1 món không lỗi',
     category: 'special',
@@ -91,6 +99,7 @@ export const SEED_ACHIEVEMENTS: Achievement[] = [
   },
   {
     id: 'all-categories',
+    createdBy: 'seed-editor',
     name: 'Đa tài',
     description: 'Nấu món thuộc cả 5 loại',
     category: 'special',
@@ -102,6 +111,7 @@ export const SEED_ACHIEVEMENTS: Achievement[] = [
   },
   {
     id: 'high-score',
+    createdBy: 'seed-editor',
     name: 'Cao thủ',
     description: 'Đạt tổng 5000 điểm',
     category: 'special',
@@ -113,6 +123,7 @@ export const SEED_ACHIEVEMENTS: Achievement[] = [
   },
   {
     id: 'level-5',
+    createdBy: 'seed-editor',
     name: 'Đầu bếp cấp 5',
     description: 'Đạt level 5',
     category: 'special',
@@ -124,6 +135,7 @@ export const SEED_ACHIEVEMENTS: Achievement[] = [
   },
   {
     id: 'all-recipes',
+    createdBy: 'seed-editor',
     name: 'Bậc thầy ẩm thực',
     description: 'Nấu tất cả 15 món',
     category: 'special',
@@ -137,6 +149,7 @@ export const SEED_ACHIEVEMENTS: Achievement[] = [
   // ===== 15 thành tích bổ sung (GD4) — độ hiếm: common / rare / epic / legendary =====
   {
     id: 'cook-3',
+    createdBy: 'seed-editor',
     name: 'Bén lửa bếp Huế',
     description: 'Nấu 3 món bất kỳ',
     category: 'special',
@@ -148,6 +161,7 @@ export const SEED_ACHIEVEMENTS: Achievement[] = [
   },
   {
     id: 'cook-10',
+    createdBy: 'seed-editor',
     name: 'Chục món vào tay',
     description: 'Nấu 10 món bất kỳ',
     category: 'special',
@@ -159,6 +173,7 @@ export const SEED_ACHIEVEMENTS: Achievement[] = [
   },
   {
     id: 'cook-25',
+    createdBy: 'seed-editor',
     name: 'Đầu bếp không nghỉ',
     description: 'Nấu 25 món bất kỳ',
     category: 'special',
@@ -170,6 +185,7 @@ export const SEED_ACHIEVEMENTS: Achievement[] = [
   },
   {
     id: 'score-2000',
+    createdBy: 'seed-editor',
     name: 'Ngôi sao đang lên',
     description: 'Đạt tổng 2.000 điểm',
     category: 'special',
@@ -181,6 +197,7 @@ export const SEED_ACHIEVEMENTS: Achievement[] = [
   },
   {
     id: 'score-10000',
+    createdBy: 'seed-editor',
     name: 'Huyền thoại sống',
     description: 'Đạt tổng 10.000 điểm',
     category: 'special',
@@ -192,6 +209,7 @@ export const SEED_ACHIEVEMENTS: Achievement[] = [
   },
   {
     id: 'level-3',
+    createdBy: 'seed-editor',
     name: 'Tay nghề lên hương',
     description: 'Đạt level 3',
     category: 'special',
@@ -203,6 +221,7 @@ export const SEED_ACHIEVEMENTS: Achievement[] = [
   },
   {
     id: 'level-8',
+    createdBy: 'seed-editor',
     name: 'Bậc thầy cấp 8',
     description: 'Đạt level 8',
     category: 'special',
@@ -214,6 +233,7 @@ export const SEED_ACHIEVEMENTS: Achievement[] = [
   },
   {
     id: 'no-mistake-3',
+    createdBy: 'seed-editor',
     name: 'Tay dao không run',
     description: 'Nấu 3 món không mắc lỗi nào',
     category: 'special',
@@ -225,6 +245,7 @@ export const SEED_ACHIEVEMENTS: Achievement[] = [
   },
   {
     id: 'no-mistake-5',
+    createdBy: 'seed-editor',
     name: 'Bách phát bách trúng',
     description: 'Nấu 5 món không mắc lỗi nào',
     category: 'special',
@@ -236,6 +257,7 @@ export const SEED_ACHIEVEMENTS: Achievement[] = [
   },
   {
     id: 'perfect-3',
+    createdBy: 'seed-editor',
     name: 'Người cầu toàn',
     description: 'Đạt 5 sao ở 3 món',
     category: 'special',
@@ -247,6 +269,7 @@ export const SEED_ACHIEVEMENTS: Achievement[] = [
   },
   {
     id: 'perfect-10',
+    createdBy: 'seed-editor',
     name: 'Đẳng cấp hoàng gia',
     description: 'Đạt 5 sao ở 10 món',
     category: 'special',
@@ -258,6 +281,7 @@ export const SEED_ACHIEVEMENTS: Achievement[] = [
   },
   {
     id: 'difficulty-3',
+    createdBy: 'seed-editor',
     name: 'Dám thử món khó',
     description: 'Hoàn thành 1 món cấp Khó (3★) trở lên',
     category: 'special',
@@ -269,6 +293,7 @@ export const SEED_ACHIEVEMENTS: Achievement[] = [
   },
   {
     id: 'difficulty-4',
+    createdBy: 'seed-editor',
     name: 'Chinh phục Cực khó',
     description: 'Hoàn thành 2 món cấp Cực khó (4★) trở lên',
     category: 'special',
@@ -280,6 +305,7 @@ export const SEED_ACHIEVEMENTS: Achievement[] = [
   },
   {
     id: 'hell-1',
+    createdBy: 'seed-editor',
     name: 'Kẻ chinh phục Địa ngục',
     description: 'Hoàn thành 1 món cấp Địa ngục (5★)',
     category: 'special',
@@ -291,6 +317,7 @@ export const SEED_ACHIEVEMENTS: Achievement[] = [
   },
   {
     id: 'hell-3',
+    createdBy: 'seed-editor',
     name: 'Chúa tể Cố Đô',
     description: 'Hoàn thành cả 3 món cấp Địa ngục (5★)',
     category: 'special',
@@ -302,6 +329,7 @@ export const SEED_ACHIEVEMENTS: Achievement[] = [
   },
   {
     id: 'first-buy',
+    createdBy: 'seed-editor',
     name: 'Khách quen đầu tiên',
     description: 'Mua món đầu tiên bằng xu',
     category: 'special',
@@ -313,6 +341,7 @@ export const SEED_ACHIEVEMENTS: Achievement[] = [
   },
   {
     id: 'own-10',
+    createdBy: 'seed-editor',
     name: 'Tủ bếp 10 món',
     description: 'Sở hữu 10 món trong bộ sưu tập',
     category: 'special',
@@ -324,6 +353,7 @@ export const SEED_ACHIEVEMENTS: Achievement[] = [
   },
   {
     id: 'own-25',
+    createdBy: 'seed-editor',
     name: 'Tủ bếp 25 món',
     description: 'Sở hữu 25 món trong bộ sưu tập',
     category: 'special',
@@ -335,6 +365,7 @@ export const SEED_ACHIEVEMENTS: Achievement[] = [
   },
   {
     id: 'own-50',
+    createdBy: 'seed-editor',
     name: 'Trọn bộ ngự trù',
     description: 'Sở hữu toàn bộ 50 món của Huế Chef',
     category: 'special',
@@ -346,6 +377,7 @@ export const SEED_ACHIEVEMENTS: Achievement[] = [
   },
   {
     id: 'coins-1000',
+    createdBy: 'seed-editor',
     name: 'Túi xu đầu tiên đầy',
     description: 'Kiếm tổng cộng 1.000 xu từ nấu ăn',
     category: 'special',
@@ -357,6 +389,7 @@ export const SEED_ACHIEVEMENTS: Achievement[] = [
   },
   {
     id: 'buy-5star',
+    createdBy: 'seed-editor',
     name: 'Chinh phục đỉnh cao',
     description: 'Sở hữu một món 5 sao',
     category: 'special',

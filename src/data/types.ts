@@ -1,9 +1,16 @@
-export type RecipeCategory = 'bun' | 'com' | 'banh' | 'che' | 'nem';
+/**
+ * Recipe category id. The five original ids ('bun' | 'com' | 'banh' | 'che' |
+ * 'nem') are built-in presets with i18n labels; editors can register more
+ * categories at runtime (see lib/taxonomy.ts), so the type is a plain string.
+ */
+export type RecipeCategory = string;
 
 export interface Ingredient {
   id: string;
   name: string;
-  category: 'protein' | 'vegetable' | 'spice' | 'grain' | 'other';
+  /** Ingredient group id: presets 'protein' | 'vegetable' | 'spice' |
+   * 'grain' | 'other' plus editor-registered groups (lib/taxonomy.ts). */
+  category: string;
   fallbackEmoji: string;
   image?: string;
   unit?: string;
@@ -148,10 +155,13 @@ export type AchievementRarity = 'common' | 'rare' | 'epic' | 'legendary';
 
 export interface Achievement {
   id: string;
+  /** Account that created this achievement ('seed-editor' for the seeded
+   * catalogue, an admin/editor user id for runtime creations). */
+  createdBy?: string;
   name: string;
   description: string;
   story?: string;
-  category?: 'bun' | 'com' | 'banh' | 'che' | 'nem' | 'special';
+  category?: string;
   icon: string;
   rarity?: AchievementRarity;
   condition: AchievementCondition;

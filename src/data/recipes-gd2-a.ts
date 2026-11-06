@@ -16,6 +16,7 @@ export const RECIPES_GD2_A: Recipe[] = [
     image: '/images/che-dau-xanh.jpg',
     baseScore: 400,
     priceCoins: 0,
+    editorId: 'seed-editor',
     ingredients: [
       { ingredientId: 'mung-bean', amount: '200g' },
       { ingredientId: 'rock-sugar', amount: '120g' },
@@ -153,13 +154,14 @@ export const RECIPES_GD2_A: Recipe[] = [
   {
     id: 'banh-uot',
     name: 'Bánh ướt cuốn thịt',
-    category: 'banh',
+    category: 'goi-tron-cuon',
     difficulty: 1,
     duration: 180,
     description: 'Lá bánh ướt mỏng trong cuốn thịt nướng thơm sả, chấm nước mắm chua ngọt.',
     image: '/images/banh-uot.jpg',
     baseScore: 400,
     priceCoins: 0,
+    editorId: 'seed-editor',
     ingredients: [
       { ingredientId: 'rice-flour', amount: '300g' },
       { ingredientId: 'grilled-pork', amount: '250g' },
@@ -306,6 +308,7 @@ export const RECIPES_GD2_A: Recipe[] = [
     image: '/images/banh-cuon.jpg',
     baseScore: 900,
     priceCoins: 115,
+    editorId: 'seed-editor',
     ingredients: [
       { ingredientId: 'rice-flour', amount: '300g' },
       { ingredientId: 'tapioca', amount: '50g' },
@@ -460,6 +463,7 @@ export const RECIPES_GD2_A: Recipe[] = [
     image: '/images/che-troi-nuoc.jpg',
     baseScore: 925,
     priceCoins: 120,
+    editorId: 'seed-editor',
     ingredients: [
       { ingredientId: 'sticky-rice-flour', amount: '300g' },
       { ingredientId: 'mung-bean', amount: '150g' },
@@ -614,6 +618,7 @@ export const RECIPES_GD2_A: Recipe[] = [
     image: '/images/banh-dap.jpg',
     baseScore: 950,
     priceCoins: 125,
+    editorId: 'seed-editor',
     ingredients: [
       { ingredientId: 'rice-paper', amount: '5 cái' },
       { ingredientId: 'rice-flour', amount: '200g' },
@@ -761,13 +766,14 @@ export const RECIPES_GD2_A: Recipe[] = [
   {
     id: 'va-tron',
     name: 'Vả trộn',
-    category: 'com',
+    category: 'goi-tron-cuon',
     difficulty: 2,
     duration: 240,
     description: 'Vả trộn chua cay giòn mát với tôm, tai heo và đậu phộng, xúc bánh tráng nướng.',
     image: '/images/va-tron.jpg',
     baseScore: 1025,
     priceCoins: 135,
+    editorId: 'seed-editor',
     ingredients: [
       { ingredientId: 'fig', amount: '500g' },
       { ingredientId: 'shrimp', amount: '200g' },
@@ -922,6 +928,7 @@ export const RECIPES_GD2_A: Recipe[] = [
     image: '/images/bun-rieu.jpg',
     baseScore: 1100,
     priceCoins: 145,
+    editorId: 'seed-editor',
     ingredients: [
       { ingredientId: 'crab', amount: '500g' },
       { ingredientId: 'rice-noodle', amount: '500g' },
@@ -1076,6 +1083,7 @@ export const RECIPES_GD2_A: Recipe[] = [
     image: '/images/mi-quang.jpg',
     baseScore: 1175,
     priceCoins: 155,
+    editorId: 'seed-editor',
     ingredients: [
       { ingredientId: 'rice-noodle', amount: '500g' },
       { ingredientId: 'chicken', amount: '1/2 con' },
@@ -1230,6 +1238,7 @@ export const RECIPES_GD2_A: Recipe[] = [
     image: '/images/cao-lau.jpg',
     baseScore: 1200,
     priceCoins: 155,
+    editorId: 'seed-editor',
     ingredients: [
       { ingredientId: 'rice-noodle', amount: '400g' },
       { ingredientId: 'pork-belly', amount: '300g' },

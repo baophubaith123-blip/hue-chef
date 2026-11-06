@@ -13,6 +13,7 @@ export const RECIPES_GD2_C: Recipe[] = [
     image: '/images/banh-phu-the.jpg',
     baseScore: 1525,
     priceCoins: 460,
+    editorId: 'seed-editor',
     ingredients: [
       { ingredientId: 'tapioca', amount: '300g' },
       { ingredientId: 'mung-bean', amount: '200g' },
@@ -175,13 +176,14 @@ export const RECIPES_GD2_C: Recipe[] = [
   {
     id: 'tom-chua',
     name: 'Tôm chua thịt luộc',
-    category: 'com',
+    category: 'mon-man',
     difficulty: 3,
     duration: 300,
     description: 'Tôm chua Huế lên men chua cay đậm đà, ăn kèm thịt ba chỉ luộc, rau sống và hoa chuối thái mỏng đầy mê hoặc.',
     image: '/images/tom-chua.jpg',
     baseScore: 1550,
     priceCoins: 465,
+    editorId: 'seed-editor',
     ingredients: [
       { ingredientId: 'shrimp', amount: '500g' },
       { ingredientId: 'pork-belly', amount: '400g' },
@@ -351,6 +353,7 @@ export const RECIPES_GD2_C: Recipe[] = [
     image: '/images/bun-nghe.jpg',
     baseScore: 1575,
     priceCoins: 475,
+    editorId: 'seed-editor',
     ingredients: [
       { ingredientId: 'rice-noodle', amount: '500g' },
       { ingredientId: 'pork-belly', amount: '300g' },
@@ -513,13 +516,14 @@ export const RECIPES_GD2_C: Recipe[] = [
   {
     id: 'banh-trang-cuon',
     name: 'Bánh tráng cuốn thịt heo',
-    category: 'banh',
+    category: 'goi-tron-cuon',
     difficulty: 3,
     duration: 300,
     description: 'Bánh tráng cuốn thịt heo hai đầu da giòn mềm, rau thơm ngập cuốn, chấm mắm nêm thơm dứa cay nồng đậm chất miền Trung.',
     image: '/images/banh-trang-cuon.jpg',
     baseScore: 1625,
     priceCoins: 490,
+    editorId: 'seed-editor',
     ingredients: [
       { ingredientId: 'rice-paper', amount: '20 lá' },
       { ingredientId: 'pork-belly', amount: '500g' },
@@ -689,6 +693,7 @@ export const RECIPES_GD2_C: Recipe[] = [
     image: '/images/com-ga-hoi-an.jpg',
     baseScore: 1650,
     priceCoins: 495,
+    editorId: 'seed-editor',
     ingredients: [
       { ingredientId: 'chicken', amount: '1 con (1,2kg)' },
       { ingredientId: 'rice', amount: '500g' },
@@ -851,13 +856,14 @@ export const RECIPES_GD2_C: Recipe[] = [
   {
     id: 'ca-kho-to',
     name: 'Cá kho tộ',
-    category: 'com',
+    category: 'mon-man',
     difficulty: 4,
     duration: 390,
     description: 'Cá kho tộ rim lửa riu riu đến keo sệt, thịt cá săn chắc thấm đẫm nước kho mặn ngọt, thơm tiêu hành ăn hao cơm vô cùng.',
     image: '/images/ca-kho-to.jpg',
     baseScore: 1800,
     priceCoins: 790,
+    editorId: 'seed-editor',
     ingredients: [
       { ingredientId: 'snakehead', amount: '800g' },
       { ingredientId: 'pork-belly', amount: '200g' },
@@ -1045,13 +1051,14 @@ export const RECIPES_GD2_C: Recipe[] = [
   {
     id: 'thit-kho-tau',
     name: 'Thịt kho tàu',
-    category: 'com',
+    category: 'mon-man',
     difficulty: 4,
     duration: 390,
     description: 'Thịt kho tàu miếng lớn mềm rục mà không nát, trứng kho thấm vị, nước kho nâu óng béo thơm nước dừa đậm đà ngày Tết và cả ngày thường.',
     image: '/images/thit-kho-tau.jpg',
     baseScore: 1825,
     priceCoins: 805,
+    editorId: 'seed-editor',
     ingredients: [
       { ingredientId: 'pork-belly', amount: '1kg' },
       { ingredientId: 'egg', amount: '8 quả' },
