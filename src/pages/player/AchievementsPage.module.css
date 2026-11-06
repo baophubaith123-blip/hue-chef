@@ -297,3 +297,22 @@
   border: 2.5px solid var(--ink, #4a2c14);
   box-shadow: 0 3px 0 var(--ink-soft, rgba(74, 44, 20, 0.45));
 }
+
+
+/* ===== Phase 17 — festival scene strip ===== */
+.container::before {
+  content: '';
+  display: block;
+  height: 84px;
+  margin-bottom: 1.1rem;
+  border: var(--border-game, 3px solid #4a2c14);
+  border-radius: 20px;
+  background-image: url('/images/festival-day.webp');
+  background-size: cover;
+  background-position: center 16%;
+  box-shadow: var(--shadow-game-card, 0 12px 28px rgba(59, 42, 32, 0.12));
+}
+
+[data-theme='dark'] .container::before {
+  background-image: url('/images/festival-night.webp');
+}

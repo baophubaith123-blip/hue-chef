@@ -416,3 +416,19 @@
   background: var(--wood-gradient, linear-gradient(180deg, #ce9550, #b57e40));
   color: #fff6e0;
 }
+
+
+/* ===== Phase 17 — festival scene behind the hero ===== */
+.hero {
+  background-image:
+    linear-gradient(180deg, rgba(250, 245, 239, 0.35), rgba(250, 245, 239, 0.55)),
+    url('/images/festival-day.webp');
+  background-size: cover;
+  background-position: center top;
+}
+
+[data-theme='dark'] .hero {
+  background-image:
+    linear-gradient(180deg, rgba(24, 8, 20, 0.35), rgba(24, 8, 20, 0.55)),
+    url('/images/festival-night.webp');
+}

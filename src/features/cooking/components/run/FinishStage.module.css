@@ -239,3 +239,33 @@
 .doneBadge {
   border: 3px solid var(--ink, #200f04);
 }
+
+
+/* ===== Phase 17 — real festival scene backdrop ===== */
+.field {
+  background-image:
+    linear-gradient(180deg, rgba(24, 8, 20, 0.18), rgba(24, 8, 20, 0.34)),
+    url('/images/kitchen-night.webp');
+  background-size: cover;
+  background-position: center;
+}
+
+[data-theme='light'] .field {
+  background-image:
+    linear-gradient(180deg, rgba(253, 243, 216, 0.3), rgba(253, 243, 216, 0.42)),
+    url('/images/kitchen-day.webp');
+}
+
+
+/* ===== Phase 17 — one-frame fit ===== */
+.stage {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.field {
+  flex: 1 1 auto;
+  height: auto;
+  min-height: 0;
+}
