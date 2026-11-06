@@ -13,12 +13,14 @@ import { NotificationProvider } from '@/contexts/NotificationContext';
 import { RecipeProvider } from '@/contexts/RecipeContext';
 import { SupportProvider } from '@/contexts/SupportContext';
 import { MaintenanceGate } from '@/components/MaintenanceGate';
+import { TaxonomyProvider } from '@/contexts/TaxonomyContext';
 import { ThemeProvider } from '@/contexts/ThemeContext';
 
 export function AppProviders({ children }: { children: ReactNode }) {
   return (
     <ThemeProvider>
       <LanguageContextProvider>
+        <TaxonomyProvider>
         <AuthProvider>
           <MaintenanceGate>
           <AdminProvider>
@@ -42,6 +44,7 @@ export function AppProviders({ children }: { children: ReactNode }) {
           </AdminProvider>
           </MaintenanceGate>
         </AuthProvider>
+        </TaxonomyProvider>
       </LanguageContextProvider>
     </ThemeProvider>
   );

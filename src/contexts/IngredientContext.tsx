@@ -46,15 +46,29 @@ function loadStoredIngredients(): Ingredient[] {
   }
 
   const seedEmojiMap = new Map(SEED_INGREDIENTS.map((s) => [s.id, s.fallbackEmoji]));
-  const result: Ingredient[] = valid.map((item) => ({
-    id: item.id,
-    name: item.name,
-    category: item.category || 'other',
-    fallbackEmoji: item.fallbackEmoji || seedEmojiMap.get(item.id) || '🍲',
-    image: item.image,
-    unit: item.unit,
-    description: item.description,
-  }));
+  const seedUnitMap = new Map(SEED_INGREDIENTS.map((s) => [s.id, s.unit]));
+  // The five bean/seed items that Phase 15 moved out of the catch-all
+  // 'other' group into the new 'dau-hat' group.
+  const MOVED_TO_DAU_HAT = new Set(['lotus-seed', 'peanut', 'mung-bean', 'black-bean', 'sesame']);
+  const result: Ingredient[] = valid.map((item) => {
+    // Phase 15: seeds gained default units — backfill for stored copies
+    // that predate them (a unit the user typed themselves is kept). The
+    // group move applies only to the five moved items still filed under
+    // their old 'other' group.
+    const category =
+      item.category === 'other' && MOVED_TO_DAU_HAT.has(item.id)
+        ? 'dau-hat'
+        : (item.category || 'other');
+    return {
+      id: item.id,
+      name: item.name,
+      category,
+      fallbackEmoji: item.fallbackEmoji || seedEmojiMap.get(item.id) || '🍲',
+      image: item.image,
+      unit: item.unit || seedUnitMap.get(item.id),
+      description: item.description,
+    };
+  });
 
   // Merge in seed ingredients the stored list predates (same pattern as
   // recipes): returning users must see newly added seeds in the pickers.

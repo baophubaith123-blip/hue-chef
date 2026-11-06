@@ -25,7 +25,7 @@ import { validateMinigames } from '@/features/recipes/validation';
 import { AppError } from '@/lib/errors';
 import { appendAudit } from '@/features/admin/lib/audit';
 import { suggestPriceCoins } from '@/lib/pricing';
-import { getJsonStorage, setJsonStorage, STORAGE_KEYS } from '@/lib/storage';
+import { getJsonStorage, getStorageItem, setJsonStorage, setStorageItem, STORAGE_KEYS } from '@/lib/storage';
 
 if (import.meta.env.DEV) {
   for (const recipe of SEED_RECIPES) {
@@ -118,6 +118,12 @@ function loadInitialRecipes(): Recipe[] {
 
   const updatedSeedMap = new Map(seeded.map((r) => [r.id, r]));
 
+  // Phase 15 re-categorised the seed catalogue (16 dishes had a wrong or
+  // misleading category, e.g. vả trộn filed under rice). Stored copies carry
+  // the OLD category, so sync it from the seeds exactly once; edits made
+  // after this migration are never overwritten.
+  const needsCategorySync = getStorageItem(STORAGE_KEYS.categoryMigrationV1) === null;
+
   const result = validStored.map((r) => {
     const seedVersion = updatedSeedMap.get(r.id);
     if (seedVersion) {
@@ -128,10 +134,18 @@ function loadInitialRecipes(): Recipe[] {
         ...seedVersion,
         ...r,
         status: r.status ?? seedVersion.status,
+        category:
+          needsCategorySync && seedVersion.editorId
+            ? seedVersion.category
+            : (r.category ?? seedVersion.category),
       });
     }
     return withDefaultStatus(r);
   });
+
+  if (needsCategorySync) {
+    setStorageItem(STORAGE_KEYS.categoryMigrationV1, 'done');
+  }
 
   for (const s of seeded) {
     if (!result.some((r) => r.id === s.id)) {

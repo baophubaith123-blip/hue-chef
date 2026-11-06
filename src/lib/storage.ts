@@ -17,6 +17,9 @@ export const STORAGE_KEYS = {
   ingredients: 'hue-chef-ingredients',
   adminSettings: 'hue-chef-admin-settings',
   progress: 'hue-chef-progress',
+  taxonomy: 'hue-chef-taxonomy',
+  editorAchievements: 'hue-chef-editor-achievements',
+  categoryMigrationV1: 'hue-chef-category-migration-v1',
 } as const;
 
 export function getStorageItem(key: string): string | null {
