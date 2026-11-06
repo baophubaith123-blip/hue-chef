@@ -115,12 +115,12 @@ export function CookingResultModal({
                 </div>
               </div>
 
-              {session.comboBonus > 0 ? (
+              {session.maxCombo >= 2 ? (
                 <div className={styles.metricCard}>
                   <span className={styles.metricIcon}>🔥</span>
                   <div className={styles.metricDetails}>
                     <span className={styles.metricLabel}>{dict.cooking.result.comboBonus}</span>
-                    <span className={styles.metricValueHighlight}>+{session.comboBonus}</span>
+                    <span className={styles.metricValueHighlight}>×{session.maxCombo}</span>
                     <span className={styles.metricLabel}>
                       {dict.cooking.result.maxCombo(session.maxCombo)}
                     </span>
@@ -152,34 +152,46 @@ export function CookingResultModal({
               </div>
             ) : null}
 
-            {/* 5-stage run breakdown */}
-            {session.stageResults.length > 0 && (
+            {/* Per-component breakdown: shares of the dish's value (the
+                rows sum exactly to the final score, capped at baseScore). */}
+            {Object.keys(session.scoreParts).length > 0 && (
               <div className={styles.minigamesSection}>
                 <h4 className={styles.minigamesTitle}>{dict.cooking.result.stagesSummary}</h4>
                 <ul className={styles.minigamesList}>
-                  {session.stageResults.map((entry) => {
-                    const stageMeta = {
-                      market: { icon: '🧺', name: dict.cooking.stages.marketName },
-                      catch: { icon: '🎯', name: dict.cooking.stages.catchName },
-                      season: { icon: '🧂', name: dict.cooking.stages.seasonName },
-                      finish: { icon: '🍲', name: dict.cooking.stages.finishName },
-                    }[entry.stage];
-                    return (
-                      <li key={entry.stage} className={styles.minigameItem}>
-                        <div className={styles.minigameInfo}>
-                          <span>{stageMeta.icon}</span>
-                          <span className={styles.minigameTitle}>{stageMeta.name}</span>
-                        </div>
-                        <span
-                          className={`${styles.minigameScore} ${
-                            entry.score >= 0 ? styles.minigamePassed : styles.minigameFailed
-                          }`}
-                        >
-                          {entry.score >= 0 ? `+${entry.score}` : entry.score}
-                        </span>
-                      </li>
-                    );
-                  })}
+                  {(
+                    [
+                      { key: 'market', icon: '🧺', name: dict.cooking.stages.marketName },
+                      { key: 'catch', icon: '🎯', name: dict.cooking.stages.catchName },
+                      { key: 'cook', icon: '🍳', name: dict.cooking.result.partCook },
+                      { key: 'season', icon: '🧂', name: dict.cooking.stages.seasonName },
+                      { key: 'finish', icon: '🍲', name: dict.cooking.stages.finishName },
+                      { key: 'quiz', icon: '❓', name: dict.cooking.result.partQuiz },
+                      { key: 'time', icon: '⏱️', name: dict.cooking.result.partTime },
+                    ] as const
+                  )
+                    .filter(
+                      (row) =>
+                        session.scorePlan[row.key] > 0 &&
+                        session.scoreParts[row.key] !== undefined,
+                    )
+                    .map((row) => {
+                      const points = session.scoreParts[row.key] ?? 0;
+                      return (
+                        <li key={row.key} className={styles.minigameItem}>
+                          <div className={styles.minigameInfo}>
+                            <span>{row.icon}</span>
+                            <span className={styles.minigameTitle}>{row.name}</span>
+                          </div>
+                          <span className={`${styles.minigameScore} ${styles.minigamePassed}`}>
+                            +{points}
+                            <span className={styles.partMax}>
+                              {' '}
+                              / {session.scorePlan[row.key]}
+                            </span>
+                          </span>
+                        </li>
+                      );
+                    })}
                 </ul>
               </div>
             )}

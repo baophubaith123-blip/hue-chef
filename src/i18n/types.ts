@@ -459,6 +459,9 @@ export interface I18nDictionary {
       backToHome: string;
       minigamesSummary: string;
       stagesSummary: string;
+      partCook: string;
+      partQuiz: string;
+      partTime: string;
       comboBonus: string;
       maxCombo: (count: number) => string;
       gainedXp: (xp: number) => string;
@@ -515,7 +518,7 @@ export interface I18nDictionary {
       marketGo: string;
       marketNotNeeded: string;
       marketWrongToast: string;
-      marketFullList: string;
+      marketFullList: (points: number) => string;
       marketRule1: string;
       marketRule2: string;
       marketRule3: string;

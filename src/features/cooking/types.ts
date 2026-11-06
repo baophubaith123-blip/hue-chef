@@ -1,4 +1,5 @@
 import type { Recipe } from '@/data/types';
+import type { ScoreComponentKey, ScorePlan } from '@/features/cooking/lib/score-rescale';
 
 export type CookingPhase =
   | 'idle'
@@ -10,11 +11,8 @@ export type CookingPhase =
   | 'success'
   | 'failed';
 
-/** One scored stage of the 5-stage run (points flow through the bonus channel). */
-export interface StageResultEntry {
-  stage: 'market' | 'catch' | 'season' | 'finish';
-  score: number;
-}
+/** A scored stage of the 5-stage run that banks points mid-run. */
+export type RunStageKey = 'market' | 'catch' | 'season' | 'finish';
 
 export interface MinigameResultEntry {
   minigameId: string;
@@ -42,12 +40,17 @@ export interface CookingSession {
   lastComboAt: number | null;
   /** Longest combo streak reached during this session. */
   maxCombo: number;
-  /** Total combo bonus points banked (added on top of the lib/score total). */
+  /** Total raw combo bonus points banked during the cook stage (stat only —
+   *  combo value reaches the total folded into the cook component's share). */
   comboBonus: number;
-  /** Total bonus banked by the new run stages (market / catch / season / finish). */
-  stageBonus: number;
-  /** Per-stage breakdown of stageBonus, shown on the result modal. */
-  stageResults: StageResultEntry[];
+  /** Max points per run component: the dish's baseScore split by weight. */
+  scorePlan: ScorePlan;
+  /** Rescaled points banked per component, shown on the result modal. */
+  scoreParts: Partial<Record<ScoreComponentKey, number>>;
+  /** Exact (float) rescaled earnings of the cook component, rounded at the end. */
+  cookEarnedExact: number;
+  /** Total required ingredient drops across all steps (cook share divisor). */
+  totalDropTargets: number;
   finalScore: number;
   stars: 1 | 2 | 3 | 4 | 5;
   failReason?: 'timeout' | 'abandoned';

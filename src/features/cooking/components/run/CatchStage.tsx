@@ -10,6 +10,7 @@ import {
 import { getIngredientById, SEED_INGREDIENTS } from '@/data/ingredients';
 import type { Recipe } from '@/data/types';
 import { COMBO_WINDOW_MS, comboBonusForStreak } from '@/features/cooking/lib/combo';
+import { catchRawMax, clampRatio } from '@/features/cooking/lib/score-rescale';
 import type { ResolvedStageConfig } from '@/features/cooking/lib/stage-config';
 import { CATCH_MISS_PENALTY, CATCH_POINTS } from '@/features/cooking/lib/stage-bonus';
 import { StageHelp } from '@/features/cooking/components/run/StageHelp';
@@ -21,6 +22,9 @@ import styles from '@/features/cooking/components/run/CatchStage.module.css';
 interface CatchStageProps {
   recipe: Recipe;
   config: ResolvedStageConfig;
+  /** This stage's share of the dish's value (the score ceiling split). */
+  maxPoints: number;
+  onProgress?: (points: number) => void;
   onComplete: (bonus: number) => void;
 }
 
@@ -51,7 +55,7 @@ const CATCH_RADIUS_PX = 86;
  * drags Nồi Nồi to catch every correct one; scoring reuses the shared
  * combo curve from lib/combo.
  */
-export function CatchStage({ recipe, config, onComplete }: CatchStageProps) {
+export function CatchStage({ recipe, config, maxPoints, onProgress, onComplete }: CatchStageProps) {
   const { dict } = useTranslation();
   const s = dict.cooking.stages;
 
@@ -93,14 +97,30 @@ export function CatchStage({ recipe, config, onComplete }: CatchStageProps) {
   const lastCatchAtRef = useRef(0);
   const potXRef = useRef(0.5);
 
+  // Raw stage points convert into this stage's share of the dish's value.
+  const rawMax = catchRawMax(correctIds.length);
+  const toRescaled = useCallback(
+    (raw: number) =>
+      Math.max(0, Math.min(maxPoints, Math.round(maxPoints * clampRatio(raw / rawMax)))),
+    [maxPoints, rawMax],
+  );
+  const rescaledStep = useCallback(
+    (rawDelta: number) => Math.max(1, Math.round((maxPoints * rawDelta) / Math.max(1, rawMax))),
+    [maxPoints, rawMax],
+  );
+
   const finish = useCallback(() => {
     if (doneRef.current) return;
     doneRef.current = true;
     statusRef.current = 'done';
     setStatus('done');
     playSound('success');
-    window.setTimeout(() => onComplete(bonusRef.current), 750);
-  }, [onComplete]);
+    window.setTimeout(() => onComplete(toRescaled(bonusRef.current)), 750);
+  }, [onComplete, toRescaled]);
+
+  useEffect(() => {
+    onProgress?.(toRescaled(bonus));
+  }, [bonus, onProgress, toRescaled]);
 
   useEffect(() => {
     pausedRef.current = paused;
@@ -238,7 +258,7 @@ export function CatchStage({ recipe, config, onComplete }: CatchStageProps) {
               const gain = CATCH_POINTS + comboBonusForStreak(nextStreak);
               bonusRef.current += gain;
               setBonus(bonusRef.current);
-              pushFloater(tok.xRatio * 100, `+${gain}`, 'good');
+              pushFloater(tok.xRatio * 100, `+${rescaledStep(gain)}`, 'good');
               playSound('drop');
               if (caughtRef.current.size >= correctIds.length) {
                 finish();
@@ -260,7 +280,7 @@ export function CatchStage({ recipe, config, onComplete }: CatchStageProps) {
             setBonus(bonusRef.current);
             streakRef.current = 0;
             setStreak(0);
-            pushFloater(tok.xRatio * 100, `−${CATCH_MISS_PENALTY}`, 'bad');
+            pushFloater(tok.xRatio * 100, `−${rescaledStep(CATCH_MISS_PENALTY)}`, 'bad');
           }
           continue;
         }
@@ -280,6 +300,7 @@ export function CatchStage({ recipe, config, onComplete }: CatchStageProps) {
     fieldSize,
     finish,
     pushFloater,
+    rescaledStep,
   ]);
 
   const handlePointer = (event: ReactPointerEvent<HTMLDivElement>) => {
@@ -309,7 +330,7 @@ export function CatchStage({ recipe, config, onComplete }: CatchStageProps) {
         <span className={styles.stageChip}>🎯 ② {s.catchName}</span>
         <span className={styles.chip}>{s.catchProgress(caughtCount, correctIds.length)}</span>
         {streak >= 2 ? <span className={styles.comboChip}>🔥 {s.catchCombo(streak)}</span> : null}
-        <span className={styles.chip}>⭐ {bonus >= 0 ? `+${bonus}` : bonus}</span>
+        <span className={styles.chip}>⭐ +{toRescaled(bonus)}</span>
       </div>
 
       <div

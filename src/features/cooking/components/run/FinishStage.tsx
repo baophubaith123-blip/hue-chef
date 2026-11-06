@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 
 import type { Recipe } from '@/data/types';
 import { comboBonusForStreak } from '@/features/cooking/lib/combo';
+import { clampRatio } from '@/features/cooking/lib/score-rescale';
 import type { ResolvedStageConfig } from '@/features/cooking/lib/stage-config';
 import {
   FINISH_GOOD_WINDOW,
@@ -18,6 +19,9 @@ import styles from '@/features/cooking/components/run/FinishStage.module.css';
 interface FinishStageProps {
   recipe: Recipe;
   config: ResolvedStageConfig;
+  /** This stage's share of the dish's value (the score ceiling split). */
+  maxPoints: number;
+  onProgress?: (points: number) => void;
   onComplete: (bonus: number) => void;
 }
 
@@ -52,13 +56,13 @@ const RING_SIZE_PX = 96;
  * inner ring grows from each centre. Tapping exactly when the growing
  * ring meets the rim is "Tuyệt vời" — the only tier that builds combo.
  */
-export function FinishStage({ config, onComplete }: FinishStageProps) {
+export function FinishStage({ config, maxPoints, onProgress, onComplete }: FinishStageProps) {
   const { dict } = useTranslation();
   const s = dict.cooking.stages;
 
   const [, setFrame] = useState(0);
   const [secondsLeft, setSecondsLeft] = useState(config.finishSeconds);
-  const [bonus, setBonus] = useState(0);
+  const [resolvedCount, setResolvedCount] = useState(0);
   const [streak, setStreak] = useState(0);
   const [potMood, setPotMood] = useState<PotMood>(null);
   const [floaters, setFloaters] = useState<Floater[]>([]);
@@ -72,17 +76,44 @@ export function FinishStage({ config, onComplete }: FinishStageProps) {
   const ringsRef = useRef<Ring[]>([]);
   const ringKeyRef = useRef(0);
   const lastSpawnRef = useRef(-config.finishSpawnMs);
-  const bonusRef = useRef(0);
+  const baseOutcomeRef = useRef(0);
+  const comboEarnedRef = useRef(0);
   const streakRef = useRef(0);
+  const resolvedRef = useRef(0);
+  const prevCumRef = useRef(0);
   const moodTimerRef = useRef<number | null>(null);
+
+  // Stage earnings convert into this stage's share of the dish's value:
+  // each ring's base outcome (perfect 50 · good by closeness · miss −20)
+  // counts in full, the combo earned on perfect taps counts at half — so
+  // an all-"Tốt" run still earns about half the share and only spotless
+  // rhythm play fills it.
+  const toRescaled = useCallback(
+    (resolved: number) => {
+      if (resolved <= 0) return 0;
+      const earned = baseOutcomeRef.current + comboEarnedRef.current * 0.5;
+      return Math.max(
+        0,
+        Math.min(
+          maxPoints,
+          Math.round(maxPoints * clampRatio(earned / (resolved * FINISH_PERFECT_POINTS))),
+        ),
+      );
+    },
+    [maxPoints],
+  );
 
   const finish = useCallback(() => {
     if (doneRef.current) return;
     doneRef.current = true;
     setDone(true);
     playSound('success');
-    window.setTimeout(() => onComplete(bonusRef.current), 650);
-  }, [onComplete]);
+    window.setTimeout(() => onComplete(toRescaled(resolvedRef.current)), 650);
+  }, [onComplete, toRescaled]);
+
+  useEffect(() => {
+    onProgress?.(toRescaled(resolvedCount));
+  }, [onProgress, resolvedCount, toRescaled]);
 
   useEffect(() => {
     pausedRef.current = paused;
@@ -109,36 +140,41 @@ export function FinishStage({ config, onComplete }: FinishStageProps) {
     (ring: Ring, result: RingResult, gameNow: number) => {
       ring.resolved = result;
       ring.resolvedAt = gameNow;
+      resolvedRef.current += 1;
+      let word: string;
       if (result === 'perfect') {
         streakRef.current += 1;
-        const gain = FINISH_PERFECT_POINTS + comboBonusForStreak(streakRef.current);
-        bonusRef.current += gain;
+        const comboGain = comboBonusForStreak(streakRef.current);
+        baseOutcomeRef.current += FINISH_PERFECT_POINTS;
+        comboEarnedRef.current += comboGain;
         setMood('jump');
-        pushFloater(ring.xPercent, ring.yPercent, `+${gain} ${s.finishPerfect}`, 'perfect');
+        word = s.finishPerfect;
         playSound('success');
       } else if (result === 'good') {
         const p = (gameNow - ring.bornAt) / ring.growMs;
         const gain = finishGoodPoints(Math.abs(p - 1));
-        bonusRef.current += gain;
+        baseOutcomeRef.current += gain;
         setMood('nod');
-        pushFloater(ring.xPercent, ring.yPercent, `+${gain} ${s.finishGood}`, 'good');
+        word = s.finishGood;
         playSound('drop');
       } else {
         streakRef.current = 0;
-        bonusRef.current -= FINISH_MISS_PENALTY;
+        baseOutcomeRef.current -= FINISH_MISS_PENALTY;
         setMood('dizzy');
-        pushFloater(
-          ring.xPercent,
-          ring.yPercent,
-          `−${FINISH_MISS_PENALTY} ${s.finishMiss}`,
-          'miss',
-        );
+        word = s.finishMiss;
         playSound('error');
       }
+      // The floater shows the rescaled delta of the stage's cumulative
+      // earnings, so the numbers match the run's capped total.
+      const cum = toRescaled(resolvedRef.current);
+      const delta = cum - prevCumRef.current;
+      prevCumRef.current = cum;
+      const deltaText = delta > 0 ? `+${delta} ` : delta < 0 ? `−${-delta} ` : '';
+      pushFloater(ring.xPercent, ring.yPercent, `${deltaText}${word}`, result);
       setStreak(streakRef.current);
-      setBonus(bonusRef.current);
+      setResolvedCount(resolvedRef.current);
     },
-    [pushFloater, s, setMood],
+    [pushFloater, s, setMood, toRescaled],
   );
 
   useEffect(() => {
@@ -244,7 +280,7 @@ export function FinishStage({ config, onComplete }: FinishStageProps) {
         {streak >= 2 ? (
           <span className={styles.comboChip}>🔥 {s.finishCombo(streak)}</span>
         ) : null}
-        <span className={styles.chip}>⭐ {bonus >= 0 ? `+${bonus}` : bonus}</span>
+        <span className={styles.chip}>⭐ +{toRescaled(resolvedCount)}</span>
         <span
           className={[styles.chip, secondsDisplay <= 3 && !done ? styles.chipDanger : '']
             .filter(Boolean)

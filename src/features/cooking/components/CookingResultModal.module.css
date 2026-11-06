@@ -356,3 +356,9 @@
     width: 100%;
   }
 }
+
+.partMax {
+  color: var(--color-text-muted, #8a7460);
+  font-weight: 600;
+  font-size: 0.85em;
+}

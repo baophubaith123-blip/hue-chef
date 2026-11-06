@@ -3,6 +3,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { getIngredientById, SEED_INGREDIENTS } from '@/data/ingredients';
 import type { Recipe } from '@/data/types';
 import type { ResolvedStageConfig } from '@/features/cooking/lib/stage-config';
+import { clampRatio, marketRawMax } from '@/features/cooking/lib/score-rescale';
 import {
   MARKET_FULL_LIST_BONUS,
   MARKET_PICK_POINTS,
@@ -18,6 +19,9 @@ import styles from '@/features/cooking/components/run/MarketStage.module.css';
 interface MarketStageProps {
   recipe: Recipe;
   config: ResolvedStageConfig;
+  /** This stage's share of the dish's value (the score ceiling split). */
+  maxPoints: number;
+  onProgress?: (points: number) => void;
   onComplete: (bonus: number) => void;
 }
 
@@ -29,7 +33,7 @@ type ListState = 'viewing' | 'hidden' | 'peeking';
  * viewing time ends; peeking again costs 5s and every hide reshuffles the
  * stall so positions cannot be memorised.
  */
-export function MarketStage({ recipe, config, onComplete }: MarketStageProps) {
+export function MarketStage({ recipe, config, maxPoints, onProgress, onComplete }: MarketStageProps) {
   const { dict } = useTranslation();
   const s = dict.cooking.stages;
   const hidesList = config.marketViewSeconds > 0;
@@ -69,11 +73,24 @@ export function MarketStage({ recipe, config, onComplete }: MarketStageProps) {
   const pausedRef = useRef(false);
   const toastTimerRef = useRef<number | null>(null);
 
+  // Raw stage points are converted into this stage's share of the dish's
+  // value, so the run total can never pass the recipe's baseScore.
+  const rawMax = marketRawMax(correctIds.length);
+  const toRescaled = useCallback(
+    (raw: number) =>
+      Math.max(0, Math.min(maxPoints, Math.round(maxPoints * clampRatio(raw / rawMax)))),
+    [maxPoints, rawMax],
+  );
+
   const finish = useCallback(() => {
     if (doneRef.current) return;
     doneRef.current = true;
-    onComplete(bonusRef.current);
-  }, [onComplete]);
+    onComplete(toRescaled(bonusRef.current));
+  }, [onComplete, toRescaled]);
+
+  useEffect(() => {
+    onProgress?.(toRescaled(bonus));
+  }, [bonus, onProgress, toRescaled]);
 
   const hideList = useCallback(() => {
     listStateRef.current = 'hidden';
@@ -137,7 +154,11 @@ export function MarketStage({ recipe, config, onComplete }: MarketStageProps) {
         playSound('drop');
         if (nextPicked.size === correctIds.length) {
           bonusRef.current += MARKET_FULL_LIST_BONUS;
-          showToast(s.marketFullList);
+          showToast(
+            s.marketFullList(
+              Math.round((maxPoints * MARKET_FULL_LIST_BONUS) / Math.max(1, rawMax)),
+            ),
+          );
           playSound('success');
         }
         setBonus(bonusRef.current);
@@ -151,7 +172,7 @@ export function MarketStage({ recipe, config, onComplete }: MarketStageProps) {
         playSound('error');
       }
     },
-    [correctIds.length, correctSet, picked, s, showToast, wrong],
+    [correctIds.length, correctSet, maxPoints, picked, rawMax, s, showToast, wrong],
   );
 
   const listVisible = listState !== 'hidden';
@@ -163,7 +184,7 @@ export function MarketStage({ recipe, config, onComplete }: MarketStageProps) {
       <div className={styles.topBar}>
         <span className={styles.stageChip}>🧺 ① {s.marketName}</span>
         <span className={styles.chip}>{s.marketCollected(picked.size, correctIds.length)}</span>
-        <span className={styles.chip}>⭐ {bonus >= 0 ? `+${bonus}` : bonus}</span>
+        <span className={styles.chip}>⭐ +{toRescaled(bonus)}</span>
         <span
           className={[styles.chip, secondsDisplay <= 10 ? styles.chipDanger : '']
             .filter(Boolean)

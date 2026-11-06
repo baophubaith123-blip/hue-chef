@@ -25,6 +25,7 @@ import { StageHelp } from '@/features/cooking/components/run/StageHelp';
 import { useCookingState } from '@/features/cooking/hooks/useCookingState';
 import { useDragDrop } from '@/features/cooking/hooks/useDragDrop';
 import { COMBO_WINDOW_MS, comboBonusForStreak } from '@/features/cooking/lib/combo';
+import { SEASON_MAX_BONUS_RATIO } from '@/features/cooking/lib/stage-bonus';
 import { resolveStageConfig } from '@/features/cooking/lib/stage-config';
 import { buildTrayIngredientIds } from '@/features/cooking/lib/tray-ingredients';
 import { shuffleArray } from '@/features/cooking/lib/shuffle';
@@ -62,6 +63,9 @@ export default function CookingPage() {
   const [dropFx, setDropFx] = useState<PotDropFx | null>(null);
   const fxTimerRef = useRef<number | null>(null);
   const [seasonOpen, setSeasonOpen] = useState(false);
+  // Rescaled points the currently running stage reports live, so the HUD
+  // total never exceeds the dish's value even mid-stage.
+  const [liveStagePoints, setLiveStagePoints] = useState(0);
   const [seasonToast, setSeasonToast] = useState<string | null>(null);
   const seasonToastTimerRef = useRef<number | null>(null);
   const [appliedResult, setAppliedResult] = useState<{
@@ -261,10 +265,20 @@ export default function CookingPage() {
           if (fxTimerRef.current !== null) {
             window.clearTimeout(fxTimerRef.current);
           }
+          // The floater shows the rescaled value of the drop inside the
+          // cook component's share, matching the capped run total.
+          const dropFactor =
+            session.totalDropTargets > 0
+              ? session.scorePlan.cook /
+                (session.totalDropTargets * scoreRules.correctPoints)
+              : 0;
           setDropFx({
             key: Date.now(),
             ingredientName: getIngredientById(ingredientId)?.name ?? ingredientId,
-            points: scoreRules.correctPoints + comboGain,
+            points: Math.max(
+              1,
+              Math.round((scoreRules.correctPoints + comboGain) * dropFactor),
+            ),
           });
           fxTimerRef.current = window.setTimeout(() => {
             setDropFx(null);
@@ -329,6 +343,13 @@ export default function CookingPage() {
     }, remaining + 30);
     return () => window.clearTimeout(timer);
   }, [comboStreakNow, lastComboAt, expireCombo]);
+
+  // Stage components report their live rescaled earnings; reset the report
+  // whenever the run moves on (banked points take over the HUD total).
+  const sessionPhase = session?.phase;
+  useEffect(() => {
+    setLiveStagePoints(0);
+  }, [sessionPhase]);
 
   const handleMinigamesAllComplete = useCallback(
     (results: MinigameResultEntry[], totalBonusScore: number) => {
@@ -400,7 +421,26 @@ export default function CookingPage() {
   const displayScore =
     session.phase === 'success' || session.phase === 'failed'
       ? session.finalScore
-      : Math.max(0, session.recipe.baseScore + session.runningScoreDelta);
+      : Math.max(0, Math.round(session.runningScoreDelta) + liveStagePoints);
+
+  // Seasoning: hand the bar a VIRTUAL step-points value so its bonus comes
+  // out already rescaled into the season share — each step's slice of the
+  // share is proportional to its raw seasoning maximum.
+  const seasonRawMaxOf = (step: (typeof sessionSteps)[number]) =>
+    Math.round(
+      scoreRules.correctPoints *
+        Math.max(1, step.requiredIngredients.length) *
+        SEASON_MAX_BONUS_RATIO,
+    );
+  const seasonTotalRawMax = sessionSteps
+    .filter((step) => Boolean(step.actionLabel))
+    .reduce((sum, step) => sum + seasonRawMaxOf(step), 0);
+  const seasonVirtualStepPoints =
+    seasonTotalRawMax > 0 && activeStep
+      ? (session.scorePlan.season * seasonRawMaxOf(activeStep)) /
+        seasonTotalRawMax /
+        SEASON_MAX_BONUS_RATIO
+      : scoreRules.correctPoints * Math.max(1, currentRequiredIds.length);
 
   // 5-stage run progress chips (① market → ② catch → ③ cook → ④ finish → ⑤ quiz).
   const stageDict = dict.cooking.stages;
@@ -477,6 +517,8 @@ export default function CookingPage() {
         <MarketStage
           recipe={recipe}
           config={stageConfig}
+          maxPoints={session.scorePlan.market}
+          onProgress={setLiveStagePoints}
           onComplete={(bonus) => completeStage('market', bonus)}
         />
       </PlayerShell>
@@ -490,6 +532,8 @@ export default function CookingPage() {
         <CatchStage
           recipe={recipe}
           config={stageConfig}
+          maxPoints={session.scorePlan.catch}
+          onProgress={setLiveStagePoints}
           onComplete={(bonus) => completeStage('catch', bonus)}
         />
       </PlayerShell>
@@ -503,6 +547,8 @@ export default function CookingPage() {
         <FinishStage
           recipe={recipe}
           config={stageConfig}
+          maxPoints={session.scorePlan.finish}
+          onProgress={setLiveStagePoints}
           onComplete={(bonus) => completeStage('finish', bonus)}
         />
       </PlayerShell>
@@ -551,10 +597,7 @@ export default function CookingPage() {
                 total: sessionSteps.length,
               })}
               {activeStep ? ` · ${activeStep.title} · ` : ' · '}
-              {t('cooking.stepInstruction', {
-                correct: scoreRules.correctPoints,
-                wrong: scoreRules.wrongPenalty,
-              })}
+              {t('cooking.stepInstruction')}
             </p>
           </div>
         </div>
@@ -572,8 +615,9 @@ export default function CookingPage() {
             <span className={styles.scoreValue}>{displayScore}</span>
             {session.phase === 'running' ? (
               <p className={styles.scoreHint}>
-                {t('cooking.sessionDelta')} {session.runningScoreDelta >= 0 ? '+' : ''}
-                {session.runningScoreDelta}
+                {t('cooking.sessionDelta')}{' '}
+                {Math.round(session.runningScoreDelta) >= 0 ? '+' : ''}
+                {Math.round(session.runningScoreDelta)}
               </p>
             ) : null}
           </div>
@@ -635,9 +679,7 @@ export default function CookingPage() {
       {seasonOpen && session.actionButtonLabel ? (
         <SeasonBar
           stepLabel={session.actionButtonLabel}
-          stepPoints={
-            scoreRules.correctPoints * Math.max(1, currentRequiredIds.length)
-          }
+          stepPoints={seasonVirtualStepPoints}
           difficulty={recipe.difficulty}
           ingredientCount={Math.max(1, currentRequiredIds.length)}
           onResult={handleSeasonResult}
