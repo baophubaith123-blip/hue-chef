@@ -560,6 +560,11 @@ Hệ thống có **4 vai trò**:
 | Soạn công thức | Ô bước không nhãn gây khó hiểu; không xem trước được | Nhãn + chú thích từng ô, **Xem trước + checklist 7 mục + chạy thử** trước khi gửi duyệt, **Xem lại** mọi công thức của mình (Phase 15) |
 | Thành tích phía Editor | Editor không có mục thành tích | Editor tạo thành tích → **Admin duyệt** → người chơi thấy; dashboard Editor có số đếm thành tích (Phase 15) |
 | Danh sách nguyên liệu | Phân loại in thô tiếng Anh, không có đơn vị, cuộn chung trang | Nhãn tiếng Việt, **đơn vị đủ 83 loại**, nhóm Đậu·Hạt mới, **cuộn riêng**, bỏ cột Mô tả (Phase 15) |
+| Giao diện người chơi | Phong cách cung đình phẳng, podium bảng xếp hạng là 3 cột đen đơn điệu | **Theme 'Lễ hội ẩm thực'**: gỗ + biển gỗ, đèn lồng, cờ hội, viền dày nét game 2D cho toàn bộ phía Player; podium thành **thùng gỗ vàng/bạc/đồng**; sáng = lễ hội ngày, tối = chợ đêm (Phase 16) |
+| Ảnh món ăn | Ảnh thật hiển thị phẳng | Ảnh thật **đóng khung gỗ viền vàng** — giữ đúng món thật và dễ thêm món mới (Phase 16) |
+| Chợ nguyên liệu khi món nhiều nguyên liệu | Toàn bộ ô chợ dồn vào một lưới dài | **Chia sạp 8 ô/trang** ('Sạp x/y' + mũi tên + chấm trang), lựa chọn giữ nguyên khi lật sạp (Phase 16) |
+| Khay nguyên liệu khi nấu | Toàn bộ chip (tối đa 40) dồn một khay cuộn dài | **Chia tối đa 3 khay**, chip đã dùng giữ khóa ở mọi khay, thanh lật khay riêng với dialog Nêm (Phase 16) |
+| Linh vật Nồi Nồi | Ảnh mascot kiểu cũ, lệch phong cách game | **Vẽ lại 2D** nét lễ hội, dùng thống nhất ở nồi nấu, MC hỏi đáp, hứng nguyên liệu, hoàn thiện, hộp thư trống, giới thiệu và trang cá nhân (Phase 16) |
 | Bảng xếp hạng | Tĩnh, tải lại trang | **Thời gian thực**: tự làm mới khi có điểm mới, khi quay lại tab, heartbeat 5 giây; có mũi tên tăng/giảm hạng so với kỳ trước |
 | Cuộn danh sách | Cuộn toàn trang | **Bộ cuộn riêng** cho lưới công thức (tìm kiếm đứng im), danh sách BXH, cột bước nấu và khay nguyên liệu |
 | Lưu trữ | localStorage | Giữ nguyên & đã kiểm chứng: bộ sưu tập, thành tích, EXP, hộp thư, thông báo **không mất khi tắt máy/mở lại**; chỉ mất khi xoá dữ liệu trình duyệt hoặc đổi trình duyệt/máy (đồng bộ đa thiết bị cần backend — ngoài phạm vi PRD) |
