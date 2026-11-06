@@ -5,6 +5,7 @@ import { Button } from '@/components/Button';
 import { Card } from '@/components/Card';
 import { EmptyState } from '@/components/EmptyState';
 import { useAuth } from '@/contexts/AuthContext';
+import { useTaxonomy } from '@/contexts/TaxonomyContext';
 import { useAdmin } from '@/contexts/AdminContext';
 import { useMail } from '@/contexts/MailContext';
 import { useRecipes } from '@/contexts/RecipeContext';
@@ -17,6 +18,7 @@ import styles from '@/pages/admin/AdminAllRecipesPage.module.css';
 
 export default function AdminAllRecipesPage() {
   const { t, dict } = useTranslation();
+  const { recipeCategoryLabel } = useTaxonomy();
   const { user } = useAuth();
   const { recipes, approveRecipe, rejectRecipe } = useRecipes();
   const { sendRecipeApprovedMail, sendRecipeRejectedMail } = useMail();
@@ -123,7 +125,7 @@ export default function AdminAllRecipesPage() {
                           {r.name}
                         </Link>
                       </td>
-                      <td>{dict.recipe.categoryLabels[r.category] ?? r.category}</td>
+                      <td>{recipeCategoryLabel(r.category)}</td>
                       <td>{editor ? editor.email : '-'}</td>
                       <td>
                         <span

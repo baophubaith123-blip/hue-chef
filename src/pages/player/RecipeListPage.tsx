@@ -19,7 +19,7 @@ const DEFAULT_FILTERS: RecipeFilterState = {
   search: '',
   category: 'all',
   difficulty: 'all',
-  sort: 'name-asc',
+  sort: 'difficulty-asc',
 };
 
 export default function RecipeListPage() {

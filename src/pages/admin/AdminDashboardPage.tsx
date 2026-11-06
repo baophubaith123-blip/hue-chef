@@ -17,6 +17,7 @@ import {
 import { Button } from '@/components/Button';
 import { Card } from '@/components/Card';
 import { useAuth } from '@/contexts/AuthContext';
+import { useTaxonomy } from '@/contexts/TaxonomyContext';
 import { useRecipes } from '@/contexts/RecipeContext';
 import { useTranslation } from '@/i18n/useTranslation';
 import { AdminShell } from '@/pages/admin/AdminShell';
@@ -32,6 +33,7 @@ const STATUS_COLORS: Record<string, string> = {
 
 export default function AdminDashboardPage() {
   const { t } = useTranslation();
+  const { recipeCategoryLabel } = useTaxonomy();
   const { user } = useAuth();
   const { recipes, getPendingRecipes } = useRecipes();
   const pendingCount = getPendingRecipes().length;
@@ -61,11 +63,11 @@ export default function AdminDashboardPage() {
     }
     return Object.entries(map)
       .map(([name, value]) => ({
-        name: t(`recipe.categoryLabels.${name}`) || name,
+        name: recipeCategoryLabel(name),
         value,
       }))
       .sort((a, b) => b.value - a.value);
-  }, [recipes, t]);
+  }, [recipes, recipeCategoryLabel]);
 
   const totalApproved = statusStats.find((s) => s.name === t('recipeStatus.approved'))?.value ?? 0;
 

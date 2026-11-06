@@ -24,6 +24,15 @@ export function filterAndSortRecipes(recipes: Recipe[], filters: RecipeFilterSta
   }
 
   switch (filters.sort) {
+    case 'difficulty-asc':
+      // Default catalogue order: easiest first, up to 5-star "hell".
+      list.sort(
+        (a, b) =>
+          a.difficulty - b.difficulty ||
+          a.baseScore - b.baseScore ||
+          a.name.localeCompare(b.name, 'vi'),
+      );
+      break;
     case 'difficulty-desc':
       list.sort((a, b) => b.difficulty - a.difficulty || a.name.localeCompare(b.name));
       break;

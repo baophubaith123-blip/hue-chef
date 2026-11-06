@@ -6,6 +6,7 @@ import { Button } from '@/components/Button';
 import { EmptyState } from '@/components/EmptyState';
 import { ImageWithFallback } from '@/components/ImageWithFallback';
 import { useAchievements } from '@/contexts/AchievementContext';
+import { useTaxonomy } from '@/contexts/TaxonomyContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRecipes } from '@/contexts/RecipeContext';
 import { SEED_ACHIEVEMENTS } from '@/data/achievements';
@@ -20,6 +21,7 @@ import styles from '@/pages/player/HomePage.module.css';
 
 export default function HomePage() {
   const { t, dict } = useTranslation();
+  const { recipeCategoryLabel } = useTaxonomy();
   const { user } = useAuth();
   const navigate = useNavigate();
   const { getApprovedRecipes } = useRecipes();
@@ -354,7 +356,7 @@ export default function HomePage() {
               <div className={styles.journeyBody}>
                 <div className={styles.journeyDetails}>
                   <span className={styles.journeyCategory}>
-                    {dict.recipe.categoryLabels[nextRecipe.category] ?? nextRecipe.category}
+                    {recipeCategoryLabel(nextRecipe.category)}
                   </span>
                   <h3 className={styles.journeyName}>{nextRecipe.name}</h3>
 

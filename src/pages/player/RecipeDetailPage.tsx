@@ -10,6 +10,7 @@ import { difficultyName } from '@/features/recipes/lib/difficulty';
 import { RecipeComments } from '@/features/comments/components/RecipeComments';
 import { isRecipeOwned } from '@/features/recipes/lib/ownership';
 import { useAuth } from '@/contexts/AuthContext';
+import { useTaxonomy } from '@/contexts/TaxonomyContext';
 import { useRecipes } from '@/contexts/RecipeContext';
 import { formatDuration } from '@/lib/format';
 import { PlayerShell } from '@/pages/player/PlayerShell';
@@ -23,6 +24,7 @@ export default function RecipeDetailPage() {
   const { isLoading, getRecipeById } = useRecipes();
   const { user, purchaseRecipe } = useAuth();
   const { t, dict } = useTranslation();
+  const { recipeCategoryLabel } = useTaxonomy();
   const [buyConfirmOpen, setBuyConfirmOpen] = useState(false);
   const [justBought, setJustBought] = useState(false);
 
@@ -54,7 +56,7 @@ export default function RecipeDetailPage() {
     );
   }
 
-  const categoryLabel = dict.recipe.categoryLabels[recipe.category] ?? recipe.category;
+  const categoryLabel = recipeCategoryLabel(recipe.category);
   const owned = isRecipeOwned(user, recipe);
   const balance = user?.coins ?? 0;
   const canAfford = balance >= recipe.priceCoins;

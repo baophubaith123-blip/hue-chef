@@ -1,5 +1,6 @@
 import { useState, type ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTaxonomy } from '@/contexts/TaxonomyContext';
 
 import { Button } from '@/components/Button';
 import { findUserById, loadUsers } from '@/features/auth/store';
@@ -19,14 +20,15 @@ interface ReviewDetailProps {
 
 export function ReviewDetail({ recipe, onApprove, onReject, minigamesSlot }: ReviewDetailProps) {
   const navigate = useNavigate();
-  const { t, dict } = useTranslation();
+  const { t } = useTranslation();
+  const { recipeCategoryLabel } = useTaxonomy();
   const [reason, setReason] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [processing, setProcessing] = useState(false);
 
   const users = loadUsers();
   const editor = recipe.editorId ? findUserById(users, recipe.editorId) : undefined;
-  const categoryLabel = dict.recipe.categoryLabels[recipe.category];
+  const categoryLabel = recipeCategoryLabel(recipe.category);
 
   const handleReject = () => {
     if (!reason.trim()) {

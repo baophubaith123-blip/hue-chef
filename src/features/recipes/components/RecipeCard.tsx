@@ -1,5 +1,6 @@
 import { useState, type MouseEvent } from 'react';
 import { Link } from 'react-router-dom';
+import { useTaxonomy } from '@/contexts/TaxonomyContext';
 
 import type { Recipe } from '@/data/types';
 import { formatDuration } from '@/lib/format';
@@ -16,6 +17,7 @@ interface RecipeCardProps {
 
 export function RecipeCard({ recipe, lockedPrice }: RecipeCardProps) {
   const { dict } = useTranslation();
+  const { recipeCategoryLabel } = useTaxonomy();
   const [tilt, setTilt] = useState<{ rotateX: number; rotateY: number } | null>(null);
 
   const handleMouseMove = (e: MouseEvent<HTMLElement>) => {
@@ -41,7 +43,7 @@ export function RecipeCard({ recipe, lockedPrice }: RecipeCardProps) {
     setTilt(null);
   };
 
-  const categoryLabel = dict.recipe.categoryLabels[recipe.category] ?? recipe.category;
+  const categoryLabel = recipeCategoryLabel(recipe.category);
   const tierName = difficultyName(dict.recipe.difficultyNames, recipe.difficulty);
 
   return (

@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 
 import { Button } from '@/components/Button';
+import { useTranslation } from '@/i18n/useTranslation';
 
 import styles from '@/components/DynamicFormList.module.css';
 
@@ -28,6 +29,7 @@ export function DynamicFormList<T>({
   itemLabel = 'Item',
   minItems = 1,
 }: DynamicFormListProps<T>) {
+  const { t } = useTranslation();
   const updateAt = (index: number, patch: Partial<T>) => {
     onChange(items.map((item, idx) => (idx === index ? { ...item, ...patch } : item)));
   };
@@ -58,7 +60,7 @@ export function DynamicFormList<T>({
                 disabled={items.length <= minItems}
                 onClick={() => removeAt(index)}
               >
-                Remove
+                {t('common.remove')}
               </Button>
             </div>
             {renderItem(item, index, (patch) => updateAt(index, patch), () => removeAt(index))}

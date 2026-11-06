@@ -1,5 +1,6 @@
 import type { DragEvent } from 'react';
 
+import { useTaxonomy } from '@/contexts/TaxonomyContext';
 import { getIngredientById } from '@/data/ingredients';
 import { useTranslation } from '@/i18n/useTranslation';
 
@@ -32,7 +33,8 @@ export function IngredientTray({
   getTrayItemProps,
   onSelectIngredient,
 }: IngredientTrayProps) {
-  const { t, dict } = useTranslation();
+  const { t } = useTranslation();
+  const { ingredientCategoryLabel } = useTaxonomy();
 
   const remainingCount = trayIngredientIds.filter(
     (id) => !placedIngredientIds.includes(id),
@@ -55,8 +57,7 @@ export function IngredientTray({
           const isUsed = placedIngredientIds.includes(ingredientId);
           const isNeeded = !isUsed && requiredIngredientIds.includes(ingredientId);
           const dragProps = disabled || isUsed ? {} : getTrayItemProps(ingredientId);
-          const categoryLabel =
-            dict.cooking.categories[ingredient.category] ?? ingredient.category;
+          const categoryLabel = ingredientCategoryLabel(ingredient.category);
           const amount = amountByIngredientId[ingredientId];
 
           return (

@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { useTaxonomy } from '@/contexts/TaxonomyContext';
 
 import { EmptyState } from '@/components/EmptyState';
 import { findUserById, loadUsers } from '@/features/auth/store';
@@ -13,7 +14,8 @@ interface ReviewQueueProps {
 }
 
 export function ReviewQueue({ recipes }: ReviewQueueProps) {
-  const { t, dict } = useTranslation();
+  const { t } = useTranslation();
+  const { recipeCategoryLabel } = useTaxonomy();
 
   if (recipes.length === 0) {
     return (
@@ -39,7 +41,7 @@ export function ReviewQueue({ recipes }: ReviewQueueProps) {
         <tbody>
           {recipes.map((recipe) => {
             const editor = recipe.editorId ? findUserById(users, recipe.editorId) : undefined;
-            const categoryLabel = dict.recipe.categoryLabels[recipe.category];
+            const categoryLabel = recipeCategoryLabel(recipe.category);
             return (
               <tr key={recipe.id} className={styles.row}>
                 <td>
