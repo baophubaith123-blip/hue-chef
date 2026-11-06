@@ -4,6 +4,9 @@ export type Locale = 'vi' | 'en';
 
 export interface I18nDictionary {
   common: {
+    new: string;
+    ok: string;
+    reset: string;
     save: string;
     cancel: string;
     delete: string;
@@ -125,6 +128,9 @@ export interface I18nDictionary {
     minIngredients: string;
     minSteps: string;
     scoreOutOfBand: string;
+    scoreAboveMax: string;
+    duplicateIngredient: string;
+    recipeIncomplete: string;
     priceNegative: string;
     recipeNotFound: string;
     forbiddenEdit: string;
@@ -140,6 +146,8 @@ export interface I18nDictionary {
     threadNotFound: string;
     cannotCloseThread: string;
     broadcastEmpty: string;
+    backupInvalid: string;
+    fileReadFailed: string;
     cannotDeleteSelf: string;
     cannotDeleteLastAdmin: string;
     userNotFound: string;
@@ -199,6 +207,9 @@ export interface I18nDictionary {
     ingredientUnit: string;
     ingredientDescription: string;
     searchIngredient: string;
+    ingredientNamePlaceholder: string;
+    ingredientUnitPlaceholder: string;
+    ingredientCategoryLabels: Record<'protein' | 'vegetable' | 'spice' | 'grain' | 'other', string>;
     filterAll: string;
     filterHasImage: string;
     filterEmojiOnly: string;
@@ -301,6 +312,10 @@ export interface I18nDictionary {
     backupIntro: string;
     exportJson: string;
     importJson: string;
+    backupWarning: string;
+    backupImportConfirm: string;
+    backupImported: (users: number, recipes: number) => string;
+    settingsSaved: string;
     statPlayers: string;
     statEditors: string;
     statSupports: string;
@@ -361,6 +376,18 @@ export interface I18nDictionary {
     recommendToAdmin: string;
     rejectAppeal: string;
     resolutionPlaceholder: string;
+    openChats: string;
+    threadLabel: string;
+    handledBy: string;
+    openThread: string;
+    appealRecommended: string;
+    appealRejectedMsg: string;
+    resolutionRequired: string;
+    appealMailSubject: (status: string) => string;
+    appealMailBody: (status: string, resolution?: string) => string;
+    appealMailRecommendedBody: (resolution?: string) => string;
+    closeThread: string;
+    threadClosed: string;
   };
   appeal: {
     statusLabels: Record<'open' | 'recommended' | 'rejected' | 'resolved', string>;
@@ -372,6 +399,11 @@ export interface I18nDictionary {
     rejectNote: string;
     resolution: string;
   };
+  maintenance: {
+    title: string;
+    body: string;
+    adminLogin: string;
+  };
   ban: {
     noticeTitle: string;
     noticeBody: string;
@@ -379,6 +411,7 @@ export interface I18nDictionary {
     reasonLabel: string;
     untilLabel: string;
     permanent: string;
+    appealHint: string;
   };
   warning: {
     popupTitle: (count: number) => string;
@@ -453,6 +486,7 @@ export interface I18nDictionary {
     playerHome: string;
   };
   cooking: {
+    defaultActionLabel: string;
     result: {
       successTitle: string;
       failTitle: string;
@@ -511,6 +545,12 @@ export interface I18nDictionary {
       rewardCorrect: string;
       speedBonus: string;
       correctBang: string;
+      typingHint: string;
+      typingPlaceholder: string;
+      typingProgress: (done: number, total: number) => string;
+      typingAccuracy: (pct: number) => string;
+      typingDone: string;
+      typingTimeout: string;
     };
     stages: {
       helpAria: string;
@@ -743,7 +783,7 @@ export interface I18nDictionary {
     saveSuccess: string;
     invalidOldPassword: string;
     passwordMismatch: string;
-    maxAvatarSize: string;
+    maxAvatarSize: (mb: number) => string;
     invalidImageType: string;
     equip: string;
     equipped: string;
@@ -892,6 +932,12 @@ export interface I18nDictionary {
     correctOption: string;
     explanation: string;
     typingText: string;
+    addOption: string;
+    selectIngredient: string;
+    newOption: (n: number) => string;
+    defaultOption1: string;
+    defaultOption2: string;
+    defaultOption3: string;
     speed: string;
     speedSlow: string;
     speedNormal: string;
