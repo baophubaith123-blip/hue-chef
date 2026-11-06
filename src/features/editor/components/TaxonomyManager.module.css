@@ -1,0 +1,54 @@
+.wrap {
+  margin-top: 0.6rem;
+}
+
+.title {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--color-text-muted);
+  margin: 0 0 0.4rem;
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.6rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  background: var(--color-surface-alt);
+  font-size: 0.85rem;
+}
+
+.name {
+  font-weight: 600;
+}
+
+.count {
+  color: var(--color-text-muted);
+  font-size: 0.78rem;
+}
+
+.deleteBtn {
+  border: none;
+  background: transparent;
+  color: var(--color-accent, #C8553D);
+  cursor: pointer;
+  font-size: 0.8rem;
+  padding: 0 0.15rem;
+}
+
+.deleteBtn:disabled {
+  color: var(--color-text-muted);
+  cursor: not-allowed;
+  opacity: 0.5;
+}

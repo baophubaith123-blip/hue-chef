@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { useTaxonomy } from '@/contexts/TaxonomyContext';
 
 import { Button } from '@/components/Button';
 import type { Recipe } from '@/data/types';
@@ -15,8 +16,9 @@ interface MyRecipeCardProps {
 }
 
 export function MyRecipeCard({ recipe, canEdit, onDelete }: MyRecipeCardProps) {
-  const { t, dict } = useTranslation();
-  const categoryLabel = dict.recipe.categoryLabels[recipe.category];
+  const { t } = useTranslation();
+  const { recipeCategoryLabel } = useTaxonomy();
+  const categoryLabel = recipeCategoryLabel(recipe.category);
 
   return (
     <article className={styles.card}>
@@ -54,7 +56,7 @@ export function MyRecipeCard({ recipe, canEdit, onDelete }: MyRecipeCardProps) {
       ) : null}
       <div className={styles.actions}>
         <Link className={styles.link} to={`/editor/recipes/${recipe.id}`}>
-          {t('common.view')}
+          {t('editor.reviewRecipe')}
         </Link>
         {canEdit ? (
           <Link className={styles.link} to={`/editor/recipes/${recipe.id}/edit`}>

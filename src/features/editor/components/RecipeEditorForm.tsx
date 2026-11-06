@@ -2,8 +2,10 @@ import { useMemo, useState, type FormEvent } from 'react';
 
 import { Button } from '@/components/Button';
 import { DynamicFormList } from '@/components/DynamicFormList';
+import { useAuth } from '@/contexts/AuthContext';
 import { useIngredients } from '@/contexts/IngredientContext';
-import type { RecipeCategory, RecipeGameplayConfig } from '@/data/types';
+import { useTaxonomy } from '@/contexts/TaxonomyContext';
+import type { RecipeGameplayConfig } from '@/data/types';
 import type { RecipeFormErrors, RecipeFormValues } from '@/features/editor/types';
 import {
   hasRecipeFormErrors,
@@ -13,7 +15,10 @@ import { canSubmitForReview, REQUIRED_ACTION_BY_STARS } from '@/features/recipes
 import { useTranslation } from '@/i18n/useTranslation';
 import { SCORE_BANDS, suggestPriceCoins } from '@/lib/pricing';
 
+import { AddNewSelect } from './AddNewSelect';
 import { MinigameFormList } from './MinigameFormList';
+import { RecipePreviewModal } from './RecipePreviewModal';
+import { TaxonomyManager } from './TaxonomyManager';
 import styles from '@/features/editor/components/RecipeEditorForm.module.css';
 
 export type RecipeFormSubmitMode = 'draft' | 'submit';
@@ -23,23 +28,34 @@ interface RecipeEditorFormProps {
   draftLabel: string;
   submitLabel: string;
   showSubmitButton?: boolean;
+  /** Id of the already-saved recipe (edit mode) — enables the test run
+   * inside the preview modal. */
+  savedRecipeId?: string;
   onSubmit: (values: RecipeFormValues, mode: RecipeFormSubmitMode) => void | Promise<void>;
 }
-
-const CATEGORIES: RecipeCategory[] = ['bun', 'com', 'banh', 'che', 'nem'];
 
 export function RecipeEditorForm({
   initialValues,
   draftLabel,
   submitLabel,
   showSubmitButton = true,
+  savedRecipeId,
   onSubmit,
 }: RecipeEditorFormProps) {
   const { t, dict } = useTranslation();
   const { ingredients } = useIngredients();
+  const { user } = useAuth();
+  const {
+    recipeCategoryOptions,
+    recipeCategoryLabel,
+    addCategory,
+    stepActions: customStepActions,
+    addStepAction,
+  } = useTaxonomy();
   const [values, setValues] = useState<RecipeFormValues>(initialValues);
   const [errors, setErrors] = useState<RecipeFormErrors>({});
   const [submitting, setSubmitting] = useState(false);
+  const [showPreview, setShowPreview] = useState(false);
 
   const isMinigamesValid = useMemo(() => {
     const ingIds = values.ingredients.map((r) => r.ingredientId).filter(Boolean);
@@ -124,8 +140,6 @@ export function RecipeEditorForm({
     }
   };
 
-  const categoryLabels = dict.recipe.categoryLabels;
-
   return (
     <form className={styles.form} onSubmit={handleSubmit} noValidate>
       <div className={styles.imagePreviewWrap}>
@@ -159,20 +173,26 @@ export function RecipeEditorForm({
           <label className={styles.label} htmlFor="recipe-category">
             {t('recipe.category')}
           </label>
-          <select
+          <AddNewSelect
             id="recipe-category"
-            className={styles.select}
+            selectClassName={styles.select}
             value={values.category}
-            onChange={(event) =>
-              setValues({ ...values, category: event.target.value as RecipeCategory })
-            }
-          >
-            {CATEGORIES.map((category) => (
-              <option key={category} value={category}>
-                {categoryLabels[category]}
-              </option>
-            ))}
-          </select>
+            options={recipeCategoryOptions.map((option) => ({
+              value: option.id,
+              label: recipeCategoryLabel(option.id),
+            }))}
+            addOptionLabel={t('taxonomy.addCategoryOption')}
+            newPlaceholder={t('taxonomy.newCategoryPlaceholder')}
+            onChange={(category) => setValues({ ...values, category })}
+            onAddNew={(name) => {
+              try {
+                return addCategory('recipe', name, user?.id ?? 'seed-editor').id;
+              } catch {
+                return null;
+              }
+            }}
+          />
+          <TaxonomyManager kind="recipe" />
         </div>
         <div className={styles.field}>
           <label className={styles.label} htmlFor="recipe-difficulty">
@@ -354,6 +374,7 @@ export function RecipeEditorForm({
       />
 
       <h3 className={styles.sectionTitle}>{t('recipe.steps')}</h3>
+      <p className={styles.hint}>{t('editorSteps.intro')}</p>
       {errors.steps ? <p className={styles.error}>{errors.steps}</p> : null}
       <DynamicFormList
         items={values.steps}
@@ -371,38 +392,65 @@ export function RecipeEditorForm({
         minItems={3}
         renderItem={(item, _index, update) => (
           <div>
-            <div className={styles.stepRow}>
-              <input
-                className={styles.input}
-                placeholder={t('recipe.title')}
-                value={item.title}
-                onChange={(event) => update({ title: event.target.value })}
-              />
-              <input
-                className={styles.input}
-                placeholder={t('recipe.description')}
-                value={item.description}
-                onChange={(event) => update({ description: event.target.value })}
-              />
-              <input
-                className={styles.input}
-                type="number"
-                min={1}
-                step={5}
-                value={item.duration ?? item.durationSeconds ?? 30}
-                onChange={(event) => {
-                  const dur = Number(event.target.value) || 0;
-                  update({ duration: dur, durationSeconds: dur });
-                }}
-              />
+            <div className={styles.stepFields}>
+              <div className={styles.stepField}>
+                <label className={styles.stepFieldLabel}>{t('editorSteps.titleLabel')}</label>
+                <input
+                  className={styles.input}
+                  placeholder={t('editorSteps.titlePlaceholder')}
+                  value={item.title}
+                  onChange={(event) => update({ title: event.target.value })}
+                />
+              </div>
+              <div className={styles.stepField}>
+                <label className={styles.stepFieldLabel}>{t('editorSteps.descLabel')}</label>
+                <input
+                  className={styles.input}
+                  placeholder={t('editorSteps.descPlaceholder')}
+                  value={item.description}
+                  onChange={(event) => update({ description: event.target.value })}
+                />
+              </div>
+              <div className={styles.stepFieldSmall}>
+                <label className={styles.stepFieldLabel}>{t('editorSteps.durationLabel')}</label>
+                <input
+                  className={styles.input}
+                  type="number"
+                  min={1}
+                  step={5}
+                  value={item.duration ?? item.durationSeconds ?? 30}
+                  onChange={(event) => {
+                    const dur = Number(event.target.value) || 0;
+                    update({ duration: dur, durationSeconds: dur });
+                  }}
+                />
+                <span className={styles.stepHint}>{t('editorSteps.durationHint')}</span>
+              </div>
             </div>
             <div className={styles.stepExtra}>
-              <input
-                className={styles.input}
-                placeholder={t('editorGameplay.stepActionLabel')}
-                value={item.actionLabel}
-                onChange={(event) => update({ actionLabel: event.target.value })}
-              />
+              <div className={styles.stepField}>
+                <label className={styles.stepFieldLabel}>{t('editorGameplay.stepActionLabel')}</label>
+                <AddNewSelect
+                  selectClassName={styles.select}
+                  value={item.actionLabel}
+                  options={[
+                    ...new Set([
+                      ...dict.editorSteps.presetActions,
+                      ...customStepActions,
+                      ...(item.actionLabel ? [item.actionLabel] : []),
+                    ]),
+                  ].map((action) => ({ value: action, label: action }))}
+                  addOptionLabel={t('taxonomy.addActionOption')}
+                  newPlaceholder={t('taxonomy.newActionPlaceholder')}
+                  onChange={(actionLabel) => update({ actionLabel })}
+                  onAddNew={(name) => {
+                    addStepAction(name);
+                    return name.trim();
+                  }}
+                />
+                <span className={styles.stepHint}>{t('editorSteps.actionHint')}</span>
+              </div>
+              <p className={styles.stepHint}>{t('editorSteps.ingredientsHint')}</p>
               <div className={styles.chipRow}>
                 <span className={styles.chipLabel}>{t('editorGameplay.stepIngredients')}:</span>
                 {values.ingredients
@@ -509,6 +557,9 @@ export function RecipeEditorForm({
       </div>
 
       <div className={styles.actions}>
+        <Button type="button" variant="ghost" onClick={() => setShowPreview(true)}>
+          {t('editorPreview.openButton')}
+        </Button>
         <Button type="submit" disabled={submitting}>
           {submitting ? '…' : draftLabel}
         </Button>
@@ -539,6 +590,18 @@ export function RecipeEditorForm({
       ) : null}
       {showSubmitButton && quizCount < 1 ? (
         <p className={styles.hint}>⚠ {t('editorGameplay.needsQuiz')}</p>
+      ) : null}
+      {showPreview ? (
+        <RecipePreviewModal
+          values={values}
+          savedRecipeId={savedRecipeId}
+          canSubmit={showSubmitButton}
+          onClose={() => setShowPreview(false)}
+          onSubmitForReview={() => {
+            setShowPreview(false);
+            void handleSubmitForReview();
+          }}
+        />
       ) : null}
     </form>
   );

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import { Button } from '@/components/Button';
@@ -18,6 +18,17 @@ import shellStyles from '@/pages/common/RoleShell.module.css';
 export default function EditorMyRecipesPage() {
   const { t } = useTranslation();
   const { myRecipes, isLoading, canEditRecipe, editorId } = useEditorRecipes();
+  // Same catalogue order as the player side: easiest first, up to 5 stars.
+  const sortedRecipes = useMemo(
+    () =>
+      [...myRecipes].sort(
+        (a, b) =>
+          a.difficulty - b.difficulty ||
+          a.baseScore - b.baseScore ||
+          a.name.localeCompare(b.name, 'vi'),
+      ),
+    [myRecipes],
+  );
   const { deleteRecipeAsEditor } = useRecipes();
   const [error, setError] = useState<string | null>(null);
 
@@ -59,11 +70,11 @@ export default function EditorMyRecipesPage() {
       </Card>
       {isLoading ? (
         <Loading label={t('common.loading')} />
-      ) : myRecipes.length === 0 ? (
+      ) : sortedRecipes.length === 0 ? (
         <EmptyState title={t('editor.noRecipesYet')} description={t('editor.createFirstDraft')} />
       ) : (
         <ul className={shellStyles.grid}>
-          {myRecipes.map((recipe) => (
+          {sortedRecipes.map((recipe) => (
             <li key={recipe.id}>
               <MyRecipeCard
                 recipe={recipe}

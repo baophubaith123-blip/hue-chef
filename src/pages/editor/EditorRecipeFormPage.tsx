@@ -115,6 +115,7 @@ export default function EditorRecipeFormPage() {
           draftLabel={isEditMode ? t('editor.saveDraft') : t('editor.createDraft')}
           submitLabel={t('editor.saveAndSubmit')}
           showSubmitButton={canSubmitDirectly}
+          savedRecipeId={existing?.id}
           onSubmit={handleSave}
         />
       </Card>

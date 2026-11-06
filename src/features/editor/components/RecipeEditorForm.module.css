@@ -203,3 +203,39 @@
   font-weight: 700;
   cursor: pointer;
 }
+
+.stepFields {
+  display: grid;
+  gap: 0.6rem;
+  grid-template-columns: 1fr 1fr 9rem;
+}
+
+@media (max-width: 640px) {
+  .stepFields {
+    grid-template-columns: 1fr;
+  }
+}
+
+.stepField {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.stepFieldSmall {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.stepFieldLabel {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.stepHint {
+  font-size: 0.78rem;
+  color: var(--color-text-muted, #7a6455);
+  margin: 0;
+}

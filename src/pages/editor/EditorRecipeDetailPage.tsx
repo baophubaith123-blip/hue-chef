@@ -6,6 +6,7 @@ import { Card } from '@/components/Card';
 import { Loading } from '@/components/Loading';
 import { getIngredientById } from '@/data/ingredients';
 import { useRecipes } from '@/contexts/RecipeContext';
+import { useTaxonomy } from '@/contexts/TaxonomyContext';
 import { loadUsers, saveUsers } from '@/features/auth/store';
 import { RecipeStatusBadge } from '@/features/editor/components/RecipeStatusBadge';
 import { useEditorRecipes } from '@/features/editor/hooks/useEditorRecipes';
@@ -21,7 +22,8 @@ import styles from '@/pages/editor/EditorRecipeDetailPage.module.css';
 export default function EditorRecipeDetailPage() {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
-  const { t, dict } = useTranslation();
+  const { t } = useTranslation();
+  const { recipeCategoryLabel } = useTaxonomy();
   const { isLoading, getRecipeById, submitRecipeForReview, deleteRecipeAsEditor } = useRecipes();
   const { editorId, canEditRecipe } = useEditorRecipes();
   const [message, setMessage] = useState<string | null>(null);
@@ -100,7 +102,7 @@ export default function EditorRecipeDetailPage() {
     }
   };
 
-  const categoryLabel = dict.recipe.categoryLabels[recipe.category];
+  const categoryLabel = recipeCategoryLabel(recipe.category);
 
   return (
     <EditorShell>
