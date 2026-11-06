@@ -113,7 +113,7 @@ export interface I18nDictionary {
     pts: string;
     allCategories: string;
     searchPlaceholder: string;
-    categoryLabels: Record<'bun' | 'com' | 'banh' | 'che' | 'nem', string>;
+    categoryLabels: Record<string, string>;
     difficultyNames: string[];
   };
   recipeStatus: {
@@ -175,6 +175,10 @@ export interface I18nDictionary {
     statRejected: string;
     myRecipesTitle: string;
     myRecipesHint: string;
+    reviewRecipe: string;
+    statAchievementsCreated: string;
+    statAchievementsPending: string;
+    viewAchievements: string;
     noRecipesYet: string;
     createFirstDraft: string;
     newRecipeTitle: string;
@@ -209,7 +213,7 @@ export interface I18nDictionary {
     searchIngredient: string;
     ingredientNamePlaceholder: string;
     ingredientUnitPlaceholder: string;
-    ingredientCategoryLabels: Record<'protein' | 'vegetable' | 'spice' | 'grain' | 'other', string>;
+    ingredientCategoryLabels: Record<string, string>;
     filterAll: string;
     filterHasImage: string;
     filterEmojiOnly: string;
@@ -633,7 +637,7 @@ export interface I18nDictionary {
     backToRecipes: string;
     startingSession: string;
     used: string;
-    categories: Record<'protein' | 'grain' | 'spice' | 'vegetable' | 'other', string>;
+    categories: Record<string, string>;
   };
   notifications: {
     bellAria: string;
@@ -987,5 +991,79 @@ export interface I18nDictionary {
     actionMissingCorrectInList: string;
     typingEmptyText: string;
     typingInvalidSpeed: string;
+  };
+  taxonomy: {
+    addCategoryOption: string;
+    newCategoryPlaceholder: string;
+    addUnitOption: string;
+    newUnitPlaceholder: string;
+    addActionOption: string;
+    newActionPlaceholder: string;
+    customBadge: string;
+    myCategoriesTitle: string;
+    myCategoriesEmpty: string;
+    categoryInUse: string;
+  };
+  recipeFilter: {
+    categoryButton: string;
+    difficultyButton: string;
+    all: string;
+    clear: string;
+  };
+  editorSteps: {
+    intro: string;
+    titleLabel: string;
+    titlePlaceholder: string;
+    descLabel: string;
+    descPlaceholder: string;
+    durationLabel: string;
+    durationHint: string;
+    actionHint: string;
+    ingredientsHint: string;
+    presetActions: string[];
+  };
+  editorPreview: {
+    openButton: string;
+    title: string;
+    checklistTitle: string;
+    checkName: string;
+    checkImage: string;
+    checkDescription: string;
+    checkIngredients: string;
+    checkSteps: string;
+    checkQuiz: string;
+    checkMinigames: string;
+    runTestNeedSave: string;
+    submitNow: string;
+    stagesTitle: string;
+    stageOn: string;
+    stageOff: string;
+  };
+  editorAchievements: {
+    title: string;
+    intro: string;
+    createButton: string;
+    createTitle: string;
+    editTitle: string;
+    myListTitle: string;
+    seedListTitle: string;
+    statusPending: string;
+    statusApproved: string;
+    statusRejected: string;
+    submitCreate: string;
+    createdPending: string;
+    emptyList: string;
+    adminSectionTitle: string;
+    adminEmpty: string;
+    iconLabel: string;
+    rarityLabel: string;
+    conditionLabel: string;
+    conditionCount: string;
+    conditionScore: string;
+    conditionAmount: string;
+    conditionLevel: string;
+    conditionDifficulty: string;
+    conditionCategory: string;
+    conditionTypes: Record<string, string>;
   };
 }
