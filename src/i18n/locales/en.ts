@@ -751,9 +751,9 @@ export const en: I18nDictionary = {
     roleSupportDesc: 'Handle appeals, assist players through live support, and cultivate a welcoming community.',
     statsTitle: 'Impressive Numbers',
     statRecipes: '15+ Signature Dishes',
-    statIngredients: '32+ Fresh Ingredients',
-    statAchievements: '12+ Culinary Badges',
-    statCooks: '100+ Active Chefs',
+    statIngredients: '72+ Fresh Ingredients',
+    statAchievements: '27+ Culinary Badges',
+    statCooks: '40+ Active Chefs',
   },
   dashboard: {
     greetingMorning: 'Good morning',

@@ -752,9 +752,9 @@ export const vi: I18nDictionary = {
     roleSupportDesc: 'Giải đáp khiếu nại, trợ giúp người chơi qua hộp thư hỗ trợ và duy trì cộng đồng ẩm thực văn minh.',
     statsTitle: 'Con Số Ấn Tượng',
     statRecipes: '15+ Món ăn đặc trưng',
-    statIngredients: '32+ Nguyên liệu phong phú',
-    statAchievements: '12+ Huy hiệu ẩm thực',
-    statCooks: '100+ Đầu bếp đang nấu',
+    statIngredients: '72+ Nguyên liệu phong phú',
+    statAchievements: '27+ Huy hiệu ẩm thực',
+    statCooks: '40+ Đầu bếp đang nấu',
   },
   dashboard: {
     greetingMorning: 'Chào buổi sáng',
