@@ -393,3 +393,62 @@
     gap: 1rem;
   }
 }
+
+/* ===== Phase 19 — slimmer in-run header: more of the frame for the stage ===== */
+.runFrame {
+  gap: 0.55rem;
+}
+
+.runFrame .back {
+  margin-bottom: 0;
+  padding: 0.28rem 0.7rem;
+  font-size: 0.85rem;
+}
+
+.runFrame .top {
+  padding: 0.55rem 1rem;
+}
+
+.runFrame .title {
+  font-size: 1.3rem;
+  margin-bottom: 0.1rem;
+}
+
+.runFrame .subtitle {
+  font-size: 0.85rem;
+}
+
+.runFrame .scorePanel {
+  flex-direction: row;
+  align-items: baseline;
+  gap: 0.5rem;
+  padding: 0.4rem 0.9rem;
+  min-width: 0;
+}
+
+.runFrame .scoreValue {
+  font-size: 1.45rem;
+}
+
+.runFrame .stageFlow {
+  margin: 2px 0 4px;
+}
+
+/* Last resort on very short windows: release the fixed frame height and
+   let the page scroll naturally instead of crushing the stage content. */
+@media (max-height: 680px) {
+  .runFrame {
+    height: auto;
+    min-height: calc(100dvh - 8.55rem);
+  }
+
+  .runFrame > section {
+    min-height: 30rem;
+  }
+}
+
+@media (max-height: 680px) and (max-width: 1024px) {
+  .runFrame {
+    min-height: calc(100dvh - 7.35rem);
+  }
+}
