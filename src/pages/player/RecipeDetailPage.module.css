@@ -474,3 +474,26 @@
 .buyBalance {
   color: var(--paper-text-muted, #7a5c38);
 }
+
+/* ===== Phase 18 — on-paper text pins (detail card stays paper in both themes) ===== */
+.title,
+[data-theme='dark'] .title {
+  color: var(--paper-text, #43301b);
+}
+
+.metricValue {
+  color: var(--paper-text, #43301b);
+}
+
+.ingredientName {
+  color: var(--paper-text, #43301b);
+}
+
+.stepTitle {
+  color: var(--paper-text, #43301b);
+}
+
+.stepIngredientChip,
+[data-theme='dark'] .stepIngredientChip {
+  color: #43301b;
+}

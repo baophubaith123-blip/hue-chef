@@ -432,3 +432,24 @@
     linear-gradient(180deg, rgba(24, 8, 20, 0.35), rgba(24, 8, 20, 0.55)),
     url('/images/festival-night.webp');
 }
+
+/* ===== Phase 18 — on-paper text pins (cards stay paper in both themes) ===== */
+.statText {
+  color: var(--paper-text, #43301b);
+}
+
+.stepTitle {
+  color: var(--paper-text, #43301b);
+}
+
+.stepDesc {
+  color: var(--paper-text-muted, #7a5c38);
+}
+
+.roleCardFront .roleTitle {
+  color: var(--paper-text, #43301b);
+}
+
+.roleCardFront .roleDesc {
+  color: var(--paper-text-muted, #7a5c38);
+}

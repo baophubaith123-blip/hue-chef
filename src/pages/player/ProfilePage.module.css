@@ -542,3 +542,23 @@
 [data-theme='dark'] .header p {
   text-shadow: 0 1px 6px rgba(24, 8, 20, 0.85);
 }
+
+/* ===== Phase 18 — on-paper text pins (cards stay paper in both themes) ===== */
+[data-theme='dark'] .userName,
+[data-theme='dark'] .statVal,
+[data-theme='dark'] .formTitle {
+  color: var(--paper-text, #43301b);
+}
+
+.label {
+  color: var(--paper-text, #43301b);
+}
+
+[data-theme='dark'] .badgeTileName {
+  color: var(--paper-text, #43301b);
+}
+
+/* The equipped tile is a dark plaque — its name keeps the light tone. */
+[data-theme='dark'] .badgeTileEquipped .badgeTileName {
+  color: #ffe9be;
+}
