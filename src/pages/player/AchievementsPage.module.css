@@ -316,3 +316,12 @@
 [data-theme='dark'] .container::before {
   background-image: url('/images/festival-night.webp');
 }
+
+/* ===== Phase 18.1 — on-paper text pins (dark) =====
+   The summary card is paper in BOTH themes, but the legacy dark rules
+   above painted the name and stat numbers near-white (#F8EFEA) on it.
+   Re-pin them to paper text at matching specificity, later in source. */
+[data-theme='dark'] .userName,
+[data-theme='dark'] .statNumber {
+  color: var(--paper-text, #43301b);
+}

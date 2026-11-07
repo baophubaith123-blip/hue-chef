@@ -198,3 +198,24 @@
   min-height: 0;
   max-height: none;
 }
+
+/* ===== Phase 18.1 — step text contrast in dark =====
+   In dark the step cards split by state: the ACTIVE card is pale paper
+   (its title must be paper-dark — the legacy dark rule painted it
+   #fef3c7, near-invisible), while PENDING cards are dark surface and
+   DONE cards are deep green, so their titles/descriptions stay light. */
+[data-theme='dark'] .active .stepTitle {
+  color: var(--paper-text, #43301b);
+}
+
+[data-theme='dark'] .pending .stepTitle {
+  color: var(--color-plum-text, #f8efea);
+}
+
+[data-theme='dark'] .pending .stepDesc {
+  color: #d8c3a5;
+}
+
+[data-theme='dark'] .done .stepDesc {
+  color: #a9cbb6;
+}
