@@ -8,6 +8,10 @@
 export const MARKET_PICK_POINTS = 15;
 /** Market: penalty for grabbing an ingredient that is not on the list. */
 export const MARKET_WRONG_PENALTY = 10;
+/** Wrong picks made while the stage score is 0 are counted as strikes
+ *  instead of deducting points; reaching this many strikes fails the
+ *  whole run at the market stage. */
+export const MARKET_MAX_STRIKES = 3;
 /** Market: extra bonus for collecting the complete shopping list. */
 export const MARKET_FULL_LIST_BONUS = 50;
 

@@ -578,6 +578,12 @@ export interface I18nDictionary {
       marketGo: string;
       marketNotNeeded: string;
       marketWrongToast: string;
+      marketStrikes: (count: number, max: number) => string;
+      marketStrikeToast: (count: number) => string;
+      marketFailTitle: string;
+      marketFailReason: string;
+      marketFailBack: string;
+      marketFailAuto: (seconds: number) => string;
       marketFullList: (points: number) => string;
       marketRule1: string;
       marketRule2: string;

@@ -20,15 +20,6 @@ export const MARKET_VIEW_SECONDS = 8;
 export const MARKET_PEEK_COST_SECONDS = 5;
 /** A peek shows the list for this long, then it hides (and reshuffles). */
 export const MARKET_PEEK_SHOW_SECONDS = 3;
-/** Decoys mixed into the market stall, by difficulty. */
-export const MARKET_DECOY_COUNT: Record<number, number> = {
-  1: 4,
-  2: 6,
-  3: 9,
-  4: 12,
-  5: 16,
-};
-
 const CATCH_FALL_MS_BY_DIFFICULTY: Record<number, number> = {
   1: 4600,
   2: 4100,
@@ -118,7 +109,9 @@ export function resolveStageConfig(recipe: Recipe): ResolvedStageConfig {
     marketViewSeconds: d >= 3 ? MARKET_VIEW_SECONDS : MARKET_VIEW_SECONDS + (d === 1 ? 4 : 2),
     marketPeekCostSeconds: MARKET_PEEK_COST_SECONDS,
     marketPeekShowSeconds: MARKET_PEEK_SHOW_SECONDS,
-    marketDecoyCount: MARKET_DECOY_COUNT[d] ?? 6,
+    // Decoys always equal the dish's own unique correct-ingredient
+    // count, so the stall mixes right and wrong 50/50 for every dish.
+    marketDecoyCount: new Set(recipe.ingredients.map((ref) => ref.ingredientId)).size,
     catchFallMs: Math.round((CATCH_FALL_MS_BY_DIFFICULTY[d] ?? 3600) / catchSpeed),
     catchSpawnMs: CATCH_SPAWN_MS_BY_DIFFICULTY[d] ?? 950,
     catchDecoyRatio: CATCH_DECOY_RATIO_BY_DIFFICULTY[d] ?? 0.45,

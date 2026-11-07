@@ -590,6 +590,7 @@ export default function CookingPage() {
           maxPoints={session.scorePlan.market}
           onProgress={setLiveStagePoints}
           onComplete={(bonus) => completeStage('market', bonus)}
+          onFail={() => navigate(`/recipes/${recipe.id}`, { replace: true })}
         />
         </div>
       </PlayerShell>
