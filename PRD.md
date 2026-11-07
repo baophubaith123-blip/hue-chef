@@ -569,6 +569,13 @@ Hệ thống có **4 vai trò**:
 | Thanh cuộn | Thanh cuộn hệ thống thô, có nút mũi tên | **Tàn hình**: mảnh 6px, chỉ hiện mờ khi đang cuộn hoặc rê chuột, toàn app (Phase 17) |
 | Chữ trong thẻ Trang chủ (theme tối) | Hàng thành tích/vinh danh nền tối nhưng chữ cũng tối, gần như không đọc được | Chữ kem/vàng tương phản rõ trên nền hàng tối (Phase 17) |
 | Hộp thống kê Bộ sưu tập | Lật đen (theme tối) / trắng (theme sáng) lạc tông với thân thẻ kem | Bảng giấy đậm viền gỗ **giống hệt ở cả 2 theme** (Phase 17) |
+| Pha Đi chợ | Danh sách và sạp hiện cùng lúc ở độ khó thấp; lưới sạp có thể bị co mất trên màn hình thấp | **2 pha tách bạch ở mọi độ khó**: Ghi nhớ (chỉ danh sách, 12/10/8s theo ★) → bấm 'Lên Xe' hoặc hết giờ xem mới hiện sạp; đồng hồ chợ chỉ chạy ở pha chọn; lưới sạp luôn đủ chiều cao (Phase 18) |
+| Gợi ý ở màn Nấu | Dòng 'Bước này cần N nguyên liệu' + chip cần thiết phát sáng/tag | **Bỏ hẳn** — người chơi tự đọc hướng dẫn của bước để tìm nguyên liệu đúng (Phase 18) |
+| Nồi Nồi ở màn Nấu | Ảnh 280px quá to/lệch, nền kem của tranh lệch tông với panel ở cả 2 theme | Thu còn 200px, đặt trên **tấm nền kem khớp màu tranh**, thống nhất cả 2 theme; cột nồi hết chiếm rộng nhất (Phase 18) |
+| Điểm Hoàn thiện | Nhãn nổi có thể hiện số âm ở mức 'Tốt' (−4) do in độ lệch điểm rescale tích lũy | 'Tốt' **không bao giờ âm** (sàn +5); thêm mức **'Kém' −10** khi bấm sớm trước nửa vòng; 'Trượt' −20; nhãn nổi in điểm của chính vòng đó (Phase 18) |
+| Phản hồi Hỏi đáp | Đáp án tràn khỏi khung hình; chữ câu hỏi trắng trên bong bóng kem ở theme tối | Câu hỏi + 4 đáp án **trọn 1 khung**; đúng → **✓ xanh lá** trên đáp án đã chọn; sai → **✗ đỏ** trên đáp án đã chọn + ✓ xanh lá trên đáp án đúng; chữ câu hỏi mận đậm đọc rõ (Phase 18) |
+| Chữ trên nền giấy (theme tối) | Landing/Chi tiết món/Trang cá nhân: chữ trắng trên thẻ kem không đọc được | Ghim màu chữ giấy nâu đậm cho bề mặt kem ở **cả 2 theme**, đo tương phản tự động đạt (Phase 18) |
+| Đeo thành tích | Bỏ đeo ở Trang cá nhân không đồng bộ: Trang chủ vẫn hiện đang đeo, perk vẫn chạy theo state cũ | **Một nguồn sự thật duy nhất** trong hồ sơ dùng chung — đổi là áp dụng ngay khắp nơi; Trang chủ phân biệt 🏅 đang đeo / ⭐ danh hiệu cấp độ (Phase 18) |
 | Linh vật Nồi Nồi | Ảnh mascot kiểu cũ, lệch phong cách game | **Vẽ lại 2D** nét lễ hội, dùng thống nhất ở nồi nấu, MC hỏi đáp, hứng nguyên liệu, hoàn thiện, hộp thư trống, giới thiệu và trang cá nhân (Phase 16) |
 | Bảng xếp hạng | Tĩnh, tải lại trang | **Thời gian thực**: tự làm mới khi có điểm mới, khi quay lại tab, heartbeat 5 giây; có mũi tên tăng/giảm hạng so với kỳ trước |
 | Cuộn danh sách | Cuộn toàn trang | **Bộ cuộn riêng** cho lưới công thức (tìm kiếm đứng im), danh sách BXH, cột bước nấu và khay nguyên liệu |
