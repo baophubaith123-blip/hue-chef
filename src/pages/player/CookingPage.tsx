@@ -472,10 +472,6 @@ export default function CookingPage() {
   );
   const activeStep = sessionSteps[activeStepIndex];
   const currentRequiredIds = activeStep?.requiredIngredients ?? [];
-  const requiredNames = currentRequiredIds
-    .filter((reqId) => !session.potIngredients.includes(reqId))
-    .map((reqId) => getIngredientById(reqId)?.name ?? reqId)
-    .join(', ');
 
   const showResult = session.phase === 'success' || session.phase === 'failed';
   const sessionEnded = session.phase !== 'running';
@@ -731,13 +727,11 @@ export default function CookingPage() {
           sparkle={sparklePot}
           comboStreak={session.comboStreak}
           lastComboAt={session.lastComboAt}
-          requiredNames={requiredNames}
           dropFx={dropFx}
         />
           <IngredientTray
             trayIngredientIds={trayIngredientIds}
             placedIngredientIds={placedIngredientIds}
-            requiredIngredientIds={currentRequiredIds}
             amountByIngredientId={amountByIngredientId}
             draggingId={draggingId}
             disabled={sessionEnded}

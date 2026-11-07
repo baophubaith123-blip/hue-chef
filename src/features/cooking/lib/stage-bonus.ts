@@ -34,12 +34,21 @@ export const FINISH_PERFECT_POINTS = 50;
 export const FINISH_GOOD_MAX_POINTS = 40;
 /** Finish stage: penalty for a tap that overshoots the ring ("Trượt"). */
 export const FINISH_MISS_PENALTY = 20;
+/** Finish stage: penalty for tapping before the ring is half grown ("Kém"). */
+export const FINISH_POOR_PENALTY = 10;
 
-/** Offset ratio (0 = dead centre on the rim) at which a tap stops being "Tốt". */
+/** Offset ratio (0 = dead centre on the rim) at which a late tap stops being "Tốt". */
 export const FINISH_GOOD_WINDOW = 0.25;
+/** On the early side, a tap counts as "Tốt" from half-grown (offset 0.5) up to the rim. */
+export const FINISH_EARLY_GOOD_WINDOW = 0.5;
 
-/** Points for a "Tốt" tap, scaled by how close to the rim it landed. */
-export function finishGoodPoints(offsetRatio: number): number {
-  const closeness = 1 - Math.min(1, Math.max(0, offsetRatio) / FINISH_GOOD_WINDOW);
+/**
+ * Points for a "Tốt" tap, scaled by how close to the rim it landed.
+ * `signedOffset` is (progress − 1): negative = early, positive = late.
+ * A "Tốt" tap NEVER deducts: the result is floored at +5.
+ */
+export function finishGoodPoints(signedOffset: number): number {
+  const window = signedOffset < 0 ? FINISH_EARLY_GOOD_WINDOW : FINISH_GOOD_WINDOW;
+  const closeness = 1 - Math.min(1, Math.max(0, Math.abs(signedOffset)) / window);
   return Math.max(5, Math.round(FINISH_GOOD_MAX_POINTS * closeness));
 }

@@ -125,3 +125,16 @@
   min-height: 0;
   overflow-y: auto;
 }
+
+/* ===== Phase 18 — slimmer runner chrome ===== */
+.runnerContainer {
+  gap: 0.5rem;
+}
+
+.runnerHeader {
+  padding: 0.55rem 0.9rem;
+}
+
+.gameWrapper {
+  padding: 0.5rem;
+}

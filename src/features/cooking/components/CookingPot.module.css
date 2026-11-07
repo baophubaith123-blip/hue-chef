@@ -352,3 +352,32 @@
   transform: translateY(3px);
   box-shadow: 0 2px 0 var(--ink-soft, rgba(74, 44, 20, 0.45)) !important;
 }
+
+/* ===== Phase 18 — compact pot, cream plaque matched to the artwork ===== */
+.column {
+  min-height: 0;
+  height: 100%;
+  padding: 1rem;
+  gap: 0.7rem;
+}
+
+.pot {
+  min-height: 0;
+}
+
+/* The plaque uses the exact cream baked into noi-noi-2d.webp (#f9f4ec),
+   so the artwork blends in seamlessly in both themes. */
+.potStage {
+  background: #f9f4ec;
+  border: 3px solid var(--wood-dark, #8a5a2b);
+  border-radius: 22px;
+  padding: 0.85rem 1.1rem 0.6rem;
+  box-shadow: 0 6px 16px rgba(32, 15, 4, 0.25);
+}
+
+.potImg {
+  width: min(200px, 55vw);
+  border: none;
+  border-radius: 14px;
+  box-shadow: none;
+}

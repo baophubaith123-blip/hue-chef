@@ -470,3 +470,68 @@
     linear-gradient(180deg, rgba(24, 8, 20, 0.5), rgba(24, 8, 20, 0.66)),
     url('/images/festival-night.webp');
 }
+
+/* ===== Phase 18 — question text sits on the paper bubble in both themes ===== */
+[data-theme='dark'] .question {
+  color: var(--color-plum, #4a1525);
+}
+
+/* ===== Phase 18 — compact quiz: question + all 4 answers in one frame ===== */
+.container {
+  padding: 0.9rem 1rem;
+  gap: 0.55rem;
+}
+
+.hostAvatar {
+  width: 58px;
+  height: 58px;
+}
+
+.speechBubble {
+  padding: 0.65rem 0.9rem;
+}
+
+.question {
+  font-size: 1.08rem;
+  margin-bottom: 0.2rem;
+}
+
+.instruction {
+  font-size: 0.82rem;
+}
+
+.metaRow {
+  margin: 0.1rem 0;
+}
+
+.optionsGrid {
+  gap: 0.6rem;
+}
+
+.optionButton {
+  min-height: 48px;
+  padding: 0.55rem 0.8rem;
+}
+
+.markCorrect,
+.markWrong {
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.95rem;
+  font-weight: 900;
+  color: #ffffff;
+  border: 2px solid rgba(32, 15, 4, 0.55);
+}
+
+.markCorrect {
+  background: #15803d;
+}
+
+.markWrong {
+  background: #b42318;
+}

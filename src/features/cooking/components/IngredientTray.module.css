@@ -366,3 +366,33 @@
   max-height: none;
   min-height: 0;
 }
+
+/* ===== Phase 18 — uniform chips, vertical-only scroll, full-height tray ===== */
+.tray {
+  height: 100%;
+}
+
+.list {
+  flex: 1 1 auto;
+  min-height: 0;
+  max-height: none;
+  overflow-y: auto;
+  overflow-x: hidden;
+  grid-auto-rows: 68px;
+}
+
+.chip {
+  height: 100%;
+  overflow: hidden;
+}
+
+.chipTexts {
+  flex: 1 1 auto;
+}
+
+.chipName {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}

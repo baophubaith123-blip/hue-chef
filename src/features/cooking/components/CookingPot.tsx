@@ -23,8 +23,6 @@ interface CookingPotProps {
   comboStreak?: number;
   /** Timestamp of the last correct drop — restarts the badge countdown bar. */
   lastComboAt?: number | null;
-  /** Comma-separated names the current step still needs, for the speech line. */
-  requiredNames?: string;
   /** Transient "+points" popup + "added to pot" pill after a correct drop. */
   dropFx?: PotDropFx | null;
 }
@@ -40,7 +38,6 @@ export function CookingPot({
   onExecuteAction,
   comboStreak = 0,
   lastComboAt = null,
-  requiredNames = '',
   dropFx = null,
 }: CookingPotProps) {
   const { t } = useTranslation();
@@ -75,11 +72,6 @@ export function CookingPot({
           </div>
         ) : null}
         <div className={styles.potInner}>
-          {requiredNames && !disabled ? (
-            <p className={styles.needsLine}>
-              {t('cooking.stepNeedsNames', { names: requiredNames })}
-            </p>
-          ) : null}
           <div className={styles.potStage} aria-hidden>
             <span className={`${styles.steamPuff} ${styles.steamPuff1}`} />
             <span className={`${styles.steamPuff} ${styles.steamPuff2}`} />

@@ -8,6 +8,7 @@ import {
   FINISH_GOOD_WINDOW,
   FINISH_MISS_PENALTY,
   FINISH_PERFECT_POINTS,
+  FINISH_POOR_PENALTY,
   finishGoodPoints,
 } from '@/features/cooking/lib/stage-bonus';
 import { StageHelp } from '@/features/cooking/components/run/StageHelp';
@@ -25,7 +26,7 @@ interface FinishStageProps {
   onComplete: (bonus: number) => void;
 }
 
-type RingResult = 'perfect' | 'good' | 'miss';
+type RingResult = 'perfect' | 'good' | 'poor' | 'miss';
 
 interface Ring {
   key: number;
@@ -80,7 +81,6 @@ export function FinishStage({ config, maxPoints, onProgress, onComplete }: Finis
   const comboEarnedRef = useRef(0);
   const streakRef = useRef(0);
   const resolvedRef = useRef(0);
-  const prevCumRef = useRef(0);
   const moodTimerRef = useRef<number | null>(null);
 
   // Stage earnings convert into this stage's share of the dish's value:
@@ -142,6 +142,7 @@ export function FinishStage({ config, maxPoints, onProgress, onComplete }: Finis
       ring.resolvedAt = gameNow;
       resolvedRef.current += 1;
       let word: string;
+      let pointsText: string;
       if (result === 'perfect') {
         streakRef.current += 1;
         const comboGain = comboBonusForStreak(streakRef.current);
@@ -149,28 +150,34 @@ export function FinishStage({ config, maxPoints, onProgress, onComplete }: Finis
         comboEarnedRef.current += comboGain;
         setMood('jump');
         word = s.finishPerfect;
+        pointsText = `+${FINISH_PERFECT_POINTS} `;
         playSound('success');
       } else if (result === 'good') {
         const p = (gameNow - ring.bornAt) / ring.growMs;
-        const gain = finishGoodPoints(Math.abs(p - 1));
+        const gain = finishGoodPoints(p - 1);
         baseOutcomeRef.current += gain;
         setMood('nod');
         word = s.finishGood;
+        pointsText = `+${gain} `;
         playSound('drop');
+      } else if (result === 'poor') {
+        streakRef.current = 0;
+        baseOutcomeRef.current -= FINISH_POOR_PENALTY;
+        setMood('dizzy');
+        word = s.finishPoor;
+        pointsText = `−${FINISH_POOR_PENALTY} `;
+        playSound('error');
       } else {
         streakRef.current = 0;
         baseOutcomeRef.current -= FINISH_MISS_PENALTY;
         setMood('dizzy');
         word = s.finishMiss;
+        pointsText = `−${FINISH_MISS_PENALTY} `;
         playSound('error');
       }
-      // The floater shows the rescaled delta of the stage's cumulative
-      // earnings, so the numbers match the run's capped total.
-      const cum = toRescaled(resolvedRef.current);
-      const delta = cum - prevCumRef.current;
-      prevCumRef.current = cum;
-      const deltaText = delta > 0 ? `+${delta} ` : delta < 0 ? `−${-delta} ` : '';
-      pushFloater(ring.xPercent, ring.yPercent, `${deltaText}${word}`, result);
+      // The floater shows THIS ring's own outcome (never a cumulative
+      // rescale delta, which could dip below zero on a "Tốt" tap).
+      pushFloater(ring.xPercent, ring.yPercent, `${pointsText}${word}`, result);
       setStreak(streakRef.current);
       setResolvedCount(resolvedRef.current);
     },
@@ -253,12 +260,15 @@ export function FinishStage({ config, maxPoints, onProgress, onComplete }: Finis
     const gameNow = gameNowRef.current;
     const p = (gameNow - ring.bornAt) / ring.growMs;
     const offset = Math.abs(p - 1);
-    if (offset <= PERFECT_WINDOW * config.finishWindowScale) {
+    if (p < 0.5) {
+      // Tapped before the ring was even half grown — "Kém".
+      resolveRing(ring, 'poor', gameNow);
+    } else if (offset <= PERFECT_WINDOW * config.finishWindowScale) {
       resolveRing(ring, 'perfect', gameNow);
-    } else if (offset <= FINISH_GOOD_WINDOW * config.finishWindowScale) {
-      resolveRing(ring, 'good', gameNow);
-    } else {
+    } else if (p > 1 + FINISH_GOOD_WINDOW * config.finishWindowScale) {
       resolveRing(ring, 'miss', gameNow);
+    } else {
+      resolveRing(ring, 'good', gameNow);
     }
   };
 
@@ -304,7 +314,7 @@ export function FinishStage({ config, maxPoints, onProgress, onComplete }: Finis
             (gameNowRef.current - ring.bornAt) / ring.growMs,
           );
           const ringClass = ring.resolved
-            ? ring.resolved === 'miss'
+            ? ring.resolved === 'miss' || ring.resolved === 'poor'
               ? styles.ringMiss
               : ring.resolved === 'perfect'
                 ? styles.ringPerfect
@@ -339,7 +349,7 @@ export function FinishStage({ config, maxPoints, onProgress, onComplete }: Finis
               styles.floater,
               f.kind === 'perfect'
                 ? styles.floaterPerfect
-                : f.kind === 'miss'
+                : f.kind === 'miss' || f.kind === 'poor'
                   ? styles.floaterMiss
                   : styles.floaterGood,
             ].join(' ')}

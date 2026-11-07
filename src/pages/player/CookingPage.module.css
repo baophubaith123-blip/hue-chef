@@ -385,3 +385,11 @@
   z-index: 5;
   margin: 0;
 }
+
+/* ===== Phase 18 — balanced cook-stage columns ===== */
+@media (min-width: 1024px) {
+  .runFrame .grid {
+    grid-template-columns: minmax(0, 1.12fr) minmax(0, 1.02fr) minmax(0, 1.3fr);
+    gap: 1rem;
+  }
+}

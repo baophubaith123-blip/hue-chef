@@ -11,8 +11,6 @@ interface IngredientTrayProps {
   trayIngredientIds: string[];
   disabled?: boolean;
   placedIngredientIds: string[];
-  /** Ingredients the current step needs — their cards glow with a NEED tag. */
-  requiredIngredientIds?: string[];
   /** Display amounts for real recipe ingredients (decoys have none). */
   amountByIngredientId?: Record<string, string>;
   draggingId: string | null;
@@ -28,7 +26,6 @@ export function IngredientTray({
   trayIngredientIds,
   disabled = false,
   placedIngredientIds,
-  requiredIngredientIds = [],
   amountByIngredientId = {},
   draggingId,
   getTrayItemProps,
@@ -70,7 +67,6 @@ export function IngredientTray({
             return null;
           }
           const isUsed = placedIngredientIds.includes(ingredientId);
-          const isNeeded = !isUsed && requiredIngredientIds.includes(ingredientId);
           const dragProps = disabled || isUsed ? {} : getTrayItemProps(ingredientId);
           const categoryLabel = ingredientCategoryLabel(ingredient.category);
           const amount = amountByIngredientId[ingredientId];
@@ -82,7 +78,6 @@ export function IngredientTray({
                 className={[
                   styles.chip,
                   isUsed ? styles.chipUsed : '',
-                  isNeeded ? styles.chipNeeded : '',
                   draggingId === ingredientId ? styles.chipDragging : '',
                 ]
                   .filter(Boolean)
@@ -113,9 +108,6 @@ export function IngredientTray({
                     {categoryLabel}
                     {amount ? ` · ${amount}` : ''}
                   </span>
-                  {isNeeded ? (
-                    <span className={styles.neededTag}>{t('cooking.neededThisStep')}</span>
-                  ) : null}
                 </span>
               </button>
             </li>

@@ -197,9 +197,13 @@ export function QuizGame({
               <span className={styles.optionIndexBadge}>{letter}</span>
               <span className={styles.optionText}>{optionText}</span>
               {shouldHighlightCorrect ? (
-                <span className={styles.correctBang}>{dict.cooking.minigames.correctBang}</span>
+                <span className={styles.markCorrect} aria-hidden>
+                  ✓
+                </span>
               ) : isWrong || isEliminated ? (
-                <span>✕</span>
+                <span className={styles.markWrong} aria-hidden>
+                  ✗
+                </span>
               ) : null}
             </Button>
           );
