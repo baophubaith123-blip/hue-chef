@@ -604,6 +604,7 @@ export interface I18nDictionary {
       finishTimeLeft: (seconds: number) => string;
       finishPerfect: string;
       finishGood: string;
+      finishPoor: string;
       finishMiss: string;
       finishCombo: (count: number) => string;
       finishHint: string;

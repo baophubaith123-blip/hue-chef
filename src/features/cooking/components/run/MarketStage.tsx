@@ -28,15 +28,16 @@ interface MarketStageProps {
 type ListState = 'viewing' | 'hidden' | 'peeking';
 
 /**
- * Stage ① — Đi chợ: memorise the shopping list, then pick the dish's
- * ingredients at a shuffled stall. From 3★ the list hides itself when the
- * viewing time ends; peeking again costs 5s and every hide reshuffles the
- * stall so positions cannot be memorised.
+ * Stage ① — Đi chợ: two clear phases at every difficulty. MEMORISE: only
+ * the shopping list and its countdown are on screen — no stalls yet.
+ * Tapping "Lên Xe" or letting the viewing time end hides the list and
+ * starts the PICK phase, where the stalls appear and the market clock
+ * runs. Peeking again costs 5s and every hide reshuffles the stall so
+ * positions cannot be memorised.
  */
 export function MarketStage({ recipe, config, maxPoints, onProgress, onComplete }: MarketStageProps) {
   const { dict } = useTranslation();
   const s = dict.cooking.stages;
-  const hidesList = config.marketViewSeconds > 0;
 
   const correctIds = useMemo(
     () => Array.from(new Set(recipe.ingredients.map((ref) => ref.ingredientId))),
@@ -113,9 +114,19 @@ export function MarketStage({ recipe, config, maxPoints, onProgress, onComplete 
   useEffect(() => {
     const timer = window.setInterval(() => {
       if (pausedRef.current || doneRef.current) return;
+      if (listStateRef.current === 'viewing') {
+        // MEMORISE phase: only the viewing clock runs; the market clock
+        // starts together with the PICK phase.
+        phaseRef.current = Math.max(0, phaseRef.current - 0.2);
+        setPhaseSeconds(phaseRef.current);
+        if (phaseRef.current <= 0) {
+          hideList();
+        }
+        return;
+      }
       timeRef.current = Math.max(0, timeRef.current - 0.2);
       setSecondsLeft(timeRef.current);
-      if (hidesList && listStateRef.current !== 'hidden') {
+      if (listStateRef.current === 'peeking') {
         phaseRef.current = Math.max(0, phaseRef.current - 0.2);
         setPhaseSeconds(phaseRef.current);
         if (phaseRef.current <= 0) {
@@ -127,7 +138,7 @@ export function MarketStage({ recipe, config, maxPoints, onProgress, onComplete 
       }
     }, 200);
     return () => window.clearInterval(timer);
-  }, [finish, hideList, hidesList]);
+  }, [finish, hideList]);
 
   const handlePeek = useCallback(() => {
     if (listStateRef.current !== 'hidden' || doneRef.current) return;
@@ -146,6 +157,7 @@ export function MarketStage({ recipe, config, maxPoints, onProgress, onComplete 
   const handlePick = useCallback(
     (ingredientId: string) => {
       if (doneRef.current || pausedRef.current) return;
+      if (listStateRef.current === 'viewing') return;
       if (picked.has(ingredientId) || wrong.has(ingredientId)) return;
       if (correctSet.has(ingredientId)) {
         const nextPicked = new Set(picked);
@@ -186,9 +198,40 @@ export function MarketStage({ recipe, config, maxPoints, onProgress, onComplete 
     safeStallPage * STALL_PAGE_SIZE + STALL_PAGE_SIZE,
   );
 
+  // "Lên Xe" during MEMORISE ends the memorising early and opens the
+  // stalls; during PICK it ends the stage as before.
+  const handleGo = listState === 'viewing' ? hideList : finish;
+
   const listVisible = listState !== 'hidden';
   const secondsDisplay = Math.ceil(secondsLeft);
   const phaseDisplay = Math.ceil(phaseSeconds);
+
+  const listPanel = (
+    <div className={styles.listPanel}>
+      <div className={styles.listHead}>
+        <span className={styles.listTitle}>📋 {s.marketListTitle}</span>
+        <span className={styles.viewChip}>
+          ⏳{' '}
+          {listState === 'peeking'
+            ? s.marketPeekShowing(phaseDisplay)
+            : s.marketViewLeft(phaseDisplay)}
+        </span>
+      </div>
+      <div className={styles.listItems}>
+        {correctIds.map((id) => {
+          const ing = getIngredientById(id);
+          const got = picked.has(id);
+          return (
+            <span key={id} className={got ? styles.listItemGot : styles.listItem}>
+              {ing?.fallbackEmoji} {ing?.name ?? id}
+              <small>{amountById.get(id)}</small>
+              {got ? ' ✓' : ''}
+            </span>
+          );
+        })}
+      </div>
+    </div>
+  );
 
   return (
     <section className={styles.stage} aria-label={s.marketName}>
@@ -205,39 +248,19 @@ export function MarketStage({ recipe, config, maxPoints, onProgress, onComplete 
         </span>
       </div>
 
-      {listVisible ? (
-        <div className={styles.listPanel}>
-          <div className={styles.listHead}>
-            <span className={styles.listTitle}>📋 {s.marketListTitle}</span>
-            {hidesList ? (
-              <span className={styles.viewChip}>
-                ⏳{' '}
-                {listState === 'peeking'
-                  ? s.marketPeekShowing(phaseDisplay)
-                  : s.marketViewLeft(phaseDisplay)}
-              </span>
-            ) : null}
-          </div>
-          <div className={styles.listItems}>
-            {correctIds.map((id) => {
-              const ing = getIngredientById(id);
-              const got = picked.has(id);
-              return (
-                <span key={id} className={got ? styles.listItemGot : styles.listItem}>
-                  {ing?.fallbackEmoji} {ing?.name ?? id}
-                  <small>{amountById.get(id)}</small>
-                  {got ? ' ✓' : ''}
-                </span>
-              );
-            })}
-          </div>
-        </div>
+      {listState === 'viewing' ? (
+        <div className={styles.memorizeWrap}>{listPanel}</div>
+      ) : listVisible ? (
+        listPanel
       ) : (
         <div className={styles.listHiddenPanel}>
           <span className={styles.hiddenEmoji}>🙈</span>
           <span>{s.marketListHidden}</span>
         </div>
       )}
+
+      {listState !== 'viewing' ? (
+        <>
 
       <div className={styles.stall}>
         {visibleStallIds.map((id) => {
@@ -303,16 +326,18 @@ export function MarketStage({ recipe, config, maxPoints, onProgress, onComplete 
           </button>
         </div>
       ) : null}
+        </>
+      ) : null}
 
       {toast ? <div className={styles.toast}>{toast}</div> : null}
 
       <div className={styles.footer}>
-        {hidesList && listState === 'hidden' ? (
+        {listState === 'hidden' ? (
           <button type="button" className={styles.peekBtn} onClick={handlePeek}>
             👀 {s.marketPeek}
           </button>
         ) : null}
-        <button type="button" className={styles.goBtn} onClick={finish}>
+        <button type="button" className={styles.goBtn} onClick={handleGo}>
           🛒 {s.marketGo} ➜
         </button>
       </div>

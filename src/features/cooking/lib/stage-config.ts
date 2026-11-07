@@ -13,7 +13,8 @@ export const MARKET_SECONDS_BY_DIFFICULTY: Record<number, number> = {
   5: 60,
 };
 
-/** Shopping list stays readable this long before it hides (3★ and up). */
+/** Shopping list stays readable this long before it hides (3★ and up).
+ * Easier dishes get a little longer to memorise (see the resolver). */
 export const MARKET_VIEW_SECONDS = 8;
 /** Peeking at the hidden list again costs this many seconds of market time. */
 export const MARKET_PEEK_COST_SECONDS = 5;
@@ -114,7 +115,7 @@ export function resolveStageConfig(recipe: Recipe): ResolvedStageConfig {
     finishEnabled: g.finishEnabled !== false,
     quizEnabled: g.quizEnabled !== false,
     marketSeconds: Math.min(180, Math.max(10, g.marketSeconds ?? MARKET_SECONDS_BY_DIFFICULTY[d] ?? 30)),
-    marketViewSeconds: d >= 3 ? MARKET_VIEW_SECONDS : 0,
+    marketViewSeconds: d >= 3 ? MARKET_VIEW_SECONDS : MARKET_VIEW_SECONDS + (d === 1 ? 4 : 2),
     marketPeekCostSeconds: MARKET_PEEK_COST_SECONDS,
     marketPeekShowSeconds: MARKET_PEEK_SHOW_SECONDS,
     marketDecoyCount: MARKET_DECOY_COUNT[d] ?? 6,

@@ -368,7 +368,34 @@
 }
 
 .stall {
+  flex: 1 1 auto;
   overflow-y: auto;
   min-height: 0;
+  align-content: start;
   padding-right: 2px;
+}
+
+ /* ===== Phase 18 — two-phase layout ===== */
+.memorizeWrap {
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+}
+
+.memorizeWrap .listPanel {
+  width: 100%;
+  margin-bottom: 0;
+}
+
+.memorizeWrap .listItem,
+.memorizeWrap .listItemGot {
+  font-size: 15px;
+  padding: 6px 14px;
+}
+
+.listPanel,
+.listHiddenPanel,
+.pager,
+.topBar {
+  flex: 0 0 auto;
 }
