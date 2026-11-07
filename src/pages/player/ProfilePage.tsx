@@ -32,9 +32,6 @@ export default function ProfilePage() {
   // Form state for own profile editing
   const [name, setName] = useState(targetUser?.name ?? '');
   const [avatar, setAvatar] = useState(targetUser?.avatar ?? '');
-  const [equippedBadgeId, setEquippedBadgeId] = useState<string | null>(
-    targetUser?.equippedAchievementId ?? null,
-  );
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -65,7 +62,7 @@ export default function ProfilePage() {
   const xpPercent =
     maxExpValue > 0 ? Math.min(100, Math.round((expValue / maxExpValue) * 100)) : 0;
   const equippedAchievement = allAchievements.find(
-    (b) => b.id === (equippedBadgeId ?? targetUser.equippedAchievementId ?? ''),
+    (b) => b.id === (targetUser.equippedAchievementId ?? ''),
   );
   const joinedDate = targetUser.createdAt ? new Date(targetUser.createdAt) : null;
   const joinedLabel =
@@ -165,7 +162,6 @@ export default function ProfilePage() {
     const patch: Parameters<typeof updateProfile>[0] = {
       name: name.trim(),
       avatar,
-      equippedAchievementId: equippedBadgeId,
     };
 
     if (finalPassword) {
@@ -212,16 +208,9 @@ export default function ProfilePage() {
                 {targetUser.name.charAt(0).toUpperCase()}
               </div>
             )}
-            {equippedBadgeId || targetUser.equippedAchievementId ? (
+            {targetUser.equippedAchievementId ? (
               <div className={styles.equippedOverlay}>
-                <AchievementIcon
-                  badgeId={
-                    (equippedBadgeId !== undefined
-                      ? equippedBadgeId
-                      : targetUser.equippedAchievementId) || ''
-                  }
-                  size="sm"
-                />
+                <AchievementIcon badgeId={targetUser.equippedAchievementId} size="sm" />
               </div>
             ) : null}
           </div>
@@ -296,8 +285,7 @@ export default function ProfilePage() {
             <div className={styles.badgeTiles}>
               {allAchievements.map((b) => {
                 const isUnlocked = unlockedBadges.includes(b.id);
-                const isEquipped =
-                  (equippedBadgeId ?? targetUser.equippedAchievementId) === b.id;
+                const isEquipped = targetUser.equippedAchievementId === b.id;
                 return (
                   <div
                     key={b.id}
@@ -380,9 +368,11 @@ export default function ProfilePage() {
                   <select
                     id="equipped-badge"
                     className={styles.select}
-                    value={equippedBadgeId ?? ''}
+                    value={targetUser.equippedAchievementId ?? ''}
                     onChange={(e) =>
-                      setEquippedBadgeId(e.target.value ? e.target.value : null)
+                      updateProfile({
+                        equippedAchievementId: e.target.value ? e.target.value : null,
+                      })
                     }
                   >
                     <option value="">-- {t('profile.noBadge')} --</option>

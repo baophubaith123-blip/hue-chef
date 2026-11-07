@@ -25,7 +25,7 @@ export default function HomePage() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const { getApprovedRecipes } = useRecipes();
-  const { isUnlocked, getProgressPct } = useAchievements();
+  const { isUnlocked, getProgressPct, allAchievements } = useAchievements();
 
   const approvedRecipes = useMemo(() => getApprovedRecipes(), [getApprovedRecipes]);
 
@@ -45,14 +45,16 @@ export default function HomePage() {
     [cookedRecipes],
   );
 
-  // Equipped badge or level-based title
+  // Equipped badge (looked up in the merged catalogue, so editor-created
+  // achievements show too) — kept separate from the level-based title:
+  // the Lv.1 title and the first achievement share a name, so the hero
+  // must never present the level title as if it were an equipped badge.
   const equippedBadge = useMemo(() => {
     if (!user?.equippedAchievementId) return null;
-    return SEED_ACHIEVEMENTS.find((a) => a.id === user.equippedAchievementId) ?? null;
-  }, [user?.equippedAchievementId]);
+    return allAchievements.find((a) => a.id === user.equippedAchievementId) ?? null;
+  }, [user?.equippedAchievementId, allAchievements]);
 
   const chefTitle = useMemo(() => {
-    if (equippedBadge) return equippedBadge.name;
     if (level >= 7) return t('dashboard.titleGrandmaster');
     if (level >= 5) return t('dashboard.titleMaster');
     if (level >= 3) return t('dashboard.titleCook');
@@ -201,7 +203,9 @@ export default function HomePage() {
               </div>
               <div className={styles.heroUserMeta}>
                 <span className={styles.greeting}>{greeting}, <strong>{user?.name}</strong></span>
-                <span className={styles.titleTagText}>🎖️ {chefTitle}</span>
+                <span className={styles.titleTagText}>
+                  {equippedBadge ? `🏅 ${equippedBadge.name}` : `⭐ ${chefTitle}`}
+                </span>
               </div>
             </div>
 
