@@ -329,7 +329,7 @@
 
 .greeting {
   font-size: 0.95rem;
-  color: var(--color-text-muted);
+  color: #f8efea;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -970,7 +970,7 @@
 }
 
 .heroExploreBtn {
-  background: var(--wood-gradient, linear-gradient(180deg, #b57e40, #96652c)) !important;
+  background: var(--wood-gradient) !important;
   border: 3px solid var(--ink, #200f04) !important;
   color: #fff6e0 !important;
   box-shadow: 0 5px 0 rgba(0, 0, 0, 0.4) !important;

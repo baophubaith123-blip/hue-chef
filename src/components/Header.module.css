@@ -10,11 +10,10 @@
 .inner {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0.7rem 1rem;
+  padding: 1.05rem 1.25rem;
   display: flex;
   align-items: center;
-  gap: 1rem;
-  justify-content: space-between;
+  gap: 1.25rem;
 }
 
 .brand {
@@ -24,13 +23,13 @@
   text-decoration: none;
   color: #fff6e0;
   font-weight: 800;
-  font-size: 1.15rem;
+  font-size: 1.45rem;
   letter-spacing: -0.01em;
 }
 
 .brandIcon {
-  width: 34px;
-  height: 34px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
   background: var(--gradient-gold, linear-gradient(135deg, #f6c453, #e9a23b));
   border: 2.5px solid var(--ink, #200f04);
@@ -38,8 +37,8 @@
   align-items: center;
   justify-content: center;
   color: #43301b;
-  font-size: 1.1rem;
-  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.4);
+  font-size: 1.55rem;
+  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.4);
 }
 
 .brandText {
@@ -54,7 +53,7 @@
 }
 
 .brandSub {
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   color: var(--color-plum-text-muted, #d1b3bc);
   font-weight: 600;
   margin-top: 0.15rem;
@@ -66,6 +65,7 @@
   gap: 0.6rem;
   flex-wrap: wrap;
   justify-content: flex-end;
+  margin-left: auto;
 }
 
 .links {
@@ -79,8 +79,8 @@
   text-decoration: none;
   color: var(--color-plum-text-muted, #d1b3bc);
   font-weight: 600;
-  font-size: 0.85rem;
-  padding: 0.35rem 0.6rem;
+  font-size: 0.95rem;
+  padding: 0.5rem 0.8rem;
   border-radius: var(--radius-md);
   transition: all 0.15s ease;
 }
@@ -90,42 +90,40 @@
   color: #fff6e0;
 }
 
-.enterGameBtn,
-.loginBtn {
+.enterGameBtn {
   text-decoration: none;
   font-weight: 800;
-  font-size: 0.85rem;
-  padding: 0.42rem 0.9rem;
+  font-size: 1.08rem;
+  padding: 0.72rem 1.7rem;
   border-radius: var(--radius-full);
-  border: 2.5px solid var(--ink, #200f04);
+  border: 3px solid var(--ink, #200f04);
   transition: all 0.15s ease;
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
-  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.4);
-}
-
-.enterGameBtn {
+  gap: 0.45rem;
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.45);
   background: var(--gradient-gold, linear-gradient(135deg, #f6c453, #e9a23b));
   color: #43301b;
+  white-space: nowrap;
 }
 
 .enterGameBtn:hover {
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 0 rgba(0, 0, 0, 0.45);
 }
 
-.loginBtn {
-  background: var(--wood-gradient, linear-gradient(180deg, #b57e40, #96652c));
-  color: #fff6e0;
-}
-
-.loginBtn:hover {
-  transform: translateY(-1px);
+.enterGameBtn:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.45);
 }
 
 @media (max-width: 640px) {
   .links {
     display: none;
+  }
+  .enterGameBtn {
+    font-size: 0.95rem;
+    padding: 0.55rem 1.1rem;
   }
   .brandSub {
     display: none;

@@ -690,6 +690,8 @@ export interface I18nDictionary {
   language: {
     vi: string;
     en: string;
+    viShort: string;
+    enShort: string;
     switch: string;
   };
   sound: {

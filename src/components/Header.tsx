@@ -28,21 +28,20 @@ export function Header() {
           </span>
         </Link>
 
+        <Link
+          to={user ? getDefaultPathForRole(user.role) : '/login'}
+          className={styles.enterGameBtn}
+        >
+          🎮 {t('header.enterGame')}
+        </Link>
+
+        <nav className={styles.links} aria-label="Utility">
+          <Link to="/about" className={styles.link}>{t('header.about')}</Link>
+          <Link to="/help" className={styles.link}>{t('header.help')}</Link>
+          <Link to="/feedback" className={styles.link}>{t('header.feedback')}</Link>
+        </nav>
+
         <div className={styles.rightGroup}>
-          <nav className={styles.links} aria-label="Utility">
-            <Link to="/help" className={styles.link}>{t('header.help')}</Link>
-            <Link to="/about" className={styles.link}>{t('header.about')}</Link>
-            <Link to="/feedback" className={styles.link}>{t('header.feedback')}</Link>
-          </nav>
-          {user ? (
-            <Link to={getDefaultPathForRole(user.role)} className={styles.enterGameBtn}>
-              🎮 {t('header.enterGame')}
-            </Link>
-          ) : (
-            <Link to="/login" className={styles.loginBtn}>
-              🔑 {t('header.login')}
-            </Link>
-          )}
           {user ? <NotificationBell /> : null}
           <LanguageSwitcher />
         </div>

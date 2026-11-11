@@ -101,7 +101,7 @@
   box-shadow: var(--shadow-game-card, 0 12px 28px rgba(59, 42, 32, 0.12));
 }
 
-.challengeTitle { color: var(--paper-text, #43301b); }
+.challengeTitle { color: #f8efea; }
 
 .stepBadge,
 .scoreBonusBadge {

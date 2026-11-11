@@ -116,7 +116,7 @@ export default function AdminAppealsPage() {
   };
 
   const statusTone: Record<AppealStatus, { bg: string; color: string }> = {
-    open: { bg: 'var(--color-accent-soft)', color: 'var(--color-accent)' },
+    open: { bg: 'var(--color-accent-soft)', color: 'var(--gold-text)' },
     recommended: { bg: 'var(--color-primary-soft, var(--color-surface-muted))', color: 'var(--color-primary)' },
     rejected: { bg: 'var(--color-danger-soft)', color: 'var(--color-danger)' },
     resolved: { bg: 'var(--color-success-soft)', color: 'var(--color-success)' },

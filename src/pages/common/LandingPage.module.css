@@ -275,7 +275,7 @@
 
 .roleHint {
   font-size: 0.85rem;
-  color: var(--color-accent);
+  color: #8a5a00;
   font-weight: 500;
 }
 
@@ -452,4 +452,58 @@
 
 .roleCardFront .roleDesc {
   color: var(--paper-text-muted, #7a5c38);
+}
+
+/* ===== Phase 20 — hero text panel: the festival scene art is light in the
+   day theme, so hero copy sits on a solid panel in both themes ===== */
+.heroContent {
+  background: #fbf3e4;
+  border: 3px solid var(--ink, #4a2c14);
+  border-radius: 24px;
+  box-shadow: 0 6px 0 rgba(74, 44, 20, 0.35);
+  padding: 2.25rem 2.5rem;
+}
+
+.heroTitle {
+  color: #4a1525;
+}
+
+.highlight {
+  color: #b03e26;
+}
+
+.heroSubtitle {
+  color: #6b4a2a;
+}
+
+.badgeTag {
+  background: #370e1b;
+  border-color: rgba(246, 196, 83, 0.5);
+}
+
+[data-theme='dark'] .heroContent {
+  background: #1e060e;
+  border-color: rgba(246, 196, 83, 0.45);
+  box-shadow: 0 6px 0 rgba(0, 0, 0, 0.45);
+}
+
+[data-theme='dark'] .heroTitle {
+  color: #f8efea;
+}
+
+[data-theme='dark'] .highlight {
+  color: #f6c453;
+}
+
+[data-theme='dark'] .heroSubtitle {
+  color: rgba(248, 239, 234, 0.88);
+}
+
+.roleCardBack .roleTitle,
+.roleCardBack .roleDesc {
+  color: #fff6e0;
+}
+
+.roleCardBack .roleHint {
+  color: #f6c453;
 }

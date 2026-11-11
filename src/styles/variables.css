@@ -6,7 +6,7 @@
   --color-surface-muted: #F5EBDC;
   --color-text: #3B2A20;
   --color-text-muted: #7A6455;
-  --color-primary: #C8553D;
+  --color-primary: #B03E26;
   --color-primary-hover: #b0442e;
   --color-primary-contrast: #ffffff;
   --color-primary-soft: rgba(200, 85, 61, 0.12);
@@ -73,7 +73,8 @@
   --font-display: 'Playfair Display', 'Merriweather', Georgia, serif;
   --font-sans: 'Be Vietnam Pro', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --color-bg-ivory: #FAF5EF;
-  --color-brick: #C8553D;
+  --color-brick: #B03E26;
+  --gold-text: #8A5A00;
   --color-surface-hover: #F5EBDC;
 
   /* Game Redesign Tokens — gradients, glows, rarity (art stays identical in dark mode) */
@@ -87,13 +88,13 @@
   --radius-2xl: 24px;
 
   /* Achievement rarity */
-  --rarity-common: #8a7364;
+  --rarity-common: #78604F;
   --rarity-common-soft: rgba(138, 115, 100, 0.14);
   --rarity-rare: #2563eb;
   --rarity-rare-soft: rgba(37, 99, 235, 0.14);
   --rarity-epic: #9333ea;
   --rarity-epic-soft: rgba(147, 51, 234, 0.14);
-  --rarity-legendary: #e9a23b;
+  --rarity-legendary: #8a5a00;
   --rarity-legendary-soft: rgba(233, 162, 59, 0.18);
 }
 
@@ -153,6 +154,7 @@
   --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.5);
   --color-bg-ivory: #1C1512;
   --color-brick: #E8884D;
+  --gold-text: #F0B95B;
   --color-surface-hover: #352923;
 
   /* Game Redesign Tokens — Dark Mode (brand gradients & artwork unchanged) */
@@ -184,7 +186,7 @@
   --wood: #b57e40;
   --wood-light: #d9a05b;
   --wood-dark: #8a5a2b;
-  --wood-gradient: linear-gradient(180deg, #ce9550 0%, #b57e40 55%, #9c6a30 100%);
+  --wood-gradient: linear-gradient(180deg, #8f5e2a 0%, #855521 55%, #7c5222 100%);
   --wood-gradient-soft: linear-gradient(180deg, #e3b06a 0%, #cd9a52 100%);
   --paper: #fff6e0;
   --paper-deep: #f7e8c6;

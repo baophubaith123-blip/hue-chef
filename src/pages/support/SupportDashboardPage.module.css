@@ -53,12 +53,12 @@
 
 .statAccent {
   background: linear-gradient(135deg, var(--color-accent), #ff6a3a);
-  color: var(--color-accent-contrast);
+  color: #33200e;
   border: none;
 }
 
 .statAccent .statLabel {
-  color: rgba(255, 255, 255, 0.85);
+  color: #33200e;
 }
 
 .statValue {

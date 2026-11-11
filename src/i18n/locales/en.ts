@@ -737,6 +737,8 @@ export const en: I18nDictionary = {
   language: {
     vi: 'Vietnamese',
     en: 'English',
+    viShort: 'VN',
+    enShort: 'EN',
     switch: 'Change language',
   },
   sound: {

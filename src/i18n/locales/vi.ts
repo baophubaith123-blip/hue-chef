@@ -738,6 +738,8 @@ export const vi: I18nDictionary = {
   language: {
     vi: 'Tiếng Việt',
     en: 'English',
+    viShort: 'VN',
+    enShort: 'EN',
     switch: 'Đổi ngôn ngữ',
   },
   sound: {

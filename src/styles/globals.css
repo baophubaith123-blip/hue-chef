@@ -168,3 +168,8 @@ select:-webkit-autofill {
   width: 0;
   height: 0;
 }
+
+/* Phase 20 — Recharts legend labels sit on paper cards in both themes */
+body .recharts-legend-item-text {
+  color: var(--paper-text, #43301b) !important;
+}

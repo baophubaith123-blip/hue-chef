@@ -173,7 +173,7 @@ function StatCard({
   };
   const fg: Record<string, string> = {
     muted: 'var(--color-text-muted)',
-    warning: 'var(--color-accent)',
+    warning: 'var(--gold-text)',
     success: 'var(--color-success)',
   };
   return (

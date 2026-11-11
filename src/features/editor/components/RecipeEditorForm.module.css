@@ -87,13 +87,13 @@
 
 .submitBtn {
   border-color: var(--color-accent);
-  color: var(--color-accent);
+  color: #fff6e0;
   font-weight: 700;
 }
 
 .submitBtn:hover:not(:disabled) {
   background: var(--color-accent);
-  color: var(--color-accent-contrast);
+  color: #43301b;
   border-color: var(--color-accent);
 }
 

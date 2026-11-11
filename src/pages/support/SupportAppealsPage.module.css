@@ -69,13 +69,14 @@
   height: 1.1rem;
   padding: 0 0.3rem;
   border-radius: 999px;
-  background: rgba(27, 42, 74, 0.1);
-  color: inherit;
+  background: rgba(27, 42, 74, 0.08);
+  color: #5c4836;
   font-size: 0.68rem;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
 }
 
 .filterActive .filterCount {
-  background: rgba(255, 255, 255, 0.22);
+  background: rgba(0, 0, 0, 0.28);
+  color: #ffffff;
 }

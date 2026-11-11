@@ -8,9 +8,9 @@ export function LanguageSwitcher() {
   const { t, locale, setLocale } = useTranslation();
   const { theme, toggleTheme } = useTheme();
 
-  const options: { key: Locale; labelKey: 'vi' | 'en' }[] = [
-    { key: 'vi', labelKey: 'vi' },
-    { key: 'en', labelKey: 'en' },
+  const options: { key: Locale; labelKey: 'viShort' | 'enShort' }[] = [
+    { key: 'vi', labelKey: 'viShort' },
+    { key: 'en', labelKey: 'enShort' },
   ];
 
   return (
