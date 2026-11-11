@@ -269,3 +269,47 @@
   height: auto;
   min-height: 0;
 }
+
+/* ===== Phase 20.1 — finish ring + floaters readable on the LIGHT kitchen scene =====
+   The ring/floater palette was designed for the old dark plum field. On the
+   light kitchen-day scene (Phase 17) the cream outer ring all but disappears,
+   so the player cannot see the target the inner circle must reach. */
+[data-theme='light'] .ring {
+  border-color: rgba(74, 21, 37, 0.9);
+  background: rgba(74, 21, 37, 0.06);
+}
+
+[data-theme='light'] .ringInner {
+  border-color: #b45309;
+  background: rgba(180, 83, 9, 0.14);
+}
+
+[data-theme='light'] .ringPerfect {
+  border-color: #d97706;
+  box-shadow: 0 0 26px 8px rgba(217, 119, 6, 0.55);
+}
+
+[data-theme='light'] .ringGood {
+  border-color: #b03e26;
+  box-shadow: 0 0 14px 4px rgba(176, 62, 38, 0.4);
+}
+
+[data-theme='light'] .ringMiss {
+  border-color: #6b5b66;
+  background: rgba(107, 91, 102, 0.22);
+}
+
+[data-theme='light'] .floaterPerfect {
+  color: #8a5a00;
+  text-shadow: 0 2px 0 rgba(255, 246, 224, 0.9);
+}
+
+[data-theme='light'] .floaterGood {
+  color: #b03e26;
+  text-shadow: 0 2px 0 rgba(255, 246, 224, 0.9);
+}
+
+[data-theme='light'] .floaterMiss {
+  color: #6b5b66;
+  text-shadow: 0 2px 0 rgba(255, 246, 224, 0.9);
+}
