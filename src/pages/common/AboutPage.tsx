@@ -1,9 +1,8 @@
 import { Link } from 'react-router-dom';
 
-import { useAuth } from '@/contexts/AuthContext';
-import { getDefaultPathForRole } from '@/features/auth/types';
 import { useTranslation } from '@/i18n/useTranslation';
 
+import { FloatingGameButton } from '@/components/FloatingGameButton';
 import { Footer } from '@/components/Footer';
 import { Header } from '@/components/Header';
 
@@ -11,7 +10,6 @@ import styles from './AboutPage.module.css';
 
 export default function AboutPage() {
   const { t } = useTranslation();
-  const { user } = useAuth();
 
   const techStack = [
     'React 18 + TypeScript strict',
@@ -169,15 +167,7 @@ export default function AboutPage() {
         <p className={styles.acknowledge}>💫 {t('about.acknowledgements')}</p>
       </main>
       <Footer />
-      <Link
-        to={user ? getDefaultPathForRole(user.role) : '/login'}
-        className={styles.floatingPlay}
-        aria-label={t('header.enterGame')}
-        title={t('header.enterGame')}
-      >
-        <img src="/images/noi-noi.jpg" alt="" className={styles.floatingPlayImg} />
-        <span className={styles.floatingPlayLabel}>{t('header.enterGame')}</span>
-      </Link>
+      <FloatingGameButton />
     </div>
   );
 }

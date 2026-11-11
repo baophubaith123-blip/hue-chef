@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { Button } from '@/components/Button';
 import { Footer } from '@/components/Footer';
+import { FloatingGameButton } from '@/components/FloatingGameButton';
 import { Header } from '@/components/Header';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRecipes } from '@/contexts/RecipeContext';
@@ -225,6 +226,7 @@ export default function LandingPage() {
       </main>
 
       <Footer />
+      <FloatingGameButton />
     </div>
   );
 }
