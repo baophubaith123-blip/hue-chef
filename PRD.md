@@ -584,6 +584,7 @@ Hệ thống có **4 vai trò**:
 | Header trang công cộng | Thanh thấp, logo nhỏ khó nhận diện, nút vào game chìm ở cụm phải | Thanh cao hơn, logo 48px, **nút 'Vào game' to nổi bật ở đầu hàng**, Giới thiệu → Trợ giúp → Góp ý, **VN/EN** + theme ghim sát góc phải (Phase 20) |
 | Vào game từ trang Giới thiệu | Đang đọc giữa/cuối trang phải cuộn lên đầu mới thấy đường vào game | **Nút tròn nổi Nồi Nồi cố định góc dưới phải** kèm nhãn 'Vào game' — bấm vào game ở bất kỳ vị trí cuộn nào, chỉ có ở trang Giới thiệu (Phase 20) |
 | Vòng bấm giờ Hoàn thiện (theme sáng) | Vòng ngoài kem + chữ nổi nhạt vốn thiết kế cho nền tối, chìm hẳn trên tranh bếp sáng | Bộ màu riêng cho theme sáng: vòng ngoài mận đậm, vòng trong cam đậm, chữ nổi tương phản cao; theme tối giữ nguyên (Phase 20.1) |
+| Nút nổi vào game | Chỉ có ở trang Giới thiệu (Phase 20) — tác giả tìm ở trang chủ không thấy | **Có ở cả trang chủ lẫn trang Giới thiệu**, dùng chung component `FloatingGameButton` (Phase 20.2) |
 | Linh vật Nồi Nồi | Ảnh mascot kiểu cũ, lệch phong cách game | **Vẽ lại 2D** nét lễ hội, dùng thống nhất ở nồi nấu, MC hỏi đáp, hứng nguyên liệu, hoàn thiện, hộp thư trống, giới thiệu và trang cá nhân (Phase 16) |
 | Bảng xếp hạng | Tĩnh, tải lại trang | **Thời gian thực**: tự làm mới khi có điểm mới, khi quay lại tab, heartbeat 5 giây; có mũi tên tăng/giảm hạng so với kỳ trước |
 | Cuộn danh sách | Cuộn toàn trang | **Bộ cuộn riêng** cho lưới công thức (tìm kiếm đứng im), danh sách BXH, cột bước nấu và khay nguyên liệu |
