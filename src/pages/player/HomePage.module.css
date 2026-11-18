@@ -117,7 +117,7 @@
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--td-brick), var(--color-accent));
+  background: #b03e26; /* pinned: white initials must pass in both themes */
   color: #FFFFFF;
   display: flex;
   align-items: center;
@@ -541,7 +541,7 @@
 .journeyCategory {
   font-size: 0.8rem;
   font-weight: 700;
-  color: var(--td-brick);
+  color: #b03e26; /* pinned for paper */
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -650,7 +650,7 @@
 .viewAllLink {
   font-size: 0.85rem;
   font-weight: 700;
-  color: var(--td-brick);
+  color: #b03e26; /* pinned for paper */
   text-decoration: none;
   display: inline-flex;
   align-items: center;
@@ -659,7 +659,7 @@
 }
 
 .viewAllLink:hover {
-  color: var(--color-primary-hover);
+  color: #8f2f1c;
 }
 
 .achievementList {
@@ -752,7 +752,7 @@
   width: 2.25rem;
   height: 2.25rem;
   border-radius: var(--td-radius-full);
-  background: var(--td-brick);
+  background: #b03e26; /* pinned for both themes */
   color: var(--color-primary-contrast);
   display: grid;
   place-items: center;
@@ -1051,7 +1051,7 @@
 }
 
 .viewAllLink {
-  color: var(--td-brick, #c8553d);
+  color: #b03e26; /* pinned for paper */
   font-weight: 800;
 }
 

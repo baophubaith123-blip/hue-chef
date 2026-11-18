@@ -57,7 +57,7 @@
   font-weight: 800;
   font-size: 2rem;
   color: var(--td-plum);
-  background: var(--color-surface-alt);
+  background: var(--td-cream); /* pinned: plum initials on cream in both themes */
 }
 
 .badgeOverlay {

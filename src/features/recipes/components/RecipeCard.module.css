@@ -99,7 +99,7 @@
   font-weight: 800;
   letter-spacing: 0.03em;
   text-transform: uppercase;
-  color: var(--td-gold-text);
+  color: #8a5a00; /* pinned: paper stays light in dark theme */
   background: var(--td-paper-deep);
   border: 1.5px solid var(--td-gold-deep);
   padding: 2px 9px;
@@ -124,7 +124,7 @@
   margin: 0;
   font-size: 0.85rem;
   font-weight: 800;
-  color: var(--td-gold-text);
+  color: #8a5a00; /* pinned: paper stays light in dark theme */
   letter-spacing: 0.04em;
 }
 

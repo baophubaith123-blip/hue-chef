@@ -264,7 +264,7 @@
 }
 
 .emptyHint {
-  color: var(--td-paper-text-muted, #7a5c38);
+  color: var(--td-page-text-muted); /* page surface: follows the theme */
 }
 
 

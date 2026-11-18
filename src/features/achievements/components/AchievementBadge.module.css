@@ -92,7 +92,7 @@
 .unlockedAt {
   margin: 0.5rem 0 0;
   font-size: 0.7rem;
-  color: var(--color-text-muted);
+  color: var(--td-paper-text-muted); /* pinned for paper */
 }
 
 .rarityChip {

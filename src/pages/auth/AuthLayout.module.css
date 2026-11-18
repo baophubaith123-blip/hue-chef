@@ -41,7 +41,7 @@
 
 .brandSub {
   margin: 0.4rem 0 0;
-  color: var(--color-text-muted, #7c6c64);
+  color: var(--td-paper-text-muted);
   font-size: 0.95rem;
 }
 
@@ -60,7 +60,7 @@
 .label {
   font-size: 0.88rem;
   font-weight: 700;
-  color: var(--color-text, #3b2a20);
+  color: var(--td-paper-text);
 }
 
 .input {
@@ -113,11 +113,11 @@
   margin-top: 1.5rem;
   text-align: center;
   font-size: 0.9rem;
-  color: var(--color-text-muted, #7c6c64);
+  color: var(--td-paper-text-muted);
 }
 
 .link {
-  color: var(--color-brick, #c8553d);
+  color: #b03e26; /* pinned for paper */
   font-weight: 700;
   text-decoration: none;
 }
@@ -129,6 +129,6 @@
 .hint {
   margin-top: 1rem;
   font-size: 0.82rem;
-  color: var(--color-text-muted, #7c6c64);
+  color: var(--td-paper-text-muted);
   line-height: 1.45;
 }

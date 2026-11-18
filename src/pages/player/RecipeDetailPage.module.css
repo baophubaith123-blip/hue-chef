@@ -111,7 +111,7 @@
 .metricTier {
   font-size: 0.78rem;
   font-weight: 800;
-  color: var(--td-brick);
+  color: #b03e26; /* pinned for paper */
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
@@ -399,7 +399,7 @@
   font-weight: 800;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: var(--td-gold-text);
+  color: #8a5a00; /* pinned for paper */
   background: var(--td-paper-deep);
   border: 1.5px solid var(--td-gold-deep);
   padding: 3px 11px;
@@ -409,7 +409,7 @@
 .yourStars {
   font-size: 0.9rem;
   font-weight: 800;
-  color: var(--td-gold-text);
+  color: #8a5a00; /* pinned for paper */
   letter-spacing: 0.04em;
 }
 
@@ -420,9 +420,9 @@
   margin-left: 10px;
   font-size: 0.75rem;
   font-weight: 700;
-  color: var(--td-brick);
-  background: var(--td-brick-soft);
-  border: 1.5px solid var(--td-brick);
+  color: #9c3520; /* pinned pair for paper */
+  background: #fbe9d9;
+  border: 1.5px solid #b03e26;
   padding: 1px 9px;
   border-radius: var(--td-radius-full);
   vertical-align: middle;

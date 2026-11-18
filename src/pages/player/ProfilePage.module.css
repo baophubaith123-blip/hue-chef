@@ -205,7 +205,7 @@
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--color-brick, #c8553d), var(--td-gold, #e9a23b));
+  background: linear-gradient(135deg, #b03e26, #8f2f1c); /* pinned: white initial passes in both themes */
   color: #ffffff;
   display: grid;
   place-items: center;
