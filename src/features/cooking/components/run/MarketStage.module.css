@@ -68,8 +68,10 @@
 }
 
 .viewChip {
-  background: var(--color-warning-soft, #fff4e5);
-  color: var(--color-warning, #9a5b00);
+  /* Pinned pair: the old warning tokens flip apart at night (bright
+     amber on cream, 1.76) in the true dark scan. */
+  background: #fde6ba;
+  color: #8a5a00;
   font-weight: 800;
   font-size: 13px;
   border-radius: 999px;

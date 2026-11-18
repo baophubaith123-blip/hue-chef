@@ -123,9 +123,11 @@
 }
 
 .active .order {
-  background: var(--color-brick, #c8553d);
+  /* Pinned brick: the old --color-brick flips bright at night and the
+     white numeral failed contrast (2.61) in the true dark scan. */
+  background: #b03e26;
   color: #ffffff;
-  border-color: var(--color-brick, #c8553d);
+  border-color: #b03e26;
 }
 
 .done .order {
