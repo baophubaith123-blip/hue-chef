@@ -47,6 +47,10 @@ export interface StoredUser {
   ownedRecipeIds?: string[];
   cookedRecipes?: CookedRecipeEntry[];
   unlockedAchievements?: string[];
+  /** Chapter ids whose Ngự thiện boss was beaten — the sell licenses of
+   * the stall loop (Kế hoạch hợp nhất, chốt 1). Earned only by boss wins;
+   * absent on legacy records, which simply means "no license yet". */
+  sellLicenses?: string[];
   warningCount?: number;
   bio?: string;
   recipeCount?: number;
@@ -78,6 +82,9 @@ export interface PublicUser {
   ownedRecipeIds?: string[];
   cookedRecipes?: CookedRecipeEntry[];
   unlockedAchievements?: string[];
+  /** Chapter ids whose Ngự thiện boss was beaten — the sell licenses of
+   * the stall loop (Kế hoạch hợp nhất, chốt 1). */
+  sellLicenses?: string[];
   warningCount?: number;
   bio?: string;
   recipeCount?: number;

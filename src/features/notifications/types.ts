@@ -3,6 +3,7 @@ export type NotificationType =
   | 'recipe.rejected'
   | 'recipe.comment'
   | 'achievement.unlocked'
+  | 'license.granted'
   | 'mail.new'
   | 'ban.notice'
   | 'warning.count'

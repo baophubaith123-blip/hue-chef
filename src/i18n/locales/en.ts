@@ -88,6 +88,8 @@ export const en: I18nDictionary = {
     leaderboard: 'Leaderboard',
     profile: 'Profile',
     about: 'About',
+    map: 'Hue Map',
+    album: 'Dish Album',
   },
   recipe: {
     name: 'Name',
@@ -520,6 +522,82 @@ export const en: I18nDictionary = {
     lastCooked: 'Last cooked',
     notCooked: 'Not cooked yet — go conquer this dish!',
     conquered: 'Conquered {done}/{total} dishes',
+  },
+  journey: {
+    mapTitle: 'The Hue Journey Map',
+    mapSubtitle:
+      'Travel along the Perfume River through three chapters: street carts and Dong Ba market, old-town eateries, then the imperial kitchen. Learn every dish of a chapter to challenge its boss — beat the boss to earn the sell license for the whole chapter at your stall.',
+    chapterLabel: (order: number) => `Chapter ${order}`,
+    dishCount: (count: number) => `${count} dishes`,
+    cookedProgress: (done: number, total: number) => `Learned ${done}/${total} dishes`,
+    teacherLabel: 'Your teacher',
+    bossTitle: 'Chapter boss · Royal Kitchen Trial',
+    bossReady: 'The challenge is open — the imperial judge awaits!',
+    bossPassed: 'Cleared — this chapter\u2019s sell license is yours.',
+    bossLockedDishes: (done: number, total: number) =>
+      `Learn every dish of this chapter to unlock the boss (${done}/${total} learned).`,
+    bossLockedPrev: (chapterName: string) =>
+      `Beat the boss of ${chapterName} first.`,
+    bossEnter: 'Enter the boss stage',
+    bossReplay: 'Fight the boss again',
+    bossRule: (stars: number) =>
+      `Boss stages are judged more strictly than normal runs: reach at least ${stars} stars to earn the license.`,
+    licenseTitle: 'Sell license',
+    licenseSellableList: 'Dishes you may sell at the stall',
+    licenseNone: 'You hold no sell license yet — beat a chapter boss to earn one.',
+    chapters: {
+      'dong-ba': {
+        name: 'Street carts & Dong Ba Market',
+        tagline: 'Begin among the street carts and the old capital\u2019s busiest market, home of Hue\u2019s most famous snacks.',
+        teacherName: 'Auntie Tu',
+        teacherRole: 'Owner of a banh loc cart at Dong Ba market',
+      },
+      'pho-co': {
+        name: 'Old-Town Eateries',
+        tagline: 'Slip into the shady streets where long-standing family eateries guard Hue\u2019s heirloom recipes.',
+        teacherName: 'Uncle Sau',
+        teacherRole: 'Owner of a family eatery in the old town',
+      },
+      'cung-dinh': {
+        name: 'The Imperial Kitchen',
+        tagline: 'The summit of the journey: the kitchen that served Nguyen emperors, where every dish is a work of art.',
+        teacherName: 'Royal Chef Le Van Thuong',
+        teacherRole: 'Head chef of the Imperial Kitchen',
+      },
+    },
+    albumTitle: 'Hue Dish Album',
+    albumSubtitle:
+      'Every dish cooked at 3 stars or more is kept in the album with a culture card telling its story. Complete a chapter\u2019s set to finish that leg of your collection.',
+    albumProgress: (done: number, total: number) => `Collected ${done}/${total} cards`,
+    albumSetProgress: (done: number, total: number) => `${done}/${total} cards`,
+    albumSetComplete: 'Set complete!',
+    albumLockedHint: (stars: number) => `Reach ${stars} stars to unlock the culture card`,
+    albumViewCard: 'View culture card',
+    albumOrigin: 'Origin',
+    albumStory: 'The story',
+    albumYourBest: (score: number, stars: number) => `Your best: ${score} points · ${stars} stars`,
+    detailChapterLabel: 'Journey chapter',
+    detailSellable: 'Licensed — this dish may be sold at the stall',
+    detailNotSellable: (chapterName: string) =>
+      `Not licensed for sale yet — beat the boss of "${chapterName}" to sell this dish`,
+    detailBossDish: 'This is the chapter\u2019s boss dish',
+    detailViewMap: 'View on the map',
+    bossBannerTitle: 'Royal Kitchen Boss Stage',
+    bossBannerRule: (chapterName: string, stars: number) =>
+      `Cook the signature dish of "${chapterName}" at ${stars} stars or more to earn the sell license for the whole chapter.`,
+    bossResultPassedTitle: 'Boss stage cleared!',
+    bossResultPassedBody: (chapterName: string, count: number) =>
+      `The imperial judge has nodded. You receive the sell license for ${count} dishes of "${chapterName}" at the stall.`,
+    bossResultShortTitle: 'Below the royal standard',
+    bossResultShortBody: (stars: number, needed: number) =>
+      `This run reached ${stars} stars — the boss needs at least ${needed}. Cook the boss dish again when you are ready!`,
+    bossResultFailBody:
+      'The boss run did not succeed. Practise the chapter\u2019s dishes a little more, then challenge again.',
+    licenseNoticeTitle: 'New sell license earned!',
+    licenseNoticeBody: (chapterName: string) =>
+      `You are now licensed to sell every dish of "${chapterName}".`,
+    judgeAlt: 'Imperial kitchen judge',
+    judgeSpeech: 'Cook it for me to taste!',
   },
   home: {
     welcome: (name: string) => `Welcome, ${name}`,

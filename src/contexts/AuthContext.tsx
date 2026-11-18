@@ -47,6 +47,9 @@ interface AuthContextValue {
   addCoins: (amount: number) => number | null;
   purchaseRecipe: (recipeId: string, price: number) => boolean;
   addCookedRecipe: (entry: CookedRecipeEntry) => void;
+  /** Record a chapter's sell license after its boss stage is beaten.
+   * Returns true only when the license is newly granted. */
+  grantSellLicense: (chapterId: string) => boolean;
   updateProfile: (patch: Partial<Pick<StoredUser, 'name' | 'avatar' | 'password' | 'equippedAchievementId'>>) => PublicUser | null;
 }
 
@@ -299,6 +302,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     [user, persistStoredUser],
   );
 
+  const grantSellLicense = useCallback(
+    (chapterId: string): boolean => {
+      if (!user) return false;
+      const users = loadUsers();
+      const stored = findUserById(users, user.id);
+      if (!stored) return false;
+      const current = stored.sellLicenses ?? [];
+      if (current.includes(chapterId)) return false;
+      persistStoredUser(user.id, { sellLicenses: [...current, chapterId] });
+      return true;
+    },
+    [user, persistStoredUser],
+  );
+
   const updateProfile = useCallback(
     (patch: Partial<Pick<StoredUser, 'name' | 'avatar' | 'password' | 'equippedAchievementId'>>): PublicUser | null => {
       if (!user) return null;
@@ -319,9 +336,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       addCoins,
       purchaseRecipe,
       addCookedRecipe,
+      grantSellLicense,
       updateProfile,
     }),
-    [user, isLoading, login, register, logout, addXp, addCoins, purchaseRecipe, addCookedRecipe, updateProfile],
+    [user, isLoading, login, register, logout, addXp, addCoins, purchaseRecipe, addCookedRecipe, grantSellLicense, updateProfile],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

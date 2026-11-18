@@ -88,6 +88,8 @@ export const vi: I18nDictionary = {
     leaderboard: 'Bảng xếp hạng',
     profile: 'Trang cá nhân',
     about: 'Giới thiệu',
+    map: 'Bản đồ Huế',
+    album: 'Album món',
   },
   recipe: {
     name: 'Tên món',
@@ -520,6 +522,82 @@ export const vi: I18nDictionary = {
     lastCooked: 'Nấu lúc',
     notCooked: 'Chưa nấu — hãy chinh phục món này!',
     conquered: 'Đã chinh phục {done}/{total} món',
+  },
+  journey: {
+    mapTitle: 'Bản đồ hành trình Huế',
+    mapSubtitle:
+      'Đi dọc sông Hương qua ba chặng: gánh hàng rong chợ Đông Ba, quán nhỏ phố cổ rồi bếp cung đình. Học hết món của một chặng để thách đấu trùm cuối — thắng trùm là được cấp giấy phép bán toàn bộ món của chặng đó tại quầy.',
+    chapterLabel: (order: number) => `Chặng ${order}`,
+    dishCount: (count: number) => `${count} món`,
+    cookedProgress: (done: number, total: number) => `Đã học ${done}/${total} món`,
+    teacherLabel: 'Thầy dạy đồng hành',
+    bossTitle: 'Trùm cuối · Ngự thiện',
+    bossReady: 'Đã mở thách đấu — giám khảo Ngự thiện đang chờ bạn!',
+    bossPassed: 'Đã vượt qua — giấy phép bán của chặng đã thuộc về bạn.',
+    bossLockedDishes: (done: number, total: number) =>
+      `Học hết món của chặng để mở màn trùm (đã học ${done}/${total}).`,
+    bossLockedPrev: (chapterName: string) =>
+      `Cần vượt qua trùm của ${chapterName} trước.`,
+    bossEnter: 'Vào màn trùm',
+    bossReplay: 'Đấu lại trùm',
+    bossRule: (stars: number) =>
+      `Màn trùm chấm khắt khe hơn ván thường: phải đạt từ ${stars} sao trở lên mới được cấp phép.`,
+    licenseTitle: 'Giấy phép bán',
+    licenseSellableList: 'Các món được phép bán tại quầy',
+    licenseNone: 'Bạn chưa có giấy phép bán nào — hãy vượt qua trùm cuối của một chặng.',
+    chapters: {
+      'dong-ba': {
+        name: 'Gánh hàng rong & chợ Đông Ba',
+        tagline: 'Bắt đầu từ những gánh hàng rong và khu chợ sầm uất nhất cố đô, nơi hội tụ món ăn chơi trứ danh của Huế.',
+        teacherName: 'Mệ Tư',
+        teacherRole: 'Bà chủ gánh bánh lọc chợ Đông Ba',
+      },
+      'pho-co': {
+        name: 'Quán nhỏ phố cổ',
+        tagline: 'Len vào những con phố rợp bóng cây, nơi các quán nhỏ lâu đời giữ bí quyết món ăn gia truyền của Huế.',
+        teacherName: 'Chú Sáu',
+        teacherRole: 'Chủ quán ăn gia truyền phố cổ',
+      },
+      'cung-dinh': {
+        name: 'Bếp cung đình',
+        tagline: 'Đỉnh cao của hành trình: căn bếp phục vụ vua chúa triều Nguyễn, nơi mỗi món ăn là một tác phẩm.',
+        teacherName: 'Ngự trù Lê Văn Thưởng',
+        teacherRole: 'Đầu bếp trưởng Ngự thiện phòng',
+      },
+    },
+    albumTitle: 'Album món Huế',
+    albumSubtitle:
+      'Mỗi món nấu đạt từ 3 sao trở lên sẽ được lưu vào album cùng một thẻ văn hoá kể về nguồn gốc của món. Sưu tầm đủ bộ theo chặng để hoàn thành hành trình sưu tầm của bạn.',
+    albumProgress: (done: number, total: number) => `Đã sưu tầm ${done}/${total} thẻ`,
+    albumSetProgress: (done: number, total: number) => `${done}/${total} thẻ`,
+    albumSetComplete: 'Đủ bộ!',
+    albumLockedHint: (stars: number) => `Đạt ${stars} sao để mở thẻ văn hoá`,
+    albumViewCard: 'Xem thẻ văn hoá',
+    albumOrigin: 'Nguồn gốc',
+    albumStory: 'Câu chuyện',
+    albumYourBest: (score: number, stars: number) => `Thành tích tốt nhất của bạn: ${score} điểm · ${stars} sao`,
+    detailChapterLabel: 'Chặng hành trình',
+    detailSellable: 'Đã có giấy phép — món này được bán tại quầy',
+    detailNotSellable: (chapterName: string) =>
+      `Chưa được phép bán — thắng trùm cuối của chặng "${chapterName}" để mở bán món này`,
+    detailBossDish: 'Đây là món trùm cuối của chặng',
+    detailViewMap: 'Xem trên bản đồ',
+    bossBannerTitle: 'Màn trùm Ngự thiện',
+    bossBannerRule: (chapterName: string, stars: number) =>
+      `Nấu món tiêu biểu của chặng "${chapterName}" đạt từ ${stars} sao trở lên để nhận giấy phép bán cả chặng.`,
+    bossResultPassedTitle: 'Vượt qua màn trùm!',
+    bossResultPassedBody: (chapterName: string, count: number) =>
+      `Giám khảo Ngự thiện đã gật đầu. Bạn nhận giấy phép bán ${count} món của chặng "${chapterName}" tại quầy.`,
+    bossResultShortTitle: 'Chưa đạt ngưỡng Ngự thiện',
+    bossResultShortBody: (stars: number, needed: number) =>
+      `Ván này đạt ${stars} sao — màn trùm cần từ ${needed} sao trở lên. Nấu lại món trùm khi sẵn sàng nhé!`,
+    bossResultFailBody:
+      'Ván trùm chưa thành công. Hãy luyện thêm các món của chặng rồi quay lại thách đấu.',
+    licenseNoticeTitle: 'Nhận giấy phép bán mới!',
+    licenseNoticeBody: (chapterName: string) =>
+      `Bạn đã được cấp phép bán toàn bộ món của chặng "${chapterName}".`,
+    judgeAlt: 'Giám khảo Ngự thiện',
+    judgeSpeech: 'Nấu cho ta nếm thử nào!',
   },
   home: {
     welcome: (name: string) => `Chào mừng, ${name}`,

@@ -90,6 +90,8 @@ export interface I18nDictionary {
     leaderboard: string;
     profile: string;
     about: string;
+    map: string;
+    album: string;
   };
   recipe: {
     name: string;
@@ -483,6 +485,53 @@ export interface I18nDictionary {
     lastCooked: string;
     notCooked: string;
     conquered: string;
+  };
+  /** Gói H3 — Hue journey map, Ngự thiện boss stages, sell licenses, dish album. */
+  journey: {
+    mapTitle: string;
+    mapSubtitle: string;
+    chapterLabel: (order: number) => string;
+    dishCount: (count: number) => string;
+    cookedProgress: (done: number, total: number) => string;
+    teacherLabel: string;
+    bossTitle: string;
+    bossReady: string;
+    bossPassed: string;
+    bossLockedDishes: (done: number, total: number) => string;
+    bossLockedPrev: (chapterName: string) => string;
+    bossEnter: string;
+    bossReplay: string;
+    bossRule: (stars: number) => string;
+    licenseTitle: string;
+    licenseSellableList: string;
+    licenseNone: string;
+    chapters: Record<string, { name: string; tagline: string; teacherName: string; teacherRole: string }>;
+    albumTitle: string;
+    albumSubtitle: string;
+    albumProgress: (done: number, total: number) => string;
+    albumSetProgress: (done: number, total: number) => string;
+    albumSetComplete: string;
+    albumLockedHint: (stars: number) => string;
+    albumViewCard: string;
+    albumOrigin: string;
+    albumStory: string;
+    albumYourBest: (score: number, stars: number) => string;
+    detailChapterLabel: string;
+    detailSellable: string;
+    detailNotSellable: (chapterName: string) => string;
+    detailBossDish: string;
+    detailViewMap: string;
+    bossBannerTitle: string;
+    bossBannerRule: (chapterName: string, stars: number) => string;
+    bossResultPassedTitle: string;
+    bossResultPassedBody: (chapterName: string, count: number) => string;
+    bossResultShortTitle: string;
+    bossResultShortBody: (stars: number, needed: number) => string;
+    bossResultFailBody: string;
+    licenseNoticeTitle: string;
+    licenseNoticeBody: (chapterName: string) => string;
+    judgeAlt: string;
+    judgeSpeech: string;
   };
   home: {
     welcome: (name: string) => string;
