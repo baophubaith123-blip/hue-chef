@@ -394,6 +394,12 @@
 }
 
 .levelUpCard {
+  /* Solid paper-deep surface like the sibling cards: the base rule's
+     translucent gold gradient lets the card measure (and on some
+     displays render) as full-strength gold behind the pinned muted
+     subtitle ink — 2.84:1 — while the flat surface keeps it at ~5.3:1
+     in both themes. */
+  background: var(--td-paper-deep, #f7e8c6);
   border: 3px solid var(--td-gold, #e9a23b);
   border-radius: var(--radius-xl, 16px);
 }

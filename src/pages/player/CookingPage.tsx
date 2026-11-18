@@ -102,6 +102,14 @@ export default function CookingPage() {
   const [pendingQuality, setPendingQuality] = useState<number | null>(null);
   const animationTimerRef = useRef<number | null>(null);
   const guardCheckedIdRef = useRef<string | null>(null);
+  // The session this page mount has started, keyed by recipe + mode. The
+  // start effect below must start exactly once per key: applying progress
+  // at the end of a run replaces the user object and can flip the resolved
+  // equipped perk (its achievement unlocking in the store during that same
+  // apply), which re-runs the effect — such a re-run must never reset or
+  // restart the run it belongs to, least of all a finished one whose
+  // result modal is on screen.
+  const startedKeyRef = useRef<string | null>(null);
 
   const recipe = id ? getRecipeById(id) : undefined;
   const approved = recipe && (recipe.status ?? 'approved') === 'approved';
@@ -245,8 +253,20 @@ export default function CookingPage() {
   ]);
 
   useEffect(() => {
+    // The cleanup only ever clears visual-effect timers. The session
+    // itself is torn down by the dedicated effect further below, keyed
+    // solely on the recipe id, so a re-run of this effect can no longer
+    // reset a live or finished session by accident.
+    const cleanupFx = () => {
+      clearAnimationTimer();
+      if (fxTimerRef.current !== null) {
+        window.clearTimeout(fxTimerRef.current);
+        fxTimerRef.current = null;
+      }
+      setDropFx(null);
+    };
     if (isLoading || !id) {
-      return undefined;
+      return cleanupFx;
     }
     const current = getRecipeById(id);
     const currentApproved = current && (current.status ?? 'approved') === 'approved';
@@ -255,7 +275,7 @@ export default function CookingPage() {
       current &&
       (current.editorId === user?.id || user?.role === 'admin');
     if (!current || (!currentApproved && !currentPreview)) {
-      return undefined;
+      return cleanupFx;
     }
     // Shop guard: a locked dish cannot be cooked by direct URL — send the
     // player to its detail page where the buy panel lives. Checked once per
@@ -265,27 +285,28 @@ export default function CookingPage() {
       guardCheckedIdRef.current = current.id;
       if (!isRecipeOwned(user, current)) {
         navigate(`/recipes/${current.id}`, { replace: true });
-        return undefined;
+        return cleanupFx;
       }
     }
+    // Start exactly once per recipe mount. A re-run while this recipe's
+    // session is live — the identity churn when progress is applied at
+    // the end of a run (user object swapped; the equipped perk resolving
+    // from null to its object once its achievement lands in the unlock
+    // store during that apply) — must not reset or restart the session:
+    // a finished run's result modal stays up until the player closes it.
+    const startKey = `${current.id}:${currentPreview ? 'preview' : 'play'}`;
+    if (startedKeyRef.current === startKey) {
+      return cleanupFx;
+    }
+    startedKeyRef.current = startKey;
     setAppliedResult(null);
     startCooking(current, equippedPerk);
-    return () => {
-      clearAnimationTimer();
-      if (fxTimerRef.current !== null) {
-        window.clearTimeout(fxTimerRef.current);
-        fxTimerRef.current = null;
-      }
-      setDropFx(null);
-      resetCooking();
-      setAppliedResult(null);
-    };
+    return cleanupFx;
   }, [
     id,
     isLoading,
     getRecipeById,
     startCooking,
-    resetCooking,
     clearAnimationTimer,
     isPreview,
     user?.id,
@@ -293,6 +314,18 @@ export default function CookingPage() {
     navigate,
     equippedPerk,
   ]);
+
+  // Session teardown: reset only when the page truly leaves this recipe
+  // (route change or unmount) — never as a side effect of the start
+  // effect re-running. Clearing startedKeyRef here also keeps a
+  // StrictMode remount of the same recipe able to start its session.
+  useEffect(() => {
+    return () => {
+      startedKeyRef.current = null;
+      resetCooking();
+      setAppliedResult(null);
+    };
+  }, [id, resetCooking]);
 
   const handleDropOnPot = useCallback(
     (ingredientId: string) => {
@@ -843,7 +876,14 @@ export default function CookingPage() {
         <CookingResultModal
           session={session}
           onClose={resetCooking}
-          onRetry={() => startCooking(recipe)}
+          onRetry={() => {
+            // The retried run must be able to apply its own progress:
+            // clear the previous run's applied result. (It used to be
+            // cleared only as a side effect of the start effect
+            // re-running, which the startedKeyRef guard now prevents.)
+            setAppliedResult(null);
+            startCooking(recipe);
+          }}
           onApplyProgress={handleApplyProgress}
           gainedXp={appliedResult?.gainedXp}
           newLevel={appliedResult?.newLevel}
