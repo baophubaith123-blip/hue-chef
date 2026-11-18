@@ -29,9 +29,11 @@ import EditorMyRecipesPage from '@/pages/editor/EditorMyRecipesPage';
 import EditorRecipeDetailPage from '@/pages/editor/EditorRecipeDetailPage';
 import EditorRecipeFormPage from '@/pages/editor/EditorRecipeFormPage';
 import AchievementsPage from '@/pages/player/AchievementsPage';
+import AlbumPage from '@/pages/player/AlbumPage';
 import CollectionPage from '@/pages/player/CollectionPage';
 import CookingPage from '@/pages/player/CookingPage';
 import HomePage from '@/pages/player/HomePage';
+import HueMapPage from '@/pages/player/HueMapPage';
 import InboxPage from '@/pages/player/InboxPage';
 import LeaderboardPage from '@/pages/player/LeaderboardPage';
 import PlayerMailDetailPage from '@/pages/player/PlayerMailDetailPage';
@@ -83,6 +85,14 @@ export const router = createBrowserRouter([
       {
         path: '/recipes',
         element: <RecipeListPage />,
+      },
+      {
+        path: '/map',
+        element: <HueMapPage />,
+      },
+      {
+        path: '/album',
+        element: <AlbumPage />,
       },
       {
         path: '/recipes/:id',

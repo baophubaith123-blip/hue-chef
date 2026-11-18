@@ -56,6 +56,8 @@ export function PlayerShell({ children }: PlayerShellProps) {
     if (p.startsWith('/cooking/')) return t('cooking.pot');
     if (p === '/leaderboard') return dict.nav.leaderboard;
     if (p === '/achievements') return dict.nav.achievements;
+    if (p === '/map') return dict.nav.map;
+    if (p === '/album') return dict.nav.album;
     if (p === '/collection') return dict.nav.collection;
     if (p.startsWith('/inbox')) return dict.nav.inbox;
     if (p.startsWith('/profile')) return dict.nav.profile;
@@ -110,6 +112,26 @@ export function PlayerShell({ children }: PlayerShellProps) {
           >
             <span className={styles.navIcon}>🍲</span>
             <span className={styles.navLabel}>{t('nav.recipes')}</span>
+          </NavLink>
+
+          <NavLink
+            to="/map"
+            className={({ isActive }) =>
+              [styles.navLink, isActive ? styles.navLinkActive : ''].filter(Boolean).join(' ')
+            }
+          >
+            <span className={styles.navIcon}>🗺️</span>
+            <span className={styles.navLabel}>{t('nav.map')}</span>
+          </NavLink>
+
+          <NavLink
+            to="/album"
+            className={({ isActive }) =>
+              [styles.navLink, isActive ? styles.navLinkActive : ''].filter(Boolean).join(' ')
+            }
+          >
+            <span className={styles.navIcon}>📖</span>
+            <span className={styles.navLabel}>{t('nav.album')}</span>
           </NavLink>
 
           <NavLink
