@@ -9,7 +9,7 @@
 .profileHeaderCard {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-xl);
+  border-radius: var(--td-radius-wood);
   padding: 2rem;
   box-shadow: 0 4px 20px rgba(59, 42, 32, 0.06);
   display: flex;
@@ -35,7 +35,7 @@
   width: 80px;
   height: 80px;
   border-radius: 50%;
-  border: 3px solid var(--color-gold);
+  border: 3px solid var(--td-gold);
   background: var(--color-surface);
   box-shadow: 0 4px 14px rgba(233, 162, 59, 0.3);
   overflow: hidden;
@@ -56,7 +56,7 @@
   justify-content: center;
   font-weight: 800;
   font-size: 2rem;
-  color: var(--color-plum);
+  color: var(--td-plum);
   background: var(--color-surface-alt);
 }
 
@@ -89,10 +89,10 @@
 
 .userName {
   margin: 0;
-  font-family: var(--font-serif);
+  font-family: var(--td-font-display);
   font-size: 1.85rem;
   font-weight: 700;
-  color: var(--color-plum);
+  color: var(--td-plum);
 }
 
 [data-theme='dark'] .userName {
@@ -103,9 +103,9 @@
   font-size: 0.82rem;
   font-weight: 700;
   color: #FFFFFF;
-  background: var(--color-primary);
+  background: var(--td-brick);
   padding: 2px 10px;
-  border-radius: var(--radius-full);
+  border-radius: var(--td-radius-full);
 }
 
 .expSection {
@@ -127,15 +127,15 @@
   width: 100%;
   height: 8px;
   background-color: var(--color-surface-alt);
-  border-radius: var(--radius-full);
+  border-radius: var(--td-radius-full);
   overflow: hidden;
   border: 1px solid var(--color-border);
 }
 
 .expFill {
   height: 100%;
-  background: linear-gradient(90deg, var(--color-accent), var(--color-primary));
-  border-radius: var(--radius-full);
+  background: linear-gradient(90deg, var(--color-accent), var(--td-brick));
+  border-radius: var(--td-radius-full);
   transition: width 0.3s ease;
 }
 
@@ -157,7 +157,7 @@
 .statBox {
   background: var(--color-surface-alt);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
+  border-radius: var(--td-radius-paper);
   padding: 1.25rem;
   text-align: center;
   display: flex;
@@ -169,7 +169,7 @@
 .statNumber {
   font-size: 1.75rem;
   font-weight: 800;
-  color: var(--color-plum);
+  color: var(--td-plum);
 }
 
 [data-theme='dark'] .statNumber {
@@ -191,7 +191,7 @@
 
 .sectionTitle {
   margin: 0;
-  font-family: var(--font-serif);
+  font-family: var(--td-font-display);
   font-size: 1.35rem;
   font-weight: 700;
   color: var(--color-text);
@@ -206,7 +206,7 @@
 .badgePillCard {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-xl);
+  border-radius: var(--td-radius-wood);
   padding: 1rem;
   display: flex;
   flex-direction: column;
@@ -252,31 +252,31 @@
 .profileHeaderCard,
 .statBox,
 .badgePillCard {
-  background: var(--paper, #fff6e0);
-  color: var(--paper-text, #43301b);
-  border: var(--border-game, 3px solid #4a2c14);
+  background: var(--td-paper, #fff6e0);
+  color: var(--td-paper-text, #43301b);
+  border: 3px solid var(--td-ink);
   border-radius: 22px;
   box-shadow: var(--shadow-game-card, 0 12px 28px rgba(59, 42, 32, 0.12));
 }
 
 .avatarWrapper {
-  border: 3.5px solid var(--color-gold, #e9a23b);
-  box-shadow: 0 4px 0 var(--ink-soft, rgba(74, 44, 20, 0.45));
+  border: 3.5px solid var(--td-gold, #e9a23b);
+  box-shadow: 0 4px 0 var(--td-ink-soft, rgba(74, 44, 20, 0.45));
 }
 
 .userName {
-  color: var(--paper-text, #43301b);
+  color: var(--td-paper-text, #43301b);
 }
 
 .levelBadge {
   background: var(--gradient-gold, linear-gradient(135deg, #f6c453, #e9a23b));
-  border: 2px solid var(--ink, #4a2c14);
+  border: 2px solid var(--td-ink, #4a2c14);
   color: #43301b;
 }
 
 .expTrack {
-  border: 2.5px solid var(--ink, #4a2c14);
-  background: var(--paper-deep, #f7e8c6);
+  border: 2.5px solid var(--td-ink, #4a2c14);
+  background: var(--td-paper-deep, #f7e8c6);
 }
 
 .expFill {
@@ -285,17 +285,17 @@
 
 .expText,
 .statLabel {
-  color: var(--paper-text-muted, #7a5c38);
+  color: var(--td-paper-text-muted, #7a5c38);
 }
 
 .statNumber,
 .badgeName {
-  color: var(--paper-text, #43301b);
+  color: var(--td-paper-text, #43301b);
 }
 
 .badgeIconCircle {
-  border: 2.5px solid var(--ink, #4a2c14);
-  box-shadow: 0 3px 0 var(--ink-soft, rgba(74, 44, 20, 0.45));
+  border: 2.5px solid var(--td-ink, #4a2c14);
+  box-shadow: 0 3px 0 var(--td-ink-soft, rgba(74, 44, 20, 0.45));
 }
 
 
@@ -305,7 +305,7 @@
   display: block;
   height: 84px;
   margin-bottom: 1.1rem;
-  border: var(--border-game, 3px solid #4a2c14);
+  border: 3px solid var(--td-ink);
   border-radius: 20px;
   background-image: url('/images/festival-day.webp');
   background-size: cover;
@@ -323,5 +323,5 @@
    Re-pin them to paper text at matching specificity, later in source. */
 [data-theme='dark'] .userName,
 [data-theme='dark'] .statNumber {
-  color: var(--paper-text, #43301b);
+  color: var(--td-paper-text, #43301b);
 }

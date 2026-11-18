@@ -66,7 +66,7 @@
 }
 
 .row:hover {
-  border-color: var(--color-primary);
+  border-color: var(--td-brick);
   transform: translateY(-1px);
   box-shadow: var(--shadow-sm);
 }
@@ -103,7 +103,7 @@
   height: 120px;
   border-radius: 24px;
   object-fit: cover;
-  border: 2.5px solid var(--color-gold, #e9a23b);
+  border: 2.5px solid var(--td-gold, #e9a23b);
   box-shadow: var(--shadow-glow-gold);
   animation: bounceSoft 3.4s ease-in-out infinite;
 }
@@ -216,55 +216,55 @@
 
 /* ===== Phase 16 — theme D overrides ===== */
 .row {
-  background: var(--paper, #fff6e0);
-  color: var(--paper-text, #43301b);
-  border: var(--border-game, 3px solid #4a2c14);
+  background: var(--td-paper, #fff6e0);
+  color: var(--td-paper-text, #43301b);
+  border: 3px solid var(--td-ink);
   border-radius: 18px;
   box-shadow: 0 4px 0 rgba(74, 44, 20, 0.14);
 }
 
 .row:hover {
-  background: var(--paper-deep, #f7e8c6);
+  background: var(--td-paper-deep, #f7e8c6);
 }
 
 .subject {
-  color: var(--paper-text, #43301b);
+  color: var(--td-paper-text, #43301b);
 }
 
 .preview,
 .date {
-  color: var(--paper-text-muted, #7a5c38);
+  color: var(--td-paper-text-muted, #7a5c38);
 }
 
 .unreadBadge {
-  background: var(--color-primary, #c8553d);
-  border: 2px solid var(--ink, #4a2c14);
+  background: var(--td-brick, #c8553d);
+  border: 2px solid var(--td-ink, #4a2c14);
   color: #fff;
 }
 
 .typeChip {
   background: var(--wood-gradient-soft, linear-gradient(180deg, #e3b06a, #cd9a52));
-  border: 1.5px solid var(--ink, #4a2c14);
+  border: 1.5px solid var(--td-ink, #4a2c14);
   color: #43301b;
   font-weight: 700;
 }
 
 .dotUnread {
-  background: var(--color-primary, #c8553d);
-  border: 1.5px solid var(--ink, #4a2c14);
+  background: var(--td-brick, #c8553d);
+  border: 1.5px solid var(--td-ink, #4a2c14);
 }
 
 .icon {
-  border: 2.5px solid var(--ink, #4a2c14);
-  box-shadow: 0 3px 0 var(--ink-soft, rgba(74, 44, 20, 0.45));
+  border: 2.5px solid var(--td-ink, #4a2c14);
+  box-shadow: 0 3px 0 var(--td-ink-soft, rgba(74, 44, 20, 0.45));
 }
 
 .emptyTitle {
-  color: var(--paper-text, #43301b);
+  color: var(--td-paper-text, #43301b);
 }
 
 .emptyHint {
-  color: var(--paper-text-muted, #7a5c38);
+  color: var(--td-paper-text-muted, #7a5c38);
 }
 
 
@@ -275,7 +275,7 @@
     url('/images/festival-day.webp');
   background-size: cover;
   background-position: center 20%;
-  border: var(--border-game, 3px solid #4a2c14);
+  border: 3px solid var(--td-ink);
   border-radius: 22px;
   padding: 1.1rem 1.25rem;
   box-shadow: var(--shadow-game-card, 0 12px 28px rgba(59, 42, 32, 0.12));

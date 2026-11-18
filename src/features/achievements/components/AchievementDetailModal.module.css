@@ -125,7 +125,7 @@
 
 .storyBox {
   background: var(--color-bg-muted, #f9fafb);
-  border-left: 3px solid var(--color-primary, #ea580c);
+  border-left: 3px solid var(--td-brick, #ea580c);
   padding: 0.85rem 1rem;
   border-radius: 6px;
   text-align: left;
@@ -181,7 +181,7 @@
 
 .perkBox {
   background: linear-gradient(135deg, #fdf6e0, #fdeec3);
-  border: 1.5px solid var(--color-gold, #e9a23b);
+  border: 1.5px solid var(--td-gold, #e9a23b);
   border-radius: 10px;
   padding: 0.8rem 1rem;
   text-align: left;
@@ -215,48 +215,48 @@
 
 /* ===== Phase 16 — theme D overrides ===== */
 .modal {
-  background: var(--paper, #fff6e0);
-  color: var(--paper-text, #43301b);
-  border: var(--border-game, 3px solid #4a2c14);
+  background: var(--td-paper, #fff6e0);
+  color: var(--td-paper-text, #43301b);
+  border: 3px solid var(--td-ink);
   border-radius: 24px;
   box-shadow: 0 8px 0 rgba(0, 0, 0, 0.35), 0 24px 48px rgba(0, 0, 0, 0.45);
 }
 
 .title {
-  color: var(--paper-text, #43301b);
+  color: var(--td-paper-text, #43301b);
 }
 
 .desc,
 .storyLabel,
 .progressText {
-  color: var(--paper-text-muted, #7a5c38);
+  color: var(--td-paper-text-muted, #7a5c38);
 }
 
 .storyBox {
-  background: var(--paper-deep, #f7e8c6);
+  background: var(--td-paper-deep, #f7e8c6);
   border: 2px solid var(--wood, #b57e40);
-  color: var(--paper-text, #43301b);
+  color: var(--td-paper-text, #43301b);
 }
 
 .iconWrap {
-  border: 3px solid var(--ink, #4a2c14);
-  box-shadow: 0 4px 0 var(--ink-soft, rgba(74, 44, 20, 0.45));
+  border: 3px solid var(--td-ink, #4a2c14);
+  box-shadow: 0 4px 0 var(--td-ink-soft, rgba(74, 44, 20, 0.45));
 }
 
 .progressBar {
-  border: 2px solid var(--ink, #4a2c14);
-  background: var(--paper-deep, #f7e8c6);
+  border: 2px solid var(--td-ink, #4a2c14);
+  background: var(--td-paper-deep, #f7e8c6);
 }
 
 .perkBox {
   background: rgba(233, 162, 59, 0.16);
-  border: 2px solid var(--color-gold, #e9a23b);
-  color: var(--paper-text, #43301b);
+  border: 2px solid var(--td-gold, #e9a23b);
+  color: var(--td-paper-text, #43301b);
 }
 
 .closeBtn {
-  border: 2.5px solid var(--ink, #4a2c14);
-  background: var(--paper, #fff6e0);
-  color: var(--paper-text, #43301b);
-  box-shadow: 0 2px 0 var(--ink-soft, rgba(74, 44, 20, 0.45));
+  border: 2.5px solid var(--td-ink, #4a2c14);
+  background: var(--td-paper, #fff6e0);
+  color: var(--td-paper-text, #43301b);
+  box-shadow: 0 2px 0 var(--td-ink-soft, rgba(74, 44, 20, 0.45));
 }

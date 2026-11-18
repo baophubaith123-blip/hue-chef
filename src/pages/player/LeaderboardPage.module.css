@@ -25,10 +25,10 @@
 
 .title {
   margin: 0;
-  font-family: var(--font-serif);
+  font-family: var(--td-font-display);
   font-size: 1.85rem;
   font-weight: 800;
-  color: var(--color-plum);
+  color: var(--td-plum);
 }
 
 [data-theme='dark'] .title {
@@ -44,26 +44,26 @@
 
 .tabBtn {
   padding: 0.5rem 1.15rem;
-  border-radius: var(--radius-full);
-  background: var(--paper, #fff6e0);
-  border: 2.5px solid var(--ink, #4a2c14);
-  color: var(--paper-text-muted, #7a5c38);
+  border-radius: var(--td-radius-full);
+  background: var(--td-paper, #fff6e0);
+  border: 2.5px solid var(--td-ink, #4a2c14);
+  color: var(--td-paper-text-muted, #7a5c38);
   font-size: 0.88rem;
   font-weight: 700;
   cursor: pointer;
-  box-shadow: 0 3px 0 var(--ink-soft, rgba(74, 44, 20, 0.45));
+  box-shadow: 0 3px 0 var(--td-ink-soft, rgba(74, 44, 20, 0.45));
   transition: all 0.15s ease;
 }
 
 .tabBtn:hover {
   transform: translateY(-1px);
-  color: var(--paper-text, #43301b);
+  color: var(--td-paper-text, #43301b);
 }
 
 .tabBtnActive {
   background: var(--gradient-gold, linear-gradient(135deg, #f6c453, #e9a23b));
   color: #43301b;
-  border-color: var(--ink, #4a2c14);
+  border-color: var(--td-ink, #4a2c14);
   font-weight: 800;
 }
 
@@ -97,7 +97,7 @@
     radial-gradient(circle at 88% 0%, rgba(232, 136, 77, 0.3) 0, transparent 130px),
     linear-gradient(180deg, #5e1d31 0%, #4a1525 55%, #370e1b 100%);
   border-radius: 26px;
-  border: var(--border-game, 3px solid #200f04);
+  border: 3px solid var(--td-ink);
   box-shadow: 0 8px 0 rgba(0, 0, 0, 0.3), var(--shadow-glow-plum);
   position: sticky;
   top: 1.25rem;
@@ -178,7 +178,7 @@
 .avatarGold {
   width: 88px;
   height: 88px;
-  border-color: var(--color-gold);
+  border-color: var(--td-gold);
   box-shadow: 0 4px 0 rgba(0, 0, 0, 0.35), 0 0 22px rgba(233, 162, 59, 0.65);
 }
 
@@ -205,7 +205,7 @@
   font-size: 1.5rem;
   font-weight: 800;
   color: #4a1525;
-  background: var(--gradient-gold);
+  background: linear-gradient(135deg, var(--td-gold-bright) 0%, var(--td-gold) 55%, var(--td-gold-deep) 100%);
 }
 
 /* Name on a wooden plate */
@@ -213,9 +213,9 @@
   display: inline-block;
   max-width: 168px;
   padding: 0.22rem 0.85rem;
-  background: var(--wood-gradient, linear-gradient(180deg, #a5713a, #7c5222));
-  border: 2.5px solid var(--ink, #200f04);
-  border-radius: var(--radius-full);
+  background: var(--td-wood-gradient, linear-gradient(180deg, #a5713a, #7c5222));
+  border: 2.5px solid var(--td-ink, #200f04);
+  border-radius: var(--td-radius-full);
   box-shadow: 0 3px 0 rgba(0, 0, 0, 0.4);
   font-size: 0.95rem;
   font-weight: 800;
@@ -236,7 +236,7 @@
 
 .podiumScoreGold {
   font-size: 0.98rem;
-  color: var(--color-gold, #e9a23b);
+  color: var(--td-gold, #e9a23b);
   font-weight: 800;
   margin-bottom: 0.75rem;
 }
@@ -254,12 +254,12 @@
 .podiumPillar3 {
   width: 100%;
   border-radius: 14px 14px 0 0;
-  border: 3px solid var(--ink, #200f04);
+  border: 3px solid var(--td-ink, #200f04);
   border-bottom: none;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: var(--font-serif);
+  font-family: var(--td-font-display);
   font-weight: 800;
   position: relative;
   overflow: hidden;
@@ -302,9 +302,9 @@
 
 /* ===== Rankings card (rank 4+) — paper board, own scroll ===== */
 .rankingsCard {
-  background: var(--paper, #fff6e0);
-  color: var(--paper-text, #43301b);
-  border: var(--border-game, 3px solid #4a2c14);
+  background: var(--td-paper, #fff6e0);
+  color: var(--td-paper-text, #43301b);
+  border: 3px solid var(--td-ink);
   border-radius: 22px;
   box-shadow: var(--shadow-game-card, 0 12px 28px rgba(59, 42, 32, 0.12));
   overflow: hidden;
@@ -333,31 +333,31 @@
 }
 
 .rankingRow:hover {
-  background-color: var(--paper-deep, #f7e8c6);
+  background-color: var(--td-paper-deep, #f7e8c6);
 }
 
 .currentUserRow {
-  background-color: var(--paper-deep, #f7e8c6);
-  box-shadow: inset 5px 0 0 var(--color-gold, #e9a23b);
+  background-color: var(--td-paper-deep, #f7e8c6);
+  box-shadow: inset 5px 0 0 var(--td-gold, #e9a23b);
   font-weight: 700;
 }
 
 .currentUserRow .playerName {
-  color: var(--color-primary, #c8553d);
+  color: var(--td-brick, #c8553d);
 }
 
 .rankIndex {
   width: 33px;
   height: 33px;
   border-radius: 50%;
-  background: var(--paper-deep, #f7e8c6);
+  background: var(--td-paper-deep, #f7e8c6);
   border: 2.5px solid var(--wood, #b57e40);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 0.88rem;
   font-weight: 800;
-  color: var(--paper-text, #43301b);
+  color: var(--td-paper-text, #43301b);
   flex-shrink: 0;
 }
 
@@ -414,7 +414,7 @@
 .playerName {
   font-size: 0.95rem;
   font-weight: 600;
-  color: var(--paper-text, #43301b);
+  color: var(--td-paper-text, #43301b);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -425,20 +425,20 @@
   font-weight: 800;
   color: #43301b;
   background: var(--gradient-gold, linear-gradient(135deg, #f6c453, #e9a23b));
-  border: 1.5px solid var(--ink, #4a2c14);
+  border: 1.5px solid var(--td-ink, #4a2c14);
   padding: 1px 7px;
-  border-radius: var(--radius-full);
+  border-radius: var(--td-radius-full);
   flex-shrink: 0;
 }
 
 .playerScore {
   font-size: 0.95rem;
-  color: var(--paper-text-muted, #7a5c38);
+  color: var(--td-paper-text-muted, #7a5c38);
   white-space: nowrap;
 }
 
 .playerScore strong {
-  color: var(--paper-text, #43301b);
+  color: var(--td-paper-text, #43301b);
   font-size: 1rem;
 }
 
@@ -460,7 +460,7 @@
   margin-left: 0.6rem;
   font-size: 0.8rem;
   font-weight: 700;
-  color: var(--paper-text-muted, #7a5c38);
+  color: var(--td-paper-text-muted, #7a5c38);
 }
 
 /* ===== Phase 16.5 — real festival scene backdrop (generated art asset) ===== */

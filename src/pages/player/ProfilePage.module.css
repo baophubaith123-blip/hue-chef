@@ -4,7 +4,7 @@
 
 .title {
   margin: 0 0 0.35rem;
-  font-family: var(--font-display, var(--font-serif), Georgia, serif);
+  font-family: var(--font-display, var(--td-font-display), Georgia, serif);
   font-size: 1.85rem;
   font-weight: 700;
   color: var(--color-plum, #4a1525);
@@ -84,7 +84,7 @@
 
 .lvChip {
   padding: 0.3rem 0.8rem;
-  border-radius: var(--radius-full);
+  border-radius: var(--td-radius-full);
   background: linear-gradient(90deg, #fbbf24, #f59e0b);
   color: #7c2d12;
   font-size: 0.8rem;
@@ -112,7 +112,7 @@
 .xpFill {
   height: 100%;
   border-radius: 999px;
-  background: linear-gradient(90deg, var(--color-gold, #e9a23b), var(--color-brick, #c8553d));
+  background: linear-gradient(90deg, var(--td-gold, #e9a23b), var(--color-brick, #c8553d));
   box-shadow: 0 0 8px rgba(233, 162, 59, 0.4);
   transition: width 0.6s ease;
 }
@@ -146,7 +146,7 @@
 }
 
 .badgeTileEquipped {
-  border-color: var(--color-gold, #e9a23b);
+  border-color: var(--td-gold, #e9a23b);
   background: #fff7e6;
   box-shadow: 0 0 0 2px rgba(233, 162, 59, 0.3), 0 4px 12px rgba(233, 162, 59, 0.22);
 }
@@ -197,7 +197,7 @@
   height: 100%;
   border-radius: 50%;
   object-fit: cover;
-  border: 3.5px solid var(--color-gold, #e9a23b);
+  border: 3.5px solid var(--td-gold, #e9a23b);
   box-shadow: 0 4px 16px rgba(233, 162, 59, 0.35);
 }
 
@@ -205,13 +205,13 @@
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--color-brick, #c8553d), var(--color-gold, #e9a23b));
+  background: linear-gradient(135deg, var(--color-brick, #c8553d), var(--td-gold, #e9a23b));
   color: #ffffff;
   display: grid;
   place-items: center;
   font-size: 2.5rem;
   font-weight: 800;
-  border: 3.5px solid var(--color-gold, #e9a23b);
+  border: 3.5px solid var(--td-gold, #e9a23b);
   box-shadow: 0 4px 16px rgba(233, 162, 59, 0.35);
 }
 
@@ -227,7 +227,7 @@
 
 .userName {
   margin: 0 0 0.25rem;
-  font-family: var(--font-display, var(--font-serif), Georgia, serif);
+  font-family: var(--font-display, var(--td-font-display), Georgia, serif);
   font-size: 1.4rem;
   font-weight: 800;
   color: var(--color-plum, #4a1525);
@@ -290,7 +290,7 @@
 
 .formTitle {
   margin: 0 0 1.5rem;
-  font-family: var(--font-display, var(--font-serif), Georgia, serif);
+  font-family: var(--font-display, var(--td-font-display), Georgia, serif);
   font-size: 1.35rem;
   font-weight: 700;
   color: var(--color-plum, #4a1525);
@@ -431,26 +431,26 @@
 /* ===== Phase 16 — theme D overrides ===== */
 .profileCard,
 .formCard {
-  background: var(--paper, #fff6e0);
-  color: var(--paper-text, #43301b);
-  border: var(--border-game, 3px solid #4a2c14);
+  background: var(--td-paper, #fff6e0);
+  color: var(--td-paper-text, #43301b);
+  border: 3px solid var(--td-ink);
   border-radius: 22px;
   box-shadow: var(--shadow-game-card, 0 12px 28px rgba(59, 42, 32, 0.12));
 }
 
 .cover {
-  border-bottom: var(--border-game, 3px solid #4a2c14);
+  border-bottom: 3px solid var(--td-ink);
 }
 
 .lvChip {
   background: var(--gradient-gold, linear-gradient(135deg, #f6c453, #e9a23b));
-  border: 2px solid var(--ink, #4a2c14);
+  border: 2px solid var(--td-ink, #4a2c14);
   color: #43301b;
 }
 
 .xpTrack {
-  border: 2.5px solid var(--ink, #4a2c14);
-  background: var(--paper-deep, #f7e8c6);
+  border: 2.5px solid var(--td-ink, #4a2c14);
+  background: var(--td-paper-deep, #f7e8c6);
 }
 
 .xpFill {
@@ -460,58 +460,58 @@
 .xpText,
 .userEmail,
 .statLbl {
-  color: var(--paper-text-muted, #7a5c38);
+  color: var(--td-paper-text-muted, #7a5c38);
 }
 
 .userName,
 .statVal,
 .formTitle {
-  color: var(--paper-text, #43301b);
+  color: var(--td-paper-text, #43301b);
 }
 
 .statBox {
-  background: var(--paper-deep, #f7e8c6);
+  background: var(--td-paper-deep, #f7e8c6);
   border: 2px solid var(--wood, #b57e40);
-  border-radius: var(--radius-xl);
+  border-radius: var(--td-radius-wood);
 }
 
 .badgeTile {
-  background: var(--paper-deep, #f7e8c6);
+  background: var(--td-paper-deep, #f7e8c6);
   border: 2.5px solid var(--wood, #b57e40);
-  color: var(--paper-text, #43301b);
+  color: var(--td-paper-text, #43301b);
 }
 
 .badgeTileEquipped {
-  border-color: var(--color-gold, #e9a23b);
-  box-shadow: 0 0 0 2px rgba(233, 162, 59, 0.45), 0 4px 0 var(--ink-soft, rgba(74, 44, 20, 0.45));
+  border-color: var(--td-gold, #e9a23b);
+  box-shadow: 0 0 0 2px rgba(233, 162, 59, 0.45), 0 4px 0 var(--td-ink-soft, rgba(74, 44, 20, 0.45));
 }
 
 .input,
 .select {
   background: #fffdf4;
-  border: 2.5px solid var(--ink, #4a2c14);
-  border-radius: var(--radius-lg);
-  color: var(--paper-text, #43301b);
+  border: 2.5px solid var(--td-ink, #4a2c14);
+  border-radius: var(--td-radius-paper);
+  color: var(--td-paper-text, #43301b);
 }
 
 .input:focus,
 .select:focus {
-  border-color: var(--color-gold, #e9a23b);
+  border-color: var(--td-gold, #e9a23b);
   box-shadow: 0 0 0 3px rgba(233, 162, 59, 0.3);
   outline: none;
 }
 
 .saveButton {
   background: var(--gradient-gold, linear-gradient(135deg, #f6c453, #e9a23b));
-  border: 3px solid var(--ink, #4a2c14);
-  border-radius: var(--radius-xl);
+  border: 3px solid var(--td-ink, #4a2c14);
+  border-radius: var(--td-radius-wood);
   color: #43301b;
-  box-shadow: 0 4px 0 var(--ink-soft, rgba(74, 44, 20, 0.45));
+  box-shadow: 0 4px 0 var(--td-ink-soft, rgba(74, 44, 20, 0.45));
   font-weight: 800;
 }
 
 .avatarImage {
-  border: 3.5px solid var(--color-gold, #e9a23b);
+  border: 3.5px solid var(--td-gold, #e9a23b);
 }
 
 
@@ -522,7 +522,7 @@
     url('/images/festival-day.webp');
   background-size: cover;
   background-position: center 20%;
-  border: var(--border-game, 3px solid #4a2c14);
+  border: 3px solid var(--td-ink);
   border-radius: 22px;
   padding: 1.1rem 1.25rem;
   box-shadow: var(--shadow-game-card, 0 12px 28px rgba(59, 42, 32, 0.12));
@@ -547,15 +547,15 @@
 [data-theme='dark'] .userName,
 [data-theme='dark'] .statVal,
 [data-theme='dark'] .formTitle {
-  color: var(--paper-text, #43301b);
+  color: var(--td-paper-text, #43301b);
 }
 
 .label {
-  color: var(--paper-text, #43301b);
+  color: var(--td-paper-text, #43301b);
 }
 
 [data-theme='dark'] .badgeTileName {
-  color: var(--paper-text, #43301b);
+  color: var(--td-paper-text, #43301b);
 }
 
 /* The equipped tile is a dark plaque — its name keeps the light tone. */
