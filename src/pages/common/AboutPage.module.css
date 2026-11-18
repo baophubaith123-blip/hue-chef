@@ -483,3 +483,25 @@
   font-weight: 700;
 }
 
+
+/* ===== Dark-fix — on-paper text pins for dark theme =====
+   The cards above stay paper (--paper) in both themes, but .list li,
+   .authorRole, .authorSubject and .archNote still read the global theme
+   tokens, which flip to near-paper colours in dark mode (down to 1.02:1).
+   Pin them to the paper ink colours in dark mode only; light mode is
+   pixel-identical. The avatar gradient likewise keeps its deep
+   brick-to-gold stops instead of the lightened dark-theme tokens. */
+[data-theme='dark'] .list li,
+[data-theme='dark'] .authorRole {
+  color: var(--paper-text-muted, #7a5c38);
+}
+
+[data-theme='dark'] .authorSubject,
+[data-theme='dark'] .archNote {
+  color: var(--paper-text, #43301b);
+}
+
+[data-theme='dark'] .authorAvatar {
+  background: linear-gradient(135deg, #b03e26, #c97a1f);
+}
+
