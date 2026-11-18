@@ -45,6 +45,8 @@ interface AuthContextValue {
   logout: () => void;
   addXp: (xp: number) => AddXpResult | null;
   addCoins: (amount: number) => number | null;
+  /** Credit/debit the cok wallet (sell loop, mục 6.8); returns balance. */
+  addCok: (amount: number) => number | null;
   purchaseRecipe: (recipeId: string, price: number) => boolean;
   addCookedRecipe: (entry: CookedRecipeEntry) => void;
   /** Record a chapter's sell license after its boss stage is beaten.
@@ -270,6 +272,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     [user, persistStoredUser],
   );
 
+  const addCok = useCallback(
+    (amount: number): number | null => {
+      if (!user || amount === 0) return null;
+      const users = loadUsers();
+      const stored = findUserById(users, user.id);
+      if (!stored) return null;
+      const nextBalance = Math.max(0, (stored.cok ?? 0) + amount);
+      persistStoredUser(user.id, { cok: nextBalance });
+      return nextBalance;
+    },
+    [user, persistStoredUser],
+  );
+
   const purchaseRecipe = useCallback(
     (recipeId: string, price: number): boolean => {
       if (!user) return false;
@@ -334,12 +349,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       logout,
       addXp,
       addCoins,
+      addCok,
       purchaseRecipe,
       addCookedRecipe,
       grantSellLicense,
       updateProfile,
     }),
-    [user, isLoading, login, register, logout, addXp, addCoins, purchaseRecipe, addCookedRecipe, grantSellLicense, updateProfile],
+    [user, isLoading, login, register, logout, addXp, addCoins, addCok, purchaseRecipe, addCookedRecipe, grantSellLicense, updateProfile],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

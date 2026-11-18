@@ -44,6 +44,10 @@ export interface StoredUser {
   coins?: number;
   /** Lifetime coins ever earned (spending does not reduce it). */
   totalCoinsEarned?: number;
+  /** Cok — the rare ruby currency of the sell loop (Kế hoạch hợp nhất,
+   * mục 6.8): paid only by VIP customers at the stall. Absent on legacy
+   * records, which simply means a balance of 0. */
+  cok?: number;
   ownedRecipeIds?: string[];
   cookedRecipes?: CookedRecipeEntry[];
   unlockedAchievements?: string[];
@@ -79,6 +83,8 @@ export interface PublicUser {
   coins?: number;
   /** Lifetime coins ever earned (spending does not reduce it). */
   totalCoinsEarned?: number;
+  /** Cok — the rare ruby currency of the sell loop (mục 6.8). */
+  cok?: number;
   ownedRecipeIds?: string[];
   cookedRecipes?: CookedRecipeEntry[];
   unlockedAchievements?: string[];
