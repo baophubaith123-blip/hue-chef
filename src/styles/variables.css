@@ -220,3 +220,18 @@
   --glow-lantern: radial-gradient(circle at 6% -4%, rgba(240, 185, 91, 0.32) 0, transparent 190px),
     radial-gradient(circle at 94% -4%, rgba(232, 136, 77, 0.26) 0, transparent 210px);
 }
+
+/* ===== Gói H1 — Theme D: premium currency "cok" (ruby, red family only) ===== */
+:root {
+  --color-cok: #be123c;
+  --color-cok-bright: #f43f5e;
+  --color-cok-deep: #881337;
+  --color-cok-soft: rgba(190, 18, 60, 0.12);
+}
+
+[data-theme='dark'] {
+  --color-cok: #fb7185;
+  --color-cok-bright: #f43f5e;
+  --color-cok-deep: #881337;
+  --color-cok-soft: rgba(251, 113, 133, 0.16);
+}

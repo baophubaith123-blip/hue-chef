@@ -1,0 +1,123 @@
+/* ===== Theme D — "Lễ hội ẩm thực Huế" design tokens (Gói H1) =====
+   Bảng màu khóa cứng theo Kế hoạch hợp nhất Phần 2.1:
+   mận thẫm #4A1525 · đỏ gạch #B03E26 · vàng gold #E9A23B · kem #FAF5EF.
+   TUYỆT ĐỐI không tím/violet dưới bất kỳ dạng nào.
+   Bề mặt giấy kraft giữ sáng ở cả hai theme (đúng mẫu Theme D:
+   nền mận tối + thẻ giấy sáng), chữ trên giấy dùng token giấy cố định. */
+
+:root {
+  /* Brand — locked palette */
+  --td-plum: #4a1525;
+  --td-plum-deep: #370e1b;
+  --td-plum-soft: #5e1d31;
+  --td-plum-active: #7a243b;
+  --td-brick: #b03e26;
+  --td-brick-hover: #99331e;
+  --td-brick-soft: rgba(176, 62, 38, 0.12);
+  --td-gold: #e9a23b;
+  --td-gold-bright: #f6c453;
+  --td-gold-deep: #c97a1f;
+  --td-gold-text: #8a5a00;
+  --td-cream: #faf5ef;
+  --td-cream-muted: #d8c3ae;
+
+  /* Paper (kraft) surfaces — identical in both themes, as in the samples */
+  --td-paper: #fff6e0;
+  --td-paper-deep: #f7e8c6;
+  --td-paper-edge: #e8d5ae;
+  --td-paper-text: #43301b;
+  --td-paper-text-muted: #7a5c38;
+
+  /* Wood */
+  --td-wood: #b57e40;
+  --td-wood-light: #d9a05b;
+  --td-wood-dark: #8a5a2b;
+  --td-wood-gradient: linear-gradient(180deg, #8f5e2a 0%, #855521 55%, #7c5222 100%);
+  --td-wood-gradient-soft: linear-gradient(180deg, #e3b06a 0%, #cd9a52 100%);
+  --td-ink: #4a2c14;
+  --td-ink-soft: rgba(74, 44, 20, 0.45);
+
+  /* Premium currency "cok" — ruby (hồng ngọc), red family only */
+  --td-cok: #be123c;
+  --td-cok-bright: #f43f5e;
+  --td-cok-deep: #881337;
+  --td-cok-soft: rgba(190, 18, 60, 0.12);
+
+  /* Dish grade frames (mục 6.11) */
+  --td-grade-1: #8a5a2b;
+  --td-grade-1-deep: #6e4520;
+  --td-grade-2: #b0793f;
+  --td-grade-2-bright: #d99a52;
+  --td-grade-2-deep: #7d5527;
+  --td-grade-3: #aeb6bf;
+  --td-grade-3-bright: #e8edf2;
+  --td-grade-3-deep: #79828c;
+  --td-grade-4: #e9a23b;
+  --td-grade-4-bright: #f8cd6b;
+  --td-grade-4-deep: #b97a1c;
+  --td-grade-5: #be123c;
+  --td-grade-5-bright: #fb7185;
+  --td-grade-5-deep: #881337;
+
+  /* Feedback */
+  --td-success: #15803d;
+  --td-success-bright: #22c55e;
+  --td-danger: #b42318;
+  --td-warning: #9a5b00;
+
+  /* Page + scene surfaces (swap by theme) */
+  --td-page-bg: #faf5ef;
+  --td-page-text: #3b2a20;
+  --td-page-text-muted: #7a6455;
+  --td-header-bg: #4a1525;
+  --td-header-text: #faf5ef;
+  --td-header-text-muted: #d8c3ae;
+
+  /* Typography */
+  --td-font-display: 'Playfair Display', 'Merriweather', Georgia, serif;
+  --td-font-body: 'Be Vietnam Pro', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --td-text-xs: 12px;
+  --td-text-sm: 14px;
+  --td-text-md: 16px;
+  --td-text-lg: 20px;
+  --td-text-xl: 28px;
+  --td-text-hero: 40px;
+
+  /* Shape + elevation (warm brown shadows, never cold grey) */
+  --td-radius-paper: 12px;
+  --td-radius-button: 10px;
+  --td-radius-wood: 16px;
+  --td-radius-full: 9999px;
+  --td-shadow-paper: 0 5px 0 rgba(74, 44, 20, 0.16), 0 18px 34px rgba(74, 21, 37, 0.13);
+  --td-shadow-wood: 0 6px 0 rgba(59, 32, 8, 0.35), 0 16px 32px rgba(74, 21, 37, 0.28);
+  --td-shadow-button: 0 4px 0 rgba(122, 74, 10, 0.55);
+  --td-glow-gold: 0 0 0 2px rgba(233, 162, 59, 0.35), 0 10px 30px rgba(233, 162, 59, 0.35);
+  --td-glow-cok: 0 0 0 2px rgba(244, 63, 94, 0.35), 0 10px 30px rgba(190, 18, 60, 0.35);
+
+  /* Motion */
+  --td-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --td-duration-fast: 150ms;
+  --td-duration: 250ms;
+}
+
+[data-theme='dark'] {
+  /* Night festival: plum surfaces, paper stays light (as in the samples) */
+  --td-gold-text: #f0b95b;
+  --td-cream-muted: #b399a2;
+  --td-brick: #e8884d;
+  --td-brick-hover: #f3975e;
+  --td-brick-soft: rgba(232, 136, 77, 0.18);
+  --td-cok: #fb7185;
+  --td-cok-soft: rgba(251, 113, 133, 0.16);
+
+  --td-page-bg: #1e060e;
+  --td-page-text: #f6ebdd;
+  --td-page-text-muted: #bba896;
+  --td-header-bg: #2d0b16;
+  --td-header-text: #faf5ef;
+  --td-header-text-muted: #b399a2;
+
+  --td-shadow-paper: 0 5px 0 rgba(0, 0, 0, 0.35), 0 18px 34px rgba(0, 0, 0, 0.4);
+  --td-shadow-wood: 0 6px 0 rgba(0, 0, 0, 0.45), 0 16px 32px rgba(0, 0, 0, 0.5);
+  --td-shadow-button: 0 4px 0 rgba(0, 0, 0, 0.45);
+}
