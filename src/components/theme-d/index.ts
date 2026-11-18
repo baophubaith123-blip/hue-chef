@@ -24,5 +24,5 @@ export { CoinPill } from '@/components/theme-d/CoinPill';
 export type { CoinCurrency } from '@/components/theme-d/CoinPill';
 export { DishGradeFrame } from '@/components/theme-d/DishGradeFrame';
 export type { DishGrade } from '@/components/theme-d/DishGradeFrame';
-export { NOI_NOI_POSES, CUSTOMER_FACES, CUSTOMER_TIERS, CUSTOMER_MOODS, SCENES } from '@/components/theme-d/assets';
+export { NOI_NOI_POSES, CUSTOMER_FACES, CUSTOMER_TIERS, CUSTOMER_MOODS, SCENES, BOSS_JUDGE_IMAGE } from '@/components/theme-d/assets';
 export type { NoiNoiPose, CustomerTier, CustomerMood, SceneKey } from '@/components/theme-d/assets';

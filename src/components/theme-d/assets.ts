@@ -32,11 +32,14 @@ import khachVipSotRuot from '@/assets/theme-d/customers/khach-vip-sot-ruot.webp'
 import khachVipTucGian from '@/assets/theme-d/customers/khach-vip-tuc-gian.webp';
 import khachVipVui from '@/assets/theme-d/customers/khach-vip-vui.webp';
 
+import giamKhao from '@/assets/theme-d/giam-khao.webp';
+import sceneBanDoHue from '@/assets/theme-d/scenes/ban-do-hue.webp';
 import sceneBanHoanThien from '@/assets/theme-d/scenes/ban-hoan-thien.webp';
 import sceneBep from '@/assets/theme-d/scenes/bep.webp';
 import sceneCanhQuay from '@/assets/theme-d/scenes/canh-quay.webp';
 import sceneCho from '@/assets/theme-d/scenes/cho.webp';
 import sceneNenXepHang from '@/assets/theme-d/scenes/nen-xep-hang.webp';
+import sceneNguThien from '@/assets/theme-d/scenes/ngu-thien.webp';
 import sceneSanKhauHoiDap from '@/assets/theme-d/scenes/san-khau-hoi-dap.webp';
 import sceneSanLeHoi from '@/assets/theme-d/scenes/san-le-hoi.webp';
 
@@ -106,7 +109,16 @@ export const CUSTOMER_FACES: Record<CustomerTier, Record<CustomerMood, string>> 
   },
 };
 
-export type SceneKey = 'san-le-hoi' | 'cho' | 'bep' | 'ban-hoan-thien' | 'san-khau-hoi-dap' | 'nen-xep-hang' | 'canh-quay';
+export type SceneKey =
+  | 'san-le-hoi'
+  | 'cho'
+  | 'bep'
+  | 'ban-hoan-thien'
+  | 'san-khau-hoi-dap'
+  | 'nen-xep-hang'
+  | 'canh-quay'
+  | 'ban-do-hue'
+  | 'ngu-thien';
 
 export const SCENES: Record<SceneKey, string> = {
   'san-le-hoi': sceneSanLeHoi,
@@ -116,4 +128,9 @@ export const SCENES: Record<SceneKey, string> = {
   'san-khau-hoi-dap': sceneSanKhauHoiDap,
   'nen-xep-hang': sceneNenXepHang,
   'canh-quay': sceneCanhQuay,
+  'ban-do-hue': sceneBanDoHue,
+  'ngu-thien': sceneNguThien,
 };
+
+/** The imperial head chef who judges every Ngự thiện boss stage (Gói H3). */
+export const BOSS_JUDGE_IMAGE = giamKhao;
