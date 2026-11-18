@@ -119,6 +119,12 @@ export const en: I18nDictionary = {
       nem: 'Rolls / Sausage',
     },
     difficultyNames: ['Easy', 'Medium', 'Hard', 'Extreme', 'Hell'],
+    gradeNames: ['Common', 'Fine', 'Delicious', 'Imperial', 'Special'],
+    yourStars: (stars: number) => `You: ${'★'.repeat(stars)}${'☆'.repeat(5 - stars)}`,
+    listTitle: 'Hue Recipe Collection',
+    listSubtitle: (count: number) =>
+      `${count} traditional dishes of the Imperial City, ready for you to cook`,
+    listLoading: 'Preparing the recipes...',
   },
   recipeStatus: {
     draft: 'Draft',

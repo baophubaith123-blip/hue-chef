@@ -7,6 +7,9 @@ import { Loading } from '@/components/Loading';
 import { Modal } from '@/components/Modal';
 import { getIngredientById } from '@/data/ingredients';
 import { difficultyName } from '@/features/recipes/lib/difficulty';
+import { dishGradeFor } from '@/features/recipes/lib/grade';
+import { GESTURE_ICONS, gestureForStep } from '@/data/gesture-map';
+import { DishGradeFrame } from '@/components/theme-d/DishGradeFrame';
 import { RecipeComments } from '@/features/comments/components/RecipeComments';
 import { isRecipeOwned } from '@/features/recipes/lib/ownership';
 import { useAuth } from '@/contexts/AuthContext';
@@ -57,6 +60,11 @@ export default function RecipeDetailPage() {
   }
 
   const categoryLabel = recipeCategoryLabel(recipe.category);
+  const grade = dishGradeFor(recipe);
+  const gradeLabel = dict.recipe.gradeNames[grade - 1] ?? '';
+  const bestStars = (user?.cookedRecipes ?? [])
+    .filter((entry) => entry.recipeId === recipe.id)
+    .reduce((max, entry) => Math.max(max, entry.stars), 0);
   const owned = isRecipeOwned(user, recipe);
   const balance = user?.coins ?? 0;
   const canAfford = balance >= recipe.priceCoins;
@@ -77,15 +85,17 @@ export default function RecipeDetailPage() {
 
         <article className={styles.recipeCard}>
           <div className={styles.mediaColumn}>
-            <div className={styles.imageWrap}>
-              <ImageWithFallback
-                className={styles.image}
-                src={recipe.image}
-                alt={recipe.name}
-                fallbackTitle={recipe.name}
-              />
-              <span className={styles.categoryBadge}>{categoryLabel}</span>
-            </div>
+            <DishGradeFrame grade={grade} gradeLabel={gradeLabel}>
+              <div className={styles.imageWrap}>
+                <ImageWithFallback
+                  className={styles.image}
+                  src={recipe.image}
+                  alt={recipe.name}
+                  fallbackTitle={recipe.name}
+                />
+                <span className={styles.categoryBadge}>{categoryLabel}</span>
+              </div>
+            </DishGradeFrame>
 
             <div className={styles.metricsBox}>
               <div className={styles.metricItem}>
@@ -160,6 +170,10 @@ export default function RecipeDetailPage() {
           <div className={styles.infoColumn}>
             <header className={styles.header}>
               <h1 className={styles.title}>{recipe.name}</h1>
+              <div className={styles.gradeRow}>
+                <span className={styles.gradeChip}>{gradeLabel}</span>
+                {bestStars > 0 ? <span className={styles.yourStars}>{dict.recipe.yourStars(bestStars)}</span> : null}
+              </div>
               <p className={styles.description}>{recipe.description}</p>
             </header>
 
@@ -199,6 +213,10 @@ export default function RecipeDetailPage() {
                     <span className={styles.stepNum}>{idx + 1}</span>
                     <div className={styles.stepContent}>
                       <strong className={styles.stepTitle}>{step.title}</strong>
+                      <span className={styles.stepGesture}>
+                        <span aria-hidden>{GESTURE_ICONS[gestureForStep(step)]}</span>
+                        {dict.cooking.gestures.names[gestureForStep(step)]}
+                      </span>
                       <p className={styles.stepDesc}>{step.description}</p>
                       {step.requiredIngredients.length > 0 ? (
                         <div className={styles.stepIngredients}>

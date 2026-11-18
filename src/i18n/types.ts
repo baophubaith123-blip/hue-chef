@@ -115,6 +115,13 @@ export interface I18nDictionary {
     searchPlaceholder: string;
     categoryLabels: Record<string, string>;
     difficultyNames: string[];
+    /** Dish grade names by frame grade 1–5 (mục 6.11). */
+    gradeNames: string[];
+    /** The player's own best stars on a dish, shown inside the frame. */
+    yourStars: (stars: number) => string;
+    listTitle: string;
+    listSubtitle: (count: number) => string;
+    listLoading: string;
   };
   recipeStatus: {
     draft: string;

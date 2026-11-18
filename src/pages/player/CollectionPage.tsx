@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 
 import { Button } from '@/components/Button';
 import { Card } from '@/components/Card';
+import { DishGradeFrame } from '@/components/theme-d/DishGradeFrame';
+import { dishGradeFor } from '@/features/recipes/lib/grade';
 import { EmptyState } from '@/components/EmptyState';
 import { ImageWithFallback } from '@/components/ImageWithFallback';
 import { useAuth } from '@/contexts/AuthContext';
@@ -18,6 +20,7 @@ interface CollectionItem {
   recipeId: string;
   name: string;
   image: string;
+  difficulty: number;
   cooked: boolean;
   timesCooked: number;
   bestScore: number;
@@ -27,7 +30,7 @@ interface CollectionItem {
 }
 
 export default function CollectionPage() {
-  const { t } = useTranslation();
+  const { t, dict } = useTranslation();
   const { user } = useAuth();
   const { getApprovedRecipes } = useRecipes();
   const recipes = getApprovedRecipes();
@@ -72,6 +75,7 @@ export default function CollectionPage() {
         recipeId,
         name,
         image,
+        difficulty: recipe?.difficulty ?? 1,
         cooked: true,
         timesCooked: list.length,
         bestScore,
@@ -90,6 +94,7 @@ export default function CollectionPage() {
         recipeId: r.id,
         name: r.name,
         image: r.image,
+        difficulty: r.difficulty,
         cooked: false,
         timesCooked: 0,
         bestScore: 0,
@@ -124,12 +129,15 @@ export default function CollectionPage() {
           <EmptyState title={t('collection.empty')} />
         ) : (
           <div className={styles.grid}>
-            {items.map((item) => (
+            {items.map((item) => {
+              const grade = dishGradeFor(item);
+              return (
               <Link
                 key={item.recipeId}
                 to={`/recipes/${item.recipeId}`}
                 className={styles.cardLink}
               >
+                <DishGradeFrame grade={grade} gradeLabel={dict.recipe.gradeNames[grade - 1] ?? ''}>
                 <article className={`${styles.card} ${item.cooked ? '' : styles.cardLocked}`}>
                   <div className={styles.imageWrap}>
                     <ImageWithFallback
@@ -192,8 +200,10 @@ export default function CollectionPage() {
                     </div>
                   </div>
                 </article>
+                </DishGradeFrame>
               </Link>
-            ))}
+              );
+            })}
           </div>
         )}
       </Card>

@@ -1,7 +1,9 @@
 import { useMemo, useState } from 'react';
 
 import { Loading } from '@/components/Loading';
+import { WoodSign } from '@/components/theme-d/WoodSign';
 import { useAuth } from '@/contexts/AuthContext';
+import { useTranslation } from '@/i18n/useTranslation';
 import { useRecipes } from '@/contexts/RecipeContext';
 import type { Recipe } from '@/data/types';
 import {
@@ -25,6 +27,7 @@ const DEFAULT_FILTERS: RecipeFilterState = {
 export default function RecipeListPage() {
   const { isLoading, getApprovedRecipes } = useRecipes();
   const { user } = useAuth();
+  const { dict } = useTranslation();
   const [filters, setFilters] = useState<RecipeFilterState>(DEFAULT_FILTERS);
 
   const lockedPriceFor = (recipe: Recipe): number | undefined =>
@@ -39,19 +42,16 @@ export default function RecipeListPage() {
     <PlayerShell>
       <div className={styles.container}>
         <header className={styles.head}>
-          <div className={styles.titleRow}>
-            <span className={styles.titleIcon} aria-hidden="true">🍲</span>
-            <h1 className={styles.title}>Danh sách công thức món Huế</h1>
-          </div>
-          <p className={styles.subtitle}>
-            {visibleRecipes.length} món ăn truyền thống Cố Đô sẵn sàng để bạn trổ tài nấu nướng
-          </p>
+          <WoodSign
+            title={`🍲 ${dict.recipe.listTitle}`}
+            subtitle={dict.recipe.listSubtitle(visibleRecipes.length)}
+          />
         </header>
 
         <RecipeFilter value={filters} onChange={setFilters} />
 
         {isLoading ? (
-          <Loading label="Đang chuẩn bị công thức ẩm thực..." />
+          <Loading label={dict.recipe.listLoading} />
         ) : (
           <div className={`${styles.gridScroll} scroll-slim`}>
             <RecipeGrid recipes={visibleRecipes} lockedPriceFor={lockedPriceFor} />

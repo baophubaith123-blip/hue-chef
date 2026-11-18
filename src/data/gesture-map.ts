@@ -26,6 +26,24 @@ export type GestureId =
   | 'trang-tri'
   | 'cham-nhip';
 
+/** Display icon per gesture (recipe detail teaches the move before play). */
+export const GESTURE_ICONS: Record<GestureId, string> = {
+  khuay: '🌀',
+  nem: '🧂',
+  hap: '♨️',
+  xao: '🍳',
+  chien: '🥘',
+  thai: '🔪',
+  'gap-tha': '🥢',
+  'day-nap': '🍲',
+  'giu-lua': '🔥',
+  luoc: '💧',
+  tron: '🥗',
+  rot: '🫗',
+  'trang-tri': '🌸',
+  'cham-nhip': '🎵',
+};
+
 export const GESTURE_IDS: GestureId[] = [
   'khuay',
   'nem',

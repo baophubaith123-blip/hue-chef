@@ -18,13 +18,13 @@
 }
 
 .backLink:hover {
-  color: var(--color-primary);
+  color: var(--td-brick);
 }
 
 .recipeCard {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-xl);
+  border-radius: var(--td-radius-wood);
   box-shadow: 0 8px 30px rgba(59, 42, 32, 0.08);
   padding: 2rem;
   display: grid;
@@ -50,7 +50,7 @@
   position: relative;
   width: 100%;
   aspect-ratio: 4 / 3;
-  border-radius: var(--radius-lg);
+  border-radius: var(--td-radius-paper);
   overflow: hidden;
   box-shadow: var(--shadow-sm);
   border: 1px solid var(--color-border);
@@ -68,12 +68,12 @@
   position: absolute;
   top: 12px;
   left: 12px;
-  background: var(--color-plum);
+  background: var(--td-plum);
   color: #FFFDF9;
   font-size: 0.78rem;
   font-weight: 700;
   padding: 4px 12px;
-  border-radius: var(--radius-full);
+  border-radius: var(--td-radius-full);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
 }
 
@@ -84,7 +84,7 @@
   padding: 1rem;
   background: var(--color-surface-alt);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
+  border-radius: var(--td-radius-paper);
 }
 
 .metricItem {
@@ -103,7 +103,7 @@
 }
 
 .metricStars {
-  color: var(--color-gold);
+  color: var(--td-gold);
   font-size: 1.05rem;
   letter-spacing: 1px;
 }
@@ -111,7 +111,7 @@
 .metricTier {
   font-size: 0.78rem;
   font-weight: 800;
-  color: var(--color-primary);
+  color: var(--td-brick);
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
@@ -142,7 +142,7 @@
   padding: 0.85rem;
   font-size: 1.05rem;
   font-weight: 700;
-  border-radius: var(--radius-full);
+  border-radius: var(--td-radius-full);
   background: var(--gradient-fire);
   box-shadow: var(--shadow-glow-fire);
   transition: all 0.2s ease;
@@ -166,10 +166,10 @@
 
 .title {
   margin: 0 0 0.5rem;
-  font-family: var(--font-serif);
+  font-family: var(--td-font-display);
   font-size: 2.2rem;
   font-weight: 800;
-  color: var(--color-plum);
+  color: var(--td-plum);
   line-height: 1.2;
 }
 
@@ -192,7 +192,7 @@
 
 .sectionTitle {
   margin: 0;
-  font-family: var(--font-serif);
+  font-family: var(--td-font-display);
   font-size: 1.2rem;
   font-weight: 700;
   color: var(--color-text);
@@ -214,7 +214,7 @@
   padding: 0.6rem 0.85rem;
   background: var(--color-surface-alt);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
+  border-radius: var(--td-radius-paper);
   box-shadow: 0 1px 3px rgba(59, 42, 32, 0.04);
 }
 
@@ -254,14 +254,14 @@
   padding: 0.85rem 1rem;
   background: var(--color-surface-alt);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
+  border-radius: var(--td-radius-paper);
 }
 
 .stepNum {
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  background: var(--color-plum);
+  background: var(--td-plum);
   color: #FFFDF9;
   font-size: 0.82rem;
   font-weight: 700;
@@ -299,15 +299,15 @@
 .stepIngredientChip {
   font-size: 0.72rem;
   font-weight: 700;
-  color: var(--color-plum);
+  color: var(--td-plum);
   background: var(--color-accent-soft);
   border: 1px solid var(--color-border);
   padding: 0.12rem 0.5rem;
-  border-radius: var(--radius-full);
+  border-radius: var(--td-radius-full);
 }
 
 [data-theme='dark'] .stepIngredientChip {
-  color: var(--color-plum-text);
+  color: var(--td-cream);
 }
 
 .ownedNote {
@@ -340,7 +340,7 @@
   font-family: var(--font-heading, 'Playfair Display', serif);
   font-size: 1.6rem;
   font-weight: 800;
-  color: var(--color-primary, #c8553d);
+  color: var(--td-brick, #c8553d);
 }
 
 .buyBalance {
@@ -372,92 +372,134 @@
 
 /* ===== Phase 16 — theme D overrides ===== */
 .recipeCard {
-  background: var(--paper, #fff6e0);
-  color: var(--paper-text, #43301b);
-  border: var(--border-game, 3px solid #4a2c14);
+  background: var(--td-paper, #fff6e0);
+  color: var(--td-paper-text, #43301b);
+  border: 3px solid var(--td-ink);
   border-radius: 24px;
   box-shadow: var(--shadow-game-card, 0 12px 28px rgba(59, 42, 32, 0.12));
 }
 
-/* Real photo in a chunky wooden frame (Cách A) */
+/* The photo sits inside the shared DishGradeFrame (Gói H2) — the frame
+   carries the grade; the photo itself keeps only its inner gold seam. */
 .imageWrap {
-  border: 6px solid var(--wood-dark, #8a5a2b);
-  border-radius: 16px;
-  box-shadow: inset 0 0 0 2px rgba(233, 162, 59, 0.75), 0 4px 0 rgba(74, 44, 20, 0.3);
+  border: none;
+  border-radius: 10px;
+  box-shadow: inset 0 0 0 2px rgba(233, 162, 59, 0.75);
+}
+
+.gradeRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 6px 0 2px;
+}
+
+.gradeChip {
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--td-gold-text);
+  background: var(--td-paper-deep);
+  border: 1.5px solid var(--td-gold-deep);
+  padding: 3px 11px;
+  border-radius: var(--td-radius-full);
+}
+
+.yourStars {
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: var(--td-gold-text);
+  letter-spacing: 0.04em;
+}
+
+.stepGesture {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-left: 10px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--td-brick);
+  background: var(--td-brick-soft);
+  border: 1.5px solid var(--td-brick);
+  padding: 1px 9px;
+  border-radius: var(--td-radius-full);
+  vertical-align: middle;
 }
 
 .categoryBadge {
-  background: var(--wood-gradient, linear-gradient(180deg, #ce9550, #b57e40));
-  border: 2.5px solid var(--ink, #200f04);
+  background: var(--td-wood-gradient, linear-gradient(180deg, #ce9550, #b57e40));
+  border: 2.5px solid var(--td-ink, #200f04);
   color: #fff6e0;
   box-shadow: 0 2px 0 rgba(0, 0, 0, 0.35);
   text-shadow: 0 1px 0 rgba(32, 15, 4, 0.4);
 }
 
 .metricsBox {
-  background: var(--paper-deep, #f7e8c6);
-  border: 2.5px solid var(--ink, #4a2c14);
-  border-radius: var(--radius-xl);
-  color: var(--paper-text, #43301b);
+  background: var(--td-paper-deep, #f7e8c6);
+  border: 2.5px solid var(--td-ink, #4a2c14);
+  border-radius: var(--td-radius-wood);
+  color: var(--td-paper-text, #43301b);
 }
 
 .metricLabel {
-  color: var(--paper-text-muted, #7a5c38);
+  color: var(--td-paper-text-muted, #7a5c38);
 }
 
 .title {
-  color: var(--paper-text, #43301b);
+  color: var(--td-paper-text, #43301b);
 }
 
 .description {
-  color: var(--paper-text-muted, #7a5c38);
+  color: var(--td-paper-text-muted, #7a5c38);
 }
 
 .sectionTitle {
-  color: var(--paper-text, #43301b);
+  color: var(--td-paper-text, #43301b);
 }
 
 .ingredientPill {
-  background: var(--paper-deep, #f7e8c6);
+  background: var(--td-paper-deep, #f7e8c6);
   border: 2px solid var(--wood, #b57e40);
-  border-radius: var(--radius-xl);
-  color: var(--paper-text, #43301b);
+  border-radius: var(--td-radius-wood);
+  color: var(--td-paper-text, #43301b);
 }
 
 .ingredientAmount {
-  color: var(--paper-text-muted, #7a5c38);
+  color: var(--td-paper-text-muted, #7a5c38);
 }
 
 .stepItem {
-  background: var(--paper-deep, #f7e8c6);
+  background: var(--td-paper-deep, #f7e8c6);
   border: 2px solid var(--wood, #b57e40);
-  color: var(--paper-text, #43301b);
+  color: var(--td-paper-text, #43301b);
 }
 
 .stepNum {
   background: var(--gradient-gold, linear-gradient(135deg, #f6c453, #e9a23b));
-  border: 2.5px solid var(--ink, #4a2c14);
+  border: 2.5px solid var(--td-ink, #4a2c14);
   color: #43301b;
-  box-shadow: 0 2px 0 var(--ink-soft, rgba(74, 44, 20, 0.45));
+  box-shadow: 0 2px 0 var(--td-ink-soft, rgba(74, 44, 20, 0.45));
 }
 
 .stepDesc {
-  color: var(--paper-text-muted, #7a5c38);
+  color: var(--td-paper-text-muted, #7a5c38);
 }
 
 .stepIngredientChip {
   background: var(--wood-gradient-soft, linear-gradient(180deg, #e3b06a, #cd9a52));
-  border: 1.5px solid var(--ink, #4a2c14);
+  border: 1.5px solid var(--td-ink, #4a2c14);
   color: #43301b;
   font-weight: 700;
 }
 
 .cookNowBtn {
   background: var(--gradient-gold, linear-gradient(135deg, #f6c453, #e9a23b));
-  border: 3px solid var(--ink, #4a2c14);
-  border-radius: var(--radius-xl);
+  border: 3px solid var(--td-ink, #4a2c14);
+  border-radius: var(--td-radius-wood);
   color: #43301b;
-  box-shadow: 0 5px 0 var(--ink-soft, rgba(74, 44, 20, 0.45));
+  box-shadow: 0 5px 0 var(--td-ink-soft, rgba(74, 44, 20, 0.45));
   text-shadow: 0 1px 0 rgba(255, 246, 224, 0.5);
 }
 
@@ -467,30 +509,30 @@
 }
 
 .buyPrice {
-  color: var(--paper-text, #43301b);
+  color: var(--td-paper-text, #43301b);
 }
 
 .buyHint,
 .buyBalance {
-  color: var(--paper-text-muted, #7a5c38);
+  color: var(--td-paper-text-muted, #7a5c38);
 }
 
 /* ===== Phase 18 — on-paper text pins (detail card stays paper in both themes) ===== */
 .title,
 [data-theme='dark'] .title {
-  color: var(--paper-text, #43301b);
+  color: var(--td-paper-text, #43301b);
 }
 
 .metricValue {
-  color: var(--paper-text, #43301b);
+  color: var(--td-paper-text, #43301b);
 }
 
 .ingredientName {
-  color: var(--paper-text, #43301b);
+  color: var(--td-paper-text, #43301b);
 }
 
 .stepTitle {
-  color: var(--paper-text, #43301b);
+  color: var(--td-paper-text, #43301b);
 }
 
 .stepIngredientChip,

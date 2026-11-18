@@ -119,6 +119,12 @@ export const vi: I18nDictionary = {
       nem: 'Nem / Chả',
     },
     difficultyNames: ['Dễ', 'Trung bình', 'Khó', 'Cực khó', 'Địa ngục'],
+    gradeNames: ['Thường', 'Khá', 'Ngon', 'Cung đình', 'Đặc biệt'],
+    yourStars: (stars: number) => `Bạn: ${'★'.repeat(stars)}${'☆'.repeat(5 - stars)}`,
+    listTitle: 'Danh sách công thức món Huế',
+    listSubtitle: (count: number) =>
+      `${count} món ăn truyền thống Cố Đô sẵn sàng để bạn trổ tài nấu nướng`,
+    listLoading: 'Đang chuẩn bị công thức ẩm thực...',
   },
   recipeStatus: {
     draft: 'Bản nháp',
