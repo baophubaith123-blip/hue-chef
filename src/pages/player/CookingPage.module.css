@@ -268,6 +268,15 @@
   color: var(--td-paper-text, #43301b);
 }
 
+[data-theme='dark'] .perkChip {
+  /* The translucent-gold chip above composites to near-black on the
+     dark page and its dark-brown text vanished (measured 1.07:1 in the
+     true dark scan). Dark theme gets the solid festival-gold chip with
+     deep-brown text instead — same treatment as the active stage chip. */
+  background: linear-gradient(135deg, #fdf0d3, #fbe3ae);
+  color: #7c4a03;
+}
+
 .previewBadge {
   border: 2px solid var(--td-ink, #4a2c14);
 }

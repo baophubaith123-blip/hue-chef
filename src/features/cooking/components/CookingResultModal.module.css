@@ -400,3 +400,25 @@
 
 .failTitle { color: var(--td-paper-text, #43301b); }
 .failSubtitle { color: var(--td-paper-text-muted, #7a5c38); }
+
+/* The modal is a paper surface in BOTH themes, but --color-bg-ivory
+   flips near-black at night: the score hero became a black-to-cream
+   gradient under its pinned dark ink (measured 1.44:1) and the stage
+   breakdown section went near-black under its dark-plum title (1:1).
+   Pin both surfaces to their paper values. --color-text-muted and
+   --color-text also flip light at night, which left the "/ max"
+   suffixes light-on-cream (1.89:1) inside the pinned paper rows and
+   would do the same to the fail score — pin those inks to paper too. */
+.scoreHero {
+  background: linear-gradient(135deg, #faf5ef 0%, #f7eee3 100%);
+  border-color: #e8dfd5;
+}
+
+.minigamesSection {
+  background: #faf5ef;
+  border-color: #e8dfd5;
+}
+
+.partMax { color: var(--td-paper-text-muted, #7a5c38); }
+.failScore { color: var(--td-paper-text, #43301b); }
+.levelUpSubtitle { color: var(--td-paper-text-muted, #7a5c38); }
