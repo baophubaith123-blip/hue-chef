@@ -58,6 +58,7 @@ export function PlayerShell({ children }: PlayerShellProps) {
     if (p === '/achievements') return dict.nav.achievements;
     if (p === '/map') return dict.nav.map;
     if (p === '/album') return dict.nav.album;
+    if (p === '/stall' || p === '/market') return dict.nav.stall;
     if (p === '/collection') return dict.nav.collection;
     if (p.startsWith('/inbox')) return dict.nav.inbox;
     if (p.startsWith('/profile')) return dict.nav.profile;
@@ -132,6 +133,16 @@ export function PlayerShell({ children }: PlayerShellProps) {
           >
             <span className={styles.navIcon}>📖</span>
             <span className={styles.navLabel}>{t('nav.album')}</span>
+          </NavLink>
+
+          <NavLink
+            to="/stall"
+            className={({ isActive }) =>
+              [styles.navLink, isActive ? styles.navLinkActive : ''].filter(Boolean).join(' ')
+            }
+          >
+            <span className={styles.navIcon}>🏪</span>
+            <span className={styles.navLabel}>{t('nav.stall')}</span>
           </NavLink>
 
           <NavLink

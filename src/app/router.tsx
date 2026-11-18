@@ -34,6 +34,8 @@ import CollectionPage from '@/pages/player/CollectionPage';
 import CookingPage from '@/pages/player/CookingPage';
 import HomePage from '@/pages/player/HomePage';
 import HueMapPage from '@/pages/player/HueMapPage';
+import MarketPage from '@/pages/player/MarketPage';
+import StallPage from '@/pages/player/StallPage';
 import InboxPage from '@/pages/player/InboxPage';
 import LeaderboardPage from '@/pages/player/LeaderboardPage';
 import PlayerMailDetailPage from '@/pages/player/PlayerMailDetailPage';
@@ -93,6 +95,14 @@ export const router = createBrowserRouter([
       {
         path: '/album',
         element: <AlbumPage />,
+      },
+      {
+        path: '/stall',
+        element: <StallPage />,
+      },
+      {
+        path: '/market',
+        element: <MarketPage />,
       },
       {
         path: '/recipes/:id',
