@@ -1,0 +1,119 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+  background: rgba(30, 6, 14, 0.62);
+  backdrop-filter: blur(2px);
+  animation: td-modal-fade 180ms ease;
+}
+
+.dialog {
+  width: min(520px, 100%);
+  max-height: min(84vh, 760px);
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--td-radius-wood);
+  border: 3px solid var(--td-wood-dark);
+  background: var(--td-wood-gradient);
+  box-shadow: var(--td-shadow-wood);
+  overflow: hidden;
+  animation: td-modal-pop 220ms var(--td-ease-out);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 13px 18px;
+}
+
+.title {
+  margin: 0;
+  font-family: var(--td-font-display);
+  font-size: var(--td-text-lg);
+  font-weight: 800;
+  color: var(--td-gold-bright);
+  text-shadow: 0 2px 0 rgba(59, 32, 8, 0.6);
+}
+
+.close {
+  flex: none;
+  width: 34px;
+  height: 34px;
+  border-radius: var(--td-radius-full);
+  border: 2px solid var(--td-gold-deep);
+  background: linear-gradient(180deg, var(--td-gold-bright), var(--td-gold));
+  color: #43301b;
+  font-size: 20px;
+  font-weight: 800;
+  line-height: 1;
+  cursor: pointer;
+  transition: transform var(--td-duration-fast) var(--td-ease-out), filter var(--td-duration-fast) ease;
+}
+
+.close:hover {
+  filter: brightness(1.07);
+  transform: scale(1.06);
+}
+
+.close:active {
+  transform: scale(0.96);
+}
+
+.close:focus-visible {
+  outline: 3px solid var(--td-cream);
+  outline-offset: 2px;
+}
+
+.body h1,
+.body h2,
+.body h3,
+.body h4,
+.body h5,
+.body h6 {
+  color: var(--td-paper-text);
+}
+
+.body {
+  margin: 0 10px 10px;
+  padding: 18px 20px;
+  overflow-y: auto;
+  background: linear-gradient(180deg, var(--td-paper) 0%, var(--td-paper-deep) 100%);
+  border-radius: var(--td-radius-paper);
+  color: var(--td-paper-text);
+  font-family: var(--td-font-body);
+  font-size: var(--td-text-sm);
+  line-height: 1.55;
+}
+
+@keyframes td-modal-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes td-modal-pop {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .overlay,
+  .dialog {
+    animation: none;
+  }
+}

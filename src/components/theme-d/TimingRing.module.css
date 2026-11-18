@@ -1,0 +1,63 @@
+.wrap {
+  position: relative;
+  flex: none;
+}
+
+.svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 8px 22px rgba(233, 162, 59, 0.35));
+}
+
+.track {
+  fill: rgba(255, 246, 224, 0.92);
+  stroke: var(--td-wood-dark);
+  stroke-width: 15;
+}
+
+.zoneGood {
+  fill: none;
+  stroke: var(--td-gold);
+  stroke-width: 15;
+  stroke-linecap: butt;
+}
+
+.zonePerfect {
+  fill: none;
+  stroke: var(--td-brick);
+  stroke-width: 15;
+  stroke-linecap: butt;
+  filter: drop-shadow(0 0 6px rgba(233, 162, 59, 0.8));
+}
+
+.needle {
+  transform-origin: 100px 100px;
+  transition: transform 60ms linear;
+}
+
+.needleLine {
+  stroke: var(--td-plum);
+  stroke-width: 5;
+  stroke-linecap: round;
+}
+
+.needleTip {
+  fill: var(--td-gold-bright);
+  stroke: var(--td-gold-deep);
+  stroke-width: 2.5;
+}
+
+.hub {
+  fill: var(--td-wood-dark);
+  stroke: var(--td-gold-bright);
+  stroke-width: 3;
+}
+
+[data-theme='dark'] .track {
+  fill: rgba(55, 14, 27, 0.92);
+}
+
+[data-theme='dark'] .needleLine {
+  stroke: var(--td-cream);
+}

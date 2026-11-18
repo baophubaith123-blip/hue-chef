@@ -1,0 +1,63 @@
+.toast {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  max-width: min(420px, 92vw);
+  padding: 11px 16px 11px 11px;
+  background: linear-gradient(180deg, var(--td-paper) 0%, var(--td-paper-deep) 100%);
+  border: 2px solid var(--td-paper-edge);
+  border-radius: var(--td-radius-paper);
+  box-shadow: var(--td-shadow-paper);
+  color: var(--td-paper-text);
+  font-family: var(--td-font-body);
+  font-size: var(--td-text-sm);
+  font-weight: 600;
+  line-height: 1.4;
+  animation: td-toast-in 240ms var(--td-ease-out);
+}
+
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  flex: none;
+  border-radius: var(--td-radius-full);
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.success .icon {
+  background: var(--td-success);
+}
+
+.error .icon {
+  background: var(--td-danger);
+}
+
+.info .icon {
+  /* Dark amber (not bright gold) so the white glyph stays ≥4.5:1 in both themes. */
+  background: var(--td-warning);
+}
+
+.message {
+  min-width: 0;
+}
+
+@keyframes td-toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toast {
+    animation: none;
+  }
+}

@@ -1,0 +1,104 @@
+.podium {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 18px;
+  font-family: var(--td-font-body);
+}
+
+.slot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  min-width: 108px;
+  padding: 14px 12px 0;
+  border-radius: var(--td-radius-paper) var(--td-radius-paper) 0 0;
+  color: var(--td-paper-text);
+  text-align: center;
+}
+
+.rank1 {
+  background: linear-gradient(180deg, #ffeec2, var(--td-paper-deep));
+  border: 2.5px solid var(--td-gold-deep);
+  border-bottom: none;
+  box-shadow: var(--td-glow-gold);
+  padding-top: 20px;
+}
+
+.rank2 {
+  background: linear-gradient(180deg, #f4f6f8, #dfe4e9);
+  border: 2.5px solid var(--td-grade-3-deep);
+  border-bottom: none;
+}
+
+.rank3 {
+  background: linear-gradient(180deg, #f6ddba, #ecc491);
+  border: 2.5px solid var(--td-grade-2-deep);
+  border-bottom: none;
+}
+
+.medal {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: var(--td-radius-full);
+  font-weight: 800;
+  font-size: var(--td-text-sm);
+  color: #43301b;
+  border: 2px solid rgba(67, 48, 27, 0.55);
+}
+
+.rank1 .medal {
+  background: radial-gradient(circle at 35% 30%, var(--td-gold-bright), var(--td-gold-deep));
+}
+
+.rank2 .medal {
+  background: radial-gradient(circle at 35% 30%, #ffffff, #aeb6bf);
+}
+
+.rank3 .medal {
+  background: radial-gradient(circle at 35% 30%, #eec27f, #b0793f);
+}
+
+.avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  border-radius: var(--td-radius-full);
+  background: var(--td-plum);
+  color: var(--td-gold-bright);
+  font-family: var(--td-font-display);
+  font-size: var(--td-text-lg);
+  font-weight: 800;
+  border: 2.5px solid var(--td-gold);
+}
+
+.name {
+  font-size: var(--td-text-sm);
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.score {
+  font-size: var(--td-text-xs);
+  font-weight: 600;
+  color: var(--td-paper-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.chest {
+  display: block;
+  width: 64px;
+  margin-top: 2px;
+}
+
+.chestSvg {
+  display: block;
+  width: 100%;
+  height: auto;
+}

@@ -1,0 +1,42 @@
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 14px 6px 8px;
+  border-radius: var(--td-radius-full);
+  font-family: var(--td-font-body);
+  font-size: var(--td-text-sm);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.xu {
+  background: linear-gradient(180deg, #fff3d1, var(--td-paper-deep));
+  border: 2px solid var(--td-gold-deep);
+  color: #43301b;
+  box-shadow: 0 3px 0 rgba(122, 74, 10, 0.4);
+}
+
+.cok {
+  background: linear-gradient(180deg, #ffe4e6, #fecdd3);
+  border: 2px solid var(--td-cok-deep);
+  color: var(--td-cok-deep);
+  box-shadow: 0 3px 0 rgba(136, 19, 55, 0.4), var(--td-glow-cok);
+}
+
+.icon {
+  width: 22px;
+  height: 22px;
+  flex: none;
+}
+
+.amount {
+  font-size: var(--td-text-md);
+}
+
+.label {
+  font-weight: 600;
+  opacity: 0.85;
+}

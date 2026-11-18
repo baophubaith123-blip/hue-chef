@@ -1,0 +1,110 @@
+.bar {
+  position: sticky;
+  top: 0;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px 20px;
+  background: linear-gradient(180deg, var(--td-plum-soft), var(--td-header-bg));
+  border-bottom: 3px solid var(--td-gold-deep);
+  box-shadow: 0 6px 18px rgba(30, 6, 14, 0.35);
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+
+.brandImg {
+  border-radius: var(--td-radius-full);
+  border: 2px solid var(--td-gold);
+  object-fit: cover;
+}
+
+.brandName {
+  font-family: var(--td-font-display);
+  font-size: var(--td-text-lg);
+  font-weight: 800;
+  color: var(--td-gold-bright);
+  text-shadow: 0 2px 0 rgba(30, 6, 14, 0.7);
+  white-space: nowrap;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.enterGame {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 42px;
+  padding: 9px 20px;
+  border-radius: var(--td-radius-button);
+  background: linear-gradient(180deg, var(--td-gold-bright) 0%, var(--td-gold) 55%, var(--td-gold-deep) 100%);
+  border: 2px solid #a86e14;
+  box-shadow: 0 3px 0 rgba(122, 74, 10, 0.55);
+  color: #43301b;
+  font-family: var(--td-font-body);
+  font-size: var(--td-text-sm);
+  font-weight: 800;
+  text-decoration: none;
+  transition: transform var(--td-duration-fast) var(--td-ease-out), filter var(--td-duration-fast) ease;
+}
+
+.enterGame:hover {
+  filter: brightness(1.06);
+  transform: translateY(-1px);
+}
+
+.enterGame:active {
+  transform: translateY(1px);
+  box-shadow: 0 1px 0 rgba(122, 74, 10, 0.55);
+}
+
+.link {
+  padding: 9px 13px;
+  border-radius: var(--td-radius-button);
+  color: var(--td-header-text);
+  font-family: var(--td-font-body);
+  font-size: var(--td-text-sm);
+  font-weight: 600;
+  text-decoration: none;
+  transition: background var(--td-duration-fast) ease, color var(--td-duration-fast) ease;
+}
+
+.link:hover {
+  background: rgba(233, 162, 59, 0.18);
+  color: var(--td-gold-bright);
+}
+
+.link:active {
+  background: rgba(233, 162, 59, 0.3);
+}
+
+.brand:focus-visible,
+.enterGame:focus-visible,
+.link:focus-visible {
+  outline: 3px solid var(--td-gold-bright);
+  outline-offset: 2px;
+}
+
+@media (max-width: 640px) {
+  .bar {
+    padding: 8px 12px;
+  }
+  .brandName {
+    font-size: var(--td-text-md);
+  }
+  .link {
+    padding: 8px 9px;
+  }
+}

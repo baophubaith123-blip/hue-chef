@@ -1,0 +1,34 @@
+.garland {
+  width: 100%;
+  height: 92px;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 6px 14px rgba(233, 162, 59, 0.25));
+}
+
+.sway {
+  transform-box: fill-box;
+  transform-origin: 50% 0;
+  animation: garland-sway 5.2s ease-in-out infinite alternate;
+}
+
+@keyframes garland-sway {
+  from {
+    transform: rotate(-1.6deg);
+  }
+  to {
+    transform: rotate(1.6deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sway {
+    animation: none;
+  }
+}

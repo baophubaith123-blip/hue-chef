@@ -1,0 +1,135 @@
+.frame {
+  position: relative;
+  border-radius: 14px;
+  padding: 5px;
+  box-shadow: 0 6px 18px rgba(74, 21, 37, 0.22);
+}
+
+.inner {
+  position: relative;
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--td-paper);
+  height: 100%;
+}
+
+/* Grade 1 — Thường: plain brown wood, no effect */
+.grade1 {
+  background: linear-gradient(180deg, var(--td-grade-1), var(--td-grade-1-deep));
+}
+
+/* Grade 2 — Khá: bronze with wave corners */
+.grade2 {
+  background: linear-gradient(160deg, var(--td-grade-2-bright), var(--td-grade-2) 45%, var(--td-grade-2-deep));
+}
+
+.grade2::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 14px;
+  background:
+    radial-gradient(circle at 8% 12%, rgba(255, 246, 224, 0.5) 0 5px, transparent 6px),
+    radial-gradient(circle at 92% 12%, rgba(255, 246, 224, 0.5) 0 5px, transparent 6px),
+    radial-gradient(circle at 8% 88%, rgba(255, 246, 224, 0.5) 0 5px, transparent 6px),
+    radial-gradient(circle at 92% 88%, rgba(255, 246, 224, 0.5) 0 5px, transparent 6px);
+  pointer-events: none;
+}
+
+/* Grade 3 — Ngon: brushed silver, cloud etching, brighter rim */
+.grade3 {
+  background: linear-gradient(160deg, var(--td-grade-3-bright), var(--td-grade-3) 50%, var(--td-grade-3-deep));
+  box-shadow: 0 6px 18px rgba(74, 21, 37, 0.22), 0 0 14px rgba(232, 237, 242, 0.45);
+}
+
+/* Grade 4 — Cung đình: gold, soft halo */
+.grade4 {
+  background: linear-gradient(160deg, var(--td-grade-4-bright), var(--td-grade-4) 50%, var(--td-grade-4-deep));
+  box-shadow: 0 6px 18px rgba(74, 21, 37, 0.25), 0 0 22px rgba(233, 162, 59, 0.55);
+}
+
+/* Grade 5 — Đặc biệt: ruby, strongest glow + floating sparks */
+.grade5 {
+  background: linear-gradient(160deg, var(--td-grade-5-bright), var(--td-grade-5) 50%, var(--td-grade-5-deep));
+  box-shadow: 0 6px 18px rgba(74, 21, 37, 0.28), var(--td-glow-cok);
+}
+
+.ribbon {
+  position: absolute;
+  top: -11px;
+  right: 14px;
+  z-index: 2;
+  padding: 3px 12px;
+  border-radius: var(--td-radius-full);
+  font-family: var(--td-font-body);
+  font-size: var(--td-text-xs);
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.grade4 .ribbon {
+  background: linear-gradient(180deg, var(--td-gold-bright), var(--td-gold-deep));
+  border: 1.5px solid #a86e14;
+  color: #43301b;
+}
+
+.grade5 .ribbon {
+  /* Deep ruby in both themes so the cream label stays ≥4.5:1. */
+  background: linear-gradient(180deg, #be123c, #881337);
+  border: 1.5px solid var(--td-cok-deep);
+  color: #fff1f2;
+}
+
+.sparkles {
+  position: absolute;
+  inset: -8px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.spark {
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  border-radius: 2px;
+  background: var(--td-cok-bright);
+  box-shadow: 0 0 10px 2px rgba(244, 63, 94, 0.55);
+  transform: rotate(45deg);
+  animation: grade-spark-float 2.6s ease-in-out infinite;
+}
+
+.sparkA {
+  top: 6%;
+  left: -4px;
+}
+
+.sparkB {
+  top: 44%;
+  right: -5px;
+  animation-delay: 0.8s;
+}
+
+.sparkC {
+  bottom: 8%;
+  left: 12%;
+  animation-delay: 1.6s;
+}
+
+@keyframes grade-spark-float {
+  0%,
+  100% {
+    transform: rotate(45deg) translateY(0) scale(1);
+    opacity: 0.95;
+  }
+  50% {
+    transform: rotate(45deg) translateY(-7px) scale(0.75);
+    opacity: 0.55;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spark {
+    animation: none;
+  }
+}

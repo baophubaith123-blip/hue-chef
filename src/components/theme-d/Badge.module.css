@@ -1,0 +1,39 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: var(--td-radius-full);
+  font-family: var(--td-font-body);
+  font-size: var(--td-text-xs);
+  font-weight: 700;
+  line-height: 1.35;
+  white-space: nowrap;
+}
+
+.gold {
+  background: linear-gradient(180deg, var(--td-gold-bright), var(--td-gold));
+  border: 1.5px solid #a86e14;
+  color: #43301b;
+}
+
+.brick {
+  /* Deep brick in BOTH themes (the dark-theme --td-brick is a light orange
+     meant for large surfaces; cream label text needs the deep tone). */
+  background: #b03e26;
+  border: 1.5px solid #7c2d1c;
+  color: var(--td-cream);
+}
+
+.paper {
+  background: var(--td-paper);
+  border: 1.5px solid var(--td-paper-edge);
+  color: var(--td-paper-text);
+}
+
+.cok {
+  /* Ruby gradient kept deep in both themes so the cream label stays ≥4.5:1. */
+  background: linear-gradient(180deg, #be123c, #881337);
+  border: 1.5px solid var(--td-cok-deep);
+  color: #fff1f2;
+}

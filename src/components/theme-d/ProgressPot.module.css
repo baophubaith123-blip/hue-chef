@@ -1,0 +1,82 @@
+.wrap {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.ringWrap {
+  position: relative;
+  width: 132px;
+  height: 132px;
+}
+
+.ring {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.track {
+  fill: rgba(255, 246, 224, 0.9);
+  stroke: var(--td-paper-edge);
+  stroke-width: 11;
+}
+
+.progress {
+  fill: none;
+  stroke: var(--td-gold);
+  stroke-width: 11;
+  stroke-linecap: round;
+  filter: drop-shadow(0 0 6px rgba(233, 162, 59, 0.65));
+  transition: stroke-dasharray 300ms var(--td-ease-out);
+}
+
+.mascot {
+  position: absolute;
+  inset: 24px;
+  width: calc(100% - 48px);
+  height: calc(100% - 48px);
+  object-fit: contain;
+  pointer-events: none;
+}
+
+.percent {
+  position: absolute;
+  left: 50%;
+  bottom: 12px;
+  transform: translateX(-50%);
+  padding: 1px 9px;
+  border-radius: var(--td-radius-full);
+  background: var(--td-plum);
+  color: var(--td-gold-bright);
+  font-family: var(--td-font-body);
+  font-size: var(--td-text-xs);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.steps {
+  display: flex;
+  gap: 6px;
+}
+
+.step {
+  width: 26px;
+  height: 8px;
+  border-radius: var(--td-radius-full);
+  background: var(--td-paper-edge);
+  border: 1.5px solid var(--td-wood-dark);
+  opacity: 0.55;
+}
+
+.stepDone {
+  background: var(--td-success-bright);
+  opacity: 1;
+}
+
+.stepCurrent {
+  background: var(--td-gold);
+  opacity: 1;
+  box-shadow: 0 0 8px rgba(233, 162, 59, 0.7);
+}
