@@ -21,7 +21,13 @@ interface SeasonBarProps {
   ingredientCount: number;
   /** Equipped-perk multiplier for the gold zone width (1 = no perk). */
   zoneScale?: number;
-  onResult: (outcome: SeasonOutcome, bonus: number) => void;
+  /**
+   * Reports the outcome, the banked bonus, and the signed stop deviation
+   * ((needle − zone centre) / good window): negative = stopped early,
+   * positive = ran past. The sell loop's flavour diagnosis reads the
+   * sign (Gói H4, mục 6.5); the learning loop ignores it.
+   */
+  onResult: (outcome: SeasonOutcome, bonus: number, deviation: number) => void;
 }
 
 /**
@@ -70,7 +76,8 @@ export function SeasonBar({
 
   const handleStop = () => {
     if (outcomeRef.current) return;
-    const d = Math.abs(posRef.current - zoneCenter);
+    const signed = posRef.current - zoneCenter;
+    const d = Math.abs(signed);
     const goodWindow = zoneHalf * 1.7;
     let next: SeasonOutcome;
     let bonus = 0;
@@ -89,7 +96,7 @@ export function SeasonBar({
     window.setTimeout(() => {
       if (reportedRef.current) return;
       reportedRef.current = true;
-      onResult(next, bonus);
+      onResult(next, bonus, goodWindow > 0 ? signed / goodWindow : 0);
     }, 1050);
   };
 

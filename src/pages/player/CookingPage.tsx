@@ -27,7 +27,18 @@ import { GestureStep } from '@/features/gestures/GestureStep';
 import { gestureForStep } from '@/data/gesture-map';
 import { BOSS_JUDGE_IMAGE } from '@/components/theme-d/assets';
 import { chapterById, dishesOfChapter } from '@/features/journey/lib/chapters';
-import { BOSS_PASS_STARS, bossStateFor } from '@/features/journey/lib/journey';
+import { BOSS_PASS_STARS, bestStarsByRecipe, bossStateFor } from '@/features/journey/lib/journey';
+import { SellResultPanel } from '@/features/stall/components/SellResultPanel';
+import { diagnoseBatch, type DiagnosisInput } from '@/features/stall/lib/diagnosis';
+import { priceForBatch, qualityBandForScore } from '@/features/stall/lib/pricing-sell';
+import { dishGradeFor } from '@/features/recipes/lib/grade';
+import {
+  canCookBatch,
+  finishCook,
+  tickStall,
+  useStall,
+} from '@/features/stall/store';
+import type { CookedBatch } from '@/features/stall/types';
 import { useCookingState } from '@/features/cooking/hooks/useCookingState';
 import { useDragDrop } from '@/features/cooking/hooks/useDragDrop';
 import { COMBO_WINDOW_MS, comboBonusForStreak } from '@/features/cooking/lib/combo';
@@ -71,16 +82,34 @@ export default function CookingPage() {
   } = useCookingState();
   const [searchParams] = useSearchParams();
   const isPreview = searchParams.get('preview') === '1';
+  // Sell mode (Gói H4): ?sell=<customerId> turns the run into a cook for
+  // a stall order. The run plays the same 5-stage engine; at the end the
+  // score converts into a sell batch (quality + diagnosis + real cost)
+  // instead of learning progress. Boss and sell never combine.
+  const sellOrderId = searchParams.get('sell');
+  const isSellMode = Boolean(sellOrderId) && !isPreview;
+  const stall = useStall(isSellMode && user ? user.id : null);
+  const sellCustomer = useMemo(
+    () => (isSellMode ? stall?.customers.find((c) => c.id === sellOrderId) ?? null : null),
+    [isSellMode, stall, sellOrderId],
+  );
   // Ngự thiện boss mode (Gói H3): ?boss=<chapterId> turns the chapter's
   // signature dish run into its boss stage. A mismatched chapter/dish
   // pair is ignored — the run simply plays as a normal learning run.
   const bossParam = searchParams.get('boss');
   const bossChapter = useMemo(() => {
-    if (isPreview || !bossParam || !id) return undefined;
+    if (isPreview || isSellMode || !bossParam || !id) return undefined;
     const chapter = chapterById(bossParam);
     return chapter && chapter.bossRecipeId === id ? chapter : undefined;
-  }, [isPreview, bossParam, id]);
+  }, [isPreview, isSellMode, bossParam, id]);
   const bossGuardRef = useRef<string | null>(null);
+  // Sell mode (Gói H4): the batch is created exactly once per finished
+  // run; the seasoning deviation of the run feeds the flavour diagnosis.
+  const sellGuardRef = useRef<string | null>(null);
+  const sellAppliedRef = useRef(false);
+  const seasonDeviationRef = useRef<number | null>(null);
+  const [sellBatch, setSellBatch] = useState<CookedBatch | null>(null);
+  const [sellNow, setSellNow] = useState(() => Date.now());
 
   // Equip-one perk model: only the equipped achievement's perk is active,
   // snapshotted into the run when it starts (preview runs get no perk).
@@ -138,6 +167,35 @@ export default function CookingPage() {
       navigate('/map', { replace: true });
     }
   }, [bossChapter, user, recipe, isLoading, getApprovedRecipes, navigate]);
+
+  // Sell gate: the order must exist, belong to this dish, and still be
+  // open when the page first resolves it. Checked once per order — a
+  // customer who gives up mid-run must not bounce the cook out of the
+  // kitchen; the finished batch simply waits on the counter.
+  useEffect(() => {
+    if (!isSellMode || !sellOrderId || !user || !recipe || isLoading || !stall) return;
+    if (sellGuardRef.current === sellOrderId) return;
+    sellGuardRef.current = sellOrderId;
+    const customer = stall.customers.find((c) => c.id === sellOrderId);
+    if (
+      !customer ||
+      customer.recipeId !== recipe.id ||
+      (customer.state !== 'waiting' && customer.state !== 'accepted')
+    ) {
+      navigate('/stall', { replace: true });
+    }
+  }, [isSellMode, sellOrderId, user, recipe, isLoading, stall, navigate]);
+
+  // While a sell cook runs, the stall clock keeps ticking (patience and
+  // the shift itself), exactly as if the cook had stayed at the stall.
+  useEffect(() => {
+    if (!isSellMode || !user) return;
+    const timer = window.setInterval(() => {
+      tickStall(user.id, user, getApprovedRecipes(), Date.now());
+      setSellNow(Date.now());
+    }, 1000);
+    return () => window.clearInterval(timer);
+  }, [isSellMode, user, getApprovedRecipes]);
 
   const approved = recipe && (recipe.status ?? 'approved') === 'approved';
   // "Chạy thử 5 màn": the recipe's own editor (or an admin) may run a
@@ -216,6 +274,7 @@ export default function CookingPage() {
   const handleApplyProgress = useCallback(() => {
     if (!session || session.phase !== 'success' || !user) return;
     if (isPreview) return;
+    if (isSellMode) return;
     if (appliedResult) return;
 
     const xpPerkPct = perkValueOf(session.perk, 'xp-bonus-pct');
@@ -302,6 +361,46 @@ export default function CookingPage() {
     dict,
   ]);
 
+  // Sell conversion (Gói H4): when a sell run ends — success OR failure —
+  // its score ratio becomes the batch's 0–100 quality, the stage ratios
+  // become its flavour diagnosis, and the pantry lots it eats become its
+  // real cost. Learning progress is never touched (no XP, no cooked
+  // entry, no xu): the sell loop books everything in the stall store.
+  useEffect(() => {
+    if (!isSellMode || !sellOrderId || !user || !session) return;
+    if (session.phase !== 'success' && session.phase !== 'failed') return;
+    if (sellAppliedRef.current) return;
+    sellAppliedRef.current = true;
+    const ratio =
+      session.recipe.baseScore > 0
+        ? Math.min(1, Math.max(0, session.finalScore / session.recipe.baseScore))
+        : 0;
+    const qualityScore = Math.round(ratio * 100);
+    const band = qualityBandForScore(qualityScore);
+    const ratios: DiagnosisInput['ratios'] = {};
+    const partKeys = ['market', 'catch', 'cook', 'season', 'finish', 'quiz'] as const;
+    for (const key of partKeys) {
+      const plan = session.scorePlan[key];
+      if (plan > 0) ratios[key] = (session.scoreParts[key] ?? 0) / plan;
+    }
+    if (session.totalDurationSeconds > 0) {
+      ratios.time = session.timeRemainingSeconds / session.totalDurationSeconds;
+    }
+    const diagnosis = diagnoseBatch({
+      ratios,
+      wrongCount: session.wrongCount,
+      seasonDeviation: seasonDeviationRef.current,
+    });
+    const batch = finishCook(user.id, {
+      recipe: session.recipe,
+      qty: sellCustomer?.qty ?? 1,
+      qualityScore,
+      level: band.level,
+      diagnosis,
+    });
+    setSellBatch(batch);
+  }, [isSellMode, sellOrderId, user, session, sellCustomer]);
+
   useEffect(() => {
     // The cleanup only ever clears visual-effect timers. The session
     // itself is torn down by the dedicated effect further below, keyed
@@ -344,12 +443,18 @@ export default function CookingPage() {
     // from null to its object once its achievement lands in the unlock
     // store during that apply) — must not reset or restart the session:
     // a finished run's result modal stays up until the player closes it.
-    const startKey = `${current.id}:${currentPreview ? 'preview' : 'play'}`;
+    const sellParam = searchParams.get('sell');
+    const startKey = `${current.id}:${
+      currentPreview ? 'preview' : sellParam ? `sell:${sellParam}` : 'play'
+    }`;
     if (startedKeyRef.current === startKey) {
       return cleanupFx;
     }
     startedKeyRef.current = startKey;
     setAppliedResult(null);
+    setSellBatch(null);
+    sellAppliedRef.current = false;
+    seasonDeviationRef.current = null;
     startCooking(current, equippedPerk);
     return cleanupFx;
   }, [
@@ -511,7 +616,12 @@ export default function CookingPage() {
   );
 
   const handleSeasonResult = useCallback(
-    (outcome: SeasonOutcome, bonus: number) => {
+    (outcome: SeasonOutcome, bonus: number, deviation?: number) => {
+      // Sell mode keeps the last seasoning deviation for the flavour
+      // diagnosis (mặn vs nhạt — mục 6.5); learning runs ignore it.
+      if (isSellMode && typeof deviation === 'number') {
+        seasonDeviationRef.current = deviation;
+      }
       setSeasonOpen(false);
       if (outcome === 'miss') {
         // The step does not execute; the gesture replays (the old bar's
@@ -528,7 +638,7 @@ export default function CookingPage() {
       setPendingQuality(null);
       pulseAnimation('sparkle');
     },
-    [addStageBonus, notifySeasonMiss, executeStepAction, pendingQuality, pulseAnimation],
+    [addStageBonus, notifySeasonMiss, executeStepAction, pendingQuality, pulseAnimation, isSellMode],
   );
 
   // Combo lifetime: the streak dies COMBO_WINDOW_MS after the last
@@ -634,6 +744,23 @@ export default function CookingPage() {
         </p>
         <p className={styles.bossBannerRule}>
           {dict.journey.bossBannerRule(bossChapterName, BOSS_PASS_STARS)}
+        </p>
+      </div>
+    </div>
+  ) : null;
+  // Sell framing (Gói H4): banner over every stage of a sell run, with
+  // the ordering customer's patience draining live overhead.
+  const sellPatienceLeft = sellCustomer
+    ? Math.max(0, sellCustomer.patienceMs - (sellNow - sellCustomer.arrivedAt))
+    : 0;
+  const sellBanner = isSellMode ? (
+    <div className={styles.bossBanner}>
+      <div className={styles.bossBannerText}>
+        <p className={styles.bossBannerTitle}>🏪 {dict.stall.sellBannerTitle} — {recipe.name}</p>
+        <p className={styles.bossBannerRule}>
+          {sellCustomer
+            ? `${dict.stall.sellBannerBody(dict.stall.tierNames[sellCustomer.tier], sellCustomer.qty)} ⏳ ${Math.floor(sellPatienceLeft / 60000)}:${String(Math.floor((sellPatienceLeft % 60000) / 1000)).padStart(2, '0')}`
+            : dict.stall.sellBannerBody('', 1)}
         </p>
       </div>
     </div>
@@ -744,8 +871,8 @@ export default function CookingPage() {
 
   const stageHeader = (
     <>
-      <Link className={styles.back} to={`/recipes/${recipe.id}`}>
-        ← {t('cooking.recipeDetail')}
+      <Link className={styles.back} to={isSellMode ? '/stall' : `/recipes/${recipe.id}`}>
+        ← {isSellMode ? dict.stall.backToStall : t('cooking.recipeDetail')}
       </Link>
       <div className={styles.top}>
         <div>
@@ -763,6 +890,7 @@ export default function CookingPage() {
       {isPreview ? <span className={styles.previewBadge}>{stageDict.previewBadge}</span> : null}
       {flowChips}
       {bossBanner}
+      {sellBanner}
     </>
   );
 
@@ -822,8 +950,8 @@ export default function CookingPage() {
     return (
       <PlayerShell>
         <div className={styles.runFrame}>
-        <Link className={styles.back} to={`/recipes/${recipe.id}`}>
-          ← {t('cooking.recipeDetail')}
+        <Link className={styles.back} to={isSellMode ? '/stall' : `/recipes/${recipe.id}`}>
+          ← {isSellMode ? dict.stall.backToStall : t('cooking.recipeDetail')}
         </Link>
         <div className={styles.top}>
           <div>
@@ -837,6 +965,7 @@ export default function CookingPage() {
         </div>
         {flowChips}
         {bossBanner}
+        {sellBanner}
 
         <MinigameRunner
           minigames={session.recipe.minigames ?? []}
@@ -853,8 +982,8 @@ export default function CookingPage() {
   return (
     <PlayerShell>
       <div className={styles.runFrame}>
-      <Link className={styles.back} to={`/recipes/${recipe.id}`}>
-        ← {t('cooking.recipeDetail')}
+      <Link className={styles.back} to={isSellMode ? '/stall' : `/recipes/${recipe.id}`}>
+        ← {isSellMode ? dict.stall.backToStall : t('cooking.recipeDetail')}
       </Link>
       <div className={styles.top}>
         <div className={styles.hudDish}>
@@ -897,6 +1026,7 @@ export default function CookingPage() {
       {isPreview ? <span className={styles.previewBadge}>{stageDict.previewBadge}</span> : null}
       {flowChips}
       {bossBanner}
+      {sellBanner}
       {seasonToast ? <div className={styles.seasonToast}>{seasonToast}</div> : null}
 
       <div className={styles.gridWrap}>
@@ -971,7 +1101,32 @@ export default function CookingPage() {
         />
       ) : null}
 
-      {showResult ? (
+      {showResult && isSellMode ? (
+        sellBatch ? (
+          <SellResultPanel
+            batch={sellBatch}
+            recipeName={recipe.name}
+            recipeImage={recipe.image}
+            pricePreview={priceForBatch({
+              cost: sellBatch.cost,
+              grade: dishGradeFor(recipe),
+              bestStars: bestStarsByRecipe(user).get(recipe.id) ?? 0,
+              level: sellBatch.level,
+            })}
+            canRetry={Boolean(stall && canCookBatch(stall, recipe, sellBatch.qty))}
+            onRetry={() => {
+              setSellBatch(null);
+              sellAppliedRef.current = false;
+              seasonDeviationRef.current = null;
+              startCooking(recipe);
+            }}
+            onBackToStall={() => {
+              resetCooking();
+              navigate('/stall');
+            }}
+          />
+        ) : null
+      ) : showResult ? (
         <CookingResultModal
           session={session}
           onClose={resetCooking}
