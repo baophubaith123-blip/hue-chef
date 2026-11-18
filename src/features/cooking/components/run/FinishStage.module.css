@@ -143,7 +143,7 @@
 
 .ringInner {
   border-radius: 50%;
-  border: 3px solid var(--color-gold, #e9a23b);
+  border: 3px solid var(--td-gold, #e9a23b);
   background: rgba(233, 162, 59, 0.13);
   pointer-events: none;
 }
@@ -223,11 +223,11 @@
 
 /* ===== Phase 16 — theme D overrides ===== */
 .stage {
-  border: var(--border-game, 3px solid #200f04);
+  border: 3px solid var(--td-ink);
 }
 
 .stageChip {
-  border: 2.5px solid var(--ink, #200f04);
+  border: 2.5px solid var(--td-ink, #200f04);
   box-shadow: 0 3px 0 rgba(0, 0, 0, 0.35);
 }
 
@@ -237,7 +237,7 @@
 }
 
 .doneBadge {
-  border: 3px solid var(--ink, #200f04);
+  border: 3px solid var(--td-ink, #200f04);
 }
 
 
@@ -245,7 +245,7 @@
 .field {
   background-image:
     linear-gradient(180deg, rgba(24, 8, 20, 0.18), rgba(24, 8, 20, 0.34)),
-    url('/images/kitchen-night.webp');
+    url('../../../../assets/theme-d/scenes/ban-hoan-thien.webp');
   background-size: cover;
   background-position: center;
 }
@@ -253,7 +253,7 @@
 [data-theme='light'] .field {
   background-image:
     linear-gradient(180deg, rgba(253, 243, 216, 0.3), rgba(253, 243, 216, 0.42)),
-    url('/images/kitchen-day.webp');
+    url('../../../../assets/theme-d/scenes/ban-hoan-thien.webp');
 }
 
 

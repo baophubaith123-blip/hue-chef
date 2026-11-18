@@ -35,7 +35,7 @@
 
 .chip {
   padding: 0.35rem 0.8rem;
-  border-radius: var(--radius-full);
+  border-radius: var(--td-radius-full);
   background: var(--color-surface-alt, #f5ebdc);
   border: 1px solid var(--color-card-border, #e8dfd5);
   color: var(--color-text, #3b2a20);
@@ -80,7 +80,7 @@
 
 .ringFill {
   fill: none;
-  stroke: var(--color-gold, #e9a23b);
+  stroke: var(--td-gold, #e9a23b);
   stroke-width: 7;
   stroke-linecap: round;
   transition: stroke-dashoffset 0.1s linear;
@@ -119,7 +119,7 @@
   top: -0.4rem;
   right: 6.2rem;
   padding: 0.3rem 0.7rem;
-  border-radius: var(--radius-full);
+  border-radius: var(--td-radius-full);
   background: #15803d;
   color: #ffffff;
   font-size: 1rem;
@@ -140,7 +140,7 @@
 /* "ĐÚNG RỒI!" pill on the correct option */
 .correctBang {
   padding: 0.2rem 0.6rem;
-  border-radius: var(--radius-full);
+  border-radius: var(--td-radius-full);
   background: #15803d;
   color: #ffffff;
   font-size: 0.72rem;
@@ -165,7 +165,7 @@
   height: 84px;
   border-radius: 50%;
   object-fit: cover;
-  border: 3px solid var(--color-gold, #e9a23b);
+  border: 3px solid var(--td-gold, #e9a23b);
   box-shadow: var(--shadow-glow-gold);
   animation: bounceSoft 3.4s ease-in-out infinite;
   flex-shrink: 0;
@@ -251,7 +251,7 @@
 
 .progressBarFill {
   height: 100%;
-  background: linear-gradient(90deg, var(--color-gold, #e9a23b) 0%, var(--color-brick, #c8553d) 100%);
+  background: linear-gradient(90deg, var(--td-gold, #e9a23b) 0%, var(--color-brick, #c8553d) 100%);
   border-radius: 9999px;
   transition: width 0.1s linear;
   box-shadow: 0 0 6px rgba(233, 162, 59, 0.4);
@@ -310,7 +310,7 @@
   width: 30px;
   height: 30px;
   border-radius: 50%;
-  background: var(--gradient-gold);
+  background: linear-gradient(135deg, var(--td-gold-bright) 0%, var(--td-gold) 55%, var(--td-gold-deep) 100%);
   border: 1px solid rgba(146, 110, 60, 0.35);
   font-size: 0.85rem;
   font-weight: 800;
@@ -406,53 +406,53 @@
 
 /* ===== Phase 16 — theme D overrides ===== */
 .container {
-  background: var(--paper, #fff6e0);
-  color: var(--paper-text, #43301b);
-  border: var(--border-game, 3px solid #4a2c14);
+  background: var(--td-paper, #fff6e0);
+  color: var(--td-paper-text, #43301b);
+  border: 3px solid var(--td-ink);
   border-radius: 24px;
   box-shadow: var(--shadow-game-card, 0 12px 28px rgba(59, 42, 32, 0.12));
 }
 
 .speechBubble {
   background: #fffdf4;
-  border: 2.5px solid var(--ink, #4a2c14);
-  color: var(--paper-text, #43301b);
+  border: 2.5px solid var(--td-ink, #4a2c14);
+  color: var(--td-paper-text, #43301b);
 }
 
 .hostAvatar {
-  border: 3px solid var(--color-gold, #e9a23b);
-  box-shadow: 0 3px 0 var(--ink-soft, rgba(74, 44, 20, 0.45));
+  border: 3px solid var(--td-gold, #e9a23b);
+  box-shadow: 0 3px 0 var(--td-ink-soft, rgba(74, 44, 20, 0.45));
 }
 
-.question { color: var(--paper-text, #43301b); }
-.instruction { color: var(--paper-text-muted, #7a5c38); }
+.question { color: var(--td-paper-text, #43301b); }
+.instruction { color: var(--td-paper-text-muted, #7a5c38); }
 
 .optionButton {
   background: #fffdf4;
-  border: 3px solid var(--wood-dark, #8a5a2b);
+  border: 3px solid var(--td-wood-dark, #8a5a2b);
   border-radius: var(--radius-xl, 16px);
-  color: var(--paper-text, #43301b);
+  color: var(--td-paper-text, #43301b);
   box-shadow: 0 4px 0 rgba(74, 44, 20, 0.25);
 }
 
 .optionButton:hover:not(:disabled) {
-  border-color: var(--color-gold, #e9a23b);
+  border-color: var(--td-gold, #e9a23b);
   transform: translateY(-2px);
 }
 
 .optionIndexBadge {
-  background: var(--wood-gradient, linear-gradient(180deg, #ce9550, #b57e40));
-  border: 2px solid var(--ink, #4a2c14);
+  background: var(--td-wood-gradient, linear-gradient(180deg, #ce9550, #b57e40));
+  border: 2px solid var(--td-ink, #4a2c14);
   color: #fff6e0;
 }
 
 .progressBarTrack {
-  border: 2.5px solid var(--ink, #4a2c14);
-  background: var(--paper-deep, #f7e8c6);
+  border: 2.5px solid var(--td-ink, #4a2c14);
+  background: var(--td-paper-deep, #f7e8c6);
 }
 
 .chip {
-  border: 2px solid var(--ink, #4a2c14);
+  border: 2px solid var(--td-ink, #4a2c14);
 }
 
 
@@ -460,7 +460,7 @@
 .container {
   background-image:
     linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(255, 255, 255, 0.9)),
-    url('/images/festival-day.webp');
+    url('../../../../assets/theme-d/scenes/san-khau-hoi-dap.webp');
   background-size: cover;
   background-position: center top;
 }
@@ -468,7 +468,7 @@
 [data-theme='dark'] .container {
   background-image:
     linear-gradient(180deg, rgba(24, 8, 20, 0.5), rgba(24, 8, 20, 0.66)),
-    url('/images/festival-night.webp');
+    url('../../../../assets/theme-d/scenes/san-khau-hoi-dap.webp');
 }
 
 /* ===== Phase 18 — question text sits on the paper bubble in both themes ===== */

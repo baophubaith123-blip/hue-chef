@@ -9,7 +9,7 @@
   background: var(--color-surface, #ffffff);
   border: 1px solid var(--color-card-border, #e8dfd5);
   padding: 0.4rem 0.85rem;
-  border-radius: var(--radius-full, 9999px);
+  border-radius: var(--td-radius-full, 9999px);
   text-decoration: none;
   transition: all 0.2s ease;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
@@ -124,7 +124,7 @@
   font-family: var(--font-display, Georgia, serif);
   font-size: 1.85rem;
   font-weight: 800;
-  color: var(--color-gold, #e9a23b);
+  color: var(--td-gold, #e9a23b);
   text-shadow: 0 1px 2px rgba(233, 162, 59, 0.2);
   line-height: 1.1;
   margin-top: 0.15rem;
@@ -135,7 +135,7 @@
   font-size: 0.8rem;
   font-weight: 600;
   padding: 0.15rem 0.5rem;
-  border-radius: var(--radius-full, 9999px);
+  border-radius: var(--td-radius-full, 9999px);
   background: rgba(255, 253, 249, 0.14);
   color: #86efac;
 }
@@ -193,7 +193,7 @@
 .stageFlowChipActive {
   background: var(--color-plum, #4a1525);
   color: #ffe9be;
-  border-color: var(--color-gold, #e9a23b);
+  border-color: var(--td-gold, #e9a23b);
 }
 
 .stageFlowChipDone {
@@ -204,7 +204,7 @@
 .perkChip {
   background: linear-gradient(135deg, #fdf0d3, #fbe3ae);
   color: #7c4a03;
-  border-color: var(--color-gold, #e9a23b);
+  border-color: var(--td-gold, #e9a23b);
 }
 
 .previewBadge {
@@ -234,20 +234,20 @@
 
 /* ===== Phase 16 — theme D overrides ===== */
 .scorePanel {
-  background: var(--paper, #fff6e0);
-  color: var(--paper-text, #43301b);
-  border: var(--border-game, 3px solid #4a2c14);
+  background: var(--td-paper, #fff6e0);
+  color: var(--td-paper-text, #43301b);
+  border: 3px solid var(--td-ink);
   border-radius: 20px;
   box-shadow: var(--shadow-game-card, 0 12px 28px rgba(59, 42, 32, 0.12));
 }
 
-.scoreValue { color: var(--paper-text, #43301b); }
-.scoreLabel, .scoreHint { color: var(--paper-text-muted, #7a5c38); }
+.scoreValue { color: var(--td-paper-text, #43301b); }
+.scoreLabel, .scoreHint { color: var(--td-paper-text-muted, #7a5c38); }
 
 .stageFlowChip {
-  border: 2.5px solid var(--ink, #4a2c14);
-  background: var(--paper, #fff6e0);
-  color: var(--paper-text-muted, #7a5c38);
+  border: 2.5px solid var(--td-ink, #4a2c14);
+  background: var(--td-paper, #fff6e0);
+  color: var(--td-paper-text-muted, #7a5c38);
   font-weight: 700;
 }
 
@@ -263,17 +263,17 @@
 }
 
 .perkChip {
-  border: 2px solid var(--wood-dark, #8a5a2b);
+  border: 2px solid var(--td-wood-dark, #8a5a2b);
   background: rgba(233, 162, 59, 0.16);
-  color: var(--paper-text, #43301b);
+  color: var(--td-paper-text, #43301b);
 }
 
 .previewBadge {
-  border: 2px solid var(--ink, #4a2c14);
+  border: 2px solid var(--td-ink, #4a2c14);
 }
 
 .seasonToast {
-  border: 2.5px solid var(--ink, #200f04);
+  border: 2.5px solid var(--td-ink, #200f04);
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
 }
 
@@ -282,10 +282,10 @@
 .gridWrap {
   background-image:
     linear-gradient(180deg, rgba(250, 245, 239, 0.6), rgba(250, 245, 239, 0.72)),
-    url('/images/kitchen-day.webp');
+    url('../../assets/theme-d/scenes/bep.webp');
   background-size: cover;
   background-position: center;
-  border: var(--border-game, 3px solid #4a2c14);
+  border: 3px solid var(--td-ink);
   border-radius: 24px;
   padding: 1rem;
 }
@@ -293,7 +293,7 @@
 [data-theme='dark'] .gridWrap {
   background-image:
     linear-gradient(180deg, rgba(24, 8, 20, 0.42), rgba(24, 8, 20, 0.55)),
-    url('/images/kitchen-night.webp');
+    url('../../assets/theme-d/scenes/bep.webp');
 }
 
 

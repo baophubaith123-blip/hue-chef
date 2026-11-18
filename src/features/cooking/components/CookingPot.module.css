@@ -25,7 +25,7 @@
   color: #ffffff;
   background: var(--color-plum, #4a1525);
   padding: 0.4rem 1.25rem;
-  border-radius: var(--radius-full);
+  border-radius: var(--td-radius-full);
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
@@ -44,7 +44,7 @@
   right: 0.9rem;
   z-index: 3;
   padding: 0.3rem 0.75rem 0.45rem;
-  border-radius: var(--radius-full);
+  border-radius: var(--td-radius-full);
   background: linear-gradient(90deg, #b45309, #991b1b);
   color: #ffffff;
   font-size: 0.78rem;
@@ -92,7 +92,7 @@
 
 .fxPoints {
   padding: 0.3rem 0.7rem;
-  border-radius: var(--radius-full);
+  border-radius: var(--td-radius-full);
   background: #15803d;
   color: #ffffff;
   font-size: 0.95rem;
@@ -103,7 +103,7 @@
 
 .fxPill {
   padding: 0.3rem 0.7rem;
-  border-radius: var(--radius-full);
+  border-radius: var(--td-radius-full);
   background: rgba(255, 255, 255, 0.94);
   color: var(--color-plum, #4a1525);
   font-size: 0.8rem;
@@ -124,7 +124,7 @@
 .needsLine {
   margin: 0 0 0.6rem;
   padding: 0.45rem 0.9rem;
-  border-radius: var(--radius-full);
+  border-radius: var(--td-radius-full);
   background: rgba(255, 255, 255, 0.92);
   color: var(--color-plum, #4a1525);
   font-size: 0.85rem;
@@ -152,7 +152,7 @@
 }
 
 .potActive {
-  border-color: var(--color-gold, #e9a23b);
+  border-color: var(--td-gold, #e9a23b);
   border-style: solid;
   box-shadow: var(--shadow-glow-gold), inset 0 2px 18px rgba(0, 0, 0, 0.25);
   transform: scale(1.02);
@@ -234,7 +234,7 @@
 }
 
 .slotFilled {
-  background: var(--gradient-gold);
+  background: linear-gradient(135deg, var(--td-gold-bright) 0%, var(--td-gold) 55%, var(--td-gold-deep) 100%);
   border-color: #f6c453;
   box-shadow: 0 0 10px rgba(233, 162, 59, 0.65);
   animation: popIn 0.35s ease both;
@@ -261,7 +261,7 @@
   color: #f8efea;
   background: rgba(255, 253, 249, 0.14);
   padding: 0.25rem 0.65rem;
-  border-radius: var(--radius-full);
+  border-radius: var(--td-radius-full);
   border: 1px solid rgba(248, 239, 234, 0.35);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
   animation: popIn 0.3s ease both;
@@ -277,7 +277,7 @@
   font-size: 1.15rem;
   font-weight: 800;
   padding: 0.85rem 1.75rem;
-  border-radius: var(--radius-full);
+  border-radius: var(--td-radius-full);
   border: none;
   cursor: pointer;
   box-shadow: 0 4px 16px rgba(200, 85, 61, 0.4);
@@ -326,31 +326,31 @@
 
 /* ===== Phase 16 — theme D overrides ===== */
 .comboBadge {
-  border: 2.5px solid var(--ink, #4a2c14);
-  box-shadow: 0 3px 0 var(--ink-soft, rgba(74, 44, 20, 0.45));
+  border: 2.5px solid var(--td-ink, #4a2c14);
+  box-shadow: 0 3px 0 var(--td-ink-soft, rgba(74, 44, 20, 0.45));
 }
 
 .slot {
-  border: 2.5px dashed var(--wood-dark, #8a5a2b);
+  border: 2.5px dashed var(--td-wood-dark, #8a5a2b);
   background: rgba(255, 246, 224, 0.5);
 }
 
 .chip {
-  background: var(--paper, #fff6e0);
-  border: 2px solid var(--wood-dark, #8a5a2b);
-  color: var(--paper-text, #43301b);
+  background: var(--td-paper, #fff6e0);
+  border: 2px solid var(--td-wood-dark, #8a5a2b);
+  color: var(--td-paper-text, #43301b);
 }
 
 .actionButton {
-  border: 3px solid var(--ink, #4a2c14) !important;
-  box-shadow: 0 5px 0 var(--ink-soft, rgba(74, 44, 20, 0.45)) !important;
+  border: 3px solid var(--td-ink, #4a2c14) !important;
+  box-shadow: 0 5px 0 var(--td-ink-soft, rgba(74, 44, 20, 0.45)) !important;
   border-radius: var(--radius-xl, 16px) !important;
   font-weight: 900;
 }
 
 .actionButton:active:not(:disabled) {
   transform: translateY(3px);
-  box-shadow: 0 2px 0 var(--ink-soft, rgba(74, 44, 20, 0.45)) !important;
+  box-shadow: 0 2px 0 var(--td-ink-soft, rgba(74, 44, 20, 0.45)) !important;
 }
 
 /* ===== Phase 18 — compact pot, cream plaque matched to the artwork ===== */
@@ -369,7 +369,7 @@
    so the artwork blends in seamlessly in both themes. */
 .potStage {
   background: #f9f4ec;
-  border: 3px solid var(--wood-dark, #8a5a2b);
+  border: 3px solid var(--td-wood-dark, #8a5a2b);
   border-radius: 22px;
   padding: 0.85rem 1.1rem 0.6rem;
   box-shadow: 0 6px 16px rgba(32, 15, 4, 0.25);

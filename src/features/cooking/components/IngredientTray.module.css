@@ -29,7 +29,7 @@
   color: #ffffff;
   background: var(--color-plum, #4a1525);
   padding: 0.4rem 1.15rem;
-  border-radius: var(--radius-full);
+  border-radius: var(--td-radius-full);
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
@@ -44,7 +44,7 @@
   background: var(--color-bg-ivory, #faf5ef);
   color: var(--color-brick, #c8553d);
   padding: 0.25rem 0.75rem;
-  border-radius: var(--radius-full);
+  border-radius: var(--td-radius-full);
   font-size: 0.8rem;
   font-weight: 700;
   border: 1px solid var(--color-card-border, #e8dac8);
@@ -175,7 +175,7 @@
   color: #6b7280;
   background: #e5e7eb;
   padding: 0.1rem 0.4rem;
-  border-radius: var(--radius-full);
+  border-radius: var(--td-radius-full);
 }
 
 .chipMeta {
@@ -192,7 +192,7 @@
   align-items: center;
   gap: 2px;
   padding: 2px 4px;
-  border-radius: var(--radius-full);
+  border-radius: var(--td-radius-full);
   background: #ffffff;
   border: 1.5px solid rgba(74, 21, 37, 0.14);
   box-shadow: 0 1px 3px rgba(74, 21, 37, 0.15);
@@ -209,7 +209,7 @@
 
 /* Card needed by the current step: gold glow + NEED tag */
 .chipNeeded {
-  border-color: var(--color-gold, #e9a23b);
+  border-color: var(--td-gold, #e9a23b);
   background: #fff7e6;
   box-shadow:
     0 0 0 2px rgba(233, 162, 59, 0.35),
@@ -227,7 +227,7 @@
   align-self: flex-start;
   margin-top: 0.15rem;
   padding: 0.12rem 0.45rem;
-  border-radius: var(--radius-full);
+  border-radius: var(--td-radius-full);
   background: linear-gradient(90deg, #fbbf24, #f59e0b);
   color: #7c2d12;
   font-size: 0.6rem;
@@ -239,63 +239,63 @@
 
 /* ===== Phase 16 — theme D overrides (tray panel + paging) ===== */
 .tray {
-  background: var(--paper, #fff6e0);
-  color: var(--paper-text, #43301b);
-  border: var(--border-game, 3px solid #4a2c14);
+  background: var(--td-paper, #fff6e0);
+  color: var(--td-paper-text, #43301b);
+  border: 3px solid var(--td-ink);
   border-radius: 20px;
   box-shadow: var(--shadow-game-card, 0 12px 28px rgba(59, 42, 32, 0.12));
 }
 
 [data-theme='dark'] .tray {
-  background: var(--paper, #f8efd4);
-  border-color: var(--ink, #200f04);
-  color: var(--paper-text, #43301b);
+  background: var(--td-paper, #f8efd4);
+  border-color: var(--td-ink, #200f04);
+  color: var(--td-paper-text, #43301b);
 }
 
 .title {
-  border: 2.5px solid var(--ink, #200f04);
+  border: 2.5px solid var(--td-ink, #200f04);
   box-shadow: 0 3px 0 rgba(0, 0, 0, 0.35);
 }
 
 .remainingBadge {
   background: rgba(233, 162, 59, 0.18);
-  border: 2px solid var(--wood-dark, #8a5a2b);
-  color: var(--paper-text, #43301b);
+  border: 2px solid var(--td-wood-dark, #8a5a2b);
+  color: var(--td-paper-text, #43301b);
 }
 
 .chip {
   background: #fffdf4;
   border: 2.5px solid rgba(138, 90, 43, 0.55);
   border-radius: var(--radius-xl, 16px);
-  color: var(--paper-text, #43301b);
+  color: var(--td-paper-text, #43301b);
   box-shadow: 0 3px 0 rgba(74, 44, 20, 0.18);
 }
 
 .chip:hover:not(:disabled) {
-  border-color: var(--color-gold, #e9a23b);
+  border-color: var(--td-gold, #e9a23b);
 }
 
 .medal {
-  border: 2px solid var(--ink, #4a2c14);
+  border: 2px solid var(--td-ink, #4a2c14);
   border-radius: 14px;
 }
 
-.chipName { color: var(--paper-text, #43301b); }
-.chipMeta { color: var(--paper-text-muted, #7a5c38); }
+.chipName { color: var(--td-paper-text, #43301b); }
+.chipMeta { color: var(--td-paper-text-muted, #7a5c38); }
 
 .chipNeeded {
-  border-color: var(--color-gold, #e9a23b);
+  border-color: var(--td-gold, #e9a23b);
   box-shadow: 0 0 0 2px rgba(233, 162, 59, 0.45), 0 3px 0 rgba(74, 44, 20, 0.18);
 }
 
 .neededTag {
-  background: var(--color-primary, #c8553d);
-  border: 1.5px solid var(--ink, #4a2c14);
+  background: var(--td-brick, #c8553d);
+  border: 1.5px solid var(--td-ink, #4a2c14);
   color: #fff;
 }
 
 .chipUsed {
-  background: var(--paper-deep, #f7e8c6);
+  background: var(--td-paper-deep, #f7e8c6);
 }
 
 .pager {
@@ -310,13 +310,13 @@
   width: 42px;
   height: 42px;
   border-radius: 50%;
-  border: 3px solid var(--ink, #4a2c14);
-  background: var(--wood-gradient, linear-gradient(180deg, #ce9550, #b57e40));
+  border: 3px solid var(--td-ink, #4a2c14);
+  background: var(--td-wood-gradient, linear-gradient(180deg, #ce9550, #b57e40));
   color: #fff6e0;
   font-size: 15px;
   font-weight: 900;
   cursor: pointer;
-  box-shadow: 0 3px 0 var(--ink-soft, rgba(74, 44, 20, 0.45));
+  box-shadow: 0 3px 0 var(--td-ink-soft, rgba(74, 44, 20, 0.45));
   text-shadow: 0 1px 0 rgba(32, 15, 4, 0.4);
   transition: transform 0.12s ease, opacity 0.15s ease;
 }
@@ -332,9 +332,9 @@
 }
 
 .pagerSign {
-  background: var(--wood-gradient, linear-gradient(180deg, #ce9550, #b57e40));
-  border: 2.5px solid var(--ink, #4a2c14);
-  border-radius: var(--radius-full);
+  background: var(--td-wood-gradient, linear-gradient(180deg, #ce9550, #b57e40));
+  border: 2.5px solid var(--td-ink, #4a2c14);
+  border-radius: var(--td-radius-full);
   color: #fff6e0;
   font-weight: 800;
   font-size: 13.5px;
@@ -349,11 +349,11 @@
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  border: 2px solid var(--ink, #4a2c14);
+  border: 2px solid var(--td-ink, #4a2c14);
   background: #fff6e0;
 }
 
-.pagerDotActive { background: var(--color-gold, #e9a23b); }
+.pagerDotActive { background: var(--td-gold, #e9a23b); }
 
 
 /* ===== Phase 17 — one-frame fit ===== */

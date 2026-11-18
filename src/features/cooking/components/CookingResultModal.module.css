@@ -22,7 +22,7 @@
   width: 8px;
   height: 13px;
   border-radius: 2px;
-  background: var(--color-gold, #e9a23b);
+  background: var(--td-gold, #e9a23b);
   opacity: 0;
   animation: confettiFall 3s ease-in 0.2s forwards;
 }
@@ -55,7 +55,7 @@
   height: 3.5rem;
   border-radius: 50%;
   background: radial-gradient(circle, #fff3d6 0%, #f7dc9f 100%);
-  border: 2px solid var(--color-gold, #e9a23b);
+  border: 2px solid var(--td-gold, #e9a23b);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -89,7 +89,7 @@
 }
 
 .starFilled {
-  color: var(--color-gold, #e9a23b);
+  color: var(--td-gold, #e9a23b);
   filter: drop-shadow(0 1px 4px rgba(233, 162, 59, 0.45));
 }
 
@@ -179,7 +179,7 @@
   gap: 0.85rem;
   padding: 0.75rem 1rem;
   background: linear-gradient(135deg, rgba(233, 162, 59, 0.15) 0%, rgba(200, 85, 61, 0.12) 100%);
-  border: 1.5px solid var(--color-gold, #e9a23b);
+  border: 1.5px solid var(--td-gold, #e9a23b);
   border-radius: var(--radius-lg, 12px);
 }
 
@@ -289,9 +289,9 @@
   align-items: center;
   gap: 0.4rem;
   padding: 0.4rem 0.75rem;
-  border-radius: var(--radius-full, 9999px);
+  border-radius: var(--td-radius-full, 9999px);
   background: #fff8eb;
-  border: 1px solid var(--color-gold, #e9a23b);
+  border: 1px solid var(--td-gold, #e9a23b);
   font-size: 0.85rem;
   font-weight: 600;
   color: var(--color-plum, #4a1525);
@@ -366,8 +366,8 @@
 
 /* ===== Phase 16 — theme D overrides ===== */
 .trophyBadge {
-  border: 3.5px solid var(--ink, #4a2c14);
-  box-shadow: 0 5px 0 var(--ink-soft, rgba(74, 44, 20, 0.45)), 0 0 26px rgba(233, 162, 59, 0.45);
+  border: 3.5px solid var(--td-ink, #4a2c14);
+  box-shadow: 0 5px 0 var(--td-ink-soft, rgba(74, 44, 20, 0.45)), 0 0 26px rgba(233, 162, 59, 0.45);
 }
 
 .recipeName,
@@ -375,28 +375,28 @@
 .metricValue,
 .minigameTitle,
 .achievementName {
-  color: var(--paper-text, #43301b);
+  color: var(--td-paper-text, #43301b);
 }
 
 .scoreHeroLabel,
 .metricLabel,
 .minigameScore {
-  color: var(--paper-text-muted, #7a5c38);
+  color: var(--td-paper-text-muted, #7a5c38);
 }
 
 .metricCard,
 .minigameItem,
 .achievementBadge {
-  background: var(--paper-deep, #f7e8c6);
+  background: var(--td-paper-deep, #f7e8c6);
   border: 2.5px solid var(--wood, #b57e40);
   border-radius: var(--radius-xl, 16px);
-  color: var(--paper-text, #43301b);
+  color: var(--td-paper-text, #43301b);
 }
 
 .levelUpCard {
-  border: 3px solid var(--color-gold, #e9a23b);
+  border: 3px solid var(--td-gold, #e9a23b);
   border-radius: var(--radius-xl, 16px);
 }
 
-.failTitle { color: var(--paper-text, #43301b); }
-.failSubtitle { color: var(--paper-text-muted, #7a5c38); }
+.failTitle { color: var(--td-paper-text, #43301b); }
+.failSubtitle { color: var(--td-paper-text-muted, #7a5c38); }

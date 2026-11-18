@@ -66,7 +66,7 @@
 .fill {
   height: 100%;
   border-radius: 999px;
-  background: linear-gradient(90deg, var(--color-gold, #e9a23b) 0%, var(--color-brick, #c8553d) 100%);
+  background: linear-gradient(90deg, var(--td-gold, #e9a23b) 0%, var(--color-brick, #c8553d) 100%);
   transition: width 1s linear;
   box-shadow: 0 0 8px rgba(233, 162, 59, 0.35);
 }
@@ -100,10 +100,10 @@
 
 /* ===== Phase 16 — theme D overrides ===== */
 .track {
-  border: 2.5px solid var(--ink, #4a2c14);
+  border: 2.5px solid var(--td-ink, #4a2c14);
 }
 
 .timerHud {
-  border: 2.5px solid var(--ink, #4a2c14);
-  box-shadow: 0 3px 0 var(--ink-soft, rgba(74, 44, 20, 0.45));
+  border: 2.5px solid var(--td-ink, #4a2c14);
+  box-shadow: 0 3px 0 var(--td-ink-soft, rgba(74, 44, 20, 0.45));
 }

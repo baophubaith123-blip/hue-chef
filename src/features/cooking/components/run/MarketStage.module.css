@@ -1,6 +1,6 @@
 .stage {
   position: relative;
-  border: var(--border-game, 3px solid #4a2c14);
+  border: 3px solid var(--td-ink);
   border-radius: 24px;
   background:
     radial-gradient(circle at 10% 0%, rgba(233, 162, 59, 0.3) 0, transparent 150px),
@@ -26,7 +26,7 @@
   font-size: 14px;
   border-radius: 999px;
   padding: 6px 14px;
-  border: 2.5px solid var(--ink, #200f04);
+  border: 2.5px solid var(--td-ink, #200f04);
   box-shadow: 0 3px 0 rgba(0, 0, 0, 0.35);
 }
 
@@ -46,8 +46,8 @@
 
 /* Shopping list — paper scroll panel */
 .listPanel {
-  border: 3px dashed var(--wood-dark, #8a5a2b);
-  background: var(--paper, #fff6e0);
+  border: 3px dashed var(--td-wood-dark, #8a5a2b);
+  background: var(--td-paper, #fff6e0);
   border-radius: 16px;
   padding: 12px 14px;
   margin-bottom: 14px;
@@ -96,7 +96,7 @@
 
 .listItem small,
 .listItemGot small {
-  color: var(--paper-text-muted, #7a5c38);
+  color: var(--td-paper-text-muted, #7a5c38);
   margin-left: 5px;
 }
 
@@ -141,7 +141,7 @@
 .item {
   position: relative;
   background: #fffdf4;
-  border: 3px solid var(--wood-dark, #8a5a2b);
+  border: 3px solid var(--td-wood-dark, #8a5a2b);
   border-radius: 16px;
   padding: 26px 6px 9px;
   display: flex;
@@ -164,12 +164,12 @@
   right: 0;
   height: 16px;
   background: repeating-linear-gradient(90deg, #c8553d 0 18px, #fff3d6 18px 36px);
-  border-bottom: 2.5px solid var(--ink, #4a2c14);
+  border-bottom: 2.5px solid var(--td-ink, #4a2c14);
 }
 
 .item:hover:not(:disabled) {
   transform: translateY(-3px);
-  border-color: var(--color-gold, #e9a23b);
+  border-color: var(--td-gold, #e9a23b);
 }
 
 .itemEmoji {
@@ -185,7 +185,7 @@
 
 .itemSub {
   font-size: 12px;
-  color: var(--paper-text-muted, #7a5c38);
+  color: var(--td-paper-text-muted, #7a5c38);
   min-height: 15px;
 }
 
@@ -219,13 +219,13 @@
   width: 46px;
   height: 46px;
   border-radius: 50%;
-  border: 3px solid var(--ink, #4a2c14);
-  background: var(--wood-gradient, linear-gradient(180deg, #ce9550, #b57e40));
+  border: 3px solid var(--td-ink, #4a2c14);
+  background: var(--td-wood-gradient, linear-gradient(180deg, #ce9550, #b57e40));
   color: #fff6e0;
   font-size: 17px;
   font-weight: 900;
   cursor: pointer;
-  box-shadow: 0 4px 0 var(--ink-soft, rgba(74, 44, 20, 0.45));
+  box-shadow: 0 4px 0 var(--td-ink-soft, rgba(74, 44, 20, 0.45));
   transition: transform 0.12s ease, opacity 0.15s ease;
   text-shadow: 0 1px 0 rgba(32, 15, 4, 0.4);
 }
@@ -236,7 +236,7 @@
 
 .pagerBtn:active:not(:disabled) {
   transform: translateY(2px);
-  box-shadow: 0 1px 0 var(--ink-soft, rgba(74, 44, 20, 0.45));
+  box-shadow: 0 1px 0 var(--td-ink-soft, rgba(74, 44, 20, 0.45));
 }
 
 .pagerBtn:disabled {
@@ -253,14 +253,14 @@
 }
 
 .pagerSign {
-  background: var(--wood-gradient, linear-gradient(180deg, #ce9550, #b57e40));
-  border: 3px solid var(--ink, #4a2c14);
-  border-radius: var(--radius-full);
+  background: var(--td-wood-gradient, linear-gradient(180deg, #ce9550, #b57e40));
+  border: 3px solid var(--td-ink, #4a2c14);
+  border-radius: var(--td-radius-full);
   color: #fff6e0;
   font-weight: 800;
   font-size: 14.5px;
   padding: 6px 18px;
-  box-shadow: 0 3px 0 var(--ink-soft, rgba(74, 44, 20, 0.45));
+  box-shadow: 0 3px 0 var(--td-ink-soft, rgba(74, 44, 20, 0.45));
   text-shadow: 0 1px 0 rgba(32, 15, 4, 0.4);
 }
 
@@ -274,12 +274,12 @@
   width: 9px;
   height: 9px;
   border-radius: 50%;
-  border: 2px solid var(--ink, #4a2c14);
+  border: 2px solid var(--td-ink, #4a2c14);
   background: #fff6e0;
 }
 
 .pagerDotActive {
-  background: var(--color-gold, #e9a23b);
+  background: var(--td-gold, #e9a23b);
 }
 
 .toast {
@@ -293,7 +293,7 @@
   font-size: 14.5px;
   padding: 9px 18px;
   border-radius: 999px;
-  border: 2.5px solid var(--ink, #200f04);
+  border: 2.5px solid var(--td-ink, #200f04);
   box-shadow: 0 8px 22px rgba(0, 0, 0, 0.3);
   animation: market-toast 0.25s ease;
   white-space: nowrap;
@@ -315,15 +315,15 @@
 }
 
 .peekBtn {
-  background: var(--paper, #fff6e0);
+  background: var(--td-paper, #fff6e0);
   color: var(--color-plum, #4a1525);
   font-weight: 800;
   font-size: 15px;
-  border: 3px solid var(--ink, #4a2c14);
+  border: 3px solid var(--td-ink, #4a2c14);
   border-radius: 999px;
   padding: 10px 20px;
   cursor: pointer;
-  box-shadow: 0 4px 0 var(--ink-soft, rgba(74, 44, 20, 0.45));
+  box-shadow: 0 4px 0 var(--td-ink-soft, rgba(74, 44, 20, 0.45));
 }
 
 .goBtn {
@@ -331,11 +331,11 @@
   color: #3a2405;
   font-weight: 900;
   font-size: 16.5px;
-  border: 3px solid var(--ink, #4a2c14);
+  border: 3px solid var(--td-ink, #4a2c14);
   border-radius: 999px;
   padding: 11px 26px;
   cursor: pointer;
-  box-shadow: 0 5px 0 var(--ink-soft, rgba(74, 44, 20, 0.45));
+  box-shadow: 0 5px 0 var(--td-ink-soft, rgba(74, 44, 20, 0.45));
 }
 
 .goBtn:hover,
@@ -348,7 +348,7 @@
 .stage {
   background-image:
     linear-gradient(180deg, rgba(253, 243, 216, 0.22), rgba(253, 243, 216, 0.34)),
-    url('/images/market-day.webp');
+    url('../../../../assets/theme-d/scenes/cho.webp');
   background-size: cover;
   background-position: center;
 }
@@ -356,7 +356,7 @@
 [data-theme='dark'] .stage {
   background-image:
     linear-gradient(180deg, rgba(24, 8, 20, 0.25), rgba(24, 8, 20, 0.4)),
-    url('/images/market-night.webp');
+    url('../../../../assets/theme-d/scenes/cho.webp');
 }
 
 
@@ -441,9 +441,9 @@
   align-items: center;
   gap: 0.55rem;
   text-align: center;
-  background: var(--paper, #fff6e0);
-  color: var(--paper-text, #43301b);
-  border: var(--border-game, 3px solid #4a2c14);
+  background: var(--td-paper, #fff6e0);
+  color: var(--td-paper-text, #43301b);
+  border: 3px solid var(--td-ink);
   border-radius: 22px;
   box-shadow: var(--shadow-game-card, 0 12px 28px rgba(59, 42, 32, 0.25));
   padding: 1.4rem 1.8rem;
@@ -456,7 +456,7 @@
 
 .failTitle {
   margin: 0;
-  font-family: var(--font-serif);
+  font-family: var(--td-font-display);
   font-size: 1.45rem;
   font-weight: 800;
   color: var(--color-danger, #b42318);
@@ -471,18 +471,18 @@
 .failBtn {
   margin-top: 0.35rem;
   background: var(--gradient-gold, linear-gradient(135deg, #f6c453, #e9a23b));
-  border: 2.5px solid var(--ink, #4a2c14);
+  border: 2.5px solid var(--td-ink, #4a2c14);
   color: #43301b;
   font-weight: 800;
   font-size: 1rem;
   border-radius: 999px;
   padding: 0.6rem 1.3rem;
   cursor: pointer;
-  box-shadow: 0 4px 0 var(--ink-soft, rgba(74, 44, 20, 0.45));
+  box-shadow: 0 4px 0 var(--td-ink-soft, rgba(74, 44, 20, 0.45));
 }
 
 .failAuto {
   font-size: 0.85rem;
   font-weight: 600;
-  color: var(--paper-text-muted, #7a5c38);
+  color: var(--td-paper-text-muted, #7a5c38);
 }
