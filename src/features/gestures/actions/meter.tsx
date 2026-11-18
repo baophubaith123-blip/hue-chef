@@ -238,7 +238,6 @@ export function RotGesture({ params, mode, onDone }: GestureModuleProps) {
   const { dict } = useTranslation();
   const g = dict.cooking.gestures;
   const target = 0.74;
-  const bandHalf = params.zone / 2 + 0.03;
   const [fill, setFill] = useState(0);
   const [pouring, setPouring] = useState(false);
   const fillRef = useRef(0);
