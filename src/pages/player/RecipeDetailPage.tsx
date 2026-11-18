@@ -12,6 +12,8 @@ import { GESTURE_ICONS, gestureForStep } from '@/data/gesture-map';
 import { DishGradeFrame } from '@/components/theme-d/DishGradeFrame';
 import { RecipeComments } from '@/features/comments/components/RecipeComments';
 import { isRecipeOwned } from '@/features/recipes/lib/ownership';
+import { bossChapterForRecipe, chapterForRecipe } from '@/features/journey/lib/chapters';
+import { isDishSellable } from '@/features/journey/lib/journey';
 import { useAuth } from '@/contexts/AuthContext';
 import { useTaxonomy } from '@/contexts/TaxonomyContext';
 import { useRecipes } from '@/contexts/RecipeContext';
@@ -68,6 +70,14 @@ export default function RecipeDetailPage() {
   const owned = isRecipeOwned(user, recipe);
   const balance = user?.coins ?? 0;
   const canAfford = balance >= recipe.priceCoins;
+  // Gói H3 — journey placement of this dish: its chapter, whether the
+  // player may sell it at the stall, and whether it is a boss dish.
+  const journeyChapter = chapterForRecipe(recipe);
+  const journeyChapterName = journeyChapter
+    ? dict.journey.chapters[journeyChapter.id]?.name ?? journeyChapter.id
+    : '';
+  const sellable = isDishSellable(user, recipe);
+  const bossChapter = bossChapterForRecipe(recipe.id);
 
   const handleConfirmBuy = () => {
     if (purchaseRecipe(recipe.id, recipe.priceCoins)) {
@@ -176,6 +186,40 @@ export default function RecipeDetailPage() {
               </div>
               <p className={styles.description}>{recipe.description}</p>
             </header>
+
+            {/* Gói H3 — journey chapter, sell license status, boss entry */}
+            {journeyChapter ? (
+              <section className={styles.journeyBox}>
+                <div className={styles.journeyRow}>
+                  <span className={styles.journeyLabel}>
+                    🗺️ {dict.journey.detailChapterLabel}:{' '}
+                    <strong>
+                      {dict.journey.chapterLabel(journeyChapter.order)} · {journeyChapterName}
+                    </strong>
+                  </span>
+                  <Link className={styles.journeyMapLink} to="/map">
+                    {dict.journey.detailViewMap}
+                  </Link>
+                </div>
+                <p className={sellable ? styles.journeySellable : styles.journeyNotSellable}>
+                  {sellable
+                    ? `📜 ${dict.journey.detailSellable}`
+                    : `🔒 ${dict.journey.detailNotSellable(journeyChapterName)}`}
+                </p>
+                {bossChapter ? (
+                  <div className={styles.journeyBossRow}>
+                    <span className={styles.journeyBossNote}>
+                      👑 {dict.journey.detailBossDish}
+                    </span>
+                    {owned ? (
+                      <Link to={`/cooking/${recipe.id}?boss=${bossChapter.id}`}>
+                        <Button variant="primary">{dict.journey.bossEnter}</Button>
+                      </Link>
+                    ) : null}
+                  </div>
+                ) : null}
+              </section>
+            ) : null}
 
             {/* Nguyên liệu cần dùng */}
             <section className={styles.section}>

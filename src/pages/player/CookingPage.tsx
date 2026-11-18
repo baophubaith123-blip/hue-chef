@@ -25,6 +25,9 @@ import { SeasonBar, type SeasonOutcome } from '@/features/cooking/components/run
 import { StageHelp } from '@/features/cooking/components/run/StageHelp';
 import { GestureStep } from '@/features/gestures/GestureStep';
 import { gestureForStep } from '@/data/gesture-map';
+import { BOSS_JUDGE_IMAGE } from '@/components/theme-d/assets';
+import { chapterById, dishesOfChapter } from '@/features/journey/lib/chapters';
+import { BOSS_PASS_STARS, bossStateFor } from '@/features/journey/lib/journey';
 import { useCookingState } from '@/features/cooking/hooks/useCookingState';
 import { useDragDrop } from '@/features/cooking/hooks/useDragDrop';
 import { COMBO_WINDOW_MS, comboBonusForStreak } from '@/features/cooking/lib/combo';
@@ -47,8 +50,8 @@ import styles from '@/pages/player/CookingPage.module.css';
 export default function CookingPage() {
   const { id } = useParams<{ id: string }>();
   const { t, dict } = useTranslation();
-  const { isLoading, getRecipeById } = useRecipes();
-  const { user, addXp, addCookedRecipe } = useAuth();
+  const { isLoading, getRecipeById, getApprovedRecipes } = useRecipes();
+  const { user, addXp, addCookedRecipe, grantSellLicense } = useAuth();
   const navigate = useNavigate();
   const { checkAndUnlockForUser, allAchievements, isUnlocked } = useAchievements();
   const { push: pushNotification } = useNotification();
@@ -68,6 +71,16 @@ export default function CookingPage() {
   } = useCookingState();
   const [searchParams] = useSearchParams();
   const isPreview = searchParams.get('preview') === '1';
+  // Ngự thiện boss mode (Gói H3): ?boss=<chapterId> turns the chapter's
+  // signature dish run into its boss stage. A mismatched chapter/dish
+  // pair is ignored — the run simply plays as a normal learning run.
+  const bossParam = searchParams.get('boss');
+  const bossChapter = useMemo(() => {
+    if (isPreview || !bossParam || !id) return undefined;
+    const chapter = chapterById(bossParam);
+    return chapter && chapter.bossRecipeId === id ? chapter : undefined;
+  }, [isPreview, bossParam, id]);
+  const bossGuardRef = useRef<string | null>(null);
 
   // Equip-one perk model: only the equipped achievement's perk is active,
   // snapshotted into the run when it starts (preview runs get no perk).
@@ -112,6 +125,20 @@ export default function CookingPage() {
   const startedKeyRef = useRef<string | null>(null);
 
   const recipe = id ? getRecipeById(id) : undefined;
+
+  // Boss gate: the boss stage only opens when the chapter is learned and
+  // the journey order allows it (see bossStateFor). A locked boss URL is
+  // sent back to the map, where the missing condition is spelled out.
+  useEffect(() => {
+    if (!bossChapter || !user || !recipe || isLoading) return;
+    const key = `${recipe.id}:boss:${bossChapter.id}`;
+    if (bossGuardRef.current === key) return;
+    bossGuardRef.current = key;
+    if (bossStateFor(user, bossChapter, getApprovedRecipes()).kind === 'locked') {
+      navigate('/map', { replace: true });
+    }
+  }, [bossChapter, user, recipe, isLoading, getApprovedRecipes, navigate]);
+
   const approved = recipe && (recipe.status ?? 'approved') === 'approved';
   // "Chạy thử 5 màn": the recipe's own editor (or an admin) may run a
   // not-yet-approved recipe with ?preview=1; progress is never applied.
@@ -235,6 +262,26 @@ export default function CookingPage() {
       });
     }
 
+    // Ngự thiện boss (Gói H3): the run is judged more strictly — at
+    // BOSS_PASS_STARS or more the chapter's sell license is granted
+    // (chốt 1). A merely-passing run still banks its normal XP and
+    // cooked entry above; only the license waits for a stronger run.
+    if (bossChapter && session.stars >= BOSS_PASS_STARS) {
+      const newlyGranted = grantSellLicense(bossChapter.id);
+      if (newlyGranted) {
+        pushNotification({
+          userId: user.id,
+          type: 'license.granted',
+          title: dict.journey.licenseNoticeTitle,
+          body: dict.journey.licenseNoticeBody(
+            dict.journey.chapters[bossChapter.id]?.name ?? bossChapter.id,
+          ),
+          link: '/map',
+          relatedId: bossChapter.id,
+        });
+      }
+    }
+
     setAppliedResult({
       gainedXp: xp,
       newLevel: xpResult?.leveledUp ? xpResult.level : undefined,
@@ -250,6 +297,9 @@ export default function CookingPage() {
     checkAndUnlockForUser,
     pushNotification,
     t,
+    bossChapter,
+    grantSellLicense,
+    dict,
   ]);
 
   useEffect(() => {
@@ -566,6 +616,52 @@ export default function CookingPage() {
   const showResult = session.phase === 'success' || session.phase === 'failed';
   const sessionEnded = session.phase !== 'running';
 
+  // Boss framing (Gói H3): banner over every stage of a boss run, and the
+  // verdict block the result modal shows for the license decision.
+  const bossChapterName = bossChapter
+    ? dict.journey.chapters[bossChapter.id]?.name ?? bossChapter.id
+    : '';
+  const bossBanner = bossChapter ? (
+    <div className={styles.bossBanner}>
+      <img
+        className={styles.bossJudge}
+        src={BOSS_JUDGE_IMAGE}
+        alt={dict.journey.judgeAlt}
+      />
+      <div className={styles.bossBannerText}>
+        <p className={styles.bossBannerTitle}>
+          👑 {dict.journey.bossBannerTitle} — {recipe.name}
+        </p>
+        <p className={styles.bossBannerRule}>
+          {dict.journey.bossBannerRule(bossChapterName, BOSS_PASS_STARS)}
+        </p>
+      </div>
+    </div>
+  ) : null;
+  const bossNote =
+    bossChapter && showResult
+      ? session.phase === 'success' && session.stars >= BOSS_PASS_STARS
+        ? {
+            passed: true,
+            title: dict.journey.bossResultPassedTitle,
+            body: dict.journey.bossResultPassedBody(
+              bossChapterName,
+              dishesOfChapter(getApprovedRecipes(), bossChapter).length,
+            ),
+          }
+        : session.phase === 'success'
+          ? {
+              passed: false,
+              title: dict.journey.bossResultShortTitle,
+              body: dict.journey.bossResultShortBody(session.stars, BOSS_PASS_STARS),
+            }
+          : {
+              passed: false,
+              title: dict.journey.bossBannerTitle,
+              body: dict.journey.bossResultFailBody,
+            }
+      : null;
+
   const displayScore =
     session.phase === 'success' || session.phase === 'failed'
       ? session.finalScore
@@ -666,6 +762,7 @@ export default function CookingPage() {
       </div>
       {isPreview ? <span className={styles.previewBadge}>{stageDict.previewBadge}</span> : null}
       {flowChips}
+      {bossBanner}
     </>
   );
 
@@ -739,6 +836,7 @@ export default function CookingPage() {
           </div>
         </div>
         {flowChips}
+        {bossBanner}
 
         <MinigameRunner
           minigames={session.recipe.minigames ?? []}
@@ -798,6 +896,7 @@ export default function CookingPage() {
 
       {isPreview ? <span className={styles.previewBadge}>{stageDict.previewBadge}</span> : null}
       {flowChips}
+      {bossBanner}
       {seasonToast ? <div className={styles.seasonToast}>{seasonToast}</div> : null}
 
       <div className={styles.gridWrap}>
@@ -888,6 +987,7 @@ export default function CookingPage() {
           gainedXp={appliedResult?.gainedXp}
           newLevel={appliedResult?.newLevel}
           unlockedAchievements={appliedResult?.unlockedAchievements}
+          bossNote={bossNote}
         />
       ) : null}
       </div>

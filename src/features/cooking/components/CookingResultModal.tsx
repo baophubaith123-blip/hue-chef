@@ -11,6 +11,12 @@ import { winThreshold } from '@/lib/pricing';
 
 import styles from './CookingResultModal.module.css';
 
+export interface BossNote {
+  passed: boolean;
+  title: string;
+  body: string;
+}
+
 interface CookingResultModalProps {
   session: CookingSession;
   onClose: () => void;
@@ -19,6 +25,8 @@ interface CookingResultModalProps {
   gainedXp?: number;
   newLevel?: number;
   unlockedAchievements?: Achievement[];
+  /** Gói H3 — verdict of a Ngự thiện boss run (license granted or not). */
+  bossNote?: BossNote | null;
 }
 
 export function CookingResultModal({
@@ -29,6 +37,7 @@ export function CookingResultModal({
   gainedXp,
   newLevel,
   unlockedAchievements = [],
+  bossNote = null,
 }: CookingResultModalProps) {
   const { t, dict } = useTranslation();
   const isSuccess = session.phase === 'success';
@@ -269,6 +278,17 @@ export function CookingResultModal({
             </div>
           </div>
         )}
+
+        {/* Gói H3 — the boss verdict: license granted, or why not yet. */}
+        {bossNote ? (
+          <div className={bossNote.passed ? styles.bossNotePassed : styles.bossNote}>
+            <h4 className={styles.bossNoteTitle}>
+              {bossNote.passed ? '📜 ' : '👑 '}
+              {bossNote.title}
+            </h4>
+            <p className={styles.bossNoteBody}>{bossNote.body}</p>
+          </div>
+        ) : null}
       </div>
     </Modal>
   );

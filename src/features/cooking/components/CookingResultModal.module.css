@@ -428,3 +428,37 @@
 .partMax { color: var(--td-paper-text-muted, #7a5c38); }
 .failScore { color: var(--td-paper-text, #43301b); }
 .levelUpSubtitle { color: var(--td-paper-text-muted, #7a5c38); }
+
+/* Gói H3 — boss verdict panel: plum arena colours are the same in both
+   themes (the modal around it is paper), cream/gold on plum stays high
+   contrast at night and in daylight. */
+.bossNote,
+.bossNotePassed {
+  margin-top: 1rem;
+  background: linear-gradient(160deg, #5e1d31, #4a1525);
+  border: 3px solid #4a2c14;
+  border-radius: var(--radius-xl, 16px);
+  padding: 0.9rem 1.1rem;
+  text-align: left;
+}
+
+.bossNotePassed {
+  border-color: #e9a23b;
+  box-shadow: 0 0 0 2px rgba(233, 162, 59, 0.35), 0 10px 24px rgba(74, 21, 37, 0.35);
+}
+
+.bossNote .bossNoteTitle,
+.bossNotePassed .bossNoteTitle {
+  margin: 0 0 0.3rem;
+  font-family: var(--td-font-display);
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #f6c453;
+}
+
+.bossNoteBody {
+  margin: 0;
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: #faf5ef;
+}

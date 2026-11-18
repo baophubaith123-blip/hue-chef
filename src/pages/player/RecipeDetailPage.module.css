@@ -539,3 +539,67 @@
 [data-theme='dark'] .stepIngredientChip {
   color: #43301b;
 }
+
+/* Gói H3 — journey box: chapter, sell-license status, boss entry.
+   The detail card is a paper surface in both themes, so inks are the
+   pinned paper values (gold text uses the same pinned #8a5a00 as the
+   recipe cards). */
+.journeyBox {
+  margin-top: 1.1rem;
+  background: var(--td-paper-deep, #f7e8c6);
+  border: 2px solid var(--td-gold-deep, #c97a1f);
+  border-radius: var(--td-radius-lg, 14px);
+  padding: 0.9rem 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.journeyRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.journeyLabel {
+  font-size: 0.95rem;
+  color: #43301b;
+}
+
+.journeyMapLink {
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: #8a5a00;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.journeySellable {
+  margin: 0;
+  font-size: 0.92rem;
+  font-weight: 800;
+  color: #8a5a00;
+}
+
+.journeyNotSellable {
+  margin: 0;
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #43301b;
+}
+
+.journeyBossRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+}
+
+.journeyBossNote {
+  font-size: 0.92rem;
+  font-weight: 800;
+  color: #43301b;
+}
