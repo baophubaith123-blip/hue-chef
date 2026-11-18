@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { Button } from '@/components/Button';
 import { Footer } from '@/components/Footer';
+import { SCENES } from '@/components/theme-d/assets';
 import { FloatingGameButton } from '@/components/FloatingGameButton';
 import { Header } from '@/components/Header';
 import { useAuth } from '@/contexts/AuthContext';
@@ -73,7 +74,7 @@ export default function LandingPage() {
             </div>
 
             <div className={styles.heroVisual} aria-hidden="true">
-              <img src="/images/banner-3d.jpg" alt="" className={styles.heroBannerImg} />
+              <img src={SCENES['san-le-hoi']} alt="" className={styles.heroBannerImg} />
             </div>
           </div>
         </section>

@@ -2,8 +2,8 @@
   position: sticky;
   top: 0;
   z-index: 50;
-  background: var(--color-plum, #4a1525);
-  border-bottom: var(--border-game, 3px solid #200f04);
+  background: var(--td-header-bg);
+  border-bottom: 3px solid var(--td-ink);
   box-shadow: 0 4px 14px rgba(32, 15, 4, 0.35);
 }
 
@@ -32,7 +32,7 @@
   height: 48px;
   border-radius: 50%;
   background: var(--gradient-gold, linear-gradient(135deg, #f6c453, #e9a23b));
-  border: 2.5px solid var(--ink, #200f04);
+  border: 2.5px solid var(--td-ink, #200f04);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -54,7 +54,7 @@
 
 .brandSub {
   font-size: 0.8rem;
-  color: var(--color-plum-text-muted, #d1b3bc);
+  color: var(--td-header-text-muted);
   font-weight: 600;
   margin-top: 0.15rem;
 }
@@ -77,7 +77,7 @@
 
 .link {
   text-decoration: none;
-  color: var(--color-plum-text-muted, #d1b3bc);
+  color: var(--td-header-text-muted);
   font-weight: 600;
   font-size: 0.95rem;
   padding: 0.5rem 0.8rem;
@@ -95,14 +95,14 @@
   font-weight: 800;
   font-size: 1.08rem;
   padding: 0.72rem 1.7rem;
-  border-radius: var(--radius-full);
-  border: 3px solid var(--ink, #200f04);
+  border-radius: var(--td-radius-full);
+  border: 3px solid var(--td-ink, #200f04);
   transition: all 0.15s ease;
   display: inline-flex;
   align-items: center;
   gap: 0.45rem;
   box-shadow: 0 4px 0 rgba(0, 0, 0, 0.45);
-  background: var(--gradient-gold, linear-gradient(135deg, #f6c453, #e9a23b));
+  background: linear-gradient(135deg, var(--td-gold-bright) 0%, var(--td-gold) 55%, var(--td-gold-deep) 100%);
   color: #43301b;
   white-space: nowrap;
 }

@@ -83,7 +83,7 @@
   background: rgba(55, 14, 27, 0.55);
   border: 1px solid rgba(248, 239, 234, 0.28);
   padding: 0.35rem 0.85rem 0.35rem 0.35rem;
-  border-radius: var(--radius-full);
+  border-radius: var(--td-radius-full);
   width: fit-content;
   backdrop-filter: blur(8px);
 }
@@ -117,7 +117,7 @@
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+  background: linear-gradient(135deg, var(--td-brick), var(--color-accent));
   color: #FFFFFF;
   display: flex;
   align-items: center;
@@ -162,7 +162,7 @@
 }
 
 .heroMainHeading {
-  font-family: var(--font-display, var(--font-serif), Georgia, serif);
+  font-family: var(--font-display, var(--td-font-display), Georgia, serif);
   font-size: 2.85rem;
   font-weight: 800;
   color: #f8efea;
@@ -194,7 +194,7 @@
   padding: 0.8rem 1.85rem;
   font-size: 1rem;
   font-weight: 700;
-  border-radius: var(--radius-full);
+  border-radius: var(--td-radius-full);
   box-shadow: var(--shadow-glow-fire);
   transition: all 0.2s ease;
   border: none;
@@ -212,7 +212,7 @@
   padding: 0.8rem 1.75rem;
   background: rgba(255, 253, 249, 0.12);
   border: 1.5px solid rgba(248, 239, 234, 0.45);
-  border-radius: var(--radius-full);
+  border-radius: var(--td-radius-full);
   color: #f8efea;
   font-weight: 700;
   font-size: 0.95rem;
@@ -237,7 +237,7 @@
 }
 
 .quickModesTitle {
-  font-family: var(--font-serif);
+  font-family: var(--td-font-display);
   font-size: 1.25rem;
   font-weight: 700;
   color: var(--color-text);
@@ -265,7 +265,7 @@
 .quickModeCard {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
+  border-radius: var(--td-radius-paper);
   padding: 1.25rem;
   display: flex;
   align-items: center;
@@ -323,7 +323,7 @@
 }
 
 .quickModeCard:hover .quickModeArrow {
-  color: var(--color-primary);
+  color: var(--td-brick);
   transform: translateX(3px);
 }
 
@@ -348,9 +348,9 @@
   gap: 0.35rem;
   margin-top: 0.35rem;
   padding: 0.25rem 0.75rem;
-  border-radius: var(--radius-full);
+  border-radius: var(--td-radius-full);
   background: var(--color-primary-soft);
-  color: var(--color-primary);
+  color: var(--td-brick);
   font-size: 0.85rem;
   font-weight: 700;
   width: fit-content;
@@ -407,7 +407,7 @@
 .statCard {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
+  border-radius: var(--td-radius-paper);
   padding: 1.25rem;
   display: flex;
   flex-direction: column;
@@ -456,15 +456,15 @@
   width: 100%;
   height: 6px;
   background: var(--color-surface-muted);
-  border-radius: var(--radius-full);
+  border-radius: var(--td-radius-full);
   overflow: hidden;
   margin-top: 0.35rem;
 }
 
 .progressBarFill {
   height: 100%;
-  background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
-  border-radius: var(--radius-full);
+  background: linear-gradient(90deg, var(--td-brick), var(--color-accent));
+  border-radius: var(--td-radius-full);
   transition: width 0.3s ease;
 }
 
@@ -472,7 +472,7 @@
 .featuredBox {
   background: linear-gradient(135deg, var(--color-surface), var(--color-surface-alt));
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-xl);
+  border-radius: var(--td-radius-wood);
   padding: 1.75rem;
   box-shadow: var(--shadow-md);
   display: flex;
@@ -506,7 +506,7 @@
   gap: 1.5rem;
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
+  border-radius: var(--td-radius-paper);
   overflow: hidden;
   box-shadow: var(--shadow-sm);
 }
@@ -541,7 +541,7 @@
 .journeyCategory {
   font-size: 0.8rem;
   font-weight: 700;
-  color: var(--color-primary);
+  color: var(--td-brick);
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -571,7 +571,7 @@
   align-items: center;
   gap: 0.35rem;
   padding: 0.2rem 0.6rem;
-  border-radius: var(--radius-full);
+  border-radius: var(--td-radius-full);
   background: var(--color-surface-muted);
   color: var(--color-text-muted);
   font-size: 0.8rem;
@@ -612,7 +612,7 @@
 .panelBox {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-xl);
+  border-radius: var(--td-radius-wood);
   padding: 1.5rem;
   box-shadow: var(--shadow-sm);
   display: flex;
@@ -650,7 +650,7 @@
 .viewAllLink {
   font-size: 0.85rem;
   font-weight: 700;
-  color: var(--color-primary);
+  color: var(--td-brick);
   text-decoration: none;
   display: inline-flex;
   align-items: center;
@@ -674,7 +674,7 @@
   gap: 0.85rem;
   padding: 0.75rem;
   background: var(--color-surface-alt);
-  border-radius: var(--radius-lg);
+  border-radius: var(--td-radius-paper);
   border: 1px solid var(--color-border);
 }
 
@@ -706,7 +706,7 @@
 .achievementPct {
   font-size: 0.85rem;
   font-weight: 800;
-  color: var(--color-primary);
+  color: var(--td-brick);
 }
 
 /* Leaderboard List */
@@ -722,13 +722,13 @@
   gap: 0.85rem;
   padding: 0.75rem;
   background: var(--color-surface-alt);
-  border-radius: var(--radius-lg);
+  border-radius: var(--td-radius-paper);
   border: 1px solid var(--color-border);
   transition: all 0.2s ease;
 }
 
 .leaderboardItemHighlight {
-  border-color: var(--color-primary);
+  border-color: var(--td-brick);
   background: var(--color-primary-soft);
 }
 
@@ -743,7 +743,7 @@
 .leaderboardAvatar {
   width: 2.25rem;
   height: 2.25rem;
-  border-radius: var(--radius-full);
+  border-radius: var(--td-radius-full);
   object-fit: cover;
   border: 2px solid var(--color-border);
 }
@@ -751,8 +751,8 @@
 .leaderboardAvatarInitials {
   width: 2.25rem;
   height: 2.25rem;
-  border-radius: var(--radius-full);
-  background: var(--color-primary);
+  border-radius: var(--td-radius-full);
+  background: var(--td-brick);
   color: var(--color-primary-contrast);
   display: grid;
   place-items: center;
@@ -780,7 +780,7 @@
 .historySection {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-xl);
+  border-radius: var(--td-radius-wood);
   padding: 1.5rem;
   box-shadow: var(--shadow-sm);
   display: flex;
@@ -800,7 +800,7 @@
   justify-content: space-between;
   gap: 1rem;
   padding: 0.85rem 1rem;
-  border-radius: var(--radius-lg);
+  border-radius: var(--td-radius-paper);
   background: var(--color-surface-alt);
   border: 1px solid var(--color-border);
   transition: transform 0.15s ease;
@@ -857,7 +857,7 @@
 .historyScore {
   font-size: 1rem;
   font-weight: 800;
-  color: var(--color-primary);
+  color: var(--td-brick);
 }
 
 .historyDate {
@@ -955,7 +955,7 @@
 
 /* ===== Phase 16 — theme D overrides ===== */
 .heroBanner {
-  border: var(--border-game, 3px solid #200f04);
+  border: 3px solid var(--td-ink);
   border-radius: 26px;
   box-shadow: 0 8px 0 rgba(0, 0, 0, 0.3), 0 24px 44px rgba(74, 21, 37, 0.35);
   overflow: hidden;
@@ -963,18 +963,18 @@
 
 .heroPlayBtn {
   background: var(--gradient-gold, linear-gradient(135deg, #f6c453, #e9a23b)) !important;
-  border: 3px solid var(--ink, #200f04) !important;
+  border: 3px solid var(--td-ink, #200f04) !important;
   color: #43301b !important;
   box-shadow: 0 5px 0 rgba(0, 0, 0, 0.4) !important;
-  border-radius: var(--radius-xl) !important;
+  border-radius: var(--td-radius-wood) !important;
 }
 
 .heroExploreBtn {
-  background: var(--wood-gradient) !important;
-  border: 3px solid var(--ink, #200f04) !important;
+  background: var(--td-wood-gradient) !important;
+  border: 3px solid var(--td-ink, #200f04) !important;
   color: #fff6e0 !important;
   box-shadow: 0 5px 0 rgba(0, 0, 0, 0.4) !important;
-  border-radius: var(--radius-xl) !important;
+  border-radius: var(--td-radius-wood) !important;
 }
 
 .statCard,
@@ -982,16 +982,16 @@
 .panelBox,
 .journeyCard,
 .historyItem {
-  background: var(--paper, #fff6e0);
-  color: var(--paper-text, #43301b);
-  border: var(--border-game, 3px solid #4a2c14);
+  background: var(--td-paper, #fff6e0);
+  color: var(--td-paper-text, #43301b);
+  border: 3px solid var(--td-ink);
   border-radius: 22px;
   box-shadow: var(--shadow-game-card, 0 12px 28px rgba(59, 42, 32, 0.12));
 }
 
 .statCard:hover,
 .quickModeCard:hover {
-  border-color: var(--ink, #4a2c14);
+  border-color: var(--td-ink, #4a2c14);
 }
 
 .statLabel,
@@ -1001,7 +1001,7 @@
 .journeyMeta,
 .historyDate,
 .achievementDesc {
-  color: var(--paper-text-muted, #7a5c38);
+  color: var(--td-paper-text-muted, #7a5c38);
 }
 
 .statValue,
@@ -1011,47 +1011,47 @@
 .historyDishName,
 .achievementName,
 .leaderboardName {
-  color: var(--paper-text, #43301b);
+  color: var(--td-paper-text, #43301b);
 }
 
 .journeyImageWrap {
-  border: 5px solid var(--wood-dark, #8a5a2b);
+  border: 5px solid var(--td-wood-dark, #8a5a2b);
   box-shadow: inset 0 0 0 2px rgba(233, 162, 59, 0.75);
 }
 
 .quickModeIcon {
   background: var(--gradient-gold, linear-gradient(135deg, #f6c453, #e9a23b));
-  border: 2.5px solid var(--ink, #4a2c14);
-  box-shadow: 0 3px 0 var(--ink-soft, rgba(74, 44, 20, 0.45));
+  border: 2.5px solid var(--td-ink, #4a2c14);
+  box-shadow: 0 3px 0 var(--td-ink-soft, rgba(74, 44, 20, 0.45));
 }
 
 .progressBarTrack {
-  border: 2px solid var(--ink, #4a2c14);
-  background: var(--paper-deep, #f7e8c6);
+  border: 2px solid var(--td-ink, #4a2c14);
+  background: var(--td-paper-deep, #f7e8c6);
 }
 
 .leaderboardItem {
-  border-radius: var(--radius-xl);
+  border-radius: var(--td-radius-wood);
 }
 
 .leaderboardItemHighlight {
-  background: var(--paper-deep, #f7e8c6);
+  background: var(--td-paper-deep, #f7e8c6);
   border: 2.5px solid var(--wood, #b57e40);
 }
 
 .rankBadge {
   background: var(--gradient-gold, linear-gradient(135deg, #f6c453, #e9a23b));
-  border: 2px solid var(--ink, #4a2c14);
+  border: 2px solid var(--td-ink, #4a2c14);
   color: #43301b;
 }
 
 .historyScore,
 .leaderboardScore {
-  color: var(--paper-text, #43301b);
+  color: var(--td-paper-text, #43301b);
 }
 
 .viewAllLink {
-  color: var(--color-primary, #c8553d);
+  color: var(--td-brick, #c8553d);
   font-weight: 800;
 }
 
@@ -1084,7 +1084,7 @@
 
 [data-theme='dark'] .leaderboardItemHighlight {
   background: rgba(233, 162, 59, 0.16);
-  border-color: var(--color-gold, #e9a23b);
+  border-color: var(--td-gold, #e9a23b);
 }
 
 
@@ -1094,7 +1094,7 @@
   display: block;
   height: 84px;
   margin-bottom: 1.1rem;
-  border: var(--border-game, 3px solid #4a2c14);
+  border: 3px solid var(--td-ink);
   border-radius: 20px;
   background-image: url('/images/festival-day.webp');
   background-size: cover;
@@ -1104,4 +1104,19 @@
 
 [data-theme='dark'] .dashboard::before {
   background-image: url('/images/festival-night.webp');
+}
+
+/* ===== Gói H2 — Nồi Nồi chào ở hero (asset Theme D H1) ===== */
+.heroNoiNoi {
+  position: absolute;
+  right: 2rem;
+  bottom: 0.25rem;
+  z-index: 2;
+  pointer-events: none;
+}
+
+@media (max-width: 900px) {
+  .heroNoiNoi {
+    display: none;
+  }
 }

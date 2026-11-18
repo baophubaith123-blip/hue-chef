@@ -10,18 +10,18 @@
 .sidebar {
   width: 260px;
   min-width: 260px;
-  background-color: var(--color-plum);
+  background-color: var(--td-plum);
   background-image:
     repeating-linear-gradient(180deg, rgba(0, 0, 0, 0.14) 0 2px, transparent 2px 64px),
-    linear-gradient(180deg, var(--color-plum) 0%, var(--color-plum-dark) 100%);
-  color: var(--color-plum-text);
+    linear-gradient(180deg, var(--td-plum) 0%, var(--td-plum-deep) 100%);
+  color: var(--td-cream);
   display: flex;
   flex-direction: column;
   position: sticky;
   top: 0;
   height: 100vh;
   z-index: 50;
-  border-right: var(--border-game);
+  border-right: 3px solid var(--td-ink);
   box-shadow: 4px 0 18px rgba(32, 15, 4, 0.35);
   transition: transform 0.3s ease;
 }
@@ -35,23 +35,23 @@
   gap: 0.75rem;
   text-decoration: none;
   color: inherit;
-  background: var(--wood-gradient);
-  border: var(--border-game);
-  border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-chunky);
+  background: var(--td-wood-gradient);
+  border: 3px solid var(--td-ink);
+  border-radius: var(--td-radius-wood);
+  box-shadow: var(--td-shadow-wood);
 }
 
 .brandIcon {
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  background: var(--gradient-gold);
-  border: 2.5px solid var(--ink);
+  background: linear-gradient(135deg, var(--td-gold-bright) 0%, var(--td-gold) 55%, var(--td-gold-deep) 100%);
+  border: 2.5px solid var(--td-ink);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 1.5rem;
-  box-shadow: 0 2px 0 var(--ink-soft);
+  box-shadow: 0 2px 0 var(--td-ink-soft);
   flex-shrink: 0;
 }
 
@@ -61,7 +61,7 @@
 }
 
 .brandTitle {
-  font-family: var(--font-serif);
+  font-family: var(--td-font-display);
   font-size: 1.28rem;
   font-weight: 800;
   color: #fff6e0;
@@ -93,9 +93,9 @@
   align-items: center;
   gap: 0.75rem;
   padding: 0.68rem 1rem;
-  border-radius: var(--radius-xl);
+  border-radius: var(--td-radius-wood);
   border: 2.5px solid transparent;
-  color: var(--color-plum-text-muted);
+  color: var(--td-cream-muted);
   text-decoration: none;
   font-size: 0.95rem;
   font-weight: 600;
@@ -110,11 +110,11 @@
 }
 
 .navLinkActive {
-  background: var(--wood-gradient);
-  border-color: var(--ink);
+  background: var(--td-wood-gradient);
+  border-color: var(--td-ink);
   color: #fff6e0;
   font-weight: 800;
-  box-shadow: var(--shadow-chunky);
+  box-shadow: var(--td-shadow-wood);
   text-shadow: 0 1px 0 rgba(32, 15, 4, 0.4);
 }
 
@@ -125,7 +125,7 @@
   top: 15%;
   height: 70%;
   width: 5px;
-  background-color: var(--color-gold);
+  background-color: var(--td-gold);
   border-radius: 0 4px 4px 0;
 }
 
@@ -150,9 +150,9 @@
   min-width: 1.3rem;
   height: 1.3rem;
   padding: 0 0.4rem;
-  border-radius: var(--radius-full);
-  background: var(--color-primary);
-  border: 2px solid var(--ink);
+  border-radius: var(--td-radius-full);
+  background: var(--td-brick);
+  border: 2px solid var(--td-ink);
   color: #ffffff;
   font-size: 0.7rem;
   font-weight: 800;
@@ -170,7 +170,7 @@
   align-items: center;
   gap: 0.75rem;
   padding: 0.55rem 0.65rem;
-  border-radius: var(--radius-xl);
+  border-radius: var(--td-radius-wood);
   border: 2px solid rgba(255, 246, 224, 0.16);
   background: rgba(0, 0, 0, 0.22);
   text-decoration: none;
@@ -187,7 +187,7 @@
   width: 42px;
   height: 42px;
   border-radius: 50%;
-  border: 3px solid var(--color-gold);
+  border: 3px solid var(--td-gold);
   overflow: hidden;
   flex-shrink: 0;
   background: var(--color-surface);
@@ -207,7 +207,7 @@
   align-items: center;
   justify-content: center;
   font-weight: 800;
-  color: var(--color-plum);
+  color: var(--td-plum);
   background: #fdf4e7;
   font-size: 1.1rem;
 }
@@ -237,10 +237,10 @@
   font-size: 0.7rem;
   font-weight: 700;
   color: #43301b;
-  background: var(--gradient-gold);
-  border: 1.5px solid var(--ink);
+  background: linear-gradient(135deg, var(--td-gold-bright) 0%, var(--td-gold) 55%, var(--td-gold-deep) 100%);
+  border: 1.5px solid var(--td-ink);
   padding: 1px 7px;
-  border-radius: var(--radius-full);
+  border-radius: var(--td-radius-full);
   margin-top: 3px;
 }
 
@@ -259,7 +259,7 @@
   justify-content: space-between;
   padding: 0.9rem 2rem 1.05rem;
   background: var(--bar-bg);
-  border-bottom: var(--border-game);
+  border-bottom: 3px solid var(--td-ink);
   position: sticky;
   top: 0;
   z-index: 40;
@@ -296,7 +296,7 @@
 }
 
 .breadcrumbLink:hover {
-  color: var(--color-primary);
+  color: var(--td-brick);
 }
 
 .breadcrumbCurrent {
@@ -316,39 +316,34 @@
   align-items: center;
   gap: 0.4rem;
   padding: 0.38rem 0.85rem;
-  background: var(--paper);
-  border: 2.5px solid var(--ink);
-  border-radius: var(--radius-full);
+  background: var(--td-paper);
+  border: 2.5px solid var(--td-ink);
+  border-radius: var(--td-radius-full);
   font-size: 0.88rem;
   font-weight: 800;
-  color: var(--paper-text);
-  box-shadow: 0 3px 0 var(--ink-soft);
+  color: var(--td-paper-text);
+  box-shadow: 0 3px 0 var(--td-ink-soft);
 }
 
-.coinPill {
+/* The wallet link wraps the Theme D CoinPill (its own gold styling). */
+.coinLink {
   display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 0.38rem 0.85rem;
-  border-radius: var(--radius-full);
-  background: var(--gradient-gold);
-  border: 2.5px solid var(--ink);
-  box-shadow: 0 3px 0 var(--ink-soft);
-  color: #43301b;
-  font-weight: 800;
-  font-size: 0.9rem;
   text-decoration: none;
-  white-space: nowrap;
+  border-radius: var(--td-radius-full);
+  transition: transform 0.15s ease;
 }
 
-.coinUnit {
-  font-size: 0.75rem;
-  font-weight: 700;
-  opacity: 0.75;
+.coinLink:hover {
+  transform: translateY(-1px);
 }
 
-.gemPill {
-  color: var(--color-info);
+/* Festival garland strung under the top bar on every player screen. */
+.garland {
+  flex: none;
+  margin-bottom: -14px;
+  position: relative;
+  z-index: 5;
+  pointer-events: none;
 }
 
 .logoutBtn {

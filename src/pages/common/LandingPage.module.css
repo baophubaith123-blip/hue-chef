@@ -43,7 +43,7 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.35rem 0.85rem;
-  border-radius: var(--radius-full);
+  border-radius: var(--td-radius-full);
   background: rgba(55, 14, 27, 0.55);
   color: #f6c453;
   font-weight: 600;
@@ -158,7 +158,7 @@
 .stepCard {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
+  border-radius: var(--td-radius-paper);
   padding: 2.5rem 2rem;
   box-shadow: var(--shadow-sm);
   transition: transform 0.25s ease, box-shadow 0.25s ease;
@@ -179,7 +179,7 @@
   height: 56px;
   border-radius: var(--radius-md);
   background: var(--color-primary-soft);
-  color: var(--color-primary);
+  color: var(--td-brick);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -220,7 +220,7 @@
   text-align: center;
   transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
   transform-style: preserve-3d;
-  border-radius: var(--radius-lg);
+  border-radius: var(--td-radius-paper);
 }
 
 .roleCard:hover .roleCardInner,
@@ -241,7 +241,7 @@
   height: 100%;
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
-  border-radius: var(--radius-lg);
+  border-radius: var(--td-radius-paper);
   padding: 2rem 1.5rem;
   display: flex;
   flex-direction: column;
@@ -258,7 +258,7 @@
 .roleCardBack {
   background: var(--color-surface);
   transform: rotateY(180deg);
-  border-color: var(--color-primary);
+  border-color: var(--td-brick);
 }
 
 .roleIcon {
@@ -298,14 +298,14 @@
   padding: 2.25rem 1.5rem;
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
+  border-radius: var(--td-radius-paper);
   box-shadow: var(--shadow-sm);
   transition: transform 0.2s ease;
 }
 
 .statCard:hover {
   transform: translateY(-3px);
-  border-color: var(--color-primary);
+  border-color: var(--td-brick);
 }
 
 .statIcon {
@@ -373,47 +373,47 @@
 
 /* ===== Phase 16 — theme D overrides ===== */
 .heroBannerImg {
-  border: 6px solid var(--wood-dark, #8a5a2b);
+  border: 6px solid var(--td-wood-dark, #8a5a2b);
   box-shadow: inset 0 0 0 2px rgba(233, 162, 59, 0.8), 0 24px 48px rgba(0, 0, 0, 0.45);
 }
 
 .badgeTag {
-  border: 2.5px solid var(--ink, #200f04);
+  border: 2.5px solid var(--td-ink, #200f04);
   box-shadow: 0 3px 0 rgba(0, 0, 0, 0.4);
 }
 
 .stepCard,
 .statCard {
-  background: var(--paper, #fff6e0);
-  color: var(--paper-text, #43301b);
-  border: var(--border-game, 3px solid #4a2c14);
+  background: var(--td-paper, #fff6e0);
+  color: var(--td-paper-text, #43301b);
+  border: 3px solid var(--td-ink);
   border-radius: 22px;
   box-shadow: var(--shadow-game-card, 0 12px 28px rgba(59, 42, 32, 0.12));
 }
 
 .stepCard:hover {
-  border-color: var(--ink, #4a2c14);
+  border-color: var(--td-ink, #4a2c14);
   box-shadow: 0 8px 0 rgba(74, 44, 20, 0.16), 0 22px 38px rgba(74, 21, 37, 0.18);
 }
 
 .stepBadge {
   background: var(--gradient-gold, linear-gradient(135deg, #f6c453, #e9a23b));
-  border: 3px solid var(--ink, #4a2c14);
+  border: 3px solid var(--td-ink, #4a2c14);
   color: #43301b;
-  box-shadow: 0 3px 0 var(--ink-soft, rgba(74, 44, 20, 0.45));
+  box-shadow: 0 3px 0 var(--td-ink-soft, rgba(74, 44, 20, 0.45));
 }
 
 .roleCardFront,
 .roleCardBack {
-  background: var(--paper, #fff6e0);
-  color: var(--paper-text, #43301b);
-  border: var(--border-game, 3px solid #4a2c14);
+  background: var(--td-paper, #fff6e0);
+  color: var(--td-paper-text, #43301b);
+  border: 3px solid var(--td-ink);
   border-radius: 22px;
   box-shadow: var(--shadow-game-card, 0 12px 28px rgba(59, 42, 32, 0.12));
 }
 
 .roleCardBack {
-  background: var(--wood-gradient, linear-gradient(180deg, #ce9550, #b57e40));
+  background: var(--td-wood-gradient, linear-gradient(180deg, #ce9550, #b57e40));
   color: #fff6e0;
 }
 
@@ -435,30 +435,30 @@
 
 /* ===== Phase 18 — on-paper text pins (cards stay paper in both themes) ===== */
 .statText {
-  color: var(--paper-text, #43301b);
+  color: var(--td-paper-text, #43301b);
 }
 
 .stepTitle {
-  color: var(--paper-text, #43301b);
+  color: var(--td-paper-text, #43301b);
 }
 
 .stepDesc {
-  color: var(--paper-text-muted, #7a5c38);
+  color: var(--td-paper-text-muted, #7a5c38);
 }
 
 .roleCardFront .roleTitle {
-  color: var(--paper-text, #43301b);
+  color: var(--td-paper-text, #43301b);
 }
 
 .roleCardFront .roleDesc {
-  color: var(--paper-text-muted, #7a5c38);
+  color: var(--td-paper-text-muted, #7a5c38);
 }
 
 /* ===== Phase 20 — hero text panel: the festival scene art is light in the
    day theme, so hero copy sits on a solid panel in both themes ===== */
 .heroContent {
   background: #fbf3e4;
-  border: 3px solid var(--ink, #4a2c14);
+  border: 3px solid var(--td-ink, #4a2c14);
   border-radius: 24px;
   box-shadow: 0 6px 0 rgba(74, 44, 20, 0.35);
   padding: 2.25rem 2.5rem;

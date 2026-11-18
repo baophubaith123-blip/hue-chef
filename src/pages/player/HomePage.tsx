@@ -3,6 +3,8 @@ import { Link, useNavigate } from 'react-router-dom';
 
 import { AchievementIcon } from '@/components/AchievementIcon';
 import { Button } from '@/components/Button';
+import { NoiNoi } from '@/components/theme-d/NoiNoi';
+import { SCENES } from '@/components/theme-d/assets';
 import { EmptyState } from '@/components/EmptyState';
 import { ImageWithFallback } from '@/components/ImageWithFallback';
 import { useAchievements } from '@/contexts/AchievementContext';
@@ -182,7 +184,7 @@ export default function HomePage() {
         {/* 1. Hero Banner mang phong cách Cố Đô Cung Đình Huế (Image 6 Target) */}
         <section className={styles.heroBanner} aria-label={dict.dashboard.heroTitleHue}>
           <div className={styles.heroBg} aria-hidden="true">
-            <img src="/images/banner-3d.jpg" alt="" className={styles.heroBgImg} />
+            <img src={SCENES['san-le-hoi']} alt="" className={styles.heroBgImg} />
           </div>
 
           <div className={styles.heroContent}>
@@ -225,6 +227,7 @@ export default function HomePage() {
             </div>
           </div>
 
+          <NoiNoi pose="chao" size={168} alt="" className={styles.heroNoiNoi} />
         </section>
 
         {/* 2. Chế độ chơi nhanh (Image 1 - 4 interactive cards) */}

@@ -1,5 +1,5 @@
 .footer {
-  border-top: var(--border-game, 3px solid #200f04);
+  border-top: 3px solid var(--td-ink);
   background: var(--color-plum-dark, #370e1b);
   margin-top: auto;
 }
@@ -49,7 +49,7 @@
 }
 
 .link:hover {
-  color: var(--color-gold, #e9a23b);
+  color: var(--td-gold, #e9a23b);
 }
 
 @media (max-width: 640px) {

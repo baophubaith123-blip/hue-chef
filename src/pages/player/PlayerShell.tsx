@@ -5,6 +5,8 @@ import { AchievementIcon } from '@/components/AchievementIcon';
 import { Button } from '@/components/Button';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { NotificationBell } from '@/components/NotificationBell';
+import { CoinPill } from '@/components/theme-d/CoinPill';
+import { FestivalGarland } from '@/components/theme-d/FestivalGarland';
 import { useAuth } from '@/contexts/AuthContext';
 import { useMail } from '@/contexts/MailContext';
 import { WarningPopup } from '@/features/mail/components/WarningPopup';
@@ -227,10 +229,8 @@ export function PlayerShell({ children }: PlayerShellProps) {
           </div>
 
           <div className={styles.topBarActions}>
-            <Link to="/recipes" className={styles.coinPill} title={dict.shop.walletTitle}>
-              <span aria-hidden="true">🪙</span>
-              <span>{(user?.coins ?? 0).toLocaleString()}</span>
-              <span className={styles.coinUnit}>xu</span>
+            <Link to="/recipes" className={styles.coinLink} title={dict.shop.walletTitle}>
+              <CoinPill amount={user?.coins ?? 0} currency="xu" />
             </Link>
             <NotificationBell />
             <LanguageSwitcher />
@@ -240,6 +240,7 @@ export function PlayerShell({ children }: PlayerShellProps) {
           </div>
         </header>
 
+        <FestivalGarland className={styles.garland} />
         <main className={styles.content}>
           <div key={location.pathname} className="page-transition">
             {children}
