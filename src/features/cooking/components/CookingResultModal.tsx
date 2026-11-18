@@ -17,8 +17,6 @@ interface CookingResultModalProps {
   onRetry: () => void;
   onApplyProgress?: () => void;
   gainedXp?: number;
-  gainedCoins?: number;
-  firstClear?: boolean;
   newLevel?: number;
   unlockedAchievements?: Achievement[];
 }
@@ -29,8 +27,6 @@ export function CookingResultModal({
   onRetry,
   onApplyProgress,
   gainedXp,
-  gainedCoins,
-  firstClear,
   newLevel,
   unlockedAchievements = [],
 }: CookingResultModalProps) {
@@ -143,20 +139,8 @@ export function CookingResultModal({
                 </div>
               ) : null}
 
-              {typeof gainedCoins === 'number' ? (
-                <div className={styles.metricCard}>
-                  <span className={styles.metricIcon}>🪙</span>
-                  <div className={styles.metricDetails}>
-                    <span className={styles.metricLabel}>{dict.cooking.result.coinsEarned}</span>
-                    <span className={styles.metricValueHighlight}>+{gainedCoins} xu</span>
-                    {firstClear ? (
-                      <span className={styles.metricLabel}>
-                        {dict.cooking.result.firstClearBonus}
-                      </span>
-                    ) : null}
-                  </div>
-                </div>
-              ) : null}
+              {/* Gói H2: no xu is paid out in the learning loop anymore —
+                  the only rewards shown here are XP, levels and unlocks. */}
             </div>
 
             {/* Level Up Banner */}

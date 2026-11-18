@@ -23,10 +23,12 @@ import { FinishStage } from '@/features/cooking/components/run/FinishStage';
 import { MarketStage } from '@/features/cooking/components/run/MarketStage';
 import { SeasonBar, type SeasonOutcome } from '@/features/cooking/components/run/SeasonBar';
 import { StageHelp } from '@/features/cooking/components/run/StageHelp';
+import { GestureStep } from '@/features/gestures/GestureStep';
+import { gestureForStep } from '@/data/gesture-map';
 import { useCookingState } from '@/features/cooking/hooks/useCookingState';
 import { useDragDrop } from '@/features/cooking/hooks/useDragDrop';
 import { COMBO_WINDOW_MS, comboBonusForStreak } from '@/features/cooking/lib/combo';
-import { SEASON_MAX_BONUS_RATIO } from '@/features/cooking/lib/stage-bonus';
+import { SEASON_MAX_BONUS_RATIO, seasonBonusFor } from '@/features/cooking/lib/stage-bonus';
 import { resolveStageConfig } from '@/features/cooking/lib/stage-config';
 import {
   applyPerkToStageConfig,
@@ -37,7 +39,6 @@ import { isRecipeOwned } from '@/features/recipes/lib/ownership';
 import { buildTrayIngredientIds } from '@/features/cooking/lib/tray-ingredients';
 import { shuffleArray } from '@/features/cooking/lib/shuffle';
 import { useTranslation } from '@/i18n/useTranslation';
-import { FIRST_CLEAR_BONUS_RATIO, coinsForScore } from '@/lib/pricing';
 import { calculateXpFromStars } from '@/lib/score';
 import { PlayerShell } from '@/pages/player/PlayerShell';
 
@@ -47,7 +48,7 @@ export default function CookingPage() {
   const { id } = useParams<{ id: string }>();
   const { t, dict } = useTranslation();
   const { isLoading, getRecipeById } = useRecipes();
-  const { user, addXp, addCoins, addCookedRecipe } = useAuth();
+  const { user, addXp, addCookedRecipe } = useAuth();
   const navigate = useNavigate();
   const { checkAndUnlockForUser, allAchievements, isUnlocked } = useAchievements();
   const { push: pushNotification } = useNotification();
@@ -91,11 +92,14 @@ export default function CookingPage() {
   const seasonToastTimerRef = useRef<number | null>(null);
   const [appliedResult, setAppliedResult] = useState<{
     gainedXp: number;
-    gainedCoins: number;
-    firstClear: boolean;
     newLevel?: number;
     unlockedAchievements: Achievement[];
   } | null>(null);
+  // Gesture engine (Gói H2): the step action is played as a gesture; its
+  // 0–100 score scales the step's cook points. `pendingQuality` carries
+  // the factor across the seasoning bar when both apply to one step.
+  const [gestureAttempt, setGestureAttempt] = useState(0);
+  const [pendingQuality, setPendingQuality] = useState<number | null>(null);
   const animationTimerRef = useRef<number | null>(null);
   const guardCheckedIdRef = useRef<string | null>(null);
 
@@ -182,20 +186,10 @@ export default function CookingPage() {
     const xpPerkPct = perkValueOf(session.perk, 'xp-bonus-pct');
     const xp = Math.round(calculateXpFromStars(session.stars) * (1 + xpPerkPct / 100));
     const xpResult = addXp(xp);
-    // Coins: 10 points = 1 xu, plus +50% the first time this dish is
-    // completed. Must be computed before the cooked entry is recorded.
-    const firstClear = !(user.cookedRecipes ?? []).some(
-      (entry) => entry.recipeId === session.recipe.id,
-    );
-    const baseCoins = coinsForScore(session.finalScore);
-    const coinPerkPct = perkValueOf(session.perk, 'coin-bonus-pct');
-    const gainedCoins = Math.floor(
-      (firstClear ? Math.round(baseCoins * (1 + FIRST_CLEAR_BONUS_RATIO)) : baseCoins) *
-        (1 + coinPerkPct / 100),
-    );
-    if (gainedCoins > 0) {
-      addCoins(gainedCoins);
-    }
+    // Gói H2 — the learning loop no longer pays out xu (Kế hoạch hợp nhất,
+    // chốt 6): rewards here are progress, unlocks and collectibles only.
+    // Xu is earned solely by selling at the stall (Gói H4); the player's
+    // existing balance is untouched and still spends on recipes.
     const entry = buildCookedEntry(session);
     addCookedRecipe(entry);
 
@@ -235,8 +229,6 @@ export default function CookingPage() {
 
     setAppliedResult({
       gainedXp: xp,
-      gainedCoins,
-      firstClear,
       newLevel: xpResult?.leveledUp ? xpResult.level : undefined,
       unlockedAchievements: unlocked,
     });
@@ -245,7 +237,6 @@ export default function CookingPage() {
     user,
     appliedResult,
     addXp,
-    addCoins,
     addCookedRecipe,
     buildCookedEntry,
     checkAndUnlockForUser,
@@ -359,36 +350,102 @@ export default function CookingPage() {
     [recipe, session?.perk],
   );
 
-  const handleExecuteAction = useCallback(() => {
-    // With the seasoning stage on, the action button first opens the
-    // seasoning bar; the step only executes once the bar is stopped well
-    // (a far miss closes the bar and the player seasons again).
-    if (stageConfig?.seasonEnabled && session?.actionButtonLabel) {
-      setSeasonOpen(true);
-      return;
+  const notifySeasonMiss = useCallback(() => {
+    setSeasonToast(dict.cooking.stages.seasonMiss);
+    if (seasonToastTimerRef.current !== null) {
+      window.clearTimeout(seasonToastTimerRef.current);
     }
-    executeStepAction();
-    pulseAnimation('sparkle');
-  }, [executeStepAction, pulseAnimation, session?.actionButtonLabel, stageConfig]);
+    seasonToastTimerRef.current = window.setTimeout(() => setSeasonToast(null), 3200);
+  }, [dict]);
+
+  // The step's seasoning slice on the same virtual scale CookingPage hands
+  // the SeasonBar, so a nêm gesture banks the season share identically.
+  const seasonVirtualPointsFor = useCallback(
+    (sess: CookingSession, step: NonNullable<CookingSession['recipe']['steps']>[number]) => {
+      const rawMaxOf = (s: typeof step) =>
+        Math.round(
+          scoreRules.correctPoints *
+            Math.max(1, s.requiredIngredients.length) *
+            SEASON_MAX_BONUS_RATIO,
+        );
+      const total = (sess.recipe.steps ?? [])
+        .filter((s) => Boolean(s.actionLabel))
+        .reduce((sum, s) => sum + rawMaxOf(s), 0);
+      return total > 0
+        ? (sess.scorePlan.season * rawMaxOf(step)) / total / SEASON_MAX_BONUS_RATIO
+        : scoreRules.correctPoints * Math.max(1, step.requiredIngredients.length);
+    },
+    [scoreRules],
+  );
+
+  /**
+   * Gesture engine hand-off (Gói H2): the step action's 0–100 score
+   * scales the step's cook points. When the step's own gesture is nêm,
+   * the gesture IS the seasoning act and banks the season share by the
+   * same outcome mapping the bar used (perfect ≥ 85, good 60–84 scaled,
+   * below 60 = miss and the gesture replays). For other gestures with
+   * seasoning on, the bar still follows, carrying the quality through.
+   */
+  const handleGestureComplete = useCallback(
+    (score: number) => {
+      if (!session || session.phase !== 'running') return;
+      const steps = session.recipe.steps ?? [];
+      const step = steps[session.currentStepIndex];
+      if (!step) return;
+      const quality = score / 100;
+      if (gestureForStep(step) === 'nem' && stageConfig?.seasonEnabled) {
+        if (score < 60) {
+          notifySeasonMiss();
+          setGestureAttempt((a) => a + 1);
+          return;
+        }
+        const closeness = score >= 85 ? 1 : (score - 60) / 25;
+        const bonus = seasonBonusFor(seasonVirtualPointsFor(session, step), closeness);
+        if (bonus > 0) {
+          addStageBonus('season', bonus);
+        }
+        executeStepAction(quality);
+        pulseAnimation('sparkle');
+        return;
+      }
+      if (stageConfig?.seasonEnabled) {
+        setPendingQuality(quality);
+        setSeasonOpen(true);
+        return;
+      }
+      executeStepAction(quality);
+      pulseAnimation('sparkle');
+    },
+    [
+      session,
+      stageConfig,
+      notifySeasonMiss,
+      seasonVirtualPointsFor,
+      addStageBonus,
+      executeStepAction,
+      pulseAnimation,
+    ],
+  );
 
   const handleSeasonResult = useCallback(
     (outcome: SeasonOutcome, bonus: number) => {
       setSeasonOpen(false);
       if (outcome === 'miss') {
-        setSeasonToast(dict.cooking.stages.seasonMiss);
-        if (seasonToastTimerRef.current !== null) {
-          window.clearTimeout(seasonToastTimerRef.current);
-        }
-        seasonToastTimerRef.current = window.setTimeout(() => setSeasonToast(null), 3200);
+        // The step does not execute; the gesture replays (the old bar's
+        // "season again" rule, carried into the gesture layer).
+        notifySeasonMiss();
+        setPendingQuality(null);
+        setGestureAttempt((a) => a + 1);
         return;
       }
       if (bonus > 0) {
         addStageBonus('season', bonus);
       }
-      executeStepAction();
+      executeStepAction(pendingQuality ?? 1);
+      setPendingQuality(null);
       pulseAnimation('sparkle');
     },
-    [addStageBonus, dict, executeStepAction, pulseAnimation],
+    [addStageBonus, notifySeasonMiss, executeStepAction, pendingQuality, pulseAnimation],
   );
 
   // Combo lifetime: the streak dies COMBO_WINDOW_MS after the last
@@ -722,8 +779,8 @@ export default function CookingPage() {
           onDropOnPot={handleDropOnPot}
           potIngredients={session.potIngredients}
           requiredCount={currentRequiredIds.length}
-          actionButtonLabel={session.actionButtonLabel}
-          onExecuteAction={handleExecuteAction}
+          actionButtonLabel={null}
+          onExecuteAction={() => undefined}
           shake={shakePot}
           sparkle={sparklePot}
           comboStreak={session.comboStreak}
@@ -756,6 +813,21 @@ export default function CookingPage() {
         />
       </div>
 
+      {session.phase === 'running' && session.actionButtonLabel && activeStep && !seasonOpen ? (
+        <div className={styles.gestureSlot}>
+          <GestureStep
+            key={`${session.currentStepIndex}-${gestureAttempt}`}
+            gesture={gestureForStep(activeStep)}
+            stepLabel={session.actionButtonLabel}
+            difficulty={recipe.difficulty}
+            ingredientNames={currentRequiredIds.map(
+              (ingredientId) => getIngredientById(ingredientId)?.name ?? ingredientId,
+            )}
+            onComplete={handleGestureComplete}
+          />
+        </div>
+      ) : null}
+
       {seasonOpen && session.actionButtonLabel ? (
         <SeasonBar
           stepLabel={session.actionButtonLabel}
@@ -774,8 +846,6 @@ export default function CookingPage() {
           onRetry={() => startCooking(recipe)}
           onApplyProgress={handleApplyProgress}
           gainedXp={appliedResult?.gainedXp}
-          gainedCoins={appliedResult?.gainedCoins}
-          firstClear={appliedResult?.firstClear}
           newLevel={appliedResult?.newLevel}
           unlockedAchievements={appliedResult?.unlockedAchievements}
         />

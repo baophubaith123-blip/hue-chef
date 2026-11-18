@@ -452,3 +452,8 @@
     min-height: calc(100dvh - 7.35rem);
   }
 }
+
+/* Gesture action panel slot (Gói H2) — sits under the cook grid. */
+.gestureSlot {
+  margin-top: 18px;
+}

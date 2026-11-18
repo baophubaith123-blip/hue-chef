@@ -35,7 +35,7 @@ type CookingAction =
   | { type: 'ADD_BONUS'; stage: RunStageKey; amount: number }
   | { type: 'DROP_INGREDIENT'; ingredientId: string; at: number }
   | { type: 'COMBO_EXPIRE'; at: number }
-  | { type: 'EXECUTE_STEP_ACTION' }
+  | { type: 'EXECUTE_STEP_ACTION'; quality?: number }
   | { type: 'COMPLETE_MINIGAMES'; bonusScore: number; minigameResults: MinigameResultEntry[] }
   | { type: 'TICK' }
   | { type: 'RESET' };
@@ -51,7 +51,13 @@ interface CookingContextValue {
   addStageBonus: (stage: RunStageKey, amount: number) => void;
   dropIngredient: (ingredientId: string) => boolean; // returns true if correct drag, false if wrong drag
   expireCombo: (at: number) => void;
-  executeStepAction: () => void;
+  /**
+   * Execute the current step's action. `quality` is the gesture engine's
+   * 0–100 action score as a 0..1 factor (Gói H2): a flawless gesture (1)
+   * banks exactly what the old action button banked, so lib/score's math
+   * and the run's ceilings are unchanged.
+   */
+  executeStepAction: (quality?: number) => void;
   completeMinigames: (bonusScore: number, minigameResults: MinigameResultEntry[]) => void;
   tickTimer: () => void;
   resetCooking: () => void;
@@ -332,10 +338,12 @@ function cookingReducer(state: CookingState, action: CookingAction): CookingStat
       const currentStepIndex = session.currentStepIndex;
       const nextStepIndex = currentStepIndex + 1;
       // Score per ingredient (not per step), converted into the cook
-      // component's share of the dish's value.
+      // component's share of the dish's value, scaled by the gesture
+      // quality of the step's action (1 = flawless, the old button value).
       const stepIngredientCount = steps[currentStepIndex]?.requiredIngredients.length ?? 1;
+      const quality = Math.min(1, Math.max(0, action.quality ?? 1));
       const convertedGain =
-        SCORE_RULES.correctPoints * stepIngredientCount * cookFactor(session);
+        SCORE_RULES.correctPoints * stepIngredientCount * quality * cookFactor(session);
       const updated: CookingSession = {
         ...session,
         correctCount: session.correctCount + stepIngredientCount,
@@ -468,8 +476,8 @@ export function CookingProvider({ children }: { children: ReactNode }) {
     dispatch({ type: 'COMBO_EXPIRE', at });
   }, []);
 
-  const executeStepAction = useCallback(() => {
-    dispatch({ type: 'EXECUTE_STEP_ACTION' });
+  const executeStepAction = useCallback((quality?: number) => {
+    dispatch({ type: 'EXECUTE_STEP_ACTION', quality });
   }, []);
 
   const completeMinigames = useCallback(
