@@ -5,6 +5,7 @@ import { AchievementIcon } from '@/components/AchievementIcon';
 import { Button } from '@/components/Button';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { NotificationBell } from '@/components/NotificationBell';
+import { AudioControls } from '@/components/theme-d/AudioControls';
 import { CoinPill } from '@/components/theme-d/CoinPill';
 import { FestivalGarland } from '@/components/theme-d/FestivalGarland';
 import { useAuth } from '@/contexts/AuthContext';
@@ -309,6 +310,7 @@ export function PlayerShell({ children }: PlayerShellProps) {
             <Link to="/recipes" className={styles.coinLink} title={dict.shop.walletTitle}>
               <CoinPill amount={user?.coins ?? 0} currency="xu" />
             </Link>
+            <AudioControls />
             <NotificationBell />
             <LanguageSwitcher />
             <Button variant="secondary" className={styles.logoutBtn} onClick={handleLogout}>

@@ -20,6 +20,7 @@ export { Modal } from '@/components/theme-d/Modal';
 export { Toast } from '@/components/theme-d/Toast';
 export type { ToastTone } from '@/components/theme-d/Toast';
 export { Badge } from '@/components/theme-d/Badge';
+export { AudioControls } from '@/components/theme-d/AudioControls';
 export { CoinPill } from '@/components/theme-d/CoinPill';
 export type { CoinCurrency } from '@/components/theme-d/CoinPill';
 export { DishGradeFrame } from '@/components/theme-d/DishGradeFrame';

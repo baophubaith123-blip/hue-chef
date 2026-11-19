@@ -1,6 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom';
 
 import { ProtectedRoute } from '@/components/ProtectedRoute';
+import { MusicLayout } from '@/features/audio/MusicDirector';
 import AdminAchievementsPage from '@/pages/admin/AdminAchievementsPage';
 import AdminAllRecipesPage from '@/pages/admin/AdminAllRecipesPage';
 import AdminAppealsPage from '@/pages/admin/AdminAppealsPage';
@@ -53,6 +54,11 @@ import SupportChatPage from '@/pages/support/SupportChatPage';
 import SupportDashboardPage from '@/pages/support/SupportDashboardPage';
 
 export const router = createBrowserRouter([
+  {
+    // Root layout (Gói H8): the music director watches the route and
+    // the stall state from here so every page gets the right track.
+    element: <MusicLayout />,
+    children: [
   {
     path: '/login',
     element: <LoginPage />,
@@ -292,5 +298,7 @@ export const router = createBrowserRouter([
   {
     path: '*',
     element: <NotFoundPage />,
+  },
+    ],
   },
 ]);

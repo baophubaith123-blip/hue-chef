@@ -1226,6 +1226,9 @@ export interface I18nDictionary {
     enabled: string;
     disabled: string;
     toggle: string;
+    musicToggle: string;
+    musicOn: string;
+    musicOff: string;
   };
   header: {
     logo: string;

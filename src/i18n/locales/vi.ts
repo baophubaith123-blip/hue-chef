@@ -1431,6 +1431,9 @@ export const vi: I18nDictionary = {
     enabled: 'Đang bật',
     disabled: 'Đang tắt',
     toggle: 'Bật/tắt âm thanh',
+    musicToggle: 'Bật/tắt nhạc nền',
+    musicOn: 'Nhạc nền đang bật',
+    musicOff: 'Nhạc nền đang tắt',
   },
   header: {
     logo: 'Hue Chef',

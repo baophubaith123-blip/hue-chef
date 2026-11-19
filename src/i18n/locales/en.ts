@@ -1430,6 +1430,9 @@ export const en: I18nDictionary = {
     enabled: 'Enabled',
     disabled: 'Disabled',
     toggle: 'Toggle sound on/off',
+    musicToggle: 'Toggle background music',
+    musicOn: 'Music is on',
+    musicOff: 'Music is off',
   },
   header: {
     logo: 'Hue Chef',
