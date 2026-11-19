@@ -1595,6 +1595,8 @@ export const vi: I18nDictionary = {
     todayHint: 'Hoàn thành để nhận thưởng ngay!',
     playCenter: 'Chơi ngay',
     openedCount: (opened: number, total: number) => `Đã mở ${opened}/${total} công thức`,
+    noResults: 'Không tìm thấy món nào',
+    noResultsHint: 'Thử đổi bộ lọc hoặc từ khoá tìm kiếm nhé.',
   },
   dashboard: {
     greetingMorning: 'Chào buổi sáng',

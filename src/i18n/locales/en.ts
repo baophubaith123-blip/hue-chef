@@ -1594,6 +1594,8 @@ export const en: I18nDictionary = {
     todayHint: 'Finish them for instant rewards!',
     playCenter: 'Play now',
     openedCount: (opened: number, total: number) => `${opened}/${total} recipes unlocked`,
+    noResults: 'No dishes found',
+    noResultsHint: 'Try changing the filters or search keywords.',
   },
   dashboard: {
     greetingMorning: 'Good morning',

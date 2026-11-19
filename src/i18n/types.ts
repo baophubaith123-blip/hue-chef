@@ -1419,6 +1419,8 @@ export interface I18nDictionary {
     todayHint: string;
     playCenter: string;
     openedCount: (opened: number, total: number) => string;
+    noResults: string;
+    noResultsHint: string;
   };
   dashboard: {
     greetingMorning: string;
