@@ -1054,6 +1054,7 @@ export const en: I18nDictionary = {
       notEnoughCok: 'Not enough cok — cok comes mainly from VIP customers at the stall.',
       noDishNote: 'No dish can host a box right now — learn a few more dishes and come back.',
       activeTitle: 'A box is waiting to be cooked',
+      premiumBadge: '🎁 Premium box',
       dishLabel: 'Dish in the box',
       swapsTitle: "The box's stand-ins",
       swapLine: (from: string, to: string) => `${from} → replaced by ${to}`,

@@ -1054,6 +1054,7 @@ export const vi: I18nDictionary = {
       notEnoughCok: 'Chưa đủ cok — cok kiếm chủ yếu từ khách VIP ở quầy.',
       noDishNote: 'Chưa có món nào đủ điều kiện ứng biến lúc này — học thêm món mới rồi quay lại nhé.',
       activeTitle: 'Hộp đang chờ nấu',
+      premiumBadge: '🎁 Hộp cao cấp',
       dishLabel: 'Món trong hộp',
       swapsTitle: 'Nguyên liệu ứng biến của hộp',
       swapLine: (from: string, to: string) => `${from} → thay bằng ${to}`,

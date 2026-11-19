@@ -876,6 +876,7 @@ export interface I18nDictionary {
       notEnoughCok: string;
       noDishNote: string;
       activeTitle: string;
+      premiumBadge: string;
       dishLabel: string;
       swapsTitle: string;
       swapLine: (from: string, to: string) => string;

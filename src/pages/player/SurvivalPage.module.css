@@ -1,0 +1,155 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding-bottom: 3rem;
+}
+
+/* Page head — big hanging wooden sign (same pattern as SkillTreePage).
+   The wood surface is fixed in both themes, so its text stays pinned
+   to the light cream that reads on wood. */
+.head {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  background: var(--td-wood-gradient, linear-gradient(180deg, #ce9550, #b57e40));
+  border: 3px solid var(--td-ink);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-chunky, 0 4px 0 rgba(74, 44, 20, 0.45));
+  padding: 1.4rem 1.75rem;
+}
+
+.title {
+  margin: 0;
+  font-family: var(--td-font-display);
+  font-size: 1.85rem;
+  font-weight: 800;
+  color: #fff6e0;
+  text-shadow: 0 2px 0 rgba(32, 15, 4, 0.45);
+}
+
+.subtitle {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #fff6e0;
+  line-height: 1.55;
+}
+
+.intro {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.6;
+  color: var(--td-page-text-muted);
+}
+
+/* ---------- Record card (on a KraftCard paper body) ---------- */
+
+.recordCard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.recordLabel {
+  margin: 0;
+  font-family: var(--td-font-display);
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--td-paper-text);
+}
+
+.runsLabel {
+  margin: 0;
+  font-size: 0.92rem;
+  font-weight: 600;
+  line-height: 1.5;
+  color: var(--td-paper-text-muted);
+}
+
+/* ---------- Current run ---------- */
+
+.currentCard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.progressLabel {
+  margin: 0;
+  font-family: var(--td-font-display);
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--td-paper-text);
+}
+
+.strikesLabel {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #8a5a00; /* pinned: paper stays light in dark theme */
+}
+
+.currentDishName {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 800;
+  line-height: 1.4;
+  color: var(--td-paper-text);
+}
+
+.currentActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  margin-top: 0.35rem;
+}
+
+.actionButton {
+  min-height: 44px;
+}
+
+/* ---------- Start card ---------- */
+
+.startCard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  align-items: flex-start;
+}
+
+.needOwned {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  line-height: 1.55;
+  color: var(--td-paper-text-muted);
+}
+
+.queueHint {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  line-height: 1.5;
+  color: var(--td-paper-text-muted);
+}
+
+@media (max-width: 760px) {
+  .title {
+    font-size: 1.5rem;
+  }
+
+  .currentActions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .actionButton {
+    width: 100%;
+  }
+
+  .startCard {
+    align-items: stretch;
+  }
+}
