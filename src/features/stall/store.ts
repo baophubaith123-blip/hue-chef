@@ -87,6 +87,18 @@ import {
   applicableRequestsFor,
   type RequestKind,
 } from '@/features/stall/lib/substitutions';
+import { dishOfDayId } from '@/features/events/lib/checkin';
+import { recordPlayEvent } from '@/features/events/store';
+import {
+  FEAST_EXP_BONUS,
+  FEAST_PRICE_FACTOR,
+  FESTIVAL_BONUS_COK,
+  FESTIVAL_BONUS_MIN_OK,
+  FESTIVAL_QUOTA_FACTOR,
+  FESTIVAL_SPAWN_FACTOR,
+  FESTIVAL_TIP_FACTOR,
+  FESTIVAL_VIP_BOOST,
+} from '@/features/stall/lib/festival';
 import {
   pickyRateForStars,
   REQUEST_OK_TIP_FACTOR,
@@ -344,7 +356,8 @@ export function buyIngredient(
   unitPrice: number,
 ): StallUserState {
   const today = todayKey();
-  return update(userId, (draft) => {
+  const countBefore = inventoryCount(loadStallState(userId), ingredientId);
+  const next = update(userId, (draft) => {
     // Cold storage (Gói H6): the lot's expiry is fixed at purchase by
     // the gear the stall owns at that moment — fridge ×2, freezer ×4.
     const lot: IngredientLot = {
@@ -357,6 +370,11 @@ export function buyIngredient(
     };
     return { ...draft, lots: [...draft.lots, lot] };
   });
+  // Quest hook (Gói H7): a purchase that actually stocked the pantry.
+  if (inventoryCount(next, ingredientId) > countBefore) {
+    recordPlayEvent(userId, 'buy', { count: 1 });
+  }
+  return next;
 }
 
 /**
@@ -415,20 +433,76 @@ export function openShift(userId: string, now: number): StallUserState {
   });
 }
 
+/**
+ * Open a Night Festival shift (Gói H7, lib/festival): openShift's
+ * twin with a fatter quota and the festival flag set — the tick
+ * (faster spawns), the tier roll (more VIPs) and serveCore (fatter
+ * tips) all read the flag, so a normal shift's arithmetic is never
+ * touched. The cok ticket itself is charged by the caller through
+ * AuthContext before this runs (the wallets keep a single writer).
+ * The first customer arrives sooner: the festival crowd is already
+ * at the gate.
+ */
+export function openFestivalShift(userId: string, now: number): StallUserState {
+  return update(userId, (draft) => {
+    if (draft.shift) return draft;
+    const stars = stallStarsForExp(draft.exp);
+    const quota = Math.round(
+      shiftQuotaForStars(stars) *
+        (draft.adUntil > now ? AD_QUOTA_FACTOR : 1) *
+        FESTIVAL_QUOTA_FACTOR,
+    );
+    return {
+      ...draft,
+      customers: [],
+      shift: {
+        id: `shift-${crypto.randomUUID()}`,
+        startedAt: now,
+        endsAt: now + shiftDurationMs(stars),
+        spawnQuota: quota,
+        spawned: 0,
+        nextSpawnAt: now + 2000,
+        revenueXu: 0,
+        revenueCok: 0,
+        servedOk: 0,
+        servedPoor: 0,
+        lost: 0,
+        unserved: 0,
+        spoiledBatches: 0,
+        expGained: 0,
+        festival: true,
+      },
+    };
+  });
+}
+
 function finalizeShift(draft: StallUserState, now: number): StallUserState {
   const shift = draft.shift;
   if (!shift) return draft;
   const unserved = draft.customers.filter(
     (c) => c.state === 'waiting' || c.state === 'accepted',
   ).length;
+  // Festival bonus (Gói H7, lib/festival): a festival shift that
+  // served enough Đạt chuẩn-or-better orders hands 1 cok back at
+  // closing — booked as a pending credit, so the page pays it through
+  // the wallet like every crew earning (trần N1: ticket 2, bonus ≤ 1).
+  const festivalCokBonus =
+    shift.festival && shift.servedOk >= FESTIVAL_BONUS_MIN_OK ? FESTIVAL_BONUS_COK : 0;
   const summary: ShiftSummary = {
     ...shift,
     unserved,
     endedAt: now,
     starsBefore: stallStarsForExp(draft.exp - shift.expGained),
     starsAfter: stallStarsForExp(draft.exp),
+    ...(festivalCokBonus > 0 ? { festivalCokBonus } : {}),
   };
-  return { ...draft, shift: null, customers: [], lastSummary: summary };
+  return {
+    ...draft,
+    shift: null,
+    customers: [],
+    lastSummary: summary,
+    pendingCreditCok: draft.pendingCreditCok + festivalCokBonus,
+  };
 }
 
 export function closeShift(userId: string, now: number): StallUserState {
@@ -446,7 +520,14 @@ function spawnCustomer(
   const menu = effectiveMenuRecipes(draft, user, recipes);
   if (menu.length === 0) return null;
   const stars = stallStarsForExp(draft.exp);
-  const tier = rollTier(stars, Math.random(), draft.stallLevel >= 5 ? LEVEL5_VIP_BOOST : 1);
+  // Festival shifts (Gói H7): the lantern crowd brings more VIPs —
+  // the boost stacks on the level-5 boost exactly like it does there.
+  const tier = rollTier(
+    stars,
+    Math.random(),
+    (draft.stallLevel >= 5 ? LEVEL5_VIP_BOOST : 1) *
+      (draft.shift?.festival ? FESTIVAL_VIP_BOOST : 1),
+  );
   const dish = pickDishForTier(tier, menu, Math.random());
   if (!dish) return null;
   const usedTables = new Set(
@@ -680,6 +761,9 @@ export function tickStall(
         const phase = shiftPhaseAt(next.shift, now);
         const pullFactor =
           (next.adUntil > now ? AD_SPAWN_FACTOR : 1) * decorSpawnFactor(next.decorIds);
+        // Festival shifts (Gói H7): the crowd presses in faster —
+        // the wait between arrivals shrinks by the festival factor.
+        const festivalFactor = next.shift.festival ? FESTIVAL_SPAWN_FACTOR : 1;
         next = {
           ...next,
           customers: [...next.customers, customer],
@@ -687,7 +771,9 @@ export function tickStall(
             ...next.shift,
             spawned: next.shift.spawned + 1,
             nextSpawnAt:
-              now + interval * spawnFactorForPhase(phase) * pullFactor * (0.7 + Math.random() * 0.6),
+              now +
+              (interval * spawnFactorForPhase(phase) * pullFactor * (0.7 + Math.random() * 0.6)) /
+                festivalFactor,
           },
         };
       } else {
@@ -940,9 +1026,20 @@ function serveCore(
     );
   }
   tip = Math.round(tip * decorTipFactor(draft.decorIds));
+  // Festival shift (Gói H7, lib/festival): every tip fattens ×1.5.
+  if (draft.shift?.festival) {
+    tip = Math.round(tip * FESTIVAL_TIP_FACTOR);
+  }
+  // Dish of the day (Gói H7, lib/checkin): its tip doubles — after
+  // the festival factor — and so does the stall EXP booked below.
+  // The price itself is never doubled (capital law, mục 6.12).
+  const dotdHit = recipe.id === dishOfDayId(dayKeyOf(new Date(now)));
+  if (dotdHit) {
+    tip = tip * 2;
+  }
   const fee = customer.delivery ? deliveryFeeFor(price) : 0;
   const cok = customer.tier === 'vip' ? cokForServe(batch.level) : 0;
-  const exp = band.exp;
+  const exp = dotdHit ? band.exp * 2 : band.exp;
   const result: ServeResult = { price, tip, totalXu: price + tip + fee, cok, exp };
 
   const shift = draft.shift
@@ -985,17 +1082,31 @@ export function serveBatch(
   recipe: Recipe,
   now: number,
 ): ServeResult | null {
-  let result: ServeResult | null = null;
+  // Quest hook (Gói H7): snapshot the pair before the serve consumes
+  // them — the event needs the customer's tier and the batch's level.
+  const pre = loadStallState(userId);
+  const preCustomer = pre.customers.find((c) => c.id === customerId);
+  const preBatch = pre.batches.find((b) => b.id === batchId);
+  const holder: { result: ServeResult | null } = { result: null };
   update(userId, (draft) => {
     const customer = draft.customers.find((c) => c.id === customerId);
     const batch = draft.batches.find((b) => b.id === batchId);
     if (!customer || !batch || customer.delivery) return draft;
     const served = serveCore(draft, customer, batch, bestStars, recipe, now);
     if (!served) return draft;
-    result = served.result;
+    holder.result = served.result;
     return served.state;
   });
-  return result;
+  const servedResult = holder.result;
+  if (servedResult !== null && preCustomer && preBatch) {
+    recordPlayEvent(userId, 'serve', {
+      recipeId: recipe.id,
+      tier: preCustomer.tier,
+      level: preBatch.level,
+      revenueXu: servedResult.totalXu,
+    });
+  }
+  return holder.result;
 }
 
 /**
@@ -1011,7 +1122,11 @@ export function serveDeliveryBatch(
   recipe: Recipe,
   now: number,
 ): ServeResult | null {
-  let result: ServeResult | null = null;
+  // Quest hook (Gói H7): same pre-serve snapshot as serveBatch.
+  const pre = loadStallState(userId);
+  const preCustomer = pre.customers.find((c) => c.id === customerId);
+  const preBatch = pre.batches.find((b) => b.id === batchId);
+  const holder: { result: ServeResult | null } = { result: null };
   update(userId, (draft) => {
     const customer = draft.customers.find((c) => c.id === customerId);
     const batch = draft.batches.find((b) => b.id === batchId);
@@ -1020,12 +1135,78 @@ export function serveDeliveryBatch(
     if (!server) return draft;
     const served = serveCore(draft, customer, batch, bestStars, recipe, now);
     if (!served) return draft;
-    result = served.result;
+    holder.result = served.result;
     return {
       ...served.state,
       staff: served.state.staff.map((m) =>
         m.role === 'server' ? { ...m, ordersDone: m.ordersDone + 1 } : m,
       ),
+    };
+  });
+  const servedResult = holder.result;
+  if (servedResult !== null && preCustomer && preBatch) {
+    recordPlayEvent(userId, 'serve', {
+      recipeId: recipe.id,
+      tier: preCustomer.tier,
+      level: preBatch.level,
+      revenueXu: servedResult.totalXu,
+    });
+  }
+  return holder.result;
+}
+
+/**
+ * Serve a village feast (Gói H7, lib/festival): the big pot is handed
+ * to the village in one event — no customer, no patience, no tip.
+ * The price is the batch's ordinary capital-law price × the feast
+ * factor × the stall level's income factor (booked at the end, like
+ * serveCore), and the EXP is the quality band's plus the feast bonus.
+ * Returns null when the batch is missing or not sellable (a spoiled
+ * pot feeds nobody). The caller applies totalXu through AuthContext
+ * and stamps the feast day through the events store.
+ */
+export function serveFeast(
+  userId: string,
+  batchId: string,
+  bestStars: number,
+  recipe: Recipe,
+): ServeResult | null {
+  let result: ServeResult | null = null;
+  update(userId, (draft) => {
+    const batch = draft.batches.find((b) => b.id === batchId);
+    if (!batch) return draft;
+    const band = qualityBandForLevel(batch.level);
+    if (!band.sellable) return draft;
+    const price = Math.round(
+      priceForBatch({
+        cost: batch.cost,
+        grade: dishGradeFor(recipe),
+        bestStars,
+        level: batch.level,
+      }) *
+        FEAST_PRICE_FACTOR *
+        incomeFactorForLevel(draft.stallLevel),
+    );
+    const exp = band.exp + FEAST_EXP_BONUS;
+    result = { price, tip: 0, totalXu: price, cok: 0, exp };
+    return {
+      ...draft,
+      exp: draft.exp + exp,
+      totalServed: draft.totalServed + 1,
+      batches: draft.batches.filter((b) => b.id !== batchId),
+      shift: draft.shift
+        ? {
+            ...draft.shift,
+            revenueXu: draft.shift.revenueXu + price,
+            expGained: draft.shift.expGained + exp,
+            servedOk:
+              draft.shift.servedOk +
+              (batch.level === 'perfect' || batch.level === 'standard' ? 1 : 0),
+            servedPoor:
+              draft.shift.servedPoor +
+              (batch.level === 'good' || batch.level === 'burned' ? 1 : 0),
+          }
+        : null,
     };
   });
   return result;
@@ -1128,6 +1309,21 @@ export function buyCard(userId: string, kind: CardKind): number {
     return { ...draft, cards: { ...draft.cards, [kind]: draft.cards[kind] + 1 } };
   });
   return paid;
+}
+
+/**
+ * Grant one one-use card of a kind, free (Gói H7): quest-chain chests
+ * and premium mystery boxes pay their rewards as cards — the events
+ * store only RETURNS the reward, so the card lands here, in the store
+ * that owns the card pouch. Returns the new count of that kind.
+ */
+export function grantCard(userId: string, kind: CardKind): number {
+  let count = 0;
+  update(userId, (draft) => {
+    count = draft.cards[kind] + 1;
+    return { ...draft, cards: { ...draft.cards, [kind]: count } };
+  });
+  return count;
 }
 
 /** Buy a decoration piece; owned pieces are placed on the scene at once. */
@@ -1330,6 +1526,11 @@ export function remoteBuyIngredient(
       ),
     };
   });
+  // Quest hook (Gói H7): a non-null total is this function's success
+  // signal — the runner really bought and delivered the lot.
+  if (total !== null) {
+    recordPlayEvent(userId, 'buy', { count: 1 });
+  }
   return total;
 }
 

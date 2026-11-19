@@ -115,12 +115,17 @@ export interface StallShift {
   /** Batches discarded as spoiled during the shift. */
   spoiledBatches: number;
   expGained: number;
+  /** Gói H7: a Night Festival shift (lib/festival) — faster spawns,
+   * fatter tips, a cok bonus at closing. Absent = a normal shift. */
+  festival?: boolean;
 }
 
 export interface ShiftSummary extends StallShift {
   endedAt: number;
   starsBefore: number;
   starsAfter: number;
+  /** Gói H7: cok bonus a festival shift earned at closing (lib/festival). */
+  festivalCokBonus?: number;
 }
 
 export interface SpoilageNotice {

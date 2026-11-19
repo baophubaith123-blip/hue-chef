@@ -7,6 +7,7 @@ import {
   CoinPill,
   CustomerFace,
   DishGradeFrame,
+  FestivalGarland,
   GoldButton,
   Modal,
   NoiNoi,
@@ -22,6 +23,18 @@ import { bestStarsByRecipe, sellableRecipes } from '@/features/journey/lib/journ
 import { dishGradeFor } from '@/features/recipes/lib/grade';
 import { StallSceneLayers } from '@/features/stall/components/StallSceneLayers';
 import { todayKey } from '@/features/stall/lib/day';
+import {
+  FEAST_QTY,
+  FESTIVAL_BONUS_MIN_OK,
+  FESTIVAL_TICKET_COK,
+  FESTIVAL_TIP_FACTOR,
+} from '@/features/stall/lib/festival';
+import { dishOfDayId } from '@/features/events/lib/checkin';
+import {
+  recordFestivalBonus,
+  recordFestivalShift,
+  useEvents,
+} from '@/features/events/store';
 import { basePriceFor } from '@/features/stall/lib/market';
 import { moodForCustomer, patienceLeftMs, patienceLeftRatio } from '@/features/stall/lib/orders';
 import {
@@ -73,6 +86,7 @@ import {
   hireStaff,
   inventoryByIngredient,
   missingForBatch,
+  openFestivalShift,
   openShift,
   remoteBuyIngredient,
   remoteUnitPriceFor,
@@ -129,8 +143,9 @@ export default function StallPage() {
   const { getApprovedRecipes } = useRecipes();
   const navigate = useNavigate();
   const stall = useStall(user?.id ?? null);
+  const events = useEvents(user?.id ?? null);
   const [now, setNow] = useState(() => Date.now());
-  const [panel, setPanel] = useState<'menu' | 'pantry' | 'staff' | 'support' | null>(null);
+  const [panel, setPanel] = useState<'menu' | 'pantry' | 'staff' | 'support' | 'feast' | null>(null);
   const [remoteQty, setRemoteQty] = useState<Record<string, number>>({});
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [toast, setToast] = useState<{ message: string; tone: ToastTone } | null>(null);
@@ -291,6 +306,13 @@ export default function StallPage() {
 
   if (!user || !stall) return null;
 
+  // Closing a festival summary books its cok bonus in the events
+  // stats (Gói H7) — exactly once, at the moment the player dismisses.
+  const handleDismissSummary = () => {
+    if (stall.lastSummary?.festivalCokBonus) recordFestivalBonus(user.id);
+    dismissSummary(user.id);
+  };
+
   const handleServe = (batch: CookedBatch) => {
     if (!selected || !selectedRecipe) return;
     const serve = selected.delivery ? serveDeliveryBatch : serveBatch;
@@ -339,6 +361,10 @@ export default function StallPage() {
       );
     }
     tip = Math.round(tip * decorTipFactor(stall?.decorIds ?? []));
+    // Mirror the store (Gói H7): a festival shift fattens every tip,
+    // then the dish of the day doubles its own — same order as serveCore.
+    if (stall?.shift?.festival) tip = Math.round(tip * FESTIVAL_TIP_FACTOR);
+    if (batch.recipeId === dishOfDayId(todayKey())) tip = tip * 2;
     const fee = customer.delivery ? deliveryFeeFor(price) : 0;
     return { price, tip, fee, total: price + tip + fee };
   };
@@ -349,6 +375,12 @@ export default function StallPage() {
         <div className={styles.stage}>
           <img className={styles.scene} src={SCENES['canh-quay']} alt="" draggable={false} />
           <div className={styles.nightShade} aria-hidden />
+          {stall.shift?.festival ? (
+            <>
+              <div className={styles.festivalShade} aria-hidden />
+              <FestivalGarland />
+            </>
+          ) : null}
           {isRush ? <div className={styles.rushShade} aria-hidden /> : null}
           {/* Upgrade + decoration layers (Gói H6): one layer system —
               the level paints the structure, decor the ornaments. */}
@@ -379,14 +411,40 @@ export default function StallPage() {
                 <WoodButton onClick={() => closeShift(user.id, Date.now())}>{s.closeShift}</WoodButton>
               </div>
             ) : (
-              <GoldButton
-                className={styles.openShiftBtn}
-                disabled={sellable.length === 0}
-                onClick={() => openShift(user.id, Date.now())}
-              >
-                🔔 {s.openShift}
-              </GoldButton>
+              <>
+                <GoldButton
+                  className={styles.openShiftBtn}
+                  disabled={sellable.length === 0}
+                  onClick={() => openShift(user.id, Date.now())}
+                >
+                  🔔 {s.openShift}
+                </GoldButton>
+                <WoodButton
+                  disabled={(user.cok ?? 0) < FESTIVAL_TICKET_COK || sellable.length === 0}
+                  title={dict.events.festival.ticketNote}
+                  onClick={() => {
+                    addCok(-FESTIVAL_TICKET_COK);
+                    openFestivalShift(user.id, Date.now());
+                    recordFestivalShift(user.id);
+                    showToast(dict.events.festival.openedToast, 'success');
+                  }}
+                >
+                  {dict.events.festival.openButton(FESTIVAL_TICKET_COK)}
+                </WoodButton>
+                {sellable.length > 0 && (user.cok ?? 0) < FESTIVAL_TICKET_COK ? (
+                  <span className={styles.festivalHint}>{dict.events.festival.notEnoughCok}</span>
+                ) : null}
+              </>
             )}
+            {stall.shift?.festival ? (
+              <div className={styles.festivalBanner} role="status">
+                <strong>{dict.events.festival.activeBanner}</strong>
+                <span>{dict.events.festival.activeBody}</span>
+                <span>
+                  {dict.events.festival.bonusNote(stall.shift.servedOk, FESTIVAL_BONUS_MIN_OK)}
+                </span>
+              </div>
+            ) : null}
             {isRush ? (
               <div className={styles.rushBanner} role="status">
                 <strong>{s.rushBanner}</strong>
@@ -455,6 +513,17 @@ export default function StallPage() {
             onClick={() => setPanel('support')}
           >
             🧰 {sup.supportBtn}
+          </button>
+          <button
+            type="button"
+            className={styles.feastBtn}
+            aria-label={dict.events.feast.title}
+            onClick={() => setPanel('feast')}
+          >
+            {dict.events.feast.button}
+            {(stall.upgrades.pot ?? 0) >= 1 && events?.feast.lastDay !== todayKey() ? (
+              <span className={styles.pantryCount}>1</span>
+            ) : null}
           </button>
 
           {/* Customers at their tables, order bubble overhead (mục 5.3).
@@ -929,6 +998,9 @@ export default function StallPage() {
                     <div className={styles.menuCard}>
                       <img src={recipe.image} alt="" className={styles.menuImg} />
                       <strong>{recipe.name}</strong>
+                      {recipe.id === dishOfDayId(todayKey()) ? (
+                        <span className={styles.dotdChip}>🌟 {dict.events.checkin.dotdBadge}</span>
+                      ) : null}
                       <span>{'★'.repeat(bestStars.get(recipe.id) ?? 0)}{'☆'.repeat(5 - (bestStars.get(recipe.id) ?? 0))}</span>
                       <span>{s.menuItemMeta(bestStars.get(recipe.id) ?? 0, Math.round(GRADE_MARGIN[grade] * 100))}</span>
                       <WoodButton
@@ -1252,6 +1324,47 @@ export default function StallPage() {
         </div>
       </Modal>
 
+      {/* Village feast panel (Gói H7): pick a licensed dish, cook one
+          big pot of FEAST_QTY portions — the cooking page books the
+          feast run and serveFeast sells it to the village. */}
+      <Modal
+        open={panel === 'feast'}
+        title={dict.events.feast.title}
+        onClose={() => setPanel(null)}
+        closeLabel={s.summaryClose}
+      >
+        <div className={styles.feastBox}>
+          <p>{dict.events.feast.intro(FEAST_QTY)}</p>
+          {(stall.upgrades.pot ?? 0) < 1 ? (
+            <p>{dict.events.feast.needPot}</p>
+          ) : events?.feast.lastDay === todayKey() ? (
+            <p>{dict.events.feast.doneToday}</p>
+          ) : (
+            <>
+              <strong>{dict.events.feast.pickDish}</strong>
+              <ul className={styles.feastList}>
+                {menuRecipes.map((recipe) => (
+                  <li key={recipe.id} className={styles.feastRow}>
+                    <img src={recipe.image} alt="" className={styles.orderImg} />
+                    <div className={styles.orderInfo}>
+                      <strong>{recipe.name}</strong>
+                      <span>{dict.events.feast.portionsLabel(FEAST_QTY)}</span>
+                    </div>
+                    {canCookBatch(stall, recipe, FEAST_QTY) ? (
+                      <GoldButton onClick={() => navigate(`/cooking/${recipe.id}?feast=1`)}>
+                        {dict.events.feast.cookButton}
+                      </GoldButton>
+                    ) : (
+                      <span className={styles.orderWarn}>{dict.events.feast.missingNote}</span>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
+        </div>
+      </Modal>
+
       {/* AFK report (Gói H6, mục 5.9): the cash box and the short ledger. */}
       <Modal
         open={stall.afkReport !== null}
@@ -1298,13 +1411,16 @@ export default function StallPage() {
       <Modal
         open={stall.shift === null && stall.lastSummary !== null}
         title={s.summaryTitle}
-        onClose={() => dismissSummary(user.id)}
+        onClose={handleDismissSummary}
         closeLabel={s.summaryClose}
       >
         {stall.lastSummary ? (
           <div className={styles.summary}>
             <p>💰 {s.summaryRevenue}: <strong>{stall.lastSummary.revenueXu} xu</strong></p>
             <p>♦ {s.summaryCok}: <strong>{stall.lastSummary.revenueCok} cok</strong></p>
+            {stall.lastSummary.festivalCokBonus ? (
+              <p>{dict.events.festival.summaryBonus(stall.lastSummary.festivalCokBonus)}</p>
+            ) : null}
             <p>✅ {s.summaryServedOk}: {stall.lastSummary.servedOk}</p>
             <p>🟡 {s.summaryServedPoor}: {stall.lastSummary.servedPoor}</p>
             <p>🚶 {s.summaryLost}: {stall.lastSummary.lost}</p>
@@ -1316,7 +1432,7 @@ export default function StallPage() {
                 ? s.summaryStarsUp(stall.lastSummary.starsAfter)
                 : s.summaryStarsSame(stall.lastSummary.starsAfter)}
             </p>
-            <GoldButton onClick={() => dismissSummary(user.id)}>{s.summaryClose}</GoldButton>
+            <GoldButton onClick={handleDismissSummary}>{s.summaryClose}</GoldButton>
           </div>
         ) : null}
       </Modal>
