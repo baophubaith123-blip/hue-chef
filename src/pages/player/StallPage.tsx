@@ -46,6 +46,7 @@ import {
 } from '@/features/stall/lib/pricing-sell';
 import { REQUEST_ICONS } from '@/features/stall/lib/substitutions';
 import { REQUEST_OK_TIP_FACTOR, shiftPhaseAt } from '@/features/stall/lib/rush';
+import { isEveningAt } from '@/features/stall/lib/scene';
 import { potCapacityFor, upgradeMaxLevel } from '@/features/stall/lib/upgrades';
 import {
   STAFF_ROLES,
@@ -281,6 +282,10 @@ export default function StallPage() {
   // Rush hour (Gói H5, mục 5.5): the middle of the shift repaints the
   // scene — warmer light, a rush banner, a livelier Nồi Nồi.
   const isRush = Boolean(stall?.shift && shiftPhaseAt(stall.shift, now) === 'rush');
+  // Evening ambience (Gói H8, mục 5.5): after 18:00 the painted stall
+  // wears a warm dusk layer; a festival shift paints its deeper night
+  // over it instead.
+  const isEvening = isEveningAt(new Date(now));
   const potCapacity = potCapacityFor(stall?.upgrades.pot ?? 0);
   const cheapestDish = useMemo(() => {
     let best: Recipe | null = null;
@@ -374,7 +379,14 @@ export default function StallPage() {
       <div className={styles.stageWrap}>
         <div className={styles.stage}>
           <img className={styles.scene} src={SCENES['canh-quay']} alt="" draggable={false} />
+          {/* ONE scene-layer system (mục 5.5), painted back to front:
+              base vignette → evening dusk (Gói H8) → festival night
+              (Gói H7, replaces the dusk) → rush-hour warmth (Gói H5)
+              → level + decor structure (Gói H6). UI sits above all. */}
           <div className={styles.nightShade} aria-hidden />
+          {isEvening && !stall.shift?.festival ? (
+            <div className={styles.eveningShade} aria-hidden />
+          ) : null}
           {stall.shift?.festival ? (
             <>
               <div className={styles.festivalShade} aria-hidden />
