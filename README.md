@@ -396,6 +396,18 @@ Theo **Qui ước Studio (AGENTS.md §11)**, dự án này **có sử dụng AI*
 
 ---
 
+## 🎮 Gói Game-Shell — khu người chơi thành một tựa game (2026-11-20)
+
+Toàn bộ khu người chơi bỏ khung web (sidebar/navbar/breadcrumb/landing) và chạy trong **khung cảnh game**: nền cảnh lễ hội, HUD plaque gỗ (ví xu/cok đếm số động, xu bay về ví, chuông, mề đay nhạc/ngôn ngữ/menu), thanh điều hướng gỗ ở đáy và menu game dạng lưới icon mở từ mề đay menu — mọi điểm đến của sidebar cũ đều tới được trong tối đa 2 chạm (checklist kiểm bằng bot). Route `/` là **màn hình tiêu đề game**: biển treo dây + linh vật, nút CHƠI vàng lớn, thẻ gỗ hai bên.
+
+- **Chuẩn thị giác bắt buộc:** hai ảnh xem trước đã duyệt (`preview-title-screen`, `preview-home-final`) là bản vẽ đích cao nhất cho màn hình tiêu đề và trang chủ. Kỹ thuật đạt chuẩn: **tái dùng chính tranh đích làm asset** (biển, nút CHƠI, thẻ gỗ, dây đèn — chữ in sẵn được xoá, chữ thật/chữ động đặt lên trên; nền mận/kem của asset được tách trong suốt bằng flood-key để asset treo như vật thể thật trong cảnh). Các màn còn lại áp cùng phong cách tranh phẳng viền nâu đậm: 50 tranh món sinh lại đồng nhất một nét, bộ khung/nút/icon vẽ, 6 dáng Nồi Nồi, font Coiny + Baloo 2 + Be Vietnam Pro tự host, DishGradeFrame 5 cấp có ngọc theo cấp.
+- **Chuyển động:** framer-motion (khoá 11.11.17) + CSS — đèn lồng/cờ đung đưa lệch pha, hạt vàng bay (dừng khi tab ẩn), panel/nút nảy lò xo, thẻ nhấc khi rê chuột, số ví chạy số; tôn trọng `prefers-reduced-motion`.
+- **Luật khung hình (bắt buộc mọi màn): KHÔNG DƯ — KHÔNG THIẾU — CÂN ĐỐI.** Khung và nội dung khớp nhau ở mọi kích thước: không khoảng trống chết, không cột lệch chiều cao, không phần tử bị cắt/tràn/bị HUD che. Nghiệm thu bằng ảnh chụp TOÀN KHUNG ở ≥2 kích thước desktop + 1 mobile cho từng màn, soi đủ ba tiêu chí.
+- **Chơi thử khách:** nút CHƠI vào ngay bằng hồ sơ khách local (cờ `guest` trong dữ liệu). Phạm vi khách nằm trong MỘT cấu hình duy nhất `src/features/auth/guest-scope.ts`: khách được trang chủ (hub), Công thức + vòng học, Bản đồ Huế, Quầy + Chợ; mọi khu còn lại (album, kỹ năng, nhiệm vụ/điểm danh, sinh tồn, hộp bí ẩn, online, bảng xếp hạng, thành tích, hồ sơ) hiện panel gỗ "Cần tài khoản" thay vì điều hướng vào trong. Khách không xuất hiện trên mọi bảng xếp hạng. Đăng nhập/đăng ký về sau **hợp nhất tiến độ khách theo luật union** (lịch sử hợp nhất, ví lấy max, không xoá dữ liệu tài khoản) và mở khoá toàn bộ.
+- Luật chơi, dữ liệu, `localStorage` và `src/lib/score.ts` không đổi (diff `score.ts` = 0). Khu Admin/Editor/Support giữ khung riêng tiết chế như trước.
+
+---
+
 ## 📞 Liên hệ
 
 | Thông tin | Chi tiết |
