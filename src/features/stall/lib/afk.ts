@@ -1,4 +1,4 @@
-import { STALL_VOLUME } from '@/features/stall/lib/pricing-sell';
+import { shiftDurationMs, shiftQuotaForStars } from '@/features/stall/lib/pricing-sell';
 import { rankForOrders, type StaffRole } from '@/features/stall/lib/support';
 import type { StaffMember } from '@/features/stall/types';
 
@@ -58,11 +58,18 @@ export function afkEfficiencyFor(staff: StaffMember[]): number {
 }
 
 /**
- * Mean time between AFK customers: the live shift's customer flow
- * (stall volume by stars) stretched by the efficiency — at 50% the
- * crew serves about half the customers the owner would.
+ * Mean time between AFK customers: the live shift's own mean spawn
+ * interval (shift length ÷ shift quota — the phase factors of the
+ * live rhythm average out to ≈1 over a whole shift) stretched by the
+ * efficiency, so the AFK customer rate is exactly `efficiency` × the
+ * live rate at EVERY star level (H10 balance pass, from H4–H6 play
+ * data). The old flat 90 s base drifted as stars rose: ≈47% of live
+ * at 1 star but ≈103% at 5 stars with a kỳ-cựu crew (efficiency 0.7)
+ * — AFK could out-serve live play, breaking chốt N2 (50–70%) and the
+ * plan's rule that AFK always earns less than playing in person.
  */
 export function afkCustomerIntervalMs(stars: number, efficiency: number): number {
-  const volume = STALL_VOLUME[Math.min(5, Math.max(1, stars))] ?? 1;
-  return Math.round(90_000 / (volume * Math.max(0.1, efficiency)));
+  const s = Math.min(5, Math.max(1, stars));
+  const liveIntervalMs = shiftDurationMs(s) / Math.max(1, shiftQuotaForStars(s));
+  return Math.round(liveIntervalMs / Math.max(0.1, efficiency));
 }
