@@ -3,7 +3,7 @@ import { useSyncExternalStore } from 'react';
 import type { Recipe } from '@/data/types';
 import { getJsonStorage, setJsonStorage, STORAGE_KEYS } from '@/lib/storage';
 import { dishGradeFor } from '@/features/recipes/lib/grade';
-import { sellableRecipes } from '@/features/journey/lib/journey';
+import { bestStarsByRecipe, sellableRecipes } from '@/features/journey/lib/journey';
 import type { PublicUser } from '@/features/auth/types';
 import { addDays, dayDiff, todayKey } from '@/features/stall/lib/day';
 import { dailyPriceFor, shelfLifeDaysFor } from '@/features/stall/lib/market';
@@ -25,9 +25,28 @@ import {
   rollQty,
   rollTier,
 } from '@/features/stall/lib/orders';
-import type { DiagnosisKey } from '@/features/stall/lib/diagnosis';
+import { diagnoseBackgroundPot, type DiagnosisKey } from '@/features/stall/lib/diagnosis';
+import {
+  applicableRequestsFor,
+  type RequestKind,
+} from '@/features/stall/lib/substitutions';
+import {
+  pickyRateForStars,
+  REQUEST_OK_TIP_FACTOR,
+  shiftPhaseAt,
+  spawnFactorForPhase,
+} from '@/features/stall/lib/rush';
+import {
+  backgroundLevelFor,
+  backgroundPotDurationMs,
+  nextUpgradePrice,
+  potCapacityFor,
+  rollBackgroundQuality,
+  type UpgradeKind,
+} from '@/features/stall/lib/upgrades';
 import {
   emptyStallState,
+  type BackgroundPot,
   type CookedBatch,
   type IngredientLot,
   type ShiftSummary,
@@ -83,12 +102,27 @@ function applySpoilage(state: StallUserState, today: string): StallUserState {
   };
 }
 
+/**
+ * Fill fields a legacy record predates (Gói H5 added pots + kitchen
+ * upgrades) with safe defaults, so old players keep everything they
+ * had and simply start with no pots simmering and the starter kit.
+ */
+function withDefaults(state: StallUserState, today: string): StallUserState {
+  const base = emptyStallState(today);
+  return {
+    ...base,
+    ...state,
+    pots: state.pots ?? [],
+    upgrades: { ...base.upgrades, ...(state.upgrades ?? {}) },
+  };
+}
+
 export function loadStallState(userId: string): StallUserState {
   const shape = loadAll();
   const today = todayKey();
   const existing = shape.byUser[userId];
   if (!existing) return emptyStallState(today);
-  const rolled = applySpoilage({ ...emptyStallState(today), ...existing }, today);
+  const rolled = applySpoilage(withDefaults(existing, today), today);
   if (rolled !== existing) {
     shape.byUser[userId] = rolled;
     saveAll(shape);
@@ -99,7 +133,7 @@ export function loadStallState(userId: string): StallUserState {
 function update(userId: string, fn: (draft: StallUserState) => StallUserState): StallUserState {
   const shape = loadAll();
   const today = todayKey();
-  const current = shape.byUser[userId] ?? emptyStallState(today);
+  const current = withDefaults(shape.byUser[userId] ?? emptyStallState(today), today);
   const next = fn(applySpoilage(current, today));
   shape.byUser[userId] = next;
   saveAll(shape);
@@ -287,6 +321,15 @@ function spawnCustomer(
   );
   let tableIndex = 0;
   while (usedTables.has(tableIndex)) tableIndex += 1;
+  // Picky customers (Gói H5, mục 6.3): a share of arrivals — growing
+  // with the stall's stars — carry a special request the dish can
+  // actually conflict with; the substitution options themselves are
+  // derived from the recipe wherever they are displayed.
+  const applicable = applicableRequestsFor(dish);
+  let requestKind: RequestKind | undefined;
+  if (applicable.length > 0 && Math.random() < pickyRateForStars(stars)) {
+    requestKind = applicable[Math.floor(Math.random() * applicable.length)]?.kind;
+  }
   return {
     id: `cust-${crypto.randomUUID()}`,
     tier,
@@ -296,6 +339,7 @@ function spawnCustomer(
     patienceMs: patienceForTier(tier, Math.random()),
     state: 'waiting',
     tableIndex,
+    ...(requestKind ? { requestKind } : {}),
   };
 }
 
@@ -320,6 +364,28 @@ export function tickStall(
     if (keptCustomers.length !== next.customers.length) {
       next = { ...next, customers: keptCustomers };
     }
+
+    // Background pots (Gói H5): a pot whose simmer time is up lands on
+    // the counter as a batch, eating its FIFO lots exactly like an
+    // active cook. Pots finish even between shifts — the stove does
+    // not care whether the shutters are open.
+    const duePots = next.pots.filter((pot) => now >= pot.readyAt);
+    if (duePots.length > 0) {
+      let working = next;
+      for (const pot of duePots) {
+        const recipe = recipes.find((r) => r.id === pot.recipeId);
+        if (!recipe) continue;
+        working = consumeToBatch(working, {
+          recipe,
+          qty: pot.qty,
+          qualityScore: pot.qualityScore,
+          level: pot.level,
+          diagnosis: pot.diagnosis,
+        });
+      }
+      next = { ...working, pots: next.pots.filter((pot) => now < pot.readyAt) };
+    }
+
     const shift = next.shift;
     if (!shift) return next;
 
@@ -363,13 +429,16 @@ export function tickStall(
       if (customer) {
         const duration = next.shift.endsAt - next.shift.startedAt;
         const interval = duration / Math.max(1, next.shift.spawnQuota);
+        // Rush hour (Gói H5, mục 5.8): the middle of the shift spawns
+        // at less than half the base interval; the ends stay quiet.
+        const phase = shiftPhaseAt(next.shift, now);
         next = {
           ...next,
           customers: [...next.customers, customer],
           shift: {
             ...next.shift,
             spawned: next.shift.spawned + 1,
-            nextSpawnAt: now + interval * (0.7 + Math.random() * 0.6),
+            nextSpawnAt: now + interval * spawnFactorForPhase(phase) * (0.7 + Math.random() * 0.6),
           },
         };
       } else {
@@ -397,54 +466,128 @@ export interface FinishCookInput {
   qualityScore: number;
   level: CookedBatch['level'];
   diagnosis: DiagnosisKey[];
+  /** Gói H5: how the cook handled the order's special request. */
+  requestOutcome?: CookedBatch['requestOutcome'];
 }
 
 /**
- * A finished sell cook: consume the batch's ingredients FIFO from the
+ * The one place a batch is born: consume its ingredients FIFO from the
  * pantry lots (the batch's real cost is what those lots actually cost —
  * mục 6.12) and put the batch on the counter. A failed run still eats
  * its ingredients: a spoiled batch is a lost cost, per the capital law.
  * Units missing from the pantry (the pantry was checked before the run;
- * this is only a safety net) are booked at today's market price.
+ * this is only a safety net) are booked at today's market price. Used
+ * by the active sell cook and by background pots alike (Gói H5).
  */
-export function finishCook(userId: string, input: FinishCookInput): CookedBatch {
+function consumeToBatch(draft: StallUserState, input: FinishCookInput): StallUserState {
   const today = todayKey();
+  const lots = draft.lots.map((lot) => ({ ...lot }));
+  let cost = 0;
+  for (const ref of input.recipe.ingredients) {
+    let need = input.qty;
+    for (const lot of lots) {
+      if (need <= 0) break;
+      if (lot.ingredientId !== ref.ingredientId || lot.qty <= 0) continue;
+      const take = Math.min(need, lot.qty);
+      lot.qty -= take;
+      cost += take * lot.unitPrice;
+      need -= take;
+    }
+    if (need > 0) {
+      cost += need * dailyPriceFor(ref.ingredientId, today);
+    }
+  }
+  const batch: CookedBatch = {
+    id: `batch-${crypto.randomUUID()}`,
+    recipeId: input.recipe.id,
+    qty: input.qty,
+    qualityScore: input.qualityScore,
+    level: input.level,
+    diagnosis: [...input.diagnosis],
+    cost,
+    cookedAt: Date.now(),
+    ...(input.requestOutcome ? { requestOutcome: input.requestOutcome } : {}),
+  };
+  return {
+    ...draft,
+    lots: lots.filter((lot) => lot.qty > 0),
+    batches: [...draft.batches, batch],
+  };
+}
+
+/** A finished active sell cook becomes a counter batch. */
+export function finishCook(userId: string, input: FinishCookInput): CookedBatch {
   let batch: CookedBatch | null = null;
   update(userId, (draft) => {
-    const lots = draft.lots.map((lot) => ({ ...lot }));
-    let cost = 0;
-    for (const ref of input.recipe.ingredients) {
-      let need = input.qty;
-      for (const lot of lots) {
-        if (need <= 0) break;
-        if (lot.ingredientId !== ref.ingredientId || lot.qty <= 0) continue;
-        const take = Math.min(need, lot.qty);
-        lot.qty -= take;
-        cost += take * lot.unitPrice;
-        need -= take;
-      }
-      if (need > 0) {
-        cost += need * dailyPriceFor(ref.ingredientId, today);
-      }
-    }
-    batch = {
-      id: `batch-${crypto.randomUUID()}`,
-      recipeId: input.recipe.id,
-      qty: input.qty,
-      qualityScore: input.qualityScore,
-      level: input.level,
-      diagnosis: [...input.diagnosis],
-      cost,
-      cookedAt: Date.now(),
-    };
-    return {
-      ...draft,
-      lots: lots.filter((lot) => lot.qty > 0),
-      batches: [...draft.batches, batch],
-    };
+    const next = consumeToBatch(draft, input);
+    batch = next.batches[next.batches.length - 1] ?? null;
+    return next;
   });
   if (!batch) throw new Error('finishCook produced no batch');
   return batch;
+}
+
+/**
+ * Put an accepted order on a background pot (Gói H5): the pot simmers
+ * in real time while the player cooks something else on the main
+ * stove. Legal only when the order is accepted, the pantry covers the
+ * batch, a pot slot is free, the order is not already simmering, and
+ * no ready batch for it waits on the counter. The quality is rolled
+ * now (lib/upgrades) and the lots are eaten when the pot lands.
+ * Returns the started pot, or null when the start is not legal.
+ */
+export function startBackgroundPot(
+  userId: string,
+  user: PublicUser,
+  customerId: string,
+  recipes: Recipe[],
+  now: number,
+): BackgroundPot | null {
+  let pot: BackgroundPot | null = null;
+  update(userId, (draft) => {
+    const customer = draft.customers.find((c) => c.id === customerId);
+    if (!customer || customer.state !== 'accepted') return draft;
+    if (draft.pots.some((p) => p.customerId === customerId)) return draft;
+    if (draft.pots.length >= potCapacityFor(draft.upgrades.pot)) return draft;
+    const recipe = recipes.find((r) => r.id === customer.recipeId);
+    if (!recipe) return draft;
+    if (!canCookBatch(draft, recipe, customer.qty)) return draft;
+    const alreadyReady = draft.batches.some(
+      (b) => b.recipeId === customer.recipeId && b.qty === customer.qty && b.level !== 'spoiled',
+    );
+    if (alreadyReady) return draft;
+    const bestStars = bestStarsByRecipe(user).get(recipe.id) ?? 0;
+    const qualityScore = rollBackgroundQuality(bestStars, draft.upgrades.stove, Math.random());
+    pot = {
+      id: `pot-${crypto.randomUUID()}`,
+      customerId,
+      recipeId: recipe.id,
+      qty: customer.qty,
+      startedAt: now,
+      readyAt: now + backgroundPotDurationMs(recipe.difficulty, draft.upgrades.stove),
+      qualityScore,
+      level: backgroundLevelFor(qualityScore),
+      diagnosis: diagnoseBackgroundPot(qualityScore),
+    };
+    return { ...draft, pots: [...draft.pots, pot] };
+  });
+  return pot;
+}
+
+/**
+ * Buy the next level of a kitchen line (Gói H5). Returns the price the
+ * caller must deduct from the xu wallet through AuthContext (the
+ * wallets keep a single writer), or null when the line is maxed.
+ */
+export function buyUpgrade(userId: string, kind: UpgradeKind): number | null {
+  let paid: number | null = null;
+  update(userId, (draft) => {
+    const price = nextUpgradePrice(kind, draft.upgrades[kind]);
+    if (price === null) return draft;
+    paid = price;
+    return { ...draft, upgrades: { ...draft.upgrades, [kind]: draft.upgrades[kind] + 1 } };
+  });
+  return paid;
 }
 
 export interface ServeResult {
@@ -486,11 +629,16 @@ export function serveBatch(
       bestStars,
       level: batch.level,
     });
-    const tip = tipForBatch({
+    let tip = tipForBatch({
       price,
       level: batch.level,
       patienceLeftRatio: patienceLeftRatio(customer, now),
     });
+    // A picky request honoured by the book tips extra (Gói H5, Phần 11:
+    // the best tip comes when the order is fast AND right).
+    if (batch.requestOutcome === 'ok') {
+      tip = Math.round(tip * REQUEST_OK_TIP_FACTOR);
+    }
     const cok = customer.tier === 'vip' ? cokForServe(batch.level) : 0;
     const exp = band.exp;
     result = { price, tip, totalXu: price + tip, cok, exp };
