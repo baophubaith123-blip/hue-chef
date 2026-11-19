@@ -175,7 +175,7 @@ export default function OnlineVisitStallPage() {
         </div>
 
         <Link to="/online/visit" className={styles.backLink}>
-          {o.backToHub}
+          {o.backToVisitList}
         </Link>
 
         <OnlineGate session={session}>

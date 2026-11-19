@@ -1974,6 +1974,7 @@ export const en: I18nDictionary = {
     visitCardBody: 'See another player\'s stall: its level, stars, decorations and the menu on sale.',
     openBtn: 'Open',
     backToHub: 'Back to the online arena',
+    backToVisitList: 'Back to the visit list',
     loading: 'Loading…',
     loadError: 'Could not load online data — check your connection and retry.',
     playersTitle: 'Online players',

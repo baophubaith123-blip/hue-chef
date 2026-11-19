@@ -1975,6 +1975,7 @@ export const vi: I18nDictionary = {
     visitCardBody: 'Xem quầy hàng của người chơi khác: cấp quầy, sao, trang trí và thực đơn đang bán.',
     openBtn: 'Mở',
     backToHub: 'Về khu vực online',
+    backToVisitList: 'Về danh sách ghé thăm',
     loading: 'Đang tải…',
     loadError: 'Chưa tải được dữ liệu online — kiểm tra mạng rồi thử lại.',
     playersTitle: 'Người chơi online',

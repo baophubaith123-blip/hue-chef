@@ -1705,6 +1705,7 @@ export interface I18nDictionary {
     visitCardBody: string;
     openBtn: string;
     backToHub: string;
+    backToVisitList: string;
     loading: string;
     loadError: string;
     playersTitle: string;
