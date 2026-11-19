@@ -623,10 +623,14 @@ export function tickStall(
       }
     }
 
-    // Patience expiry → lost orders.
+    // Patience expiry → lost orders. The counters MUST start from
+    // next.shift — the crew passes above may already have booked
+    // revenue/EXP into it this very tick (the server's auto-serve);
+    // starting from the tick-opening `shift` snapshot would silently
+    // erase those bookings every second.
     let exp = next.exp;
-    let lost = shift.lost;
-    let expGained = shift.expGained;
+    let lost = next.shift?.lost ?? shift.lost;
+    let expGained = next.shift?.expGained ?? shift.expGained;
     const expired = next.customers.map((c) => {
       if (
         (c.state === 'waiting' || c.state === 'accepted') &&
@@ -640,7 +644,12 @@ export function tickStall(
       return c;
     });
     if (expired !== next.customers) {
-      next = { ...next, customers: expired, exp, shift: { ...shift, lost, expGained } };
+      next = {
+        ...next,
+        customers: expired,
+        exp,
+        shift: { ...(next.shift ?? shift), lost, expGained },
+      };
     }
 
     // Shift clock.
