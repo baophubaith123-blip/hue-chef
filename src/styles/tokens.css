@@ -64,6 +64,12 @@
   --td-success-bright: #22c55e;
   --td-danger: #b42318;
   --td-warning: #9a5b00;
+  /* Strong text variants for soft-tinted chips on paper (H10 contrast
+     pass): --td-success/--td-warning on their own 12-15% washes over
+     paper measure 3.7-4.3:1; these darker shades reach 5.8-7:1 while
+     staying in the same green/amber families. */
+  --td-success-strong: #14532d;
+  --td-warning-strong: #7a4a00;
 
   /* Page + scene surfaces (swap by theme) */
   --td-page-bg: #faf5ef;

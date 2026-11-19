@@ -73,6 +73,14 @@
   color: var(--color-danger);
 }
 
+/* Dark mode: the ban chip sits on the table's dark surface; #ef4444 on
+   its own dark red wash measured 3.43:1 — a lighter red of the same
+   family reaches ~5.9:1 (H10 contrast pass). */
+[data-theme='dark'] .type_ban {
+  background: rgba(239, 68, 68, 0.22);
+  color: #fca5a5;
+}
+
 .type_warning {
   background: var(--color-warning-soft);
   color: var(--color-warning);
@@ -113,7 +121,9 @@
   width: 36px;
   height: 36px;
   border-radius: 999px;
-  background: var(--color-primary);
+  /* Pinned brick: --color-primary flips to light #e8884d in dark mode,
+     where white initials measured 2.61:1 (H10 contrast pass). */
+  background: #b03e26;
   color: var(--color-primary-contrast);
   display: flex;
   align-items: center;

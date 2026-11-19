@@ -107,12 +107,12 @@
 
 .chip_pending {
   background: rgba(233, 162, 59, 0.15);
-  color: var(--td-warning, #9a5b00);
+  color: var(--td-warning-strong, #7a4a00);
 }
 
 .chip_approved {
   background: rgba(21, 128, 61, 0.12);
-  color: var(--td-success, #15803d);
+  color: var(--td-success-strong, #14532d);
 }
 
 .chip_rejected {

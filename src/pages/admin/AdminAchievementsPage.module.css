@@ -160,6 +160,17 @@
   border: 1px dashed var(--td-gold);
   border-radius: var(--td-radius-paper);
   background: var(--td-paper-deep);
+  /* The section sits on paper in BOTH themes, so its text must use the
+     fixed paper tokens — the page-text tokens flip to cream in dark
+     mode and vanished on the paper background (H10 contrast pass). */
+  color: var(--td-paper-text);
+}
+
+.editorPendingSection .intro {
+  color: var(--td-paper-text-muted);
+}
+.editorPendingSection .sectionTitle {
+  color: var(--td-paper-text);
 }
 
 .sectionTitle {

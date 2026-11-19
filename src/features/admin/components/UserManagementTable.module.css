@@ -152,10 +152,25 @@
 }
 
 .deleteBtn {
-  color: var(--color-danger);
+  /* The shared ghost Button paints its own paper background in both
+     themes, while --color-danger flips to bright #ef4444 in dark mode
+     (3.28:1 on paper). --td-danger is the same red family at a depth
+     that passes on paper in both themes (H10 contrast pass). */
+  color: var(--td-danger);
 }
 
 .deleteBtn:hover:not(:disabled) {
-  color: var(--color-danger);
-  background: var(--color-danger-soft);
+  color: var(--td-danger);
+  background: var(--td-brick-soft);
+}
+
+/* The table surface flips dark, where the base red is too dark for
+   text — lift the banned/warning reds in dark theme. */
+[data-theme='dark'] .statusBanned {
+  background: rgba(239, 68, 68, 0.22);
+  color: #fca5a5;
+}
+
+[data-theme='dark'] .warningHigh {
+  color: #fca5a5;
 }

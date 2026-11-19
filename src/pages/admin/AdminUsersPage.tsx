@@ -172,8 +172,8 @@ function StatCard({
   };
   const fg: Record<string, string> = {
     muted: 'var(--td-paper-text-muted)',
-    warning: 'var(--td-warning)',
-    success: 'var(--td-success)',
+    warning: 'var(--td-warning-strong)',
+    success: 'var(--td-success-strong)',
   };
   return (
     <div

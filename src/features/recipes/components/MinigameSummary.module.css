@@ -206,3 +206,53 @@
 .explanation {
   color: var(--paper-text-muted, #7a5c38);
 }
+
+/* ===== H10 — complete the paper migration of this component =====
+   The Phase 16 block above moved the card to fixed paper, but several
+   children kept the flipping --color-* tokens: in dark mode the
+   question/meta text flipped cream on the light card (1.0-2.0:1) and
+   the details box flipped dark under paper-brown text. Everything
+   inside the paper card now uses the fixed paper palette; the two
+   filled type badges keep white text, so their backgrounds are pinned
+   to shades that pass in both themes. */
+.question {
+  color: var(--paper-text, #43301b);
+}
+
+.metaGroup {
+  color: var(--paper-text-muted, #7a5c38);
+}
+
+.details {
+  background: var(--paper-deep, #f7e8c6);
+  border-color: var(--wood, #b57e40);
+}
+
+.actionTag {
+  background: var(--paper, #fff6e0);
+  border-color: var(--wood, #b57e40);
+  color: var(--paper-text-muted, #7a5c38);
+}
+
+.ingredientHighlight {
+  color: var(--paper-text, #43301b);
+}
+
+.correctActionBadge {
+  background: rgba(21, 128, 61, 0.12);
+  color: #14532d;
+}
+
+.correctOption {
+  background: rgba(21, 128, 61, 0.12);
+  border-color: #15803d;
+  color: #14532d;
+}
+
+[data-theme='dark'] .typeQuiz {
+  background: #2563eb;
+}
+
+[data-theme='dark'] .typeAction {
+  background: #b03e26;
+}

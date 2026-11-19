@@ -11,7 +11,10 @@
 .label {
   font-size: 0.85rem;
   font-weight: 600;
-  color: var(--color-text);
+  /* FileUpload is used inside paper cards (editor + support); the
+     flipping --color-text turned cream on paper in dark mode
+     (H10 contrast pass). */
+  color: var(--paper-text, #43301b);
 }
 
 .drop {
@@ -115,8 +118,8 @@
 .error {
   margin: 0;
   font-size: 0.8rem;
-  color: var(--color-danger);
-  background: var(--color-danger-soft);
+  color: var(--td-danger, #b42318);
+  background: var(--td-brick-soft, rgba(176, 62, 38, 0.12));
   padding: 0.4rem 0.6rem;
   border-radius: var(--radius-md);
 }

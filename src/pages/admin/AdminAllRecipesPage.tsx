@@ -72,7 +72,7 @@ export default function AdminAllRecipesPage() {
   const getStatusStyle = (status: RecipeStatus) => {
     switch (status) {
       case 'approved':
-        return { background: 'rgba(21, 128, 61, 0.12)', color: 'var(--td-success)' };
+        return { background: 'rgba(21, 128, 61, 0.12)', color: 'var(--td-success-strong)' };
       case 'rejected':
         return { background: 'var(--td-brick-soft)', color: 'var(--td-danger)' };
       case 'pending':

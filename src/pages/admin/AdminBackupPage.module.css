@@ -32,7 +32,7 @@
 .warningBox {
   padding: 0.85rem 1rem;
   background: rgba(233, 162, 59, 0.15);
-  color: var(--td-warning);
+  color: var(--td-warning-strong);
   border: 1px solid var(--td-gold);
   border-radius: var(--td-radius-button);
   font-size: 0.9rem;

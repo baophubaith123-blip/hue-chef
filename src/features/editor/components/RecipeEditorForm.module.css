@@ -239,3 +239,41 @@
   color: var(--color-text-muted, #7a6455);
   margin: 0;
 }
+
+/* ===== H10 — paper-context text colors =====
+   The form renders inside the editor's paper cards (light in both
+   themes). Text that sits directly on the card must use the fixed
+   paper palette: the flipping --color-* tokens turned cream/bright on
+   paper in dark mode (1.9-2.3:1). Fields keep their own flipping
+   surface+text pairing (dark inputs in dark mode) — only the
+   on-card text is pinned here. */
+.form {
+  color: var(--paper-text, #43301b);
+}
+
+.label,
+/* .stepFieldLabel / .stepHint / .chipLabel intentionally NOT pinned:
+   the step-editor blocks sit on a flipping panel, so they keep their
+   original flipping --color-text / --color-text-muted declarations. */
+
+.sectionTitle {
+  color: #b03e26;
+}
+
+.suggestBtn {
+  color: #b03e26;
+}
+
+.hint {
+  color: var(--td-warning, #9a5b00);
+}
+
+.error {
+  color: var(--td-danger, #b42318);
+}
+
+/* The toggle rows paint their own flipping surface, so their text
+   keeps the flipping pairing instead of the pinned form color. */
+.toggleRow {
+  color: var(--color-text);
+}

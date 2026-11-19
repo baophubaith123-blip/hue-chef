@@ -95,8 +95,8 @@ const TONE: Record<string, string> = {
 
 const TONE_TEXT: Record<string, string> = {
   muted: 'var(--td-paper-text-muted)',
-  warning: 'var(--td-warning)',
-  success: 'var(--td-success)',
+  warning: 'var(--td-warning-strong)',
+  success: 'var(--td-success-strong)',
   danger: 'var(--td-danger)',
 };
 
