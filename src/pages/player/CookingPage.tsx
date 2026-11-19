@@ -25,6 +25,7 @@ import { SeasonBar, type SeasonOutcome } from '@/features/cooking/components/run
 import { StageHelp } from '@/features/cooking/components/run/StageHelp';
 import { GestureStep } from '@/features/gestures/GestureStep';
 import { gestureForStep } from '@/data/gesture-map';
+import { NoiNoi } from '@/components/theme-d';
 import { BOSS_JUDGE_IMAGE } from '@/components/theme-d/assets';
 import { chapterById, dishesOfChapter } from '@/features/journey/lib/chapters';
 import { BOSS_PASS_STARS, bestStarsByRecipe, bossStateFor } from '@/features/journey/lib/journey';
@@ -35,6 +36,7 @@ import {
   type DiagnosisInput,
   type DiagnosisKey,
 } from '@/features/stall/lib/diagnosis';
+import { patienceLeftRatio } from '@/features/stall/lib/orders';
 import { priceForBatch, qualityBandForScore } from '@/features/stall/lib/pricing-sell';
 import {
   requestForKind,
@@ -121,7 +123,12 @@ export default function CookingPage() {
   const kitchen = stall?.upgrades ?? { knife: 0, stove: 0, pot: 0 };
   const boostActive = !isPreview && Boolean(user);
   const zoneScaleForGesture = (gesture: ReturnType<typeof gestureForStep>): number =>
-    boostActive ? gestureZoneScale(gesture, skillTiers, kitchen) : 1;
+    boostActive
+      ? gestureZoneScale(gesture, skillTiers, kitchen, {
+          slicer: stall?.gear?.slicer ?? false,
+          mixer: stall?.gear?.mixer ?? false,
+        })
+      : 1;
   const runTimeScale = boostActive ? gestureTimeScale(skillTiers) : 1;
   const runSeasonZoneScale = boostActive ? seasonZoneScale(skillTiers) : 1;
   // Picky-customer substitution (Gói H5, mục 6.3): the applicable
@@ -840,6 +847,67 @@ export default function CookingPage() {
     isSellMode && sellRequest ? (
       <SubstitutionPanel request={sellRequest} chosen={subChoice} onConfirm={handleSubConfirm} />
     ) : null;
+  // Nồi Nồi assistant (Gói H6, mục 8.2 ý 14): a small Theme D hint bar
+  // under the stage header. Hint density thins out as the player levels
+  // up — full (levels 1–3), light (4–6), minimal (7+) — and warnings
+  // always outrank step hints. Never shown on a finished run (the
+  // result panel takes over) or in preview.
+  const FIRE_GESTURE_IDS: ReadonlyArray<ReturnType<typeof gestureForStep>> = [
+    'giu-lua',
+    'chien',
+    'xao',
+    'hap',
+    'luoc',
+    'day-nap',
+  ];
+  const hintLevel: 'full' | 'light' | 'minimal' =
+    (user?.level ?? 1) <= 3 ? 'full' : (user?.level ?? 1) <= 6 ? 'light' : 'minimal';
+  const patienceThreshold = hintLevel === 'full' ? 0.4 : hintLevel === 'light' ? 0.3 : 0.2;
+  const sessionPhaseForHint = session.phase;
+  let assistantText: string | null = null;
+  let assistantPose: 'hoang' | 'chi-tay' = 'chi-tay';
+  if (!showResult && !isPreview) {
+    if (
+      isSellMode &&
+      sellCustomer &&
+      patienceLeftRatio(sellCustomer, sellNow) < patienceThreshold
+    ) {
+      assistantText = dict.cooking.assistant.patienceWarning;
+      assistantPose = 'hoang';
+    } else if (
+      hintLevel !== 'minimal' &&
+      sessionPhaseForHint === 'running' &&
+      activeStep &&
+      FIRE_GESTURE_IDS.includes(gestureForStep(activeStep))
+    ) {
+      assistantText = dict.cooking.assistant.fireCaution;
+      assistantPose = 'hoang';
+    } else if (hintLevel === 'full') {
+      if (sessionPhaseForHint === 'running' && activeStep) {
+        assistantText = dict.cooking.assistant.nextStep(activeStep.title);
+        assistantPose = 'chi-tay';
+      } else if (
+        sessionPhaseForHint === 'market' ||
+        sessionPhaseForHint === 'catch' ||
+        sessionPhaseForHint === 'finish' ||
+        sessionPhaseForHint === 'minigames'
+      ) {
+        assistantText = dict.cooking.assistant.stageHints[sessionPhaseForHint];
+        assistantPose = 'chi-tay';
+      }
+    }
+  }
+  const assistantBar = assistantText ? (
+    <div className={styles.assistantBar}>
+      <NoiNoi
+        pose={assistantPose}
+        size={54}
+        alt={dict.stall.noiNoiAlt}
+        className={styles.assistantMascot}
+      />
+      <p className={styles.assistantText}>{assistantText}</p>
+    </div>
+  ) : null;
   const bossNote =
     bossChapter && showResult
       ? session.phase === 'success' && session.stars >= BOSS_PASS_STARS
@@ -967,6 +1035,7 @@ export default function CookingPage() {
       {bossBanner}
       {sellBanner}
       {subPanel}
+      {assistantBar}
     </>
   );
 
@@ -1043,6 +1112,7 @@ export default function CookingPage() {
         {bossBanner}
         {sellBanner}
       {subPanel}
+      {assistantBar}
 
         <MinigameRunner
           minigames={session.recipe.minigames ?? []}
@@ -1105,6 +1175,7 @@ export default function CookingPage() {
       {bossBanner}
       {sellBanner}
       {subPanel}
+      {assistantBar}
       {seasonToast ? <div className={styles.seasonToast}>{seasonToast}</div> : null}
 
       <div className={styles.gridWrap}>

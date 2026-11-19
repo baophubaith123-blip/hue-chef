@@ -508,3 +508,29 @@
   line-height: 1.45;
   color: var(--td-cream, #faf5ef);
 }
+
+/* Nồi Nồi assistant bar (Gói H6, mục 8.2 ý 14) — pinned paper tokens
+   only, so text stays readable on the paper in both themes. */
+.assistantBar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  background: var(--td-paper, #fff6e0);
+  color: var(--td-paper-text, #43301b);
+  border: 2px solid var(--td-paper-edge, #e8d5ae);
+  border-radius: 12px;
+  padding: 6px 12px 6px 8px;
+}
+
+.assistantMascot {
+  flex-shrink: 0;
+}
+
+.assistantText {
+  margin: 0;
+  font-size: 13.5px;
+  font-weight: 600;
+  line-height: 1.45;
+  color: var(--td-paper-text, #43301b);
+}
