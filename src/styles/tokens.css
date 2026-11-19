@@ -82,6 +82,12 @@
   /* Typography */
   --td-font-display: 'Playfair Display', 'Merriweather', Georgia, serif;
   --td-font-body: 'Be Vietnam Pro', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  /* Game-shell type system (Gói Game-Shell): Coiny for big display,
+     Baloo 2 for buttons/headings, Be Vietnam Pro for body copy. Scoped
+     overrides live under .game-scope so admin/editor keep their serif. */
+  --td-font-game-display: 'Coiny', 'Baloo 2', system-ui, sans-serif;
+  --td-font-game: 'Baloo 2', 'Be Vietnam Pro', system-ui, sans-serif;
+  --td-font-game-body: 'Be Vietnam Pro', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   --td-text-xs: 12px;
   --td-text-sm: 14px;
   --td-text-md: 16px;
