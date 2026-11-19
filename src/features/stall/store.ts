@@ -62,7 +62,10 @@ function saveAll(shape: StallStoreShape): void {
 
 /** Write off lots whose last usable day has passed; returns notices. */
 function applySpoilage(state: StallUserState, today: string): StallUserState {
-  if (state.lastDay === today) return state;
+  // Scan on every load/tick, not only on the first tick of a new day: a
+  // lot whose expiry day has passed is written off as soon as any stall
+  // activity observes it (notices are added only for lots actually
+  // removed, so repeated scans never duplicate them).
   const notices = [...state.spoiledNotices];
   const kept: IngredientLot[] = [];
   for (const lot of state.lots) {
