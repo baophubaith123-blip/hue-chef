@@ -22,6 +22,7 @@ export const STORAGE_KEYS = {
   categoryMigrationV1: 'hue-chef-category-migration-v1',
   stall: 'hue-chef-stall',
   skills: 'hue-chef-skills',
+  events: 'hue-chef-events',
 } as const;
 
 export function getStorageItem(key: string): string | null {
