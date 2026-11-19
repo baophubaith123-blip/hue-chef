@@ -1,0 +1,154 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* ---------- Notice / auth card ---------- */
+
+.noticeCard,
+.authCard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+.noticeTitle {
+  margin: 0;
+  font-family: var(--td-font-display);
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--td-paper-text);
+}
+
+.noticeBody {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.6;
+  color: var(--td-paper-text-muted);
+}
+
+.formTitle {
+  margin: 0.4rem 0 0;
+  font-family: var(--td-font-display);
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--td-paper-text);
+}
+
+.doneNote {
+  margin: 0;
+  padding: 0.65rem 0.8rem;
+  background: var(--td-paper-deep);
+  border: 2px solid var(--td-ink);
+  border-radius: var(--td-radius-paper);
+  font-size: 0.92rem;
+  font-weight: 600;
+  line-height: 1.55;
+  color: var(--td-paper-text);
+}
+
+.errorNote {
+  margin: 0;
+  padding: 0.65rem 0.8rem;
+  background: var(--td-paper-deep);
+  border: 2px solid var(--td-brick, #b03e26);
+  border-radius: var(--td-radius-paper);
+  font-size: 0.92rem;
+  font-weight: 700;
+  line-height: 1.55;
+  color: var(--td-brick, #b03e26);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  margin-top: 0.2rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.fieldLabel {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--td-paper-text);
+}
+
+.input {
+  min-height: 44px;
+  padding: 0.55rem 0.75rem;
+  background: #fffdf6;
+  border: 2px solid var(--td-ink);
+  border-radius: var(--td-radius-paper);
+  font: inherit;
+  font-size: 0.95rem;
+  color: var(--td-paper-text);
+}
+
+.input:focus-visible {
+  outline: 3px solid var(--td-gold, #e9a23b);
+  outline-offset: 1px;
+}
+
+.formActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  margin-top: 0.2rem;
+}
+
+/* ---------- Signed-in status bar ---------- */
+
+.statusBar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.9rem 1.2rem;
+}
+
+.statusText {
+  flex: 1;
+  min-width: 220px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.signedInAs {
+  margin: 0;
+  font-size: 0.98rem;
+  font-weight: 800;
+  color: var(--td-paper-text);
+  overflow-wrap: anywhere;
+}
+
+.syncText {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  line-height: 1.5;
+  color: var(--td-paper-text-muted);
+}
+
+.statusActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+}
+
+@media (max-width: 760px) {
+  .statusActions {
+    width: 100%;
+  }
+
+  .formActions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

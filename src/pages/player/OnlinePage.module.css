@@ -1,0 +1,144 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding-bottom: 3rem;
+}
+
+/* Page head — big hanging wooden sign (same pattern as SurvivalPage). */
+.head {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  background: var(--td-wood-gradient, linear-gradient(180deg, #ce9550, #b57e40));
+  border: 3px solid var(--td-ink);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-chunky, 0 4px 0 rgba(74, 44, 20, 0.45));
+  padding: 1.4rem 1.75rem;
+}
+
+.title {
+  margin: 0;
+  font-family: var(--td-font-display);
+  font-size: 1.85rem;
+  font-weight: 800;
+  color: #fff6e0;
+  text-shadow: 0 2px 0 rgba(32, 15, 4, 0.45);
+}
+
+.subtitle {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #fff6e0;
+  line-height: 1.55;
+}
+
+/* ---------- Arena entry cards ---------- */
+
+.cardGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 1rem;
+}
+
+.hubCard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.cardTitle {
+  margin: 0;
+  font-family: var(--td-font-display);
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--td-paper-text);
+}
+
+.cardBody {
+  margin: 0;
+  flex: 1;
+  font-size: 0.93rem;
+  font-weight: 600;
+  line-height: 1.6;
+  color: var(--td-paper-text-muted);
+}
+
+.cardAction {
+  margin-top: 0.3rem;
+}
+
+/* ---------- Player directory ---------- */
+
+.playersCard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.stateText {
+  margin: 0;
+  font-size: 0.93rem;
+  font-weight: 600;
+  line-height: 1.6;
+  color: var(--td-paper-text-muted);
+}
+
+.playerList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+.playerRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.7rem 1rem;
+  padding: 0.8rem 0.9rem;
+  background: var(--td-paper-deep);
+  border: 2px solid var(--td-ink);
+  border-radius: var(--td-radius-paper);
+}
+
+.playerMain {
+  flex: 1;
+  min-width: 180px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem 0.7rem;
+}
+
+.playerName {
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--td-paper-text);
+  overflow-wrap: anywhere;
+}
+
+.playerLevel {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--td-paper-text-muted);
+}
+
+.playerActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+@media (max-width: 760px) {
+  .title {
+    font-size: 1.5rem;
+  }
+
+  .playerActions {
+    width: 100%;
+  }
+}

@@ -1,0 +1,114 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding-bottom: 3rem;
+}
+
+/* Page head — big hanging wooden sign (same pattern as SurvivalPage). */
+.head {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  background: var(--td-wood-gradient, linear-gradient(180deg, #ce9550, #b57e40));
+  border: 3px solid var(--td-ink);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-chunky, 0 4px 0 rgba(74, 44, 20, 0.45));
+  padding: 1.4rem 1.75rem;
+}
+
+.title {
+  margin: 0;
+  font-family: var(--td-font-display);
+  font-size: 1.85rem;
+  font-weight: 800;
+  color: #fff6e0;
+  text-shadow: 0 2px 0 rgba(32, 15, 4, 0.45);
+}
+
+.subtitle {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #fff6e0;
+  line-height: 1.55;
+}
+
+.backLink {
+  align-self: flex-start;
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--td-page-text-muted);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.listCard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.cardTitle {
+  margin: 0;
+  font-family: var(--td-font-display);
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--td-paper-text);
+}
+
+.stateText {
+  margin: 0;
+  font-size: 0.93rem;
+  font-weight: 600;
+  line-height: 1.6;
+  color: var(--td-paper-text-muted);
+}
+
+.playerList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+.playerRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.7rem 1rem;
+  padding: 0.8rem 0.9rem;
+  background: var(--td-paper-deep);
+  border: 2px solid var(--td-ink);
+  border-radius: var(--td-radius-paper);
+}
+
+.playerMain {
+  flex: 1;
+  min-width: 180px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem 0.7rem;
+}
+
+.playerName {
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--td-paper-text);
+  overflow-wrap: anywhere;
+}
+
+.playerLevel {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--td-paper-text-muted);
+}
+
+@media (max-width: 760px) {
+  .title {
+    font-size: 1.5rem;
+  }
+}

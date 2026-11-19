@@ -1,0 +1,48 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 14px 16px;
+}
+
+.head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.4rem 0.8rem;
+}
+
+.title {
+  font-family: var(--td-font-display);
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--td-paper-text);
+}
+
+.score {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--td-paper-text);
+}
+
+.stage {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--td-paper-text-muted);
+}
+
+.track {
+  height: 10px;
+  background: var(--td-paper-deep);
+  border: 2px solid var(--td-ink);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.fill {
+  height: 100%;
+  background: var(--td-gold, #e9a23b);
+  transition: width 0.45s ease;
+}
