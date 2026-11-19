@@ -19,6 +19,8 @@ import { claimCheckin, useEvents } from '@/features/events/store';
 import { dishGradeFor } from '@/features/recipes/lib/grade';
 import { addDays, dayDiff, todayKey } from '@/features/stall/lib/day';
 import { useTranslation } from '@/i18n/useTranslation';
+import { celebrate } from '@/lib/juice';
+import { playSound } from '@/lib/sound';
 
 import styles from '@/features/events/components/CheckinPanel.module.css';
 
@@ -79,6 +81,10 @@ export function CheckinPanel() {
     if (!result) return;
     if (result.xu > 0) addCoins(result.xu);
     if (result.cok > 0) addCok(result.cok);
+    // Gói H8: a claimed day chimes and bursts.
+    playSound('checkin');
+    if (result.cok > 0) playSound('cok');
+    celebrate('small');
     showToast(c.claimedToast(result.cycleDay, result.xu, result.cok), 'success');
   };
 

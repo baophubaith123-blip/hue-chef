@@ -12,6 +12,8 @@ import { claimChainChest, claimQuest, useEvents } from '@/features/events/store'
 import type { QuestInstance } from '@/features/events/types';
 import { grantCard } from '@/features/stall/store';
 import { useTranslation } from '@/i18n/useTranslation';
+import { buzz, celebrate } from '@/lib/juice';
+import { playSound } from '@/lib/sound';
 import { PlayerShell } from '@/pages/player/PlayerShell';
 
 import styles from '@/pages/player/QuestsPage.module.css';
@@ -52,6 +54,9 @@ export default function QuestsPage() {
     const reward = claimQuest(user.id, scope, defId);
     if (reward === null) return;
     if (reward > 0) addCoins(reward);
+    // Gói H8: quest rewards land with a coin sound and a small burst.
+    playSound('coin');
+    celebrate('small');
     showToast(q.claimedToast(reward), 'success');
   };
 
@@ -62,6 +67,10 @@ export default function QuestsPage() {
     for (const kind of result.cards) {
       grantCard(user.id, kind);
     }
+    // Gói H8: the chain chest is a big moment — chest arp + big burst.
+    playSound('chest');
+    celebrate('big');
+    buzz([40, 40, 80]);
     showToast(q.chestToast(result.xu), 'success');
   };
 

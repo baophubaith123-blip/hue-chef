@@ -1332,6 +1332,11 @@ export default function CookingPage() {
         playSound('starup');
         celebrate('big');
         buzz([40, 40, 80]);
+      } else if (isFeastMode) {
+        // Gói H8: a village feast lands with bells and gold coins.
+        playSound('feast');
+        celebrate('coins');
+        buzz([40, 40, 80]);
       } else {
         playSound('win');
         if (!isSellMode && session.stars >= 3) celebrate('small');
@@ -1340,7 +1345,7 @@ export default function CookingPage() {
     } else {
       playSound('lose');
     }
-  }, [showResult, isPreview, session, bossNote, isSellMode]);
+  }, [showResult, isPreview, session, bossNote, isSellMode, isFeastMode]);
 
   // Feast serve/discard/retry (Gói H7): serving books the village
   // payout through the stall store; the caller applies the xu and

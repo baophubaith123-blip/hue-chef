@@ -21,6 +21,7 @@ import { isRecipeOwned } from '@/features/recipes/lib/ownership';
 import { todayKey } from '@/features/stall/lib/day';
 import { CARD_KINDS } from '@/features/stall/lib/support';
 import { useTranslation } from '@/i18n/useTranslation';
+import { playSound } from '@/lib/sound';
 import { PlayerShell } from '@/pages/player/PlayerShell';
 
 import styles from '@/pages/player/MysteryPage.module.css';
@@ -117,6 +118,10 @@ export default function MysteryPage() {
     }
 
     registerMysteryBox(user.id, box, !premium && freeAvailable);
+    // Gói H8: opening the box gets the chest arp (and a cok sparkle
+    // for the premium box).
+    playSound('chest');
+    if (premium) playSound('cok');
     showToast(m.openToast, 'success');
   };
 
