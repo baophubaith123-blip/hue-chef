@@ -5,8 +5,7 @@ import {
   SKILL_BRANCH_IDS,
   SKILL_MAX_TIER,
   emptySkillTiers,
-  skillPointsSpent,
-  skillPointsTotalForLevel,
+  skillPointsAvailable,
 } from '@/features/skills/lib/skills';
 import type { SkillBranchId, SkillTiers } from '@/features/skills/types';
 
@@ -113,7 +112,7 @@ export function unlockSkillTier(
 ): boolean {
   const current = loadSkillTiers(userId);
   if (current[branch] >= SKILL_MAX_TIER) return false;
-  const available = skillPointsTotalForLevel(playerLevel) - skillPointsSpent(current);
+  const available = skillPointsAvailable(playerLevel, current);
   if (available < 1) return false;
   update(userId, (draft) => ({ ...draft, [branch]: draft[branch] + 1 }));
   return true;

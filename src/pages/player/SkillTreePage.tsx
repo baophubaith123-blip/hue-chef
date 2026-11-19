@@ -5,7 +5,7 @@ import {
   SKILL_BRANCH_IDS,
   SKILL_MAX_TIER,
   emptySkillTiers,
-  skillPointsSpent,
+  skillPointsAvailable,
   skillPointsTotalForLevel,
 } from '@/features/skills/lib/skills';
 import { unlockSkillTier, useSkills } from '@/features/skills/store';
@@ -31,7 +31,7 @@ export default function SkillTreePage() {
   const tiers = storedTiers ?? emptySkillTiers();
   const level = user?.level ?? 1;
   const totalPoints = skillPointsTotalForLevel(level);
-  const available = totalPoints - skillPointsSpent(tiers);
+  const available = skillPointsAvailable(level, tiers);
 
   return (
     <PlayerShell>

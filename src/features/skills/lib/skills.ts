@@ -39,6 +39,16 @@ export function skillPointsTotalForLevel(level: number): number {
 }
 
 /** Points already spent: every unlocked tier costs exactly 1 point. */
+/**
+ * Points still unspent. Clamped at 0: tiers are spent from the level
+ * total, and even if a stored record ever disagreed with the level
+ * (hand-edited data, a future level rebalance), the balance a player
+ * sees — and the unlock gate — never goes negative.
+ */
+export function skillPointsAvailable(level: number, tiers: SkillTiers): number {
+  return Math.max(0, skillPointsTotalForLevel(level) - skillPointsSpent(tiers));
+}
+
 export function skillPointsSpent(tiers: SkillTiers): number {
   return tiers.knife + tiers.fire + tiers.seasoning + tiers.speed;
 }
