@@ -360,6 +360,7 @@ export function GameShell({ variant = 'board', children }: GameShellProps) {
           >
             <motion.div
               className={styles.menuPanel}
+              data-testid="game-menu"
               role="dialog"
               aria-modal="true"
               aria-label={dict.game.menu}
