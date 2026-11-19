@@ -19,8 +19,10 @@ import { useMail } from '@/contexts/MailContext';
 import { WarningPopup } from '@/features/mail/components/WarningPopup';
 import { BanNoticePopup } from '@/features/mail/components/BanNoticePopup';
 import { OnlineSyncMount } from '@/features/online/components/OnlineSyncMount';
+import { isGuestBlocked } from '@/features/auth/guest-scope';
 import { useNextRecipe } from '@/features/recipes/hooks/useNextRecipe';
 import { useTranslation } from '@/i18n/useTranslation';
+import { GuestGate } from '@/pages/player/GuestGate';
 
 import styles from '@/pages/player/GameShell.module.css';
 
@@ -290,7 +292,13 @@ export function GameShell({ variant = 'board', children }: GameShellProps) {
           transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
           className={styles.pageMotion}
         >
-          {variant === 'board' ? <div className={styles.board}>{children}</div> : children}
+          {isGuestBlocked(user, location.pathname) ? (
+            <GuestGate />
+          ) : variant === 'board' ? (
+            <div className={styles.board}>{children}</div>
+          ) : (
+            children
+          )}
         </motion.div>
       </main>
 
@@ -394,6 +402,16 @@ export function GameShell({ variant = 'board', children }: GameShellProps) {
 
               <p className={styles.menuSectionLabel}>{dict.game.accountSection}</p>
               <div className={styles.accountRow}>
+                {user?.guest ? (
+                  <>
+                    <Link to="/login" className={styles.accountLink}>
+                      {t('auth.login')}
+                    </Link>
+                    <Link to="/register" className={styles.accountLink}>
+                      {t('auth.register')}
+                    </Link>
+                  </>
+                ) : null}
                 <Link to="/profile" className={styles.accountLink}>
                   {gameIcon('profile') ? (
                     <img src={gameIcon('profile')} alt="" className={styles.accountIcon} />

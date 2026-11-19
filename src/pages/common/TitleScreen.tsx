@@ -20,7 +20,7 @@ import styles from '@/pages/common/TitleScreen.module.css';
  */
 export default function TitleScreen() {
   const { t, dict } = useTranslation();
-  const { user, logout } = useAuth();
+  const { user, logout, playAsGuest } = useAuth();
   const navigate = useNavigate();
   const reduceMotion = useReducedMotion();
 
@@ -28,7 +28,10 @@ export default function TitleScreen() {
     if (user) {
       navigate(getDefaultPathForRole(user.role));
     } else {
-      navigate('/login');
+      // Instant guest play (Bảo's chốt): no form first — a local guest
+      // profile is created on the spot and the game opens.
+      playAsGuest(dict.game.guestName);
+      navigate('/home');
     }
   };
 
@@ -74,7 +77,16 @@ export default function TitleScreen() {
           <Link to="/feedback" className={styles.tagBtn}>
             {t('feedback.title')}
           </Link>
-          {user ? (
+          {user?.guest ? (
+            <>
+              <Link to="/login" className={styles.tagBtn}>
+                {t('auth.login')}
+              </Link>
+              <Link to="/register" className={styles.tagBtn}>
+                {t('auth.register')}
+              </Link>
+            </>
+          ) : user ? (
             <button
               type="button"
               className={`${styles.tagBtn} ${styles.tagBtnBrick}`}

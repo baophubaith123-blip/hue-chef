@@ -24,6 +24,7 @@ import { formatDate, formatDuration } from '@/lib/format';
 import { useTranslation } from '@/i18n/useTranslation';
 import { SceneShell } from '@/pages/player/SceneShell';
 
+import { GuestGate } from '@/pages/player/GuestGate';
 import styles from '@/pages/player/HomePage.module.css';
 
 export default function HomePage() {
@@ -82,7 +83,9 @@ export default function HomePage() {
   // Leaderboard data & user rank
   const leaderboardData = useMemo(() => {
     const users = loadUsers();
-    const players = users.filter((u) => u.role === 'player' && u.status !== 'banned');
+    const players = users.filter(
+      (u) => u.role === 'player' && u.status !== 'banned' && !u.guest,
+    );
     const mapped = players.map((p) => {
       const entries = p.cookedRecipes ?? [];
       const score = entries.reduce((sum, r) => sum + (r.score ?? 0), 0);
@@ -376,6 +379,12 @@ export default function HomePage() {
           </div>
 
           <aside className={styles.sideCol}>
+            {user?.guest ? (
+              <div className={styles.guestGateWrap}>
+                <GuestGate />
+              </div>
+            ) : (
+              <>
             <Link to="/quests" className={styles.todayPanel}>
               <span className={styles.tape} aria-hidden="true" />
               <h2 className={styles.todayTitle}>
@@ -424,6 +433,8 @@ export default function HomePage() {
             <div className={styles.paperFrame}>
               <CheckinPanel />
             </div>
+              </>
+            )}
           </aside>
         </div>
 

@@ -63,6 +63,12 @@ export interface StoredUser {
   banReason?: string;
   /** Ban expiry date (yyyy-mm-dd); null/undefined = permanent ban. */
   banUntil?: string | null;
+  /** Guest profile (Gói Game-Shell): auto-created local profile for
+   *  instant play from the title screen. Guests play the full local
+   *  game but never appear on any leaderboard; on login/register the
+   *  guest progress merges into the account (union law) and the guest
+   *  record is consumed. Absent on legacy records = not a guest. */
+  guest?: boolean;
 }
 
 export interface AuthSession {
@@ -99,6 +105,8 @@ export interface PublicUser {
   banReason?: string;
   /** Ban expiry date (yyyy-mm-dd); null/undefined = permanent ban. */
   banUntil?: string | null;
+  /** Guest profile flag — see StoredUser.guest. */
+  guest?: boolean;
 }
 
 /** True while a ban is in force; a dated ban stops applying after its last day. */

@@ -411,6 +411,19 @@
   min-width: 0;
 }
 
+/* Guest column: the quests/check-in pair is replaced by the account
+   panel (guest scope) — it stretches so the columns still end level. */
+.guestGateWrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.guestGateWrap > section {
+  margin: auto;
+  width: 100%;
+}
+
 .todayPanel {
   position: relative;
   display: block;

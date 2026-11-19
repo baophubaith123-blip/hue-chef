@@ -1520,6 +1520,9 @@ export const en: I18nDictionary = {
     kingWeekly: 'Kitchen king of the week',
     kingMonthly: 'Kitchen king of the month',
     kingAllTime: 'All-time kitchen king',
+    guestInviteTitle: 'You are playing as a guest',
+    guestInviteBody: 'Guest profiles are not ranked. Log in to join the leaderboard — all your guest progress will be kept and merged into your account.',
+    guestInviteCta: 'Log in to join the leaderboard',
   },
   profile: {
     title: 'User Profile',
@@ -1605,6 +1608,9 @@ export const en: I18nDictionary = {
     destinations: 'Explore',
     settings: 'Settings',
     accountSection: 'Account & system',
+    guestName: 'Guest',
+    accountRequired: 'Account required',
+    accountRequiredBody: 'This area is for players with an account. Log in or create an account to unlock it — your guest progress is kept and merged into your account.',
   },
   dashboard: {
     greetingMorning: 'Good morning',

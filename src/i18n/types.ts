@@ -1315,6 +1315,9 @@ export interface I18nDictionary {
     kingWeekly: string;
     kingMonthly: string;
     kingAllTime: string;
+    guestInviteTitle: string;
+    guestInviteBody: string;
+    guestInviteCta: string;
   };
   profile: {
     title: string;
@@ -1430,6 +1433,9 @@ export interface I18nDictionary {
     destinations: string;
     settings: string;
     accountSection: string;
+    guestName: string;
+    accountRequired: string;
+    accountRequiredBody: string;
   };
   dashboard: {
     greetingMorning: string;

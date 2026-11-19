@@ -27,7 +27,7 @@ export default function LoginPage() {
   const [formError, setFormError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
-  if (user) {
+  if (user && !user.guest) {
     return (
       <Navigate to={userBanned ? '/support/chat' : getDefaultPathForRole(user.role)} replace />
     );

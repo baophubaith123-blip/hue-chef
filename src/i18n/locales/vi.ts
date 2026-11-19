@@ -1521,6 +1521,9 @@ export const vi: I18nDictionary = {
     kingWeekly: 'Vua bếp tuần này',
     kingMonthly: 'Vua bếp tháng này',
     kingAllTime: 'Vua bếp mọi thời đại',
+    guestInviteTitle: 'Bạn đang chơi với hồ sơ khách',
+    guestInviteBody: 'Khách chơi thử không được xếp hạng. Đăng nhập để lên bảng xếp hạng — toàn bộ tiến độ chơi thử của bạn sẽ được giữ và hợp nhất vào tài khoản.',
+    guestInviteCta: 'Đăng nhập để lên bảng xếp hạng',
   },
   profile: {
     title: 'Trang Cá Nhân',
@@ -1606,6 +1609,9 @@ export const vi: I18nDictionary = {
     destinations: 'Khám phá',
     settings: 'Cài đặt',
     accountSection: 'Tài khoản & hệ thống',
+    guestName: 'Khách',
+    accountRequired: 'Cần tài khoản',
+    accountRequiredBody: 'Khu vực này dành cho người chơi có tài khoản. Đăng nhập hoặc tạo tài khoản để mở khoá — tiến độ chơi thử của bạn vẫn được giữ và hợp nhất vào tài khoản.',
   },
   dashboard: {
     greetingMorning: 'Chào buổi sáng',

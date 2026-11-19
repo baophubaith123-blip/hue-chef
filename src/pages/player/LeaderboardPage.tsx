@@ -36,7 +36,9 @@ export default function LeaderboardPage() {
 
   const { leaderboardData, prevRankById } = useMemo(() => {
     const users = loadUsers();
-    const players = users.filter((u) => u.role === 'player' && u.status !== 'banned');
+    const players = users.filter(
+      (u) => u.role === 'player' && u.status !== 'banned' && !u.guest,
+    );
 
     const dayMs = 24 * 60 * 60 * 1000;
     const windowMs = timeFrame === 'weekly' ? 7 * dayMs : timeFrame === 'monthly' ? 30 * dayMs : null;

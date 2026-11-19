@@ -42,6 +42,9 @@ interface AuthContextValue {
   isLoading: boolean;
   login: (email: string, password: string) => Promise<PublicUser>;
   register: (name: string, email: string, password: string) => Promise<PublicUser>;
+  /** Instant guest play from the title screen (Gói Game-Shell): creates
+   *  (or reuses) the local guest profile and starts its session. */
+  playAsGuest: (displayName: string) => PublicUser;
   logout: () => void;
   addXp: (xp: number) => AddXpResult | null;
   addCoins: (amount: number) => number | null;
@@ -68,6 +71,51 @@ function readSession(): AuthSession | null {
 
 function createPlayerId(): string {
   return `player-${crypto.randomUUID()}`;
+}
+
+/**
+ * Guest merge (Gói Game-Shell, H9 union law): when the current session
+ * belongs to a guest profile and a real account signs in / registers,
+ * the guest's progress folds into that account — histories union,
+ * wallets take the max, nothing is ever deleted from the account — and
+ * the guest record is consumed. Returns the merged target record.
+ */
+function mergeGuestProgress(users: StoredUser[], target: StoredUser): StoredUser {
+  const session = readSession();
+  if (!session || session.userId === target.id) return target;
+  const guest = findUserById(users, session.userId);
+  if (!guest?.guest) return target;
+
+  const unionIds = (a: string[] = [], b: string[] = []): string[] =>
+    Array.from(new Set([...a, ...b]));
+  const cookedByKey = new Map<string, CookedRecipeEntry>();
+  for (const entry of [...(target.cookedRecipes ?? []), ...(guest.cookedRecipes ?? [])]) {
+    cookedByKey.set(`${entry.recipeId}|${entry.cookedAt}`, entry);
+  }
+  const guestWinsLevel =
+    (guest.level ?? 1) > (target.level ?? 1) ||
+    ((guest.level ?? 1) === (target.level ?? 1) && (guest.exp ?? 0) > (target.exp ?? 0));
+  const levelSide = guestWinsLevel ? guest : target;
+
+  const merged: StoredUser = {
+    ...target,
+    coins: Math.max(target.coins ?? 0, guest.coins ?? 0),
+    cok: Math.max(target.cok ?? 0, guest.cok ?? 0),
+    totalCoinsEarned: Math.max(target.totalCoinsEarned ?? 0, guest.totalCoinsEarned ?? 0),
+    level: levelSide.level,
+    exp: levelSide.exp,
+    maxExp: levelSide.maxExp,
+    ownedRecipeIds: unionIds(target.ownedRecipeIds, guest.ownedRecipeIds),
+    cookedRecipes: Array.from(cookedByKey.values()),
+    unlockedAchievements: unionIds(target.unlockedAchievements, guest.unlockedAchievements),
+    sellLicenses: unionIds(target.sellLicenses, guest.sellLicenses),
+    equippedAchievementId: target.equippedAchievementId ?? guest.equippedAchievementId ?? null,
+  };
+  const next = users
+    .filter((u) => u.id !== guest.id)
+    .map((u) => (u.id === target.id ? merged : u));
+  saveUsers(next);
+  return merged;
 }
 
 /** If a dated ban has expired, lift it in the users store and return the fresh record. */
@@ -182,7 +230,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (found.password !== password) {
       throw new AppError('Incorrect password', 'INVALID_PASSWORD');
     }
-    const fresh = liftExpiredBan(loadUsers(), found);
+    const merged = mergeGuestProgress(users, found);
+    const fresh = liftExpiredBan(loadUsers(), merged);
     persistSession(fresh);
     return toPublicUser(fresh);
   }, [persistSession]);
@@ -212,9 +261,47 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     };
     const next = [...users, newUser];
     saveUsers(next);
-    persistSession(newUser);
-    return toPublicUser(newUser);
+    const merged = mergeGuestProgress(loadUsers(), newUser);
+    persistSession(merged);
+    return toPublicUser(merged);
   }, [persistSession]);
+
+  const playAsGuest = useCallback(
+    (displayName: string): PublicUser => {
+      const users = loadUsers();
+      const existing = users.find((u) => u.guest);
+      if (existing) {
+        persistSession(existing);
+        return toPublicUser(existing);
+      }
+      const id = `guest-${crypto.randomUUID()}`;
+      const guestUser: StoredUser = {
+        id,
+        name: displayName,
+        email: `${id}@guest.local`,
+        password: '',
+        role: 'player' satisfies UserRole,
+        avatar: '',
+        status: 'active',
+        createdAt: new Date().toISOString(),
+        level: 1,
+        exp: 0,
+        maxExp: 1000,
+        coins: 0,
+        cok: 0,
+        ownedRecipeIds: [],
+        cookedRecipes: [],
+        unlockedAchievements: [],
+        sellLicenses: [],
+        warningCount: 0,
+        guest: true,
+      };
+      saveUsers([...users, guestUser]);
+      persistSession(guestUser);
+      return toPublicUser(guestUser);
+    },
+    [persistSession],
+  );
 
   const logout = useCallback(() => {
     removeStorageItem(STORAGE_KEYS.auth);
@@ -346,6 +433,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       isLoading,
       login,
       register,
+      playAsGuest,
       logout,
       addXp,
       addCoins,
@@ -355,7 +443,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       grantSellLicense,
       updateProfile,
     }),
-    [user, isLoading, login, register, logout, addXp, addCoins, addCok, purchaseRecipe, addCookedRecipe, grantSellLicense, updateProfile],
+    [user, isLoading, login, register, playAsGuest, logout, addXp, addCoins, addCok, purchaseRecipe, addCookedRecipe, grantSellLicense, updateProfile],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
