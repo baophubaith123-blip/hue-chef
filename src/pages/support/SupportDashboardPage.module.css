@@ -13,19 +13,19 @@
 .title {
   margin: 0;
   font-size: 1.5rem;
-  color: var(--color-text);
+  color: var(--td-page-text, #3b2a20);
 }
 
 .greeting {
   margin: 0;
   font-size: 0.9rem;
-  color: var(--color-text-muted);
+  color: var(--td-page-text-muted, #7a6455);
 }
 
 .introText {
   margin: 0;
   font-size: 0.9rem;
-  color: var(--color-text-muted);
+  color: var(--td-page-text-muted, #7a6455);
   line-height: 1.5;
 }
 
@@ -37,9 +37,10 @@
 
 .stat {
   padding: 0.85rem 1rem;
-  border-radius: var(--radius-lg);
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
+  border-radius: var(--td-radius-paper, 12px);
+  background: var(--td-paper, #fff6e0);
+  color: var(--td-paper-text, #43301b);
+  border: 1px solid var(--td-paper-edge, #e8d5ae);
   display: flex;
   flex-direction: column;
   gap: 0.2rem;
@@ -48,17 +49,17 @@
 
 .stat:hover {
   transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--td-shadow-paper);
 }
 
 .statAccent {
-  background: linear-gradient(135deg, var(--color-accent), #ff6a3a);
-  color: #33200e;
+  background: linear-gradient(135deg, var(--td-gold, #e9a23b), var(--td-gold-deep, #c97a1f));
+  color: var(--td-ink, #4a2c14);
   border: none;
 }
 
 .statAccent .statLabel {
-  color: #33200e;
+  color: var(--td-ink, #4a2c14);
 }
 
 .statValue {
@@ -70,7 +71,7 @@
 
 .statLabel {
   font-size: 0.78rem;
-  color: var(--color-text-muted);
+  color: var(--td-paper-text-muted, #7a5c38);
   font-weight: 500;
 }
 
@@ -83,7 +84,7 @@
 .muted {
   margin: 0;
   padding: 0.5rem 0;
-  color: var(--color-text-muted);
+  color: var(--td-paper-text-muted, #7a5c38);
   font-size: 0.88rem;
 }
 
@@ -102,16 +103,16 @@
   gap: 0.65rem;
   align-items: center;
   padding: 0.55rem 0.65rem;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  background: var(--color-surface-muted);
+  border: 1px solid var(--td-paper-edge, #e8d5ae);
+  border-radius: var(--td-radius-button, 10px);
+  background: var(--td-paper-deep, #f7e8c6);
   text-decoration: none;
   color: inherit;
   transition: border-color 120ms ease, transform 120ms ease;
 }
 
 .threadLink:hover {
-  border-color: var(--color-primary);
+  border-color: var(--td-plum, #4a1525);
   transform: translateX(2px);
 }
 
@@ -119,8 +120,8 @@
   width: 34px;
   height: 34px;
   border-radius: 999px;
-  background: var(--color-primary);
-  color: var(--color-primary-contrast);
+  background: var(--td-plum, #4a1525);
+  color: var(--td-cream, #faf5ef);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -138,7 +139,7 @@
 
 .threadSubject {
   font-size: 0.88rem;
-  color: var(--color-text);
+  color: var(--td-paper-text, #43301b);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -146,14 +147,14 @@
 
 .threadMeta {
   font-size: 0.72rem;
-  color: var(--color-text-muted);
+  color: var(--td-paper-text-muted, #7a5c38);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
 .chev {
-  color: var(--color-text-muted);
+  color: var(--td-paper-text-muted, #7a5c38);
   font-size: 1.5rem;
   line-height: 1;
 }
@@ -163,5 +164,5 @@
   justify-content: flex-end;
   margin-top: 0.75rem;
   padding-top: 0.5rem;
-  border-top: 1px dashed var(--color-border);
+  border-top: 1px dashed var(--td-paper-edge, #e8d5ae);
 }

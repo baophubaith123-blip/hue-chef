@@ -31,31 +31,31 @@
 .select {
   padding: 0.55rem 0.8rem;
   border-radius: 10px;
-  border: 1px solid var(--color-border);
-  background: var(--color-surface);
-  color: var(--color-text);
+  border: 1px solid var(--td-paper-edge, #e8d5ae);
+  background: #fffdf4;
+  color: var(--td-paper-text, #43301b);
   font-size: 0.92rem;
 }
 
 .input:focus,
 .select:focus {
   outline: none;
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px rgba(200, 85, 61, 0.15);
+  border-color: var(--td-brick, #b03e26);
+  box-shadow: 0 0 0 3px rgba(176, 62, 38, 0.15);
 }
 
 .hint {
   font-size: 0.78rem;
-  color: var(--color-text-muted);
+  color: var(--td-paper-text-muted, #7a5c38);
 }
 
 .error {
-  color: var(--color-danger, #B3261E);
+  color: var(--td-danger, #b42318);
   font-weight: 600;
 }
 
 .success {
-  color: var(--color-success);
+  color: var(--td-success, #15803d);
   font-weight: 600;
 }
 
@@ -75,9 +75,9 @@
   align-items: center;
   gap: 0.75rem;
   padding: 0.6rem 0.75rem;
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--td-paper-edge, #e8d5ae);
   border-radius: 12px;
-  background: var(--color-surface);
+  background: var(--td-paper-deep, #f7e8c6);
 }
 
 .itemIcon {
@@ -93,29 +93,29 @@
 }
 
 .itemDesc {
-  color: var(--color-text-muted);
+  color: var(--td-paper-text-muted, #7a5c38);
   font-size: 0.85rem;
 }
 
 .chip {
   padding: 0.2rem 0.6rem;
-  border-radius: var(--radius-full);
+  border-radius: var(--td-radius-full, 9999px);
   font-size: 0.78rem;
   font-weight: 700;
   white-space: nowrap;
 }
 
 .chip_pending {
-  background: var(--color-warning-soft);
-  color: var(--color-warning);
+  background: rgba(233, 162, 59, 0.15);
+  color: var(--td-warning, #9a5b00);
 }
 
 .chip_approved {
-  background: var(--color-success-soft);
-  color: var(--color-success);
+  background: rgba(21, 128, 61, 0.12);
+  color: var(--td-success, #15803d);
 }
 
 .chip_rejected {
-  background: #FDECEC;
-  color: var(--color-danger, #B3261E);
+  background: var(--td-brick-soft, rgba(176, 62, 38, 0.12));
+  color: var(--td-danger, #b42318);
 }

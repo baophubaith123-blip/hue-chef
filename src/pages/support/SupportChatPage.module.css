@@ -15,7 +15,7 @@
 .title {
   margin: 0;
   font-size: 1.3rem;
-  color: var(--color-text);
+  color: var(--td-page-text, #3b2a20);
 }
 
 .layout {
@@ -33,9 +33,10 @@
 }
 
 .threadListCol {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
+  background: var(--td-paper, #fff6e0);
+  color: var(--td-paper-text, #43301b);
+  border: 1px solid var(--td-paper-edge, #e8d5ae);
+  border-radius: var(--td-radius-paper, 12px);
   padding: 0.5rem;
   overflow: hidden;
   display: flex;
@@ -64,7 +65,7 @@
   padding: 0.55rem 0.65rem;
   border: 1px solid transparent;
   background: transparent;
-  border-radius: var(--radius-md);
+  border-radius: var(--td-radius-button, 10px);
   color: inherit;
   text-align: left;
   font-family: inherit;
@@ -73,20 +74,20 @@
 }
 
 .threadItem:hover {
-  background: var(--color-surface-muted);
+  background: var(--td-paper-deep, #f7e8c6);
 }
 
 .threadItemActive {
-  background: var(--color-primary-soft);
-  border-color: var(--color-primary);
+  background: var(--td-brick-soft, rgba(176, 62, 38, 0.12));
+  border-color: var(--td-plum, #4a1525);
 }
 
 .avatar {
   width: 34px;
   height: 34px;
   border-radius: 999px;
-  background: var(--color-primary);
-  color: var(--color-primary-contrast);
+  background: var(--td-plum, #4a1525);
+  color: var(--td-cream, #faf5ef);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -111,14 +112,14 @@
 
 .threadMeta {
   font-size: 0.7rem;
-  color: var(--color-text-muted);
+  color: var(--td-paper-text-muted, #7a5c38);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
 .tagClosed {
-  color: var(--color-text-muted);
+  color: var(--td-paper-text-muted, #7a5c38);
   font-weight: 500;
 }
 
@@ -127,8 +128,8 @@
   height: 1.1rem;
   padding: 0 0.3rem;
   border-radius: 999px;
-  background: var(--color-accent);
-  color: #43301b;
+  background: var(--td-gold, #e9a23b);
+  color: var(--td-ink, #4a2c14);
   font-size: 0.65rem;
   font-weight: 700;
   display: inline-flex;
@@ -143,9 +144,9 @@
 }
 
 .banBanner {
-  background: #fdecec;
-  border: 1.5px solid var(--color-brick, #c8553d);
-  color: #7a1f14;
+  background: var(--td-brick-soft, rgba(176, 62, 38, 0.12));
+  border: 1.5px solid var(--td-brick, #b03e26);
+  color: var(--td-danger, #b42318);
   border-radius: 10px;
   padding: 0.75rem 1rem;
   margin-bottom: 1rem;

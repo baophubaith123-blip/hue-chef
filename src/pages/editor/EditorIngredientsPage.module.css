@@ -11,12 +11,12 @@
 .title {
   font-size: 2rem;
   font-weight: 700;
-  color: var(--color-text, #333);
+  color: var(--td-page-text, #3b2a20);
   margin-bottom: var(--spacing-xs, 6px);
 }
 
 .subtitle {
-  color: var(--color-text-muted, #666);
+  color: var(--td-page-text-muted, #7a6455);
   font-size: 1rem;
 }
 
@@ -34,17 +34,18 @@
 }
 
 .formCard {
-  background: var(--color-surface, #fff);
-  border: 1px solid var(--color-border, #e5e7eb);
-  border-radius: var(--radius-lg, 12px);
+  background: var(--td-paper, #fff6e0);
+  color: var(--td-paper-text, #43301b);
+  border: 1px solid var(--td-paper-edge, #e8d5ae);
+  border-radius: var(--td-radius-paper, 12px);
   padding: var(--spacing-lg, 24px);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1px 2px rgba(74, 21, 37, 0.08);
 }
 
 .formTitle {
   font-size: 1.25rem;
   font-weight: 600;
-  color: var(--color-text, #333);
+  color: var(--td-paper-text, #43301b);
   margin-bottom: var(--spacing-md, 16px);
 }
 
@@ -55,12 +56,12 @@
 }
 
 .formError {
-  background-color: rgba(220, 38, 38, 0.1);
-  color: var(--color-error, #dc2626);
+  background-color: var(--td-brick-soft, rgba(176, 62, 38, 0.12));
+  color: var(--td-danger, #b42318);
   padding: 10px 14px;
-  border-radius: var(--radius-md, 8px);
+  border-radius: var(--td-radius-button, 10px);
   font-size: 0.9rem;
-  border-left: 3px solid var(--color-error, #dc2626);
+  border-left: 3px solid var(--td-danger, #b42318);
 }
 
 .field {
@@ -72,7 +73,7 @@
 .label {
   font-weight: 500;
   font-size: 0.9rem;
-  color: var(--color-text, #333);
+  color: var(--td-paper-text, #43301b);
 }
 
 .input,
@@ -80,11 +81,11 @@
 .textarea {
   width: 100%;
   padding: 10px 12px;
-  border: 1px solid var(--color-border, #d1d5db);
-  border-radius: var(--radius-md, 6px);
+  border: 1px solid var(--td-paper-edge, #e8d5ae);
+  border-radius: var(--td-radius-button, 10px);
   font-size: 0.95rem;
-  background-color: var(--color-surface, #fff);
-  color: var(--color-text, #333);
+  background-color: #fffdf4;
+  color: var(--td-paper-text, #43301b);
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
   font-family: inherit;
 }
@@ -93,8 +94,8 @@
 .select:focus,
 .textarea:focus {
   outline: none;
-  border-color: var(--color-primary, #b91c1c);
-  box-shadow: 0 0 0 3px rgba(185, 28, 28, 0.15);
+  border-color: var(--td-brick, #b03e26);
+  box-shadow: 0 0 0 3px rgba(176, 62, 38, 0.15);
 }
 
 .textarea {
@@ -109,11 +110,12 @@
 }
 
 .listCard {
-  background: var(--color-surface, #fff);
-  border: 1px solid var(--color-border, #e5e7eb);
-  border-radius: var(--radius-lg, 12px);
+  background: var(--td-paper, #fff6e0);
+  color: var(--td-paper-text, #43301b);
+  border: 1px solid var(--td-paper-edge, #e8d5ae);
+  border-radius: var(--td-radius-paper, 12px);
   padding: var(--spacing-lg, 24px);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1px 2px rgba(74, 21, 37, 0.08);
 }
 
 .listHeader {
@@ -134,15 +136,15 @@
 .listTitle {
   font-size: 1.25rem;
   font-weight: 600;
-  color: var(--color-text, #333);
+  color: var(--td-paper-text, #43301b);
 }
 
 .badgeCount {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--color-surface-alt, #f3f4f6);
-  color: var(--color-text, #374151);
+  background-color: var(--td-paper-deep, #f7e8c6);
+  color: var(--td-paper-text, #43301b);
   padding: 2px 10px;
   border-radius: 9999px;
   font-size: 0.85rem;
@@ -161,20 +163,20 @@
   flex: 1;
   min-width: 180px;
   padding: 8px 12px;
-  border: 1px solid var(--color-border, #d1d5db);
-  border-radius: var(--radius-md, 6px);
+  border: 1px solid var(--td-paper-edge, #e8d5ae);
+  border-radius: var(--td-radius-button, 10px);
   font-size: 0.9rem;
-  background-color: var(--color-surface, #fff);
-  color: var(--color-text, #333);
+  background-color: #fffdf4;
+  color: var(--td-paper-text, #43301b);
 }
 
 .filterSelect {
   padding: 8px 12px;
-  border: 1px solid var(--color-border, #d1d5db);
-  border-radius: var(--radius-md, 6px);
+  border: 1px solid var(--td-paper-edge, #e8d5ae);
+  border-radius: var(--td-radius-button, 10px);
   font-size: 0.9rem;
-  background-color: var(--color-surface, #fff);
-  color: var(--color-text, #333);
+  background-color: #fffdf4;
+  color: var(--td-paper-text, #43301b);
 }
 
 .tableContainer {
@@ -199,18 +201,18 @@
 
 .th {
   padding: 12px 14px;
-  background-color: var(--color-surface-alt, #f9fafb);
-  border-bottom: 2px solid var(--color-border, #e5e7eb);
+  background-color: var(--td-paper-deep, #f7e8c6);
+  border-bottom: 2px solid var(--td-paper-edge, #e8d5ae);
   font-size: 0.85rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: var(--color-text-muted, #6b7280);
+  color: var(--td-paper-text-muted, #7a5c38);
 }
 
 .td {
   padding: 12px 14px;
-  border-bottom: 1px solid var(--color-border, #e5e7eb);
+  border-bottom: 1px solid var(--td-paper-edge, #e8d5ae);
   font-size: 0.95rem;
   vertical-align: middle;
 }
@@ -233,7 +235,7 @@
   height: 32px;
   object-fit: cover;
   border-radius: var(--radius-sm, 4px);
-  border: 1px solid var(--color-border, #e5e7eb);
+  border: 1px solid var(--td-paper-edge, #e8d5ae);
 }
 
 .categoryBadge {
@@ -242,12 +244,12 @@
   border-radius: var(--radius-sm, 4px);
   font-size: 0.8rem;
   font-weight: 500;
-  background-color: var(--color-surface-alt, #f3f4f6);
-  color: var(--color-text, #4b5563);
+  background-color: var(--td-paper-deep, #f7e8c6);
+  color: var(--td-paper-text, #43301b);
 }
 
 .dimText {
-  color: var(--color-text-muted, #9ca3af);
+  color: var(--td-paper-text-muted, #7a5c38);
   font-style: italic;
   font-size: 0.85rem;
 }
@@ -261,38 +263,38 @@
 .actionBtn {
   padding: 5px 10px;
   border-radius: var(--radius-sm, 4px);
-  border: 1px solid var(--color-border, #d1d5db);
-  background: var(--color-surface, #fff);
-  color: var(--color-text, #374151);
+  border: 1px solid var(--td-paper-edge, #e8d5ae);
+  background: #fffdf4;
+  color: var(--td-paper-text, #43301b);
   font-size: 0.85rem;
   cursor: pointer;
   transition: all 0.15s ease;
 }
 
 .actionBtn:hover {
-  background: var(--color-surface-alt, #f3f4f6);
-  border-color: var(--color-border-hover, #9ca3af);
+  background: var(--td-paper-deep, #f7e8c6);
+  border-color: var(--td-wood, #b57e40);
 }
 
 .deleteBtn {
-  color: var(--color-error, #dc2626);
-  border-color: rgba(220, 38, 38, 0.3);
+  color: var(--td-danger, #b42318);
+  border-color: rgba(180, 35, 24, 0.3);
 }
 
 .deleteBtn:hover {
-  background: rgba(220, 38, 38, 0.08);
-  border-color: var(--color-error, #dc2626);
+  background: var(--td-brick-soft, rgba(176, 62, 38, 0.12));
+  border-color: var(--td-danger, #b42318);
 }
 
 .emptyNotice {
   padding: var(--spacing-xl, 32px);
   text-align: center;
-  color: var(--color-text-muted, #6b7280);
+  color: var(--td-paper-text-muted, #7a5c38);
 }
 
 .modalContent {
   padding: var(--spacing-md, 16px) 0;
-  color: var(--color-text, #374151);
+  color: var(--td-paper-text, #43301b);
   font-size: 0.95rem;
   line-height: 1.5;
 }

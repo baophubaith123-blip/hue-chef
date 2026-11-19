@@ -3,9 +3,10 @@
   flex-direction: column;
   height: 100%;
   min-height: 520px;
-  border-radius: var(--radius-lg);
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
+  border-radius: var(--td-radius-paper);
+  background: var(--td-paper);
+  color: var(--td-paper-text);
+  border: 1px solid var(--td-paper-edge);
   overflow: hidden;
 }
 
@@ -14,15 +15,15 @@
 }
 
 .emptyText {
-  color: var(--color-text-muted);
+  color: var(--td-paper-text-muted);
   text-align: center;
   margin: 0;
 }
 
 .chatHeader {
   padding: 0.85rem 1rem;
-  border-bottom: 1px solid var(--color-border);
-  background: var(--color-surface-muted);
+  border-bottom: 1px solid var(--td-paper-edge);
+  background: var(--td-paper-deep);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -31,13 +32,13 @@
 .title {
   margin: 0;
   font-size: 1rem;
-  color: var(--color-text);
+  color: var(--td-paper-text);
 }
 
 .sub {
   margin: 0;
   font-size: 0.75rem;
-  color: var(--color-text-muted);
+  color: var(--td-paper-text-muted);
   margin-top: 0.15rem;
 }
 
@@ -49,12 +50,12 @@
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
-  background: linear-gradient(180deg, transparent 0%, rgba(27, 42, 74, 0.03) 100%);
+  background: linear-gradient(180deg, transparent 0%, rgba(74, 44, 20, 0.04) 100%);
 }
 
 .placeholder {
   margin: auto;
-  color: var(--color-text-muted);
+  color: var(--td-paper-text-muted);
   font-size: 0.85rem;
   text-align: center;
   padding: 2rem;
@@ -80,15 +81,15 @@
   width: 32px;
   height: 32px;
   border-radius: 999px;
-  background: var(--color-primary);
-  color: var(--color-primary-contrast);
+  background: var(--td-plum);
+  color: var(--td-cream);
   font-weight: 700;
   font-size: 0.75rem;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--td-paper-edge);
   object-fit: cover;
 }
 
@@ -98,18 +99,18 @@
   min-width: 96px;
   font-size: 0.88rem;
   line-height: 1.45;
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 1px 2px rgba(74, 21, 37, 0.08);
 }
 
 .meBubble {
-  background: var(--color-accent);
-  color: var(--color-accent-contrast);
+  background: var(--td-gold);
+  color: var(--td-ink);
   border-bottom-right-radius: 4px;
 }
 
 .themBubble {
-  background: var(--color-surface-muted);
-  color: var(--color-text);
+  background: var(--td-paper-deep);
+  color: var(--td-paper-text);
   border-bottom-left-radius: 4px;
 }
 
@@ -138,13 +139,13 @@
 .attachImg {
   max-width: 220px;
   max-height: 180px;
-  border-radius: var(--radius-md);
+  border-radius: var(--td-radius-button);
   border: 1px solid rgba(255, 255, 255, 0.2);
   display: block;
 }
 
 .themBubble .attachImg {
-  border-color: var(--color-border);
+  border-color: var(--td-paper-edge);
 }
 
 .attachLink {
@@ -162,21 +163,21 @@
 }
 
 .composer {
-  border-top: 1px solid var(--color-border);
+  border-top: 1px solid var(--td-paper-edge);
   padding: 0.75rem 1rem;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  background: var(--color-surface);
+  background: var(--td-paper);
 }
 
 .input {
   resize: vertical;
   padding: 0.55rem 0.7rem;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  background: var(--color-bg);
-  color: var(--color-text);
+  border: 1px solid var(--td-paper-edge);
+  border-radius: var(--td-radius-button);
+  background: #fffdf4;
+  color: var(--td-paper-text);
   font-family: inherit;
   font-size: 0.88rem;
   line-height: 1.4;
@@ -184,9 +185,9 @@
 }
 
 .input:focus {
-  outline: 2px solid var(--color-accent);
+  outline: 2px solid var(--td-brick);
   outline-offset: -1px;
-  border-color: var(--color-accent);
+  border-color: var(--td-brick);
 }
 
 .composerActions {
@@ -202,8 +203,8 @@
   align-items: center;
   gap: 0.35rem;
   padding: 0.25rem 0.45rem 0.25rem 0.6rem;
-  background: var(--color-primary-soft);
-  color: var(--color-primary);
+  background: var(--td-brick-soft);
+  color: var(--td-plum);
   border-radius: 999px;
   font-size: 0.75rem;
   font-weight: 500;
@@ -212,7 +213,7 @@
 .removeAttach {
   border: none;
   background: transparent;
-  color: var(--color-primary);
+  color: var(--td-plum);
   font-size: 1rem;
   line-height: 1;
   cursor: pointer;
@@ -223,17 +224,17 @@
 .error {
   margin: 0;
   font-size: 0.78rem;
-  color: var(--color-danger);
+  color: var(--td-danger);
   padding: 0.25rem 0.5rem;
-  background: var(--color-danger-soft);
-  border-radius: var(--radius-md);
+  background: var(--td-brick-soft);
+  border-radius: var(--td-radius-button);
 }
 
 .appealSection {
   margin: 0;
   padding: 1rem;
-  border-top: 1px dashed var(--color-border);
-  background: rgba(27, 42, 74, 0.03);
+  border-top: 1px dashed var(--td-paper-edge);
+  background: rgba(74, 44, 20, 0.04);
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
@@ -242,12 +243,12 @@
 .sectionTitle {
   margin: 0 0 0.25rem;
   font-size: 0.88rem;
-  color: var(--color-text);
+  color: var(--td-paper-text);
 }
 
 .fieldLabel {
   font-size: 0.75rem;
-  color: var(--color-text-muted);
+  color: var(--td-paper-text-muted);
   font-weight: 500;
 }
 
@@ -260,10 +261,10 @@
 
 .select {
   padding: 0.4rem 0.6rem;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  background: var(--color-surface);
-  color: var(--color-text);
+  border: 1px solid var(--td-paper-edge);
+  border-radius: var(--td-radius-button);
+  background: #fffdf4;
+  color: var(--td-paper-text);
   font-size: 0.85rem;
   font-family: inherit;
 }
@@ -271,10 +272,10 @@
 .textarea {
   width: 100%;
   padding: 0.5rem 0.7rem;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  background: var(--color-surface);
-  color: var(--color-text);
+  border: 1px solid var(--td-paper-edge);
+  border-radius: var(--td-radius-button);
+  background: #fffdf4;
+  color: var(--td-paper-text);
   font-family: inherit;
   font-size: 0.85rem;
   line-height: 1.4;
@@ -290,9 +291,9 @@
 
 .success {
   padding: 0.5rem 0.7rem;
-  background: var(--color-success-soft);
-  color: var(--color-success);
-  border-radius: var(--radius-md);
+  background: rgba(21, 128, 61, 0.12);
+  color: var(--td-success);
+  border-radius: var(--td-radius-button);
   font-size: 0.82rem;
   font-weight: 500;
 }

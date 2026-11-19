@@ -1,14 +1,14 @@
 .back {
   display: inline-block;
   margin-bottom: 0.75rem;
-  color: var(--color-text-muted);
+  color: var(--td-page-text-muted, #7a6455);
   text-decoration: none;
   font-size: 0.9rem;
   font-weight: 600;
 }
 
 .back:hover {
-  color: var(--color-primary);
+  color: var(--td-brick, #b03e26);
 }
 
 .head {
@@ -20,20 +20,20 @@
 
 .title {
   margin: 0;
-  color: var(--color-primary);
+  color: var(--td-brick, #b03e26);
 }
 
 .rejected {
-  color: var(--color-danger);
+  color: var(--td-danger, #b42318);
 }
 
 .rejectedBanner {
   margin-top: 1rem;
   padding: 0.85rem 1rem;
-  background: var(--color-danger-soft);
-  color: var(--color-danger);
-  border-radius: var(--radius-md);
-  border-left: 4px solid var(--color-danger);
+  background: var(--td-brick-soft, rgba(176, 62, 38, 0.12));
+  color: var(--td-danger, #b42318);
+  border-radius: var(--td-radius-button, 10px);
+  border-left: 4px solid var(--td-danger, #b42318);
 }
 
 .rejectedReason {
@@ -45,17 +45,21 @@
 .success {
   margin-top: 1rem;
   padding: 0.75rem 1rem;
-  color: var(--color-success);
-  background: var(--color-success-soft);
-  border-radius: var(--radius-md);
-  border-left: 4px solid var(--color-success);
+  color: var(--td-success, #15803d);
+  background: rgba(21, 128, 61, 0.12);
+  border-radius: var(--td-radius-button, 10px);
+  border-left: 4px solid var(--td-success, #15803d);
   font-weight: 600;
+}
+
+[data-theme='dark'] .success {
+  color: var(--td-success-bright, #22c55e);
 }
 
 .sectionTitle {
   margin: 1rem 0 0.35rem;
   font-size: 1rem;
-  color: var(--color-primary);
+  color: var(--td-plum, #4a1525);
   font-weight: 700;
 }
 
@@ -64,16 +68,16 @@
   display: flex;
   justify-content: center;
   padding: 0.5rem;
-  background: var(--color-surface-muted);
-  border-radius: var(--radius-lg);
+  background: var(--td-paper-deep, #f7e8c6);
+  border-radius: var(--td-radius-paper, 12px);
 }
 
 .hero {
   width: 100%;
   max-height: 20rem;
   object-fit: cover;
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-md);
+  border-radius: var(--td-radius-button, 10px);
+  box-shadow: var(--td-shadow-paper);
 }
 
 .actions {
@@ -82,17 +86,17 @@
   gap: 0.75rem;
   margin-top: 1rem;
   padding-top: 1rem;
-  border-top: 1px solid var(--color-border);
+  border-top: 1px solid var(--td-paper-edge, #e8d5ae);
 }
 
 .submitBtn {
-  background: var(--color-accent);
-  color: var(--color-accent-contrast);
-  border-color: var(--color-accent);
+  background: var(--td-gold, #e9a23b);
+  color: var(--td-ink, #4a2c14);
+  border-color: var(--td-gold, #e9a23b);
 }
 
 .submitBtn:hover:not(:disabled) {
-  background: var(--color-accent-hover);
+  background: var(--td-gold-deep, #c97a1f);
 }
 
 .stepsList {
@@ -109,9 +113,9 @@
   counter-increment: stepCounter;
   position: relative;
   padding: 0.75rem 0.85rem 0.75rem 3rem;
-  background: var(--color-surface-muted);
-  border-radius: var(--radius-md);
-  border: 1px solid var(--color-border);
+  background: var(--td-paper-deep, #f7e8c6);
+  border-radius: var(--td-radius-button, 10px);
+  border: 1px solid var(--td-paper-edge, #e8d5ae);
 }
 
 .stepItem::before {
@@ -122,8 +126,8 @@
   width: 1.75rem;
   height: 1.75rem;
   border-radius: 999px;
-  background: var(--color-accent);
-  color: var(--color-accent-contrast);
+  background: var(--td-gold, #e9a23b);
+  color: var(--td-ink, #4a2c14);
   font-weight: 700;
   font-size: 0.9rem;
   display: flex;
@@ -132,12 +136,12 @@
 }
 
 .stepTitle {
-  color: var(--color-primary);
+  color: var(--td-plum, #4a1525);
   font-size: 0.95rem;
 }
 
 .stepTime {
-  color: var(--color-text-muted);
+  color: var(--td-paper-text-muted, #7a5c38);
   font-size: 0.8rem;
   font-weight: 500;
 }
@@ -145,6 +149,6 @@
 .stepDesc {
   margin: 0.25rem 0 0;
   font-size: 0.9rem;
-  color: var(--color-text);
+  color: var(--td-paper-text, #43301b);
   line-height: 1.5;
 }

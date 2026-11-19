@@ -7,15 +7,16 @@
 
 .stat {
   padding: 0.75rem;
-  border-radius: var(--radius-md);
-  background: var(--color-surface-muted);
-  border: 1px solid var(--color-border);
+  border-radius: var(--td-radius-button, 10px);
+  background: var(--td-paper-deep, #f7e8c6);
+  border: 1px solid var(--td-paper-edge, #e8d5ae);
+  color: var(--td-paper-text, #43301b);
 }
 
 .statLabel {
   display: block;
   font-size: 0.75rem;
-  color: var(--color-text-muted);
+  color: var(--td-paper-text-muted, #7a5c38);
 }
 
 .statValue {
@@ -29,7 +30,7 @@
 
 .muted {
   margin: 0;
-  color: var(--color-text-muted);
+  color: var(--td-paper-text-muted, #7a5c38);
 }
 
 .mailBody {
@@ -39,5 +40,5 @@
 .mailReason {
   margin: 0 0 0.35rem;
   font-size: 0.85rem;
-  color: var(--color-danger);
+  color: var(--td-danger, #b42318);
 }
