@@ -1473,7 +1473,7 @@ export default function CookingPage() {
         <div className={styles.runFrame}>
         {stageHeader}
         <MarketStage
-          recipe={recipe}
+          recipe={effectiveRecipe ?? recipe}
           config={stageConfig}
           maxPoints={session.scorePlan.market}
           onProgress={setLiveStagePoints}
@@ -1491,7 +1491,7 @@ export default function CookingPage() {
         <div className={styles.runFrame}>
         {stageHeader}
         <CatchStage
-          recipe={recipe}
+          recipe={effectiveRecipe ?? recipe}
           config={stageConfig}
           maxPoints={session.scorePlan.catch}
           onProgress={setLiveStagePoints}
