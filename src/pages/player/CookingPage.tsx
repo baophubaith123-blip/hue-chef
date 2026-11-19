@@ -228,6 +228,41 @@ export default function CookingPage() {
     null,
   );
   const feastAppliedRef = useRef(false);
+
+  // Result fanfare (Gói H8): once per finished run — a win jingle and
+  // a Theme D burst for a boss pass or a 3+ star clear, a soft descent
+  // for a failed run. Preview runs stay silent. This hook pair MUST
+  // stay with the early hooks: the session guard further down returns
+  // a loading screen while the session is null and flips on every
+  // mount, so any hook declared below it changes the hook count
+  // mid-mount and crashes the page (React error #310 — caught by the
+  // H6 regression bot at the assistant check).
+  const resultFxKeyRef = useRef<string | null>(null);
+  useEffect(() => {
+    if (isPreview || !session) return;
+    if (session.phase !== 'success' && session.phase !== 'failed') return;
+    const key = `${session.recipe.id}:${session.phase}:${session.stars}:${session.finalScore}`;
+    if (resultFxKeyRef.current === key) return;
+    resultFxKeyRef.current = key;
+    if (session.phase === 'success') {
+      if (bossChapter && session.stars >= BOSS_PASS_STARS) {
+        playSound('starup');
+        celebrate('big');
+        buzz([40, 40, 80]);
+      } else if (isFeastMode) {
+        // Gói H8: a village feast lands with bells and gold coins.
+        playSound('feast');
+        celebrate('coins');
+        buzz([40, 40, 80]);
+      } else {
+        playSound('win');
+        if (!isSellMode && session.stars >= 3) celebrate('small');
+        buzz(35);
+      }
+    } else {
+      playSound('lose');
+    }
+  }, [isPreview, session, bossChapter, isSellMode, isFeastMode]);
   const [feastBatch, setFeastBatch] = useState<CookedBatch | null>(null);
   const [feastServed, setFeastServed] = useState<{ xu: number; exp: number } | null>(null);
   // Kitchen incidents (Gói H7): a per-run plan rolled when the run
@@ -1317,35 +1352,6 @@ export default function CookingPage() {
               body: dict.journey.bossResultFailBody,
             }
       : null;
-
-  // Result fanfare (Gói H8): once per finished run — a win jingle and
-  // a Theme D burst for a boss pass or a 3+ star clear, a soft descent
-  // for a failed run. Preview runs stay silent.
-  const resultFxKeyRef = useRef<string | null>(null);
-  useEffect(() => {
-    if (!showResult || isPreview) return;
-    const key = `${session.recipe.id}:${session.phase}:${session.stars}:${session.finalScore}`;
-    if (resultFxKeyRef.current === key) return;
-    resultFxKeyRef.current = key;
-    if (session.phase === 'success') {
-      if (bossNote?.passed) {
-        playSound('starup');
-        celebrate('big');
-        buzz([40, 40, 80]);
-      } else if (isFeastMode) {
-        // Gói H8: a village feast lands with bells and gold coins.
-        playSound('feast');
-        celebrate('coins');
-        buzz([40, 40, 80]);
-      } else {
-        playSound('win');
-        if (!isSellMode && session.stars >= 3) celebrate('small');
-        buzz(35);
-      }
-    } else {
-      playSound('lose');
-    }
-  }, [showResult, isPreview, session, bossNote, isSellMode, isFeastMode]);
 
   // Feast serve/discard/retry (Gói H7): serving books the village
   // payout through the stall store; the caller applies the xu and
