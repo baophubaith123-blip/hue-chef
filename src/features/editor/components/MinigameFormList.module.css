@@ -19,13 +19,16 @@
 
 .statusBannerWarning {
   background: var(--color-warning-soft);
-  color: var(--color-warning);
+  /* The banner sits on the paper form card: the soft wash composites
+     to a light tone in both themes, while --color-warning flips to
+     bright amber in dark mode (1.67:1). Pin the strong tone (H10). */
+  color: var(--td-warning-strong, #7a4a00);
   border: 1px solid var(--color-warning);
 }
 
 .statusBannerSuccess {
   background: var(--color-success-soft);
-  color: var(--color-success);
+  color: var(--td-success-strong, #14532d);
   border: 1px solid var(--color-success);
 }
 
@@ -153,7 +156,8 @@
   gap: 0.25rem;
   padding: 0.5rem 0.75rem;
   background: var(--color-danger-soft);
-  color: var(--color-danger);
+  /* Same paper-context pinning as the status banners (H10). */
+  color: var(--td-danger, #b42318);
   border-radius: var(--radius-md);
   font-size: 0.85rem;
   font-weight: 600;
