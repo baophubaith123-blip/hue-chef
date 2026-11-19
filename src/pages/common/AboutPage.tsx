@@ -2,9 +2,8 @@ import { Link } from 'react-router-dom';
 
 import { useTranslation } from '@/i18n/useTranslation';
 
-import { FloatingGameButton } from '@/components/FloatingGameButton';
-import { Footer } from '@/components/Footer';
-import { Header } from '@/components/Header';
+
+import { PublicScene } from '@/pages/common/TitleScene';
 
 import styles from './AboutPage.module.css';
 
@@ -35,8 +34,7 @@ export default function AboutPage() {
   ];
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-      <Header />
+    <PublicScene>
       <main className={styles.page}>
         <section className={styles.heroBanner} aria-label={t('about.title')}>
           <div className={styles.heroContent}>
@@ -166,8 +164,6 @@ export default function AboutPage() {
 
         <p className={styles.acknowledge}>💫 {t('about.acknowledgements')}</p>
       </main>
-      <Footer />
-      <FloatingGameButton />
-    </div>
+    </PublicScene>
   );
 }

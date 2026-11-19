@@ -1,0 +1,276 @@
+/* TitleScene / PublicScene — the festival scene for the title screen,
+   auth panels and public info pages (Gói Game-Shell). */
+
+.scene {
+  --td-brick: #b03e26;
+  --td-brick-hover: #99331e;
+  --td-brick-soft: rgba(176, 62, 38, 0.12);
+  --td-gold-text: #8a5a00;
+  --td-page-text: #3b2a20;
+  --td-page-text-muted: #7a6455;
+  --td-cok: #be123c;
+  --td-cok-soft: rgba(190, 18, 60, 0.12);
+  --td-cream-muted: #d8c3ae;
+  --color-text: #3b2a20;
+  --color-primary: #b03e26;
+  --td-font-display: var(--td-font-game);
+  --font-serif: var(--td-font-game);
+  --font-display: var(--td-font-game);
+
+  position: relative;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: var(--td-cream);
+  font-family: var(--td-font-game-body);
+  background:
+    radial-gradient(1100px 480px at 85% -80px, rgba(233, 162, 59, 0.16), transparent 60%),
+    radial-gradient(900px 520px at 8% 30%, rgba(176, 62, 38, 0.14), transparent 60%),
+    linear-gradient(180deg, var(--td-plum-soft) 0%, var(--td-plum) 34%, var(--td-plum-deep) 100%);
+  overflow-x: clip;
+  padding-bottom: 44px;
+  box-sizing: border-box;
+}
+
+.evening {
+  background:
+    radial-gradient(1100px 480px at 85% -80px, rgba(233, 162, 59, 0.1), transparent 60%),
+    radial-gradient(900px 520px at 8% 30%, rgba(176, 62, 38, 0.08), transparent 60%),
+    linear-gradient(180deg, #2c0a16 0%, #370e1b 40%, #20060f 100%);
+}
+
+.garland {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 118px;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 1;
+  -webkit-mask-image: linear-gradient(180deg, #000 55%, transparent 100%);
+  mask-image: linear-gradient(180deg, #000 55%, transparent 100%);
+}
+
+.garlandImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  transform-origin: 50% -40px;
+  animation: titleGarlandSway 7s ease-in-out infinite alternate;
+}
+
+@keyframes titleGarlandSway {
+  from {
+    transform: rotate(-0.45deg) translateX(-4px);
+  }
+  to {
+    transform: rotate(0.45deg) translateX(4px);
+  }
+}
+
+.particles {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.particle {
+  position: absolute;
+  bottom: -4vh;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(246, 196, 83, 0.95) 0%, rgba(233, 162, 59, 0) 70%);
+  opacity: 0;
+  animation-name: titleParticleRise;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+.particle:nth-child(1) { left: 8%; width: 10px; height: 10px; animation-duration: 17s; animation-delay: 0s; }
+.particle:nth-child(2) { left: 21%; width: 7px; height: 7px; animation-duration: 22s; animation-delay: 4s; }
+.particle:nth-child(3) { left: 34%; width: 12px; height: 12px; animation-duration: 19s; animation-delay: 8s; }
+.particle:nth-child(4) { left: 47%; width: 6px; height: 6px; animation-duration: 24s; animation-delay: 2s; }
+.particle:nth-child(5) { left: 59%; width: 9px; height: 9px; animation-duration: 18s; animation-delay: 11s; }
+.particle:nth-child(6) { left: 71%; width: 7px; height: 7px; animation-duration: 21s; animation-delay: 6s; }
+.particle:nth-child(7) { left: 83%; width: 11px; height: 11px; animation-duration: 16s; animation-delay: 1s; }
+.particle:nth-child(8) { left: 93%; width: 7px; height: 7px; animation-duration: 20s; animation-delay: 9s; }
+
+@keyframes titleParticleRise {
+  0% {
+    transform: translate3d(0, 0, 0);
+    opacity: 0;
+  }
+  8% {
+    opacity: 0.85;
+  }
+  55% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: translate3d(26px, -96vh, 0);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .garlandImg,
+  .particle {
+    animation: none;
+  }
+}
+
+/* ---------- Painted hanging sign with real text over the plank ---------- */
+
+.signWrap {
+  position: relative;
+  z-index: 2;
+  width: min(880px, 94vw);
+  margin-top: clamp(26px, 5vh, 54px);
+  container-type: inline-size;
+  filter: drop-shadow(0 18px 28px rgba(0, 0, 0, 0.45));
+  animation: signSway 6s ease-in-out infinite alternate;
+  transform-origin: 50% -30px;
+}
+
+@keyframes signSway {
+  from {
+    transform: rotate(-0.35deg);
+  }
+  to {
+    transform: rotate(0.35deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .signWrap {
+    animation: none;
+  }
+}
+
+.signCompact {
+  width: min(500px, 88vw);
+  margin-top: clamp(16px, 3vh, 30px);
+}
+
+.signImg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.signText {
+  position: absolute;
+  left: 4%;
+  top: 31%;
+  width: 58%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
+}
+
+.signTitle {
+  font-family: var(--td-font-game-display);
+  font-size: 11cqw;
+  line-height: 1;
+  color: #fff6e0;
+  letter-spacing: 0.01em;
+  text-shadow:
+    0 3px 0 #8a5a00,
+    0 6px 0 rgba(67, 48, 27, 0.45),
+    0 12px 26px rgba(0, 0, 0, 0.4);
+}
+
+.signSub {
+  margin-top: 1.6cqw;
+  font-family: var(--td-font-game);
+  font-weight: 700;
+  font-size: 3.1cqw;
+  color: #ffe9bd;
+  text-shadow: 0 2px 0 rgba(67, 48, 27, 0.65);
+}
+
+.content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ---------- Public info pages ---------- */
+
+.pubWrap {
+  position: relative;
+  z-index: 2;
+  width: min(1080px, 94vw);
+  margin-top: clamp(30px, 5vh, 52px);
+}
+
+.pubHead {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.backBtn {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  border: 2px solid var(--td-wood-dark);
+  background: radial-gradient(circle at 35% 30%, #e3b06a, #b57e40 60%, #8a5a2b);
+  color: var(--td-paper);
+  font-size: 1.15rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  text-shadow: 0 1px 0 rgba(67, 48, 27, 0.7);
+  box-shadow:
+    inset 0 2px 0 rgba(255, 246, 224, 0.5),
+    0 5px 10px rgba(0, 0, 0, 0.35);
+}
+
+.backBtn:hover {
+  filter: brightness(1.08);
+}
+
+.pubBrand {
+  font-family: var(--td-font-game-display);
+  font-size: 1.5rem;
+  color: var(--td-gold-bright);
+  text-decoration: none;
+  text-shadow: 0 2px 0 rgba(67, 48, 27, 0.8);
+}
+
+.pubBoard {
+  padding: clamp(18px, 3vw, 36px);
+  color: var(--td-paper-text);
+  background:
+    radial-gradient(120% 90% at 50% 0%, rgba(255, 252, 240, 0.7), transparent 60%),
+    var(--td-paper);
+  border: 30px solid transparent;
+  border-image: url('../../assets/theme-d/game/frame-scroll.webp') 30% / 1 / 0 stretch;
+  border-radius: 18px;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+  box-sizing: border-box;
+}
+
+@media (max-width: 640px) {
+  .pubBoard {
+    border-width: 20px;
+    padding: 14px;
+  }
+
+  .garland {
+    height: 84px;
+  }
+}

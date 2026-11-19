@@ -1,0 +1,132 @@
+/* TitleScreen — big golden play button + wooden tag buttons under the
+   painted sign (Gói Game-Shell). */
+
+.cornerPlaque {
+  position: absolute;
+  top: 34px;
+  right: clamp(10px, 3vw, 28px);
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 9px;
+  border-radius: 16px;
+  background: rgba(55, 14, 27, 0.78);
+  border: 2px solid rgba(233, 162, 59, 0.45);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  margin-top: clamp(18px, 4vh, 36px);
+  padding: 0 16px;
+}
+
+.playBig {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  min-width: min(430px, 86vw);
+  justify-content: center;
+  padding: 20px 38px;
+  border-radius: 22px;
+  border: 3px solid #7c4a12;
+  background:
+    radial-gradient(120% 160% at 50% -30%, rgba(255, 246, 224, 0.55), transparent 55%),
+    linear-gradient(180deg, var(--td-gold-bright) 0%, var(--td-gold) 52%, var(--td-gold-deep) 100%);
+  color: #4a2c14;
+  font-family: var(--td-font-game-display);
+  font-size: clamp(1.45rem, 4.5vw, 2rem);
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  box-shadow:
+    inset 0 3px 0 rgba(255, 246, 224, 0.75),
+    inset 0 -5px 0 rgba(122, 74, 10, 0.45),
+    0 14px 30px rgba(0, 0, 0, 0.45),
+    0 0 0 4px rgba(233, 162, 59, 0.22);
+  text-shadow: 0 1px 0 rgba(255, 246, 224, 0.65);
+}
+
+.playTriangle {
+  font-size: 0.85em;
+}
+
+.tagRow {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+.tagBtn {
+  padding: 10px 20px;
+  border-radius: 12px;
+  border: 2px solid var(--td-wood-dark);
+  background: var(--td-wood-gradient);
+  color: var(--td-paper);
+  font-family: var(--td-font-game);
+  font-weight: 700;
+  font-size: 0.95rem;
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow:
+    inset 0 2px 0 rgba(255, 246, 224, 0.35),
+    0 6px 14px rgba(0, 0, 0, 0.35);
+  text-shadow: 0 1px 0 rgba(67, 48, 27, 0.6);
+  transition: transform 0.15s ease, filter 0.15s ease;
+}
+
+.tagBtn:hover {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+}
+
+.tagBtn:active {
+  transform: scale(0.96);
+}
+
+.tagBtnBrick {
+  background: linear-gradient(180deg, #c9502f, var(--td-brick));
+  border-color: #6e2413;
+}
+
+.mascot {
+  width: clamp(120px, 18vw, 168px);
+  height: auto;
+  margin-top: clamp(14px, 3vh, 26px);
+  filter: drop-shadow(0 10px 16px rgba(0, 0, 0, 0.4));
+  animation: mascotBob 3.2s ease-in-out infinite alternate;
+}
+
+@keyframes mascotBob {
+  from {
+    transform: translateY(0) rotate(-1deg);
+  }
+  to {
+    transform: translateY(-8px) rotate(1deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mascot {
+    animation: none;
+  }
+}
+
+.tagline {
+  max-width: 620px;
+  margin: 10px 16px 0;
+  text-align: center;
+  color: var(--td-cream-muted);
+  font-size: 0.98rem;
+  line-height: 1.55;
+}
+
+@media (max-width: 640px) {
+  .cornerPlaque {
+    top: 20px;
+  }
+}

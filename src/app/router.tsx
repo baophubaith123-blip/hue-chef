@@ -21,7 +21,7 @@ import RegisterPage from '@/pages/auth/RegisterPage';
 import AboutPage from '@/pages/common/AboutPage';
 import FeedbackPage from '@/pages/common/FeedbackPage';
 import HelpPage from '@/pages/common/HelpPage';
-import LandingPage from '@/pages/common/LandingPage';
+import TitleScreen from '@/pages/common/TitleScreen';
 import NotFoundPage from '@/pages/common/NotFoundPage';
 import EditorAchievementsPage from '@/pages/editor/EditorAchievementsPage';
 import EditorDashboardPage from '@/pages/editor/EditorDashboardPage';
@@ -90,7 +90,7 @@ export const router = createBrowserRouter([
   },
   {
     path: '/',
-    element: <LandingPage />,
+    element: <TitleScreen />,
   },
   {
     element: <ProtectedRoute allowedRoles={['player']} />,

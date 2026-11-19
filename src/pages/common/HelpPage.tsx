@@ -1,7 +1,7 @@
 import { useTranslation } from '@/i18n/useTranslation';
 
-import { Header } from '@/components/Header';
-import { Footer } from '@/components/Footer';
+
+import { PublicScene } from '@/pages/common/TitleScene';
 
 import styles from './HelpPage.module.css';
 
@@ -28,8 +28,7 @@ export default function HelpPage() {
   ];
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-      <Header />
+    <PublicScene>
       <main className={styles.page}>
         <section className={styles.hero}>
           <h1 className={styles.title}>{t('help.title')}</h1>
@@ -48,7 +47,6 @@ export default function HelpPage() {
           </div>
         </section>
       </main>
-      <Footer />
-    </div>
+    </PublicScene>
   );
 }

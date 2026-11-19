@@ -1,9 +1,9 @@
 import { useState, type FormEvent } from 'react';
 
 import { Button } from '@/components/Button';
-import { Footer } from '@/components/Footer';
-import { Header } from '@/components/Header';
 import { useTranslation } from '@/i18n/useTranslation';
+
+import { PublicScene } from '@/pages/common/TitleScene';
 
 import styles from './FeedbackPage.module.css';
 
@@ -48,8 +48,7 @@ export default function FeedbackPage() {
   };
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-      <Header />
+    <PublicScene>
       <main className={styles.page}>
         <section className={styles.hero}>
           <h1 className={styles.title}>{t('feedback.title')}</h1>
@@ -103,7 +102,6 @@ export default function FeedbackPage() {
           </form>
         )}
       </main>
-      <Footer />
-    </div>
+    </PublicScene>
   );
 }

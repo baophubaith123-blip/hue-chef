@@ -14,6 +14,7 @@ import {
 } from '@/lib/validate';
 
 import authStyles from '@/pages/auth/AuthLayout.module.css';
+import { TitleScene } from '@/pages/common/TitleScene';
 
 export default function RegisterPage() {
   const { t } = useTranslation();
@@ -59,7 +60,8 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className={authStyles.page}>
+    <TitleScene compact>
+      <div className={authStyles.page}>
       <div className={authStyles.panel}>
         <header className={authStyles.brand}>
           <h1 className={authStyles.brandTitle}>{import.meta.env.VITE_APP_NAME}</h1>
@@ -139,5 +141,6 @@ export default function RegisterPage() {
         </Card>
       </div>
     </div>
+    </TitleScene>
   );
 }
