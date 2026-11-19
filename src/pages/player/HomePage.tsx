@@ -5,7 +5,7 @@ import { AchievementIcon } from '@/components/AchievementIcon';
 import { Button } from '@/components/Button';
 import { EmptyState } from '@/components/EmptyState';
 import { DishGradeFrame } from '@/components/theme-d/DishGradeFrame';
-import { GAME_ART, NOI_NOI_FLAT, gameIcon } from '@/components/theme-d/game-assets';
+import { NOI_NOI_FLAT, gameIcon } from '@/components/theme-d/game-assets';
 import { dishArtFor } from '@/components/theme-d/dish-art';
 import { useAchievements } from '@/contexts/AchievementContext';
 import { useTaxonomy } from '@/contexts/TaxonomyContext';
@@ -187,8 +187,7 @@ export default function HomePage() {
         {/* Vùng biển hiệu: biển gỗ lớn + thẻ giấy người chơi */}
         <section className={styles.signArea} aria-label={dict.dashboard.heroTitleHue}>
           <div className={styles.signWrap}>
-            <img src={GAME_ART.signTitle} alt="" className={styles.signImg} draggable={false} />
-            <div className={styles.signText}>
+                        <div className={styles.signText}>
               <span className={styles.signTitle}>Hue Chef</span>
               <span className={styles.signSub}>{dict.dashboard.heroTitleHue}</span>
             </div>

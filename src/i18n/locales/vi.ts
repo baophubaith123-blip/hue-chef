@@ -1609,6 +1609,7 @@ export const vi: I18nDictionary = {
     destinations: 'Khám phá',
     settings: 'Cài đặt',
     accountSection: 'Tài khoản & hệ thống',
+    play: 'Chơi',
     guestName: 'Khách',
     accountRequired: 'Cần tài khoản',
     accountRequiredBody: 'Khu vực này dành cho người chơi có tài khoản. Đăng nhập hoặc tạo tài khoản để mở khoá — tiến độ chơi thử của bạn vẫn được giữ và hợp nhất vào tài khoản.',

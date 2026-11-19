@@ -1433,6 +1433,7 @@ export interface I18nDictionary {
     destinations: string;
     settings: string;
     accountSection: string;
+    play: string;
     guestName: string;
     accountRequired: string;
     accountRequiredBody: string;

@@ -13,16 +13,29 @@
 
 .signArea {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 14px;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 14px 22px;
   padding-top: 6px;
+  padding-left: clamp(0px, 1.5vw, 22px);
+}
+
+@media (max-width: 700px) {
+  .signArea {
+    flex-direction: column;
+    align-items: center;
+    padding-left: 0;
+  }
 }
 
 .signWrap {
   position: relative;
-  width: min(700px, 100%);
+  width: min(560px, 100%);
   container-type: inline-size;
+  aspect-ratio: 1142 / 430;
+  background: url('../../assets/theme-d/game/sign-hero.webp') center / 100% 100% no-repeat;
   filter: drop-shadow(0 16px 26px rgba(0, 0, 0, 0.45));
   transform-origin: 50% -30px;
   animation: homeSignSway 6.5s ease-in-out infinite alternate;
@@ -43,17 +56,12 @@
   }
 }
 
-.signImg {
-  display: block;
-  width: 100%;
-  height: auto;
-}
 
 .signText {
   position: absolute;
-  left: 4%;
-  top: 31%;
-  width: 58%;
+  left: 1%;
+  top: 29%;
+  width: 65%;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -63,23 +71,24 @@
 
 .signTitle {
   font-family: var(--td-font-game-display);
-  font-size: 11cqw;
-  line-height: 1;
-  color: #fff6e0;
+  font-size: 13cqw;
+  line-height: 1.04;
+  color: #4a2410;
   letter-spacing: 0.01em;
+  -webkit-text-stroke: 0.052em #fff3d6;
   text-shadow:
-    0 3px 0 #8a5a00,
-    0 6px 0 rgba(67, 48, 27, 0.45),
-    0 12px 26px rgba(0, 0, 0, 0.4);
+    0 0.045em 0 rgba(58, 28, 13, 0.5),
+    0 12px 26px rgba(0, 0, 0, 0.35);
 }
 
 .signSub {
-  margin-top: 1.6cqw;
+  margin-top: 2.2cqw;
   font-family: var(--td-font-game);
-  font-weight: 700;
-  font-size: 3.1cqw;
-  color: #ffe9bd;
-  text-shadow: 0 2px 0 rgba(67, 48, 27, 0.65);
+  font-weight: 800;
+  font-size: 4.05cqw;
+  color: #fff6e0;
+  -webkit-text-stroke: 0.05em #3a1c0d;
+  text-shadow: 0 2px 0 rgba(58, 28, 13, 0.55);
 }
 
 .paintedIcon {

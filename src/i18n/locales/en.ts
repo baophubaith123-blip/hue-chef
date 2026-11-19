@@ -1608,6 +1608,7 @@ export const en: I18nDictionary = {
     destinations: 'Explore',
     settings: 'Settings',
     accountSection: 'Account & system',
+    play: 'Play',
     guestName: 'Guest',
     accountRequired: 'Account required',
     accountRequiredBody: 'This area is for players with an account. Log in or create an account to unlock it — your guest progress is kept and merged into your account.',

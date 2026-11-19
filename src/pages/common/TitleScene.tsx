@@ -29,6 +29,9 @@ export function TitleScene({ children, compact = false }: TitleSceneProps) {
       <div className={styles.garland} aria-hidden="true">
         <img src={GAME_ART.garlandStrip} alt="" className={styles.garlandImg} draggable={false} />
       </div>
+      <div className={styles.garlandBottom} aria-hidden="true">
+        <img src={GAME_ART.garlandBottom} alt="" className={styles.garlandBottomImg} draggable={false} />
+      </div>
       <div className={styles.particles} aria-hidden="true">
         {Array.from({ length: 8 }, (_, i) => (
           <span key={i} className={styles.particle} />
@@ -36,8 +39,7 @@ export function TitleScene({ children, compact = false }: TitleSceneProps) {
       </div>
 
       <div className={`${styles.signWrap} ${compact ? styles.signCompact : ''}`}>
-        <img src={GAME_ART.signTitle} alt="" className={styles.signImg} draggable={false} />
-        <div className={styles.signText}>
+                <div className={styles.signText}>
           <span className={styles.signTitle}>Hue Chef</span>
           <span className={styles.signSub}>{dict.dashboard.heroTitleHue}</span>
         </div>

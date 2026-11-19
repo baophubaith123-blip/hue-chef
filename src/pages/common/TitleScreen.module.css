@@ -25,33 +25,75 @@
   padding: 0 16px;
 }
 
-.playBig {
-  display: inline-flex;
+.playRow {
+  display: flex;
   align-items: center;
-  gap: 14px;
-  min-width: min(430px, 86vw);
   justify-content: center;
-  padding: 20px 38px;
-  border-radius: 22px;
-  border: 3px solid #7c4a12;
-  background:
-    radial-gradient(120% 160% at 50% -30%, rgba(255, 246, 224, 0.55), transparent 55%),
-    linear-gradient(180deg, var(--td-gold-bright) 0%, var(--td-gold) 52%, var(--td-gold-deep) 100%);
-  color: #4a2c14;
-  font-family: var(--td-font-game-display);
-  font-size: clamp(1.45rem, 4.5vw, 2rem);
-  letter-spacing: 0.02em;
-  cursor: pointer;
-  box-shadow:
-    inset 0 3px 0 rgba(255, 246, 224, 0.75),
-    inset 0 -5px 0 rgba(122, 74, 10, 0.45),
-    0 14px 30px rgba(0, 0, 0, 0.45),
-    0 0 0 4px rgba(233, 162, 59, 0.22);
-  text-shadow: 0 1px 0 rgba(255, 246, 224, 0.65);
+  gap: clamp(10px, 2.4vw, 22px);
+  flex-wrap: wrap;
 }
 
-.playTriangle {
-  font-size: 0.85em;
+.sideTag {
+  min-width: 172px;
+  aspect-ratio: 600 / 213;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 26px 10px;
+  box-sizing: border-box;
+  background: url('../../assets/theme-d/game/tag-hero.webp') center / 100% 100% no-repeat;
+  border: none;
+  color: #fff3d6;
+  font-family: var(--td-font-game);
+  font-weight: 800;
+  font-size: 1.02rem;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  -webkit-text-stroke: 0.028em #2e1508;
+  text-shadow: 0 2px 0 rgba(46, 21, 8, 0.6);
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.4));
+  transition: transform 0.15s ease, filter 0.15s ease;
+}
+
+.sideTag:hover {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+}
+
+.sideTag:active {
+  transform: scale(0.96);
+}
+
+@media (max-width: 700px) {
+  .playBig {
+    order: -1;
+  }
+}
+
+.playBig {
+  position: relative;
+  width: min(500px, 90vw);
+  aspect-ratio: 920 / 366;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-left: 33%;
+  box-sizing: border-box;
+  background: url('../../assets/theme-d/game/btn-play-hero.webp') center / contain no-repeat;
+  border: none;
+  cursor: pointer;
+  color: #ffe9a8;
+  font-family: var(--td-font-game-display);
+  font-size: clamp(2rem, 5.2vw, 3.1rem);
+  letter-spacing: 0.03em;
+  -webkit-text-stroke: 0.045em #7c3f10;
+  text-shadow: 0 3px 0 rgba(124, 63, 16, 0.55);
+  filter: drop-shadow(0 14px 26px rgba(0, 0, 0, 0.45));
+}
+
+.playBigLong {
+  font-size: clamp(1.35rem, 3.4vw, 1.95rem);
 }
 
 .tagRow {
@@ -94,11 +136,23 @@
 }
 
 .mascot {
-  width: clamp(120px, 18vw, 168px);
+  position: absolute;
+  right: clamp(8px, 3.5vw, 52px);
+  bottom: 0;
+  z-index: 3;
+  width: clamp(132px, 17vw, 196px);
   height: auto;
-  margin-top: clamp(14px, 3vh, 26px);
   filter: drop-shadow(0 10px 16px rgba(0, 0, 0, 0.4));
   animation: mascotBob 3.2s ease-in-out infinite alternate;
+}
+
+@media (max-width: 760px) {
+  .mascot {
+    position: static;
+    align-self: flex-end;
+    margin: 10px 14px 0 0;
+    width: 118px;
+  }
 }
 
 @keyframes mascotBob {

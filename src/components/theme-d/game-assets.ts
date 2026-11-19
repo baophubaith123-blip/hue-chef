@@ -15,6 +15,10 @@ import btnBrick from '@/assets/theme-d/game/btn-brick.webp';
 import btnPlay from '@/assets/theme-d/game/btn-play.webp';
 import medallion from '@/assets/theme-d/game/medallion.webp';
 import garlandStrip from '@/assets/theme-d/game/garland-strip.webp';
+import garlandBottom from '@/assets/theme-d/game/garland-bottom.webp';
+import signHero from '@/assets/theme-d/game/sign-hero.webp';
+import btnPlayHero from '@/assets/theme-d/game/btn-play-hero.webp';
+import tagHero from '@/assets/theme-d/game/tag-hero.webp';
 
 import noiNoiPot from '@/assets/theme-d/noi-noi-flat/noinoi-pot.webp';
 import noiNoiWave from '@/assets/theme-d/noi-noi-flat/noinoi-wave.webp';
@@ -34,6 +38,10 @@ export const GAME_ART = {
   btnPlay,
   medallion,
   garlandStrip,
+  garlandBottom,
+  signHero,
+  btnPlayHero,
+  tagHero,
 } as const;
 
 export type NoiNoiFlatPose = 'pot' | 'wave' | 'cook' | 'happy' | 'sad' | 'sleep';

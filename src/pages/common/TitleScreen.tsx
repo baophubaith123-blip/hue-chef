@@ -52,53 +52,50 @@ export default function TitleScreen() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.15, duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
       >
-        <motion.button
-          type="button"
-          className={styles.playBig}
-          onClick={handlePlay}
-          whileHover={reduceMotion ? undefined : { scale: 1.04 }}
-          whileTap={reduceMotion ? undefined : { scale: 0.95 }}
-          transition={spring}
-          data-testid="title-play"
-        >
-          <span className={styles.playTriangle} aria-hidden="true">
-            ▶
-          </span>
-          {user ? t('landing.ctaContinue') : t('landing.ctaStart')}
-        </motion.button>
+        <div className={styles.playRow}>
+          {user && !user.guest ? (
+            <button
+              type="button"
+              className={`${styles.sideTag} ${styles.tagBtnBrick}`}
+              onClick={() => logout()}
+            >
+              {t('auth.logout')}
+            </button>
+          ) : (
+            <Link to="/login" className={styles.sideTag}>
+              {t('auth.login')}
+            </Link>
+          )}
 
-        <div className={styles.tagRow}>
-          <Link to="/about" className={styles.tagBtn}>
+          <motion.button
+            type="button"
+            className={`${styles.playBig} ${user ? styles.playBigLong : ''}`}
+            onClick={handlePlay}
+            whileHover={reduceMotion ? undefined : { scale: 1.04 }}
+            whileTap={reduceMotion ? undefined : { scale: 0.95 }}
+            transition={spring}
+            data-testid="title-play"
+          >
+            {user ? t('landing.ctaContinue') : t('game.play')}
+          </motion.button>
+
+          <Link to="/about" className={styles.sideTag}>
             {dict.nav.about}
           </Link>
+        </div>
+
+        <div className={styles.tagRow}>
           <Link to="/help" className={styles.tagBtn}>
             {t('help.title')}
           </Link>
           <Link to="/feedback" className={styles.tagBtn}>
             {t('feedback.title')}
           </Link>
-          {user?.guest ? (
-            <>
-              <Link to="/login" className={styles.tagBtn}>
-                {t('auth.login')}
-              </Link>
-              <Link to="/register" className={styles.tagBtn}>
-                {t('auth.register')}
-              </Link>
-            </>
-          ) : user ? (
-            <button
-              type="button"
-              className={`${styles.tagBtn} ${styles.tagBtnBrick}`}
-              onClick={() => logout()}
-            >
-              {t('auth.logout')}
-            </button>
-          ) : (
+          {!user || user.guest ? (
             <Link to="/register" className={styles.tagBtn}>
               {t('auth.register')}
             </Link>
-          )}
+          ) : null}
         </div>
       </motion.div>
 
