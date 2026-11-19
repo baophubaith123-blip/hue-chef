@@ -203,6 +203,16 @@ function prepare(state: EventsUserState, today: string): EventsUserState {
   if (!next.weekly || next.weekly.week !== week) {
     next = { ...next, weekly: { week, quests: freshQuestInstances(weeklyQuestsFor(week)) } };
   }
+  // A streak whose last play day is two or more days back is already
+  // broken — read it as 0 right away instead of the stale count (the
+  // next play event would restart it at 1 anyway; best is kept).
+  if (
+    next.streak.lastPlayDay &&
+    next.streak.count > 0 &&
+    dayDiff(next.streak.lastPlayDay, today) >= 2
+  ) {
+    next = { ...next, streak: { ...next.streak, count: 0 } };
+  }
   return next;
 }
 
