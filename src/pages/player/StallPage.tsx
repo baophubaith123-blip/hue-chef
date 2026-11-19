@@ -632,10 +632,13 @@ export default function StallPage() {
 
       {/* Mobile only (≤560px CSS): the wallets move out of the sign to a
           bar under the stage so the sign cluster cannot collide with the
-          in-scene object buttons on a short stage. */}
+          in-scene object buttons on a short stage. Gói H8: the audio
+          controls ride the same bar (the sign instance hides itself on
+          phones for the same collision reason). */}
       <div className={styles.mobileWallets}>
         <CoinPill amount={user.coins ?? 0} currency="xu" label={s.xuBoard} />
         <CoinPill amount={user.cok ?? 0} currency="cok" label={s.cokJar} />
+        <AudioControls compact />
       </div>
 
       {/* Away status (Gói H6, mục 5.9): said out loud before it matters —

@@ -531,6 +531,13 @@
     display: none;
   }
 
+  /* Gói H8: same move as the wallets — on phones the sign's audio row
+     would sit under the in-scene object buttons; the under-stage bar
+     carries the controls instead. */
+  .signBox .signAudio {
+    display: none;
+  }
+
   .mobileWallets {
     display: flex;
     gap: 8px;
