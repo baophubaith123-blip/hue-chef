@@ -1477,9 +1477,12 @@ export function settleAfk(
       .map((notice) => ({ ingredientId: notice.ingredientId, qty: notice.qty }));
     const essential = afkEssentialFor(working.staff);
     if (!essential.ok) {
-      // No crew, no sales — but only report when there was something
-      // to sell; a player without licenses has no stall to close.
-      if (menu.length === 0) return working;
+      // No crew, no sales — the stall simply stayed closed, which the
+      // stall page's standing status line already says out loud. A
+      // modal ledger is only worth interrupting for when goods were
+      // actually lost while away; ordinary spoilage still surfaces
+      // through the pantry notices as before.
+      if (spoiledWhileAway.length === 0) return working;
       report = {
         startedAt: afkStart,
         endedAt: now,
