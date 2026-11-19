@@ -781,7 +781,10 @@
 }
 
 .deliveryTag {
-  background: var(--td-brick);
+  /* Deep brick in BOTH themes, same call as the Theme D brick Badge:
+     the dark-theme --td-brick is a light orange meant for large
+     surfaces, and cream label text on it only reaches 2.4:1. */
+  background: #b03e26;
   color: var(--td-cream);
   border-radius: 999px;
   padding: 1px 8px;
