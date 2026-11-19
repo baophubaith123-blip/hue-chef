@@ -1411,6 +1411,15 @@ export interface I18nDictionary {
     statAchievements: string;
     statCooks: string;
   };
+  scene: {
+    festivalTitle: string;
+    festivalLive: string;
+    featuredTag: string;
+    todayTitle: string;
+    todayHint: string;
+    playCenter: string;
+    openedCount: (opened: number, total: number) => string;
+  };
   dashboard: {
     greetingMorning: string;
     greetingAfternoon: string;

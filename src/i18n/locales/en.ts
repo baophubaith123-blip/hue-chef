@@ -1586,6 +1586,15 @@ export const en: I18nDictionary = {
     statAchievements: '27+ Culinary Badges',
     statCooks: '40+ Active Chefs',
   },
+  scene: {
+    festivalTitle: 'HUE FOOD FESTIVAL',
+    festivalLive: 'NOW LIVE',
+    featuredTag: 'FEATURED DISHES',
+    todayTitle: "TODAY'S QUESTS",
+    todayHint: 'Finish them for instant rewards!',
+    playCenter: 'Play now',
+    openedCount: (opened: number, total: number) => `${opened}/${total} recipes unlocked`,
+  },
   dashboard: {
     greetingMorning: 'Good morning',
     greetingAfternoon: 'Good afternoon',

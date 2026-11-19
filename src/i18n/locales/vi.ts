@@ -1587,6 +1587,15 @@ export const vi: I18nDictionary = {
     statAchievements: '27+ Huy hiệu ẩm thực',
     statCooks: '40+ Đầu bếp đang nấu',
   },
+  scene: {
+    festivalTitle: 'LỄ HỘI ẨM THỰC HUẾ',
+    festivalLive: 'ĐANG DIỄN RA',
+    featuredTag: 'MÓN NỔI BẬT',
+    todayTitle: 'NHIỆM VỤ HÔM NAY',
+    todayHint: 'Hoàn thành để nhận thưởng ngay!',
+    playCenter: 'Chơi ngay',
+    openedCount: (opened: number, total: number) => `Đã mở ${opened}/${total} công thức`,
+  },
   dashboard: {
     greetingMorning: 'Chào buổi sáng',
     greetingAfternoon: 'Chào buổi chiều',
