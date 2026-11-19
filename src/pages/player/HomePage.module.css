@@ -1120,3 +1120,95 @@
     display: none;
   }
 }
+
+/* ===== Gói H7 — event cards on the player home =====
+   Paper surfaces in both themes (same family as the quick-mode cards
+   above), so text stays on the pinned paper ink tokens. */
+.eventsSection {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.eventsTitle {
+  font-family: var(--td-font-display);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin: 0;
+}
+
+.eventsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+}
+
+@media (max-width: 900px) {
+  .eventsGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.eventCard {
+  background: var(--td-paper, #fff6e0);
+  color: var(--td-paper-text, #43301b);
+  border: 3px solid var(--td-ink);
+  border-radius: 22px;
+  box-shadow: var(--shadow-game-card, 0 12px 28px rgba(59, 42, 32, 0.12));
+  padding: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  text-decoration: none;
+  transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.eventCard:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+}
+
+.eventIcon {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-md);
+  background: var(--gradient-gold, linear-gradient(135deg, #f6c453, #e9a23b));
+  border: 2.5px solid var(--td-ink, #4a2c14);
+  box-shadow: 0 3px 0 var(--td-ink-soft, rgba(74, 44, 20, 0.45));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  flex-shrink: 0;
+}
+
+.eventInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.eventName {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--td-paper-text, #43301b);
+  line-height: 1.3;
+}
+
+.eventDesc {
+  margin: 0.25rem 0 0;
+  font-size: 0.82rem;
+  color: var(--td-paper-text-muted, #7a5c38);
+}
+
+.eventArrow {
+  font-size: 1.4rem;
+  color: var(--td-paper-text-muted, #7a5c38);
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.eventCard:hover .eventArrow {
+  color: var(--td-brick);
+  transform: translateX(3px);
+}

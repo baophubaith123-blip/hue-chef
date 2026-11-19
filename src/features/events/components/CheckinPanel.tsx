@@ -1,0 +1,176 @@
+import { useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
+
+import { ImageWithFallback } from '@/components/ImageWithFallback';
+import { Badge } from '@/components/theme-d/Badge';
+import { DishGradeFrame } from '@/components/theme-d/DishGradeFrame';
+import { GoldButton } from '@/components/theme-d/GoldButton';
+import { KraftCard } from '@/components/theme-d/KraftCard';
+import { Toast, type ToastTone } from '@/components/theme-d/Toast';
+import { useAuth } from '@/contexts/AuthContext';
+import { useRecipes } from '@/contexts/RecipeContext';
+import {
+  CHECKIN_REWARDS,
+  currentStreak,
+  dishOfDayId,
+  nextCycleDay,
+} from '@/features/events/lib/checkin';
+import { claimCheckin, useEvents } from '@/features/events/store';
+import { dishGradeFor } from '@/features/recipes/lib/grade';
+import { addDays, dayDiff, todayKey } from '@/features/stall/lib/day';
+import { useTranslation } from '@/i18n/useTranslation';
+
+import styles from '@/features/events/components/CheckinPanel.module.css';
+
+/**
+ * Check-in panel (Gói H7, ý tưởng 20): the 7-day claim cycle, the live
+ * cooking streak and the dish of the day, in one kraft card. Rendered
+ * on the quests page and on the player home page. Rewards come back
+ * from the events store and are booked through AuthContext, keeping
+ * the wallet's single-writer law intact.
+ */
+export function CheckinPanel() {
+  const { dict } = useTranslation();
+  const { user, addCoins, addCok } = useAuth();
+  const events = useEvents(user?.id ?? null);
+  const { getRecipeById } = useRecipes();
+
+  const [toast, setToast] = useState<{ message: string; tone: ToastTone } | null>(null);
+  const toastTimerRef = useRef<number | null>(null);
+
+  const showToast = (message: string, tone: ToastTone) => {
+    setToast({ message, tone });
+    if (toastTimerRef.current !== null) window.clearTimeout(toastTimerRef.current);
+    toastTimerRef.current = window.setTimeout(() => setToast(null), 4200);
+  };
+
+  if (!user || !events) return null;
+
+  const c = dict.events.checkin;
+  const { checkin, streak } = events;
+
+  const today = todayKey();
+  const yesterday = addDays(today, -1);
+  const claimedToday = checkin.lastClaimDay === today;
+  const targetDay = claimedToday
+    ? checkin.cycleDay
+    : nextCycleDay(checkin.lastClaimDay, checkin.cycleDay, today);
+
+  // A past day cell counts as claimed when the claim chain reaching it
+  // is still alive: either today is already claimed (the cycle includes
+  // today), or yesterday was claimed and the cycle has not wrapped yet.
+  const isDayClaimed = (day: number): boolean => {
+    if (claimedToday) return day <= checkin.cycleDay;
+    return checkin.lastClaimDay === yesterday && checkin.cycleDay < 7 && day <= checkin.cycleDay;
+  };
+
+  const broken =
+    checkin.lastClaimDay !== '' && dayDiff(checkin.lastClaimDay, today) > 1 && !claimedToday;
+
+  const streakNow = currentStreak(streak.count, streak.lastPlayDay, today);
+
+  const dotdId = dishOfDayId(today);
+  const dotdRecipe = getRecipeById(dotdId);
+  const dotdGrade = dotdRecipe ? dishGradeFor(dotdRecipe) : null;
+  const dotdGradeLabel = dotdGrade ? (dict.recipe.gradeNames[dotdGrade - 1] ?? '') : '';
+
+  const handleClaim = () => {
+    const result = claimCheckin(user.id);
+    if (!result) return;
+    if (result.xu > 0) addCoins(result.xu);
+    if (result.cok > 0) addCok(result.cok);
+    showToast(c.claimedToast(result.cycleDay, result.xu, result.cok), 'success');
+  };
+
+  return (
+    <KraftCard as="section" className={styles.panel}>
+      <div className={styles.head}>
+        <div className={styles.headText}>
+          <h2 className={styles.title}>{c.title}</h2>
+          <p className={styles.subtitle}>{c.subtitle}</p>
+        </div>
+        <div className={styles.streakBox}>
+          {streakNow > 0 ? (
+            <span className={styles.streakLive}>
+              <span aria-hidden="true">🔥</span> {c.streakLabel(streakNow)}
+            </span>
+          ) : (
+            <span className={styles.streakNone}>{c.streakNone}</span>
+          )}
+          {streak.best > 1 ? <span className={styles.streakBest}>{c.streakBest(streak.best)}</span> : null}
+        </div>
+      </div>
+
+      <div className={styles.days} role="list" aria-label={c.title}>
+        {Array.from({ length: 7 }, (_, index) => {
+          const day = index + 1;
+          const claimed = isDayClaimed(day);
+          const isToday = !claimedToday && day === targetDay;
+          const reward = CHECKIN_REWARDS[day - 1];
+          const cellClass = [
+            styles.dayCell,
+            claimed ? styles.dayClaimed : '',
+            isToday ? styles.dayToday : '',
+          ]
+            .filter(Boolean)
+            .join(' ');
+          return (
+            <div key={day} className={cellClass} role="listitem">
+              <span className={styles.dayLabel}>{c.dayLabel(day)}</span>
+              <span className={styles.dayReward}>
+                {day < 7 ? `${reward?.xu ?? 0} ${dict.events.xuUnit}` : c.day7Note}
+              </span>
+              {isToday ? <Badge tone="gold">{c.todayBadge}</Badge> : null}
+              {claimed ? (
+                <span className={styles.dayCheck} aria-hidden="true">
+                  ✓
+                </span>
+              ) : null}
+            </div>
+          );
+        })}
+      </div>
+
+      {broken ? <p className={styles.brokenNote}>{c.brokenNote}</p> : null}
+
+      <div className={styles.claimRow}>
+        {claimedToday ? (
+          <GoldButton disabled>{c.claimedToday}</GoldButton>
+        ) : (
+          <GoldButton onClick={handleClaim}>{c.claimToday}</GoldButton>
+        )}
+      </div>
+
+      {dotdRecipe && dotdGrade ? (
+        <div className={styles.dotd}>
+          <DishGradeFrame grade={dotdGrade} gradeLabel={dotdGradeLabel} className={styles.dotdFrame}>
+            <ImageWithFallback
+              src={dotdRecipe.image}
+              alt={dotdRecipe.name}
+              fallbackTitle={dotdRecipe.name}
+              className={styles.dotdImage}
+            />
+          </DishGradeFrame>
+          <div className={styles.dotdBody}>
+            <div className={styles.dotdHead}>
+              <h3 className={styles.dotdTitle}>{c.dotdTitle}</h3>
+              <Badge tone="brick">{c.dotdBadge}</Badge>
+            </div>
+            <p className={styles.dotdName}>{dotdRecipe.name}</p>
+            <p className={styles.dotdNote}>{c.dotdLearnNote}</p>
+            <p className={styles.dotdNote}>{c.dotdSellNote}</p>
+            <Link to={`/recipes/${dotdId}`} className={styles.dotdLink}>
+              {c.dotdCookNow} →
+            </Link>
+          </div>
+        </div>
+      ) : null}
+
+      {toast ? (
+        <div className={styles.toastBox}>
+          <Toast message={toast.message} tone={toast.tone} />
+        </div>
+      ) : null}
+    </KraftCard>
+  );
+}

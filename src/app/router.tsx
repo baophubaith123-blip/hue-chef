@@ -30,7 +30,10 @@ import EditorRecipeDetailPage from '@/pages/editor/EditorRecipeDetailPage';
 import EditorRecipeFormPage from '@/pages/editor/EditorRecipeFormPage';
 import AchievementsPage from '@/pages/player/AchievementsPage';
 import AlbumPage from '@/pages/player/AlbumPage';
+import MysteryPage from '@/pages/player/MysteryPage';
+import QuestsPage from '@/pages/player/QuestsPage';
 import SkillTreePage from '@/pages/player/SkillTreePage';
+import SurvivalPage from '@/pages/player/SurvivalPage';
 import CollectionPage from '@/pages/player/CollectionPage';
 import CookingPage from '@/pages/player/CookingPage';
 import HomePage from '@/pages/player/HomePage';
@@ -100,6 +103,18 @@ export const router = createBrowserRouter([
       {
         path: '/skills',
         element: <SkillTreePage />,
+      },
+      {
+        path: '/quests',
+        element: <QuestsPage />,
+      },
+      {
+        path: '/survival',
+        element: <SurvivalPage />,
+      },
+      {
+        path: '/mystery',
+        element: <MysteryPage />,
       },
       {
         path: '/stall',

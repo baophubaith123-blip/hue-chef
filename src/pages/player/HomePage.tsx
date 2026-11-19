@@ -14,6 +14,7 @@ import { useRecipes } from '@/contexts/RecipeContext';
 import { SEED_ACHIEVEMENTS } from '@/data/achievements';
 import type { Recipe } from '@/data/types';
 import { loadUsers } from '@/features/auth/store';
+import { CheckinPanel } from '@/features/events/components/CheckinPanel';
 import { RecipeCard } from '@/features/recipes/components/RecipeCard';
 import { formatDate, formatDuration } from '@/lib/format';
 import { useTranslation } from '@/i18n/useTranslation';
@@ -336,6 +337,42 @@ export default function HomePage() {
                 {userRank ? t('dashboard.rankBadge', { rank: userRank } as Record<string, unknown>) : t('dashboard.unranked')}
               </div>
             </div>
+          </div>
+        </section>
+
+        {/* 3b. Điểm danh & món của ngày (Gói H7) */}
+        <CheckinPanel />
+
+        {/* 3c. Thẻ sự kiện (Gói H7) */}
+        <section className={styles.eventsSection} aria-label={dict.events.homeCards.eventsTitle}>
+          <h2 className={styles.eventsTitle}>{dict.events.homeCards.eventsTitle}</h2>
+          <div className={styles.eventsGrid}>
+            <Link to="/quests" className={styles.eventCard}>
+              <div className={styles.eventIcon} aria-hidden="true">📜</div>
+              <div className={styles.eventInfo}>
+                <h3 className={styles.eventName}>{dict.nav.quests}</h3>
+                <p className={styles.eventDesc}>{dict.events.homeCards.questsCard}</p>
+              </div>
+              <span className={styles.eventArrow}>›</span>
+            </Link>
+
+            <Link to="/survival" className={styles.eventCard}>
+              <div className={styles.eventIcon} aria-hidden="true">🔥</div>
+              <div className={styles.eventInfo}>
+                <h3 className={styles.eventName}>{dict.nav.survival}</h3>
+                <p className={styles.eventDesc}>{dict.events.homeCards.survivalCard}</p>
+              </div>
+              <span className={styles.eventArrow}>›</span>
+            </Link>
+
+            <Link to="/mystery" className={styles.eventCard}>
+              <div className={styles.eventIcon} aria-hidden="true">🎁</div>
+              <div className={styles.eventInfo}>
+                <h3 className={styles.eventName}>{dict.nav.mystery}</h3>
+                <p className={styles.eventDesc}>{dict.events.homeCards.mysteryCard}</p>
+              </div>
+              <span className={styles.eventArrow}>›</span>
+            </Link>
           </div>
         </section>
 

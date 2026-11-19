@@ -59,6 +59,9 @@ export function PlayerShell({ children }: PlayerShellProps) {
     if (p === '/map') return dict.nav.map;
     if (p === '/album') return dict.nav.album;
     if (p === '/skills') return dict.nav.skills;
+    if (p === '/quests' || p.startsWith('/quests')) return dict.nav.quests;
+    if (p === '/survival' || p.startsWith('/survival')) return dict.nav.survival;
+    if (p === '/mystery' || p.startsWith('/mystery')) return dict.nav.mystery;
     if (p === '/stall' || p === '/market') return dict.nav.stall;
     if (p === '/collection') return dict.nav.collection;
     if (p.startsWith('/inbox')) return dict.nav.inbox;
@@ -144,6 +147,36 @@ export function PlayerShell({ children }: PlayerShellProps) {
           >
             <span className={styles.navIcon}>🌳</span>
             <span className={styles.navLabel}>{t('nav.skills')}</span>
+          </NavLink>
+
+          <NavLink
+            to="/quests"
+            className={({ isActive }) =>
+              [styles.navLink, isActive ? styles.navLinkActive : ''].filter(Boolean).join(' ')
+            }
+          >
+            <span className={styles.navIcon}>📜</span>
+            <span className={styles.navLabel}>{t('nav.quests')}</span>
+          </NavLink>
+
+          <NavLink
+            to="/survival"
+            className={({ isActive }) =>
+              [styles.navLink, isActive ? styles.navLinkActive : ''].filter(Boolean).join(' ')
+            }
+          >
+            <span className={styles.navIcon}>🔥</span>
+            <span className={styles.navLabel}>{t('nav.survival')}</span>
+          </NavLink>
+
+          <NavLink
+            to="/mystery"
+            className={({ isActive }) =>
+              [styles.navLink, isActive ? styles.navLinkActive : ''].filter(Boolean).join(' ')
+            }
+          >
+            <span className={styles.navIcon}>🎁</span>
+            <span className={styles.navLabel}>{t('nav.mystery')}</span>
           </NavLink>
 
           <NavLink

@@ -1,0 +1,292 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding-bottom: 3rem;
+}
+
+/* Page head — big hanging wooden sign (same pattern as SkillTreePage).
+   The wood surface is fixed in both themes, so its text stays pinned
+   to the light cream that reads on wood. */
+.head {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  background: var(--td-wood-gradient, linear-gradient(180deg, #ce9550, #b57e40));
+  border: 3px solid var(--td-ink);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-chunky, 0 4px 0 rgba(74, 44, 20, 0.45));
+  padding: 1.4rem 1.75rem;
+}
+
+.title {
+  margin: 0;
+  font-family: var(--td-font-display);
+  font-size: 1.85rem;
+  font-weight: 800;
+  color: #fff6e0;
+  text-shadow: 0 2px 0 rgba(32, 15, 4, 0.45);
+}
+
+.subtitle {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #fff6e0;
+  line-height: 1.55;
+}
+
+/* ---------- Quest boards (on KraftCard paper bodies) ---------- */
+
+.board {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.boardTitle {
+  margin: 0;
+  font-family: var(--td-font-display);
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--td-paper-text);
+}
+
+.questList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+.questRow {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.8rem 0.9rem;
+  background: var(--td-paper-deep);
+  border: 2px solid var(--td-ink);
+  border-radius: var(--td-radius-paper);
+}
+
+.questMain {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.questText {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1.45;
+  color: var(--td-paper-text);
+}
+
+.progressTrack {
+  width: 100%;
+  height: 10px;
+  background: var(--td-paper);
+  border: 2px solid var(--td-ink);
+  border-radius: var(--td-radius-full);
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--td-gold-bright), var(--td-gold-deep));
+  border-radius: var(--td-radius-full);
+  transition: width 0.3s ease;
+}
+
+.questMeta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.questCount {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: var(--td-paper-text);
+}
+
+.questAction {
+  flex: none;
+  display: flex;
+  align-items: center;
+}
+
+.claimedLabel {
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: #8a5a00; /* pinned: paper stays light in dark theme */
+  white-space: nowrap;
+}
+
+/* ---------- Chain ---------- */
+
+.chainIntro {
+  margin: 0;
+  font-size: 0.92rem;
+  font-weight: 600;
+  line-height: 1.55;
+  color: var(--td-paper-text-muted);
+}
+
+.chainList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.chainStep {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  padding: 0.75rem 0.9rem;
+  border-radius: var(--td-radius-paper);
+  border: 2px solid var(--td-paper-text-muted);
+  background: var(--td-paper);
+}
+
+.chainStepDone {
+  border-color: var(--td-ink);
+  background: linear-gradient(180deg, var(--td-gold-bright), var(--td-gold) 60%, var(--td-gold-deep));
+}
+
+.chainStepCurrent {
+  border-color: var(--td-gold-deep);
+  box-shadow: var(--td-glow-gold);
+  background: var(--td-paper);
+}
+
+.chainStepLocked {
+  opacity: 0.55;
+}
+
+.chainStepMark {
+  font-size: 1.05rem;
+  line-height: 1.4;
+  flex: none;
+}
+
+.chainStepMain {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.chainStepLabel {
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--td-paper-text-muted);
+}
+
+.chainStepDone .chainStepLabel,
+.chainStepDone .chainStepText {
+  color: #43301b; /* pinned: gold face keeps dark ink in both themes */
+}
+
+.chainStepText {
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1.45;
+  color: var(--td-paper-text);
+}
+
+/* ---------- Chest ---------- */
+
+.chest {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem;
+  border: 3px solid var(--td-ink);
+  border-radius: var(--td-radius-wood);
+  background: var(--td-wood-gradient-soft, linear-gradient(180deg, #e3b06a, #cd9a52));
+}
+
+.chestText {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  min-width: 0;
+  flex: 1;
+}
+
+.chestTitle {
+  margin: 0;
+  font-family: var(--td-font-display);
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #43301b; /* pinned: wood surface keeps dark ink in both themes */
+}
+
+.chestBody {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  line-height: 1.5;
+  color: #43301b; /* pinned: wood surface keeps dark ink in both themes */
+}
+
+.chestAction {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.4rem;
+}
+
+.chestLocked {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #43301b; /* pinned: wood surface keeps dark ink in both themes */
+}
+
+/* ---------- Toast (same fixed slip as StallPage) ---------- */
+
+.toastBox {
+  position: fixed;
+  left: 50%;
+  bottom: 22px;
+  transform: translateX(-50%);
+  z-index: 60;
+  width: min(520px, calc(100vw - 32px));
+  display: flex;
+  justify-content: center;
+}
+
+@media (max-width: 760px) {
+  .title {
+    font-size: 1.5rem;
+  }
+
+  .questRow {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .questAction {
+    justify-content: flex-end;
+  }
+
+  .chestAction {
+    align-items: stretch;
+    width: 100%;
+  }
+}
