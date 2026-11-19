@@ -8,6 +8,15 @@
   grid-template-columns: 1fr;
 }
 
+/* Compact rows (support dashboard widget) cannot keep the full-page
+   5-column fixed grid: the fixed columns overflow the dashboard card
+   and squeeze the avatar into the status chip. Wrap instead (H10). */
+.compact .row {
+  display: flex;
+  flex-wrap: wrap;
+  row-gap: 0.35rem;
+}
+
 .tableHeader {
   display: grid;
   grid-template-columns: 110px 1.2fr 110px 130px auto;
