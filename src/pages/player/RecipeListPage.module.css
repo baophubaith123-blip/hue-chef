@@ -9,14 +9,15 @@
   display: flex;
   flex-direction: column;
   gap: 1.1rem;
-  padding: 1.6rem 1.5rem 1.25rem;
+  padding: 1.4rem 1.5rem 1.1rem;
   background:
     radial-gradient(ellipse at 18% 0%, rgba(233, 162, 59, 0.1), transparent 55%),
     linear-gradient(180deg, var(--td-paper) 0%, var(--td-paper-deep) 100%);
   color: var(--td-paper-text);
-  border: 4px solid var(--td-ink);
-  border-radius: 22px;
-  box-shadow: var(--td-shadow-paper);
+  border: 30px solid transparent;
+  border-image: url('../../assets/theme-d/game/frame-scroll.webp') 30% / 1 / 0 stretch;
+  border-radius: 18px;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
 }
 
 /* Gold rivets pinning the board's four corners, as drawn on the mẫu. */
@@ -159,5 +160,35 @@
   .statusBar {
     font-size: 0.82rem;
     padding: 0.55rem 0.85rem;
+  }
+}
+
+/* Title plaque (Gói Game-Shell): Coiny display title on the paper board. */
+.titlePlaque {
+  text-align: center;
+  padding: 0.4rem 1rem 0.2rem;
+}
+
+.pageTitle {
+  margin: 0;
+  font-family: var(--td-font-game-display);
+  font-size: clamp(1.7rem, 4vw, 2.5rem);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  color: var(--td-brick);
+  text-shadow: 0 2px 0 rgba(255, 246, 224, 0.9);
+}
+
+.pageSub {
+  margin: 0.35rem 0 0;
+  font-family: var(--td-font-game);
+  font-weight: 700;
+  color: var(--td-paper-text-muted);
+}
+
+@media (max-width: 640px) {
+  .board {
+    border-width: 20px;
+    padding: 1rem 0.9rem 0.9rem;
   }
 }

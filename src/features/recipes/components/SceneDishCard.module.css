@@ -225,3 +225,32 @@
     transform: none;
   }
 }
+
+/* Game-shell polish (Gói Game-Shell): painted badge/plaque icons, game
+   font for the dish name, gentle card lift on hover. */
+.badgeIcon {
+  width: 15px;
+  height: 15px;
+  object-fit: cover;
+  border-radius: 4px;
+  vertical-align: -2px;
+}
+
+.plaqueIcon {
+  width: 19px;
+  height: 19px;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+.title {
+  font-family: var(--td-font-game);
+}
+
+.frameWrap {
+  transition: transform 0.18s ease;
+}
+
+.frameWrap:hover {
+  transform: translateY(-4px);
+}

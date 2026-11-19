@@ -2,7 +2,6 @@ import { useMemo, useState } from 'react';
 
 import { EmptyState } from '@/components/EmptyState';
 import { Loading } from '@/components/Loading';
-import { WoodSign } from '@/components/theme-d/WoodSign';
 import { useAuth } from '@/contexts/AuthContext';
 import { useTranslation } from '@/i18n/useTranslation';
 import { useRecipes } from '@/contexts/RecipeContext';
@@ -14,6 +13,8 @@ import {
 import { SceneDishCard } from '@/features/recipes/components/SceneDishCard';
 import { filterAndSortRecipes } from '@/features/recipes/lib/filter-recipes';
 import { countOwnedRecipes, isRecipeOwned } from '@/features/recipes/lib/ownership';
+import { motion, useReducedMotion } from 'framer-motion';
+
 import { SceneShell } from '@/pages/player/SceneShell';
 
 import styles from '@/pages/player/RecipeListPage.module.css';
@@ -30,6 +31,7 @@ export default function RecipeListPage() {
   const { user } = useAuth();
   const { dict } = useTranslation();
   const [filters, setFilters] = useState<RecipeFilterState>(DEFAULT_FILTERS);
+  const reduceMotion = useReducedMotion();
 
   const lockedPriceFor = (recipe: Recipe): number | undefined =>
     isRecipeOwned(user, recipe) ? undefined : recipe.priceCoins;
@@ -49,17 +51,13 @@ export default function RecipeListPage() {
   return (
     <SceneShell active="recipes">
       <section className={styles.board}>
-        <span className={`${styles.rivet} ${styles.rivetTl}`} aria-hidden="true" />
-        <span className={`${styles.rivet} ${styles.rivetTr}`} aria-hidden="true" />
-        <span className={`${styles.rivet} ${styles.rivetBl}`} aria-hidden="true" />
-        <span className={`${styles.rivet} ${styles.rivetBr}`} aria-hidden="true" />
 
         <header className={styles.head}>
           <span className={styles.hangTag}>{dict.nav.recipes}</span>
-          <WoodSign
-            title={`🍲 ${dict.recipe.listTitle}`}
-            subtitle={dict.recipe.listSubtitle(visibleRecipes.length)}
-          />
+          <div className={styles.titlePlaque}>
+            <h1 className={styles.pageTitle}>{dict.recipe.listTitle}</h1>
+            <p className={styles.pageSub}>{dict.recipe.listSubtitle(visibleRecipes.length)}</p>
+          </div>
         </header>
 
         <RecipeFilter value={filters} onChange={setFilters} />
@@ -70,10 +68,16 @@ export default function RecipeListPage() {
           <EmptyState title={dict.scene.noResults} description={dict.scene.noResultsHint} />
         ) : (
           <ul className={styles.grid}>
-            {visibleRecipes.map((recipe) => (
-              <li key={recipe.id} className={styles.item}>
+            {visibleRecipes.map((recipe, idx) => (
+              <motion.li
+                key={recipe.id}
+                className={styles.item}
+                initial={reduceMotion ? false : { opacity: 0, y: 14 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: Math.min(idx, 11) * 0.04 }}
+              >
                 <SceneDishCard recipe={recipe} lockedPrice={lockedPriceFor(recipe)} />
-              </li>
+              </motion.li>
             ))}
           </ul>
         )}
