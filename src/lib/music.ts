@@ -310,13 +310,14 @@ class MusicEngine {
       this.scheduleStep(this.current, this.step, this.nextTime);
       this.nextTime += stepDur;
       this.step += 1;
-      if (this.step >= STEPS_PER_LOOP) {
-        this.step = 0;
-        if (this.pending && this.pending !== this.current) {
-          this.current = this.pending;
-          this.pending = null;
-          this.mirrorState();
-        }
+      if (this.step >= STEPS_PER_LOOP) this.step = 0;
+      // Pending tracks land on the next bar line (every 8 steps), so a
+      // scene change is heard within one bar — never mid-phrase, never
+      // a whole 32-step loop late.
+      if (this.step % 8 === 0 && this.pending && this.pending !== this.current) {
+        this.current = this.pending;
+        this.pending = null;
+        this.mirrorState();
       }
     }
   }
