@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Link, Navigate, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 
-import type { Achievement } from '@/data/types';
+import type { Achievement, Recipe } from '@/data/types';
 import { getIngredientById } from '@/data/ingredients';
 import { EmptyState } from '@/components/EmptyState';
 import { Loading } from '@/components/Loading';
@@ -28,7 +28,36 @@ import { gestureForStep } from '@/data/gesture-map';
 import { NoiNoi } from '@/components/theme-d';
 import { BOSS_JUDGE_IMAGE } from '@/components/theme-d/assets';
 import { chapterById, dishesOfChapter } from '@/features/journey/lib/chapters';
-import { BOSS_PASS_STARS, bestStarsByRecipe, bossStateFor } from '@/features/journey/lib/journey';
+import {
+  BOSS_PASS_STARS,
+  bestStarsByRecipe,
+  bossStateFor,
+  sellableRecipes,
+} from '@/features/journey/lib/journey';
+import { FeastResultPanel } from '@/features/events/components/FeastResultPanel';
+import { IncidentPanel } from '@/features/events/components/IncidentPanel';
+import { MysteryResultPanel } from '@/features/events/components/MysteryResultPanel';
+import { SurvivalResultPanel } from '@/features/events/components/SurvivalResultPanel';
+import {
+  completeMysteryRun,
+  loadEventsState,
+  recordFeastServed,
+  recordPlayEvent,
+  recordSurvivalDish,
+  useEvents,
+} from '@/features/events/store';
+import type { SurvivalRun } from '@/features/events/types';
+import { isDishOfDay } from '@/features/events/lib/checkin';
+import {
+  INCIDENT_GRACE_MS,
+  INCIDENT_PENALTY_INGREDIENT,
+  incidentDefById,
+  planIncidents,
+  type IncidentId,
+  type IncidentPlanEntry,
+} from '@/features/events/lib/incidents';
+import { applyMysterySwaps } from '@/features/events/lib/mystery';
+import { SURVIVAL_MAX_STRIKES } from '@/features/events/lib/survival';
 import { SellResultPanel } from '@/features/stall/components/SellResultPanel';
 import { SubstitutionPanel } from '@/features/stall/components/SubstitutionPanel';
 import {
@@ -51,9 +80,16 @@ import {
 import { useSkills } from '@/features/skills/store';
 import { emptySkillTiers } from '@/features/skills/lib/skills';
 import { dishGradeFor } from '@/features/recipes/lib/grade';
+import { FEAST_PRICE_FACTOR, FEAST_QTY } from '@/features/stall/lib/festival';
+import { incomeFactorForLevel } from '@/features/stall/lib/stall-levels';
+import type { CardKind } from '@/features/stall/lib/support';
+import { todayKey } from '@/features/stall/lib/day';
 import {
   canCookBatch,
+  discardBatch,
   finishCook,
+  grantCard,
+  serveFeast,
   tickStall,
   useStall,
 } from '@/features/stall/store';
@@ -81,7 +117,7 @@ export default function CookingPage() {
   const { id } = useParams<{ id: string }>();
   const { t, dict } = useTranslation();
   const { isLoading, getRecipeById, getApprovedRecipes } = useRecipes();
-  const { user, addXp, addCookedRecipe, grantSellLicense } = useAuth();
+  const { user, addXp, addCoins, addCookedRecipe, grantSellLicense } = useAuth();
   const navigate = useNavigate();
   const { checkAndUnlockForUser, allAchievements, isUnlocked } = useAchievements();
   const { push: pushNotification } = useNotification();
@@ -112,6 +148,9 @@ export default function CookingPage() {
   // like the skill tree — the chef cooks with their own tools wherever
   // they cook. Preview runs stay unboosted, like perks.
   const stall = useStall(user ? user.id : null);
+  // Events record (Gói H7): survival runs, the mystery box, the feast
+  // day and the quest/streak funnel all read from this one store.
+  const events = useEvents(user?.id ?? null);
   const sellCustomer = useMemo(
     () => (isSellMode ? stall?.customers.find((c) => c.id === sellOrderId) ?? null : null),
     [isSellMode, stall, sellOrderId],
@@ -156,6 +195,60 @@ export default function CookingPage() {
     return chapter && chapter.bossRecipeId === id ? chapter : undefined;
   }, [isPreview, isSellMode, bossParam, id]);
   const bossGuardRef = useRef<string | null>(null);
+  // Event modes (Gói H7): ?survival=<runId>, ?mystery=<boxId> and
+  // ?feast=1 turn the run into an event cook on the same engine. They
+  // never combine with preview, sell or boss; when several params are
+  // present the priority is survival > mystery > feast.
+  const survivalId = searchParams.get('survival');
+  const mysteryId = searchParams.get('mystery');
+  const feastParam = searchParams.get('feast') === '1';
+  const isSurvivalMode = Boolean(survivalId) && !isPreview && !isSellMode && !bossChapter;
+  const isMysteryMode =
+    !isSurvivalMode && Boolean(mysteryId) && !isPreview && !isSellMode && !bossChapter;
+  const isFeastMode =
+    !isSurvivalMode && !isMysteryMode && feastParam && !isPreview && !isSellMode && !bossChapter;
+  const survivalGuardRef = useRef<string | null>(null);
+  const mysteryGuardRef = useRef(false);
+  const feastGuardRef = useRef<string | null>(null);
+  // Mystery box: the run is played on the box's swapped copy of the
+  // dish, and the box itself is the ticket in (no ownership guard).
+  const box = isMysteryMode ? events?.mystery.activeBox ?? null : null;
+  const boxValid = Boolean(box && box.id === mysteryId && box.recipeId === id);
+  // Survival / mystery / feast end-of-run bookings, applied exactly
+  // once per finished run (same guard pattern as the sell conversion).
+  const survivalAppliedRef = useRef(false);
+  const [survivalOutcome, setSurvivalOutcome] = useState<
+    ({ run: SurvivalRun; ended: boolean; cleared: number } & { isBest: boolean }) | null
+  >(null);
+  const mysteryAppliedRef = useRef(false);
+  const [mysteryApplied, setMysteryApplied] = useState(false);
+  const [mysteryReward, setMysteryReward] = useState<{ xu: number; card: CardKind | null } | null>(
+    null,
+  );
+  const feastAppliedRef = useRef(false);
+  const [feastBatch, setFeastBatch] = useState<CookedBatch | null>(null);
+  const [feastServed, setFeastServed] = useState<{ xu: number; exp: number } | null>(null);
+  // Kitchen incidents (Gói H7): a per-run plan rolled when the run
+  // starts; an entry fires when its step becomes active and blocks the
+  // gesture until the cook fixes it (see IncidentPanel).
+  const [incidentPlan, setIncidentPlan] = useState<IncidentPlanEntry[]>([]);
+  const [activeIncident, setActiveIncident] = useState<{
+    defId: IncidentId;
+    startedAt: number;
+    penalized: boolean;
+  } | null>(null);
+  const firedStepsRef = useRef<Set<number>>(new Set());
+  const [incidentNow, setIncidentNow] = useState(() => Date.now());
+  const rollIncidentPlan = useCallback(
+    (forRecipe: Recipe): IncidentPlanEntry[] => {
+      const steps = forRecipe.steps ?? [];
+      if (searchParams.get('fx') === '1') {
+        return steps.length >= 2 ? [{ stepIndex: 1, defId: 'lua-tat' }] : [];
+      }
+      return planIncidents(steps.length, Math.random);
+    },
+    [searchParams],
+  );
   // Sell mode (Gói H4): the batch is created exactly once per finished
   // run; the seasoning deviation of the run feeds the flavour diagnosis.
   const sellGuardRef = useRef<string | null>(null);
@@ -208,6 +301,14 @@ export default function CookingPage() {
 
   const recipe = id ? getRecipeById(id) : undefined;
 
+  // The dish actually cooked: in mystery mode the box's stand-ins are
+  // written into a synthetic copy; every other mode cooks the dish
+  // itself. The tray and the amounts follow the effective copy.
+  const effectiveRecipe = useMemo(
+    () => (recipe && boxValid && box ? applyMysterySwaps(recipe, box.swaps) : recipe),
+    [recipe, boxValid, box],
+  );
+
   // Boss gate: the boss stage only opens when the chapter is learned and
   // the journey order allows it (see bossStateFor). A locked boss URL is
   // sent back to the map, where the missing condition is spelled out.
@@ -239,16 +340,57 @@ export default function CookingPage() {
     }
   }, [isSellMode, sellOrderId, user, recipe, isLoading, stall, navigate]);
 
+  // Survival gate: the run must exist, be the one named in the URL,
+  // and be waiting for exactly this dish.
+  useEffect(() => {
+    if (!isSurvivalMode || !survivalId || !user || !events) return;
+    if (survivalGuardRef.current === survivalId) return;
+    survivalGuardRef.current = survivalId;
+    const run = events.survival.current;
+    if (!run || run.id !== survivalId || run.queue[run.index] !== id) {
+      navigate('/survival', { replace: true });
+    }
+  }, [isSurvivalMode, survivalId, user, events, id, navigate]);
+
+  // Mystery gate: once the events record is loaded, a URL whose box is
+  // not the active one (or not for this dish) goes back to the box page.
+  useEffect(() => {
+    if (!isMysteryMode || !user || !events) return;
+    if (mysteryGuardRef.current) return;
+    mysteryGuardRef.current = true;
+    if (!boxValid) {
+      navigate('/mystery', { replace: true });
+    }
+  }, [isMysteryMode, user, events, boxValid, navigate]);
+
+  // Feast gate: the dish must be licensed for sale, the big pot owned,
+  // today's feast not yet served, and the pantry able to cover the
+  // village batch.
+  useEffect(() => {
+    if (!isFeastMode || !user || !recipe || isLoading || !stall || !events) return;
+    if (feastGuardRef.current === recipe.id) return;
+    feastGuardRef.current = recipe.id;
+    const ok =
+      sellableRecipes(user, getApprovedRecipes()).some((r) => r.id === recipe.id) &&
+      (stall.upgrades.pot ?? 0) >= 1 &&
+      events.feast.lastDay !== todayKey() &&
+      canCookBatch(stall, recipe, FEAST_QTY);
+    if (!ok) {
+      navigate('/stall', { replace: true });
+    }
+  }, [isFeastMode, user, recipe, isLoading, stall, events, getApprovedRecipes, navigate]);
+
   // While a sell cook runs, the stall clock keeps ticking (patience and
   // the shift itself), exactly as if the cook had stayed at the stall.
+  // A feast cook leaves the stall the same way, so it ticks too.
   useEffect(() => {
-    if (!isSellMode || !user) return;
+    if ((!isSellMode && !isFeastMode) || !user) return;
     const timer = window.setInterval(() => {
       tickStall(user.id, user, getApprovedRecipes(), Date.now());
       setSellNow(Date.now());
     }, 1000);
     return () => window.clearInterval(timer);
-  }, [isSellMode, user, getApprovedRecipes]);
+  }, [isSellMode, isFeastMode, user, getApprovedRecipes]);
 
   const approved = recipe && (recipe.status ?? 'approved') === 'approved';
   // "Chạy thử 5 màn": the recipe's own editor (or an admin) may run a
@@ -266,19 +408,19 @@ export default function CookingPage() {
   }
 
   const trayIngredientIds = useMemo(() => {
-    if (!recipe) {
+    if (!effectiveRecipe) {
       return [];
     }
-    return shuffleArray(buildTrayIngredientIds(recipe));
-  }, [recipe]);
+    return shuffleArray(buildTrayIngredientIds(effectiveRecipe));
+  }, [effectiveRecipe]);
 
   const amountByIngredientId = useMemo(() => {
     const map: Record<string, string> = {};
-    for (const ref of recipe?.ingredients ?? []) {
+    for (const ref of effectiveRecipe?.ingredients ?? []) {
       map[ref.ingredientId] = ref.amount;
     }
     return map;
-  }, [recipe]);
+  }, [effectiveRecipe]);
 
   const clearAnimationTimer = useCallback(() => {
     if (animationTimerRef.current !== null) {
@@ -328,10 +470,15 @@ export default function CookingPage() {
     if (!session || session.phase !== 'success' || !user) return;
     if (isPreview) return;
     if (isSellMode) return;
+    // Event modes book their own outcomes in their own effects/panels.
+    if (isSurvivalMode || isMysteryMode || isFeastMode) return;
     if (appliedResult) return;
 
     const xpPerkPct = perkValueOf(session.perk, 'xp-bonus-pct');
-    const xp = Math.round(calculateXpFromStars(session.stars) * (1 + xpPerkPct / 100));
+    const xpEarned = Math.round(calculateXpFromStars(session.stars) * (1 + xpPerkPct / 100));
+    // Dish of the day (Gói H7): a learning run of today's dish pays
+    // double XP — the ×2 lives here and only here in the learn loop.
+    const xp = isDishOfDay(session.recipe.id, todayKey()) ? xpEarned * 2 : xpEarned;
     const xpResult = addXp(xp);
     // Gói H2 — the learning loop no longer pays out xu (Kế hoạch hợp nhất,
     // chốt 6): rewards here are progress, unlocks and collectibles only.
@@ -339,6 +486,13 @@ export default function CookingPage() {
     // existing balance is untouched and still spends on recipes.
     const entry = buildCookedEntry(session);
     addCookedRecipe(entry);
+    // Events funnel (Gói H7): quests, the chain and the streak hear
+    // about every real learning cook through this one call.
+    recordPlayEvent(user.id, 'cook', {
+      recipeId: session.recipe.id,
+      stars: session.stars,
+      bossWin: Boolean(bossChapter && session.stars >= BOSS_PASS_STARS),
+    });
 
     const stored = {
       level: xpResult?.level ?? user.level ?? 1,
@@ -412,6 +566,9 @@ export default function CookingPage() {
     bossChapter,
     grantSellLicense,
     dict,
+    isSurvivalMode,
+    isMysteryMode,
+    isFeastMode,
   ]);
 
   // Sell conversion (Gói H4): when a sell run ends — success OR failure —
@@ -474,6 +631,155 @@ export default function CookingPage() {
     setSellBatch(batch);
   }, [isSellMode, sellOrderId, user, session, sellCustomer, sellRequest]);
 
+  // Survival booking (Gói H7): a finished dish — success OR failure —
+  // is booked into the run exactly once. A success also reports to the
+  // events funnel; learning progress is never touched by this mode.
+  useEffect(() => {
+    if (!isSurvivalMode || !survivalId || !user || !session) return;
+    if (session.phase !== 'success' && session.phase !== 'failed') return;
+    if (survivalAppliedRef.current) return;
+    survivalAppliedRef.current = true;
+    const success = session.phase === 'success';
+    const before = loadEventsState(user.id).survival;
+    const outcome = recordSurvivalDish(user.id, survivalId, {
+      recipeId: session.recipe.id,
+      score: session.finalScore,
+      stars: session.stars,
+      success,
+    });
+    if (!outcome) return;
+    if (success) {
+      recordPlayEvent(user.id, 'cook', {
+        recipeId: session.recipe.id,
+        stars: session.stars,
+      });
+    }
+    setSurvivalOutcome({
+      ...outcome,
+      isBest:
+        outcome.ended &&
+        outcome.run.totalScore > 0 &&
+        (outcome.cleared > before.bestDishes || outcome.run.totalScore > before.bestScore),
+    });
+  }, [isSurvivalMode, survivalId, user, session]);
+
+  // Mystery booking (Gói H7): a run played to the end consumes the box
+  // exactly once; the returned reward is applied here — xu through
+  // AuthContext, the premium card through the stall store.
+  useEffect(() => {
+    if (!isMysteryMode || !boxValid || !box || !user || !session) return;
+    if (session.phase !== 'success' && session.phase !== 'failed') return;
+    if (mysteryAppliedRef.current) return;
+    mysteryAppliedRef.current = true;
+    const success = session.phase === 'success';
+    const reward = completeMysteryRun(user.id, box.id, session.finalScore, success, session.recipe);
+    if (reward) {
+      if (reward.xu > 0) addCoins(reward.xu);
+      if (reward.card) grantCard(user.id, reward.card);
+    }
+    if (success) {
+      recordPlayEvent(user.id, 'cook', {
+        recipeId: session.recipe.id,
+        stars: session.stars,
+      });
+    }
+    setMysteryReward(reward ? { xu: reward.xu, card: reward.card } : null);
+    setMysteryApplied(true);
+  }, [isMysteryMode, boxValid, box, user, session, addCoins]);
+
+  // Feast conversion (Gói H7): the sell conversion's twin without the
+  // substitution verdict — the run's score ratio becomes the village
+  // batch's quality, its stage ratios the flavour diagnosis, and the
+  // pantry lots it eats its real cost, at FEAST_QTY portions.
+  useEffect(() => {
+    if (!isFeastMode || !user || !session) return;
+    if (session.phase !== 'success' && session.phase !== 'failed') return;
+    if (feastAppliedRef.current) return;
+    feastAppliedRef.current = true;
+    const ratio =
+      session.recipe.baseScore > 0
+        ? Math.min(1, Math.max(0, session.finalScore / session.recipe.baseScore))
+        : 0;
+    const qualityScore = Math.round(ratio * 100);
+    const band = qualityBandForScore(qualityScore);
+    const ratios: DiagnosisInput['ratios'] = {};
+    const partKeys = ['market', 'catch', 'cook', 'season', 'finish', 'quiz'] as const;
+    for (const key of partKeys) {
+      const plan = session.scorePlan[key];
+      if (plan > 0) ratios[key] = (session.scoreParts[key] ?? 0) / plan;
+    }
+    if (session.totalDurationSeconds > 0) {
+      ratios.time = session.timeRemainingSeconds / session.totalDurationSeconds;
+    }
+    const diagnosis = diagnoseBatch({
+      ratios,
+      wrongCount: session.wrongCount,
+      seasonDeviation: seasonDeviationRef.current,
+    });
+    const batch = finishCook(user.id, {
+      recipe: session.recipe,
+      qty: FEAST_QTY,
+      qualityScore,
+      level: band.level,
+      diagnosis,
+    });
+    setFeastBatch(batch);
+  }, [isFeastMode, user, session]);
+
+  // Incident activation: when the running step matches a planned entry
+  // that has not fired yet, the accident strikes and blocks the step.
+  useEffect(() => {
+    if (!session || session.phase !== 'running' || activeIncident || isPreview) return;
+    const entry = incidentPlan.find(
+      (e) => e.stepIndex === session.currentStepIndex && !firedStepsRef.current.has(e.stepIndex),
+    );
+    if (!entry) return;
+    firedStepsRef.current.add(entry.stepIndex);
+    setIncidentNow(Date.now());
+    setActiveIncident({ defId: entry.defId, startedAt: Date.now(), penalized: false });
+  }, [session, activeIncident, incidentPlan, isPreview]);
+
+  // Grace countdown clock for the active incident.
+  useEffect(() => {
+    if (!activeIncident) return undefined;
+    const timer = window.setInterval(() => setIncidentNow(Date.now()), 200);
+    return () => window.clearInterval(timer);
+  }, [activeIncident]);
+
+  const incidentGraceLeft = activeIncident
+    ? INCIDENT_GRACE_MS - (incidentNow - activeIncident.startedAt)
+    : INCIDENT_GRACE_MS;
+
+  const showIncidentToast = useCallback(
+    (text: string) => {
+      setSeasonToast(text);
+      if (seasonToastTimerRef.current !== null) {
+        window.clearTimeout(seasonToastTimerRef.current);
+      }
+      seasonToastTimerRef.current = window.setTimeout(() => setSeasonToast(null), 3200);
+    },
+    [],
+  );
+
+  // Grace expired: the accident burns in as exactly ONE cooking
+  // mistake through the engine's ordinary wrong-drop channel.
+  useEffect(() => {
+    if (!activeIncident || activeIncident.penalized) return;
+    if (incidentGraceLeft > 0) return;
+    dropIngredient(INCIDENT_PENALTY_INGREDIENT);
+    showIncidentToast(dict.events.incidents.penaltyToast);
+    setActiveIncident((prev) => (prev ? { ...prev, penalized: true } : prev));
+  }, [activeIncident, incidentGraceLeft, dropIngredient, dict, showIncidentToast]);
+
+  const handleIncidentFixed = useCallback(() => {
+    showIncidentToast(
+      activeIncident?.penalized
+        ? dict.events.incidents.fixedLateToast
+        : dict.events.incidents.fixedToast,
+    );
+    setActiveIncident(null);
+  }, [activeIncident, dict, showIncidentToast]);
+
   useEffect(() => {
     // The cleanup only ever clears visual-effect timers. The session
     // itself is torn down by the dedicated effect further below, keyed
@@ -505,7 +811,8 @@ export default function CookingPage() {
     // end of a run, and re-running this effect would restart the session.
     if (!currentPreview && user && guardCheckedIdRef.current !== current.id) {
       guardCheckedIdRef.current = current.id;
-      if (!isRecipeOwned(user, current)) {
+      // Mystery mode skips the ownership guard: the box is the ticket.
+      if (!(isMysteryMode && boxValid) && !isRecipeOwned(user, current)) {
         navigate(`/recipes/${current.id}`, { replace: true });
         return cleanupFx;
       }
@@ -519,6 +826,14 @@ export default function CookingPage() {
     const sellParam = searchParams.get('sell');
     const startKey = `${current.id}:${
       currentPreview ? 'preview' : sellParam ? `sell:${sellParam}` : 'play'
+    }${
+      isSurvivalMode
+        ? `:survival:${survivalId}`
+        : isMysteryMode
+          ? `:mystery:${mysteryId}`
+          : isFeastMode
+            ? ':feast'
+            : ''
     }`;
     if (startedKeyRef.current === startKey) {
       return cleanupFx;
@@ -530,7 +845,21 @@ export default function CookingPage() {
     seasonDeviationRef.current = null;
     subChoiceRef.current = null;
     setSubChoice(null);
-    startCooking(current, equippedPerk);
+    setSurvivalOutcome(null);
+    survivalAppliedRef.current = false;
+    setMysteryReward(null);
+    setMysteryApplied(false);
+    mysteryAppliedRef.current = false;
+    setFeastBatch(null);
+    setFeastServed(null);
+    feastAppliedRef.current = false;
+    // Mystery runs play the box's swapped copy of the dish.
+    const startRecipe =
+      isMysteryMode && boxValid && box ? applyMysterySwaps(current, box.swaps) : current;
+    setIncidentPlan(rollIncidentPlan(startRecipe));
+    firedStepsRef.current = new Set();
+    setActiveIncident(null);
+    startCooking(startRecipe, equippedPerk);
     return cleanupFx;
   }, [
     id,
@@ -840,6 +1169,56 @@ export default function CookingPage() {
       </div>
     </div>
   ) : null;
+  // Event framing (Gói H7): one banner per event mode, same frame as
+  // the boss/sell banners, over every stage of the run.
+  const survivalBanner = isSurvivalMode ? (
+    <div className={styles.bossBanner}>
+      <div className={styles.bossBannerText}>
+        <p className={styles.bossBannerTitle}>💀 {dict.events.survival.bannerTitle} — {recipe.name}</p>
+        <p className={styles.bossBannerRule}>
+          {dict.events.survival.bannerBody(
+            events?.survival.current?.results.filter((r) => r.success).length ?? 0,
+            events?.survival.current?.strikes ?? 0,
+            SURVIVAL_MAX_STRIKES,
+          )}
+        </p>
+      </div>
+    </div>
+  ) : null;
+  const mysteryBanner = isMysteryMode ? (
+    <div className={styles.bossBanner}>
+      <div className={styles.bossBannerText}>
+        <p className={styles.bossBannerTitle}>🎁 {dict.events.mystery.bannerTitle} — {recipe.name}</p>
+        <p className={styles.bossBannerRule}>{dict.events.mystery.bannerBody}</p>
+      </div>
+    </div>
+  ) : null;
+  const feastBanner = isFeastMode ? (
+    <div className={styles.bossBanner}>
+      <div className={styles.bossBannerText}>
+        <p className={styles.bossBannerTitle}>🎉 {dict.events.feast.bannerTitle} — {recipe.name}</p>
+        <p className={styles.bossBannerRule}>{dict.events.feast.bannerBody(FEAST_QTY)}</p>
+      </div>
+    </div>
+  ) : null;
+  // Back link: each mode returns to its own home; sell and feast both
+  // live at the stall.
+  const backHref =
+    isSellMode || isFeastMode
+      ? '/stall'
+      : isSurvivalMode
+        ? '/survival'
+        : isMysteryMode
+          ? '/mystery'
+          : `/recipes/${recipe.id}`;
+  const backLabel =
+    isSellMode || isFeastMode
+      ? dict.stall.backToStall
+      : isSurvivalMode
+        ? dict.events.survival.backToSurvival
+        : isMysteryMode
+          ? dict.events.mystery.backToMystery
+          : t('cooking.recipeDetail');
   // Substitution panel (Gói H5): rides under the sell banner through
   // every stage of a picky order's cook — the choice can be confirmed
   // at any point before the run ends; no choice = ignored = penalised.
@@ -932,6 +1311,52 @@ export default function CookingPage() {
             }
       : null;
 
+  // Feast serve/discard/retry (Gói H7): serving books the village
+  // payout through the stall store; the caller applies the xu and
+  // stamps the feast day + the events funnel.
+  const feastPricePreview = feastBatch
+    ? Math.round(
+        priceForBatch({
+          cost: feastBatch.cost,
+          grade: dishGradeFor(recipe),
+          bestStars: bestStarsByRecipe(user).get(recipe.id) ?? 0,
+          level: feastBatch.level,
+        }) *
+          FEAST_PRICE_FACTOR *
+          incomeFactorForLevel(stall?.stallLevel ?? 1),
+      )
+    : 0;
+  const handleFeastServe = () => {
+    if (!user || !feastBatch) return;
+    const result = serveFeast(
+      user.id,
+      feastBatch.id,
+      bestStarsByRecipe(user).get(recipe.id) ?? 0,
+      session.recipe,
+    );
+    if (!result) return;
+    if (result.totalXu > 0) addCoins(result.totalXu);
+    recordFeastServed(user.id);
+    recordPlayEvent(user.id, 'feast', { recipeId: recipe.id, revenueXu: result.totalXu });
+    setFeastServed({ xu: result.totalXu, exp: result.exp });
+  };
+  const handleFeastDiscard = () => {
+    if (!user || !feastBatch) return;
+    discardBatch(user.id, feastBatch.id);
+    resetCooking();
+    navigate('/stall');
+  };
+  const handleFeastRetry = () => {
+    setFeastBatch(null);
+    setFeastServed(null);
+    feastAppliedRef.current = false;
+    seasonDeviationRef.current = null;
+    setIncidentPlan(rollIncidentPlan(recipe));
+    firedStepsRef.current = new Set();
+    setActiveIncident(null);
+    startCooking(recipe);
+  };
+
   const displayScore =
     session.phase === 'success' || session.phase === 'failed'
       ? session.finalScore
@@ -1014,8 +1439,8 @@ export default function CookingPage() {
 
   const stageHeader = (
     <>
-      <Link className={styles.back} to={isSellMode ? '/stall' : `/recipes/${recipe.id}`}>
-        ← {isSellMode ? dict.stall.backToStall : t('cooking.recipeDetail')}
+      <Link className={styles.back} to={backHref}>
+        ← {backLabel}
       </Link>
       <div className={styles.top}>
         <div>
@@ -1034,6 +1459,9 @@ export default function CookingPage() {
       {flowChips}
       {bossBanner}
       {sellBanner}
+      {survivalBanner}
+      {mysteryBanner}
+      {feastBanner}
       {subPanel}
       {assistantBar}
     </>
@@ -1095,8 +1523,8 @@ export default function CookingPage() {
     return (
       <PlayerShell>
         <div className={styles.runFrame}>
-        <Link className={styles.back} to={isSellMode ? '/stall' : `/recipes/${recipe.id}`}>
-          ← {isSellMode ? dict.stall.backToStall : t('cooking.recipeDetail')}
+        <Link className={styles.back} to={backHref}>
+          ← {backLabel}
         </Link>
         <div className={styles.top}>
           <div>
@@ -1111,6 +1539,9 @@ export default function CookingPage() {
         {flowChips}
         {bossBanner}
         {sellBanner}
+        {survivalBanner}
+        {mysteryBanner}
+        {feastBanner}
       {subPanel}
       {assistantBar}
 
@@ -1129,8 +1560,8 @@ export default function CookingPage() {
   return (
     <PlayerShell>
       <div className={styles.runFrame}>
-      <Link className={styles.back} to={isSellMode ? '/stall' : `/recipes/${recipe.id}`}>
-        ← {isSellMode ? dict.stall.backToStall : t('cooking.recipeDetail')}
+      <Link className={styles.back} to={backHref}>
+        ← {backLabel}
       </Link>
       <div className={styles.top}>
         <div className={styles.hudDish}>
@@ -1224,7 +1655,11 @@ export default function CookingPage() {
         />
       </div>
 
-      {session.phase === 'running' && session.actionButtonLabel && activeStep && !seasonOpen ? (
+      {session.phase === 'running' &&
+      session.actionButtonLabel &&
+      activeStep &&
+      !seasonOpen &&
+      !activeIncident ? (
         <div className={styles.gestureSlot}>
           <GestureStep
             key={`${session.currentStepIndex}-${gestureAttempt}`}
@@ -1241,7 +1676,18 @@ export default function CookingPage() {
         </div>
       ) : null}
 
-      {seasonOpen && session.actionButtonLabel ? (
+      {activeIncident && session.phase === 'running' && !showResult ? (
+        <div className={styles.gestureSlot}>
+          <IncidentPanel
+            def={incidentDefById(activeIncident.defId)}
+            graceLeftMs={Math.max(0, incidentGraceLeft)}
+            penalized={activeIncident.penalized}
+            onFixed={handleIncidentFixed}
+          />
+        </div>
+      ) : null}
+
+      {seasonOpen && session.actionButtonLabel && !activeIncident ? (
         <SeasonBar
           stepLabel={session.actionButtonLabel}
           stepPoints={seasonVirtualStepPoints}
@@ -1271,9 +1717,68 @@ export default function CookingPage() {
               seasonDeviationRef.current = null;
               subChoiceRef.current = null;
               setSubChoice(null);
+              setIncidentPlan(rollIncidentPlan(recipe));
+              firedStepsRef.current = new Set();
+              setActiveIncident(null);
               startCooking(recipe);
             }}
             onBackToStall={() => {
+              resetCooking();
+              navigate('/stall');
+            }}
+          />
+        ) : null
+      ) : showResult && isSurvivalMode ? (
+        survivalOutcome ? (
+          <SurvivalResultPanel
+            score={session.finalScore}
+            stars={session.stars}
+            success={session.phase === 'success'}
+            cleared={survivalOutcome.cleared}
+            totalScore={survivalOutcome.run.totalScore}
+            strikes={survivalOutcome.run.strikes}
+            ended={survivalOutcome.ended}
+            queueDone={survivalOutcome.run.index >= survivalOutcome.run.queue.length}
+            isBest={survivalOutcome.isBest}
+            onNext={() => {
+              const nextId = survivalOutcome.run.queue[survivalOutcome.run.index];
+              if (nextId) {
+                navigate(`/cooking/${nextId}?survival=${survivalId}`, { replace: true });
+              }
+            }}
+            onEnd={() => {
+              resetCooking();
+              navigate('/survival');
+            }}
+          />
+        ) : null
+      ) : showResult && isMysteryMode ? (
+        mysteryApplied ? (
+          <MysteryResultPanel
+            score={session.finalScore}
+            stars={session.stars}
+            success={session.phase === 'success'}
+            rewardXu={mysteryReward?.xu ?? 0}
+            rewardCard={mysteryReward?.card ?? null}
+            onBack={() => {
+              resetCooking();
+              navigate('/mystery');
+            }}
+          />
+        ) : null
+      ) : showResult && isFeastMode ? (
+        feastBatch ? (
+          <FeastResultPanel
+            batch={feastBatch}
+            recipeName={recipe.name}
+            recipeImage={recipe.image}
+            pricePreview={feastPricePreview}
+            canRetry={Boolean(stall && canCookBatch(stall, recipe, FEAST_QTY))}
+            served={feastServed}
+            onServe={handleFeastServe}
+            onDiscard={handleFeastDiscard}
+            onRetry={handleFeastRetry}
+            onBack={() => {
               resetCooking();
               navigate('/stall');
             }}
@@ -1289,6 +1794,9 @@ export default function CookingPage() {
             // cleared only as a side effect of the start effect
             // re-running, which the startedKeyRef guard now prevents.)
             setAppliedResult(null);
+            setIncidentPlan(rollIncidentPlan(recipe));
+            firedStepsRef.current = new Set();
+            setActiveIncident(null);
             startCooking(recipe);
           }}
           onApplyProgress={handleApplyProgress}
