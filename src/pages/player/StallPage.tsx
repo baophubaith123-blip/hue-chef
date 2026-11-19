@@ -317,6 +317,14 @@ export default function StallPage() {
         </div>
       </div>
 
+      {/* Mobile only (≤560px CSS): the wallets move out of the sign to a
+          bar under the stage so the sign cluster cannot collide with the
+          in-scene object buttons on a short stage. */}
+      <div className={styles.mobileWallets}>
+        <CoinPill amount={user.coins ?? 0} currency="xu" label={s.xuBoard} />
+        <CoinPill amount={user.cok ?? 0} currency="cok" label={s.cokJar} />
+      </div>
+
       {/* Dock: order board + counter — the stall's working surface. */}
       <div className={styles.dock}>
         <section className={styles.board} id="stall-orders" aria-label={s.orderBoardTitle}>

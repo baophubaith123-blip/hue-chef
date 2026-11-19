@@ -94,6 +94,10 @@
 .stallName {
   margin: 0 0 12px;
   font-size: 19px;
+  /* Pin the paper text color: the global h2 rule (var(--color-text))
+     would otherwise paint light text on the fixed-light paper panel
+     in the dark theme. */
+  color: var(--td-paper-text);
 }
 
 .grid {
@@ -146,7 +150,9 @@
 }
 
 .trendUp {
-  color: var(--td-brick);
+  /* Item cards are fixed cream in both themes; dark-theme --td-brick
+     (#e8884d) only reaches 2.4:1 on them, so pin the full brick. */
+  color: #b03e26;
   font-weight: 800;
   font-size: 13px;
 }

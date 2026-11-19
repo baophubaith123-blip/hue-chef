@@ -27,6 +27,9 @@
 .title {
   margin: 0;
   font-size: 21px;
+  /* Pin against the global h2 rule: the card is fixed paper in both
+     themes, while var(--color-text) turns light in the dark theme. */
+  color: var(--td-paper-text);
 }
 
 .dishRow {
@@ -74,7 +77,9 @@
 }
 
 .quality_perfect {
-  color: var(--td-gold-text);
+  /* Paper-surface text: fixed dark gold (dark-theme --td-gold-text is
+     light gold for plum surfaces and fails on paper). */
+  color: #8a5a00;
   font-weight: 800;
 }
 
@@ -89,7 +94,8 @@
 }
 
 .quality_burned {
-  color: var(--td-brick);
+  /* Paper-surface text: fixed brick (see .quality_perfect note). */
+  color: #b03e26;
   font-weight: 800;
 }
 

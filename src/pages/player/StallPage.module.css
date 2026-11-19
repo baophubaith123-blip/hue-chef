@@ -226,7 +226,9 @@
 .bubbleState {
   font-size: 11px;
   font-weight: 700;
-  color: var(--td-gold-text);
+  /* Fixed dark gold: the bubble is a paper surface in BOTH themes, so the
+     theme-flipping --td-gold-text (light gold in dark theme) fails on it. */
+  color: #8a5a00;
   white-space: nowrap;
 }
 
@@ -338,7 +340,8 @@
 }
 
 .quality_perfect {
-  color: var(--td-gold-text);
+  /* Paper-surface text: fixed dark gold (see .bubbleState note). */
+  color: #8a5a00;
   font-weight: 800;
 }
 
@@ -353,7 +356,9 @@
 }
 
 .quality_burned {
-  color: var(--td-brick);
+  /* Paper-surface text: fixed brick (dark-theme --td-brick is lightened
+     for plum surfaces and fails on paper). */
+  color: #b03e26;
   font-weight: 800;
 }
 
@@ -494,5 +499,88 @@
 
   .bubbleText {
     font-size: 11px;
+  }
+}
+
+.mobileWallets {
+  display: none;
+}
+
+/* Phones: the 16:9 stage is only ~210px tall, so the sign cluster
+   (wood sign + wallets + shift bar) would fill it and collide with the
+   in-scene object buttons. Give the stage a little more height, move
+   the wallets to a bar under the stage, and cap the object buttons. */
+@media (max-width: 560px) {
+  .stage {
+    aspect-ratio: 16 / 10;
+  }
+
+  .signBox {
+    width: 92%;
+  }
+
+  .signBox .signWallets {
+    display: none;
+  }
+
+  .mobileWallets {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    flex-wrap: wrap;
+    width: min(100%, calc(100dvh * 16 / 9));
+    padding: 8px 10px 0;
+    box-sizing: border-box;
+  }
+
+  .menuBoardBtn {
+    max-width: 54%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .pantryBtn {
+    max-width: 42%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .backBtn,
+  .marketBtn {
+    width: 44px;
+    height: 44px;
+    font-size: 20px;
+    top: 8px;
+  }
+
+  .backBtn {
+    left: 8px;
+  }
+
+  .marketBtn {
+    right: 8px;
+  }
+
+  .menuBoardBtn,
+  .pantryBtn {
+    bottom: 8px;
+    padding: 6px 9px;
+    font-size: 13px;
+  }
+
+  .menuBoardBtn {
+    left: 8px;
+  }
+
+  .pantryBtn {
+    right: 8px;
+  }
+
+  .stoveBtn {
+    width: 44px;
+    height: 44px;
+    font-size: 20px;
   }
 }
