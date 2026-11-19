@@ -30,6 +30,7 @@ import EditorRecipeDetailPage from '@/pages/editor/EditorRecipeDetailPage';
 import EditorRecipeFormPage from '@/pages/editor/EditorRecipeFormPage';
 import AchievementsPage from '@/pages/player/AchievementsPage';
 import AlbumPage from '@/pages/player/AlbumPage';
+import SkillTreePage from '@/pages/player/SkillTreePage';
 import CollectionPage from '@/pages/player/CollectionPage';
 import CookingPage from '@/pages/player/CookingPage';
 import HomePage from '@/pages/player/HomePage';
@@ -95,6 +96,10 @@ export const router = createBrowserRouter([
       {
         path: '/album',
         element: <AlbumPage />,
+      },
+      {
+        path: '/skills',
+        element: <SkillTreePage />,
       },
       {
         path: '/stall',

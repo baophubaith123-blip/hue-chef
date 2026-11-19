@@ -1,0 +1,186 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding-bottom: 3rem;
+}
+
+/* Page head — big hanging wooden sign (same pattern as the album page).
+   The wood surface is fixed in both themes, so its text stays pinned
+   to the light cream that reads on wood. */
+.head {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  background: var(--td-wood-gradient, linear-gradient(180deg, #ce9550, #b57e40));
+  border: 3px solid var(--td-ink);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-chunky, 0 4px 0 rgba(74, 44, 20, 0.45));
+  padding: 1.4rem 1.75rem;
+}
+
+.title {
+  margin: 0;
+  font-family: var(--td-font-display);
+  font-size: 1.85rem;
+  font-weight: 800;
+  color: #fff6e0;
+  text-shadow: 0 2px 0 rgba(32, 15, 4, 0.45);
+}
+
+.subtitle {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #fff6e0;
+  line-height: 1.55;
+}
+
+/* ---------- Points card (on a KraftCard paper body) ---------- */
+
+.pointsCard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.pointsLabel {
+  margin: 0;
+  font-family: var(--td-font-display);
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--td-paper-text);
+}
+
+.levelNote {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #8a5a00; /* pinned: paper stays light in dark theme */
+}
+
+.pointsHint {
+  margin: 0;
+  font-size: 0.88rem;
+  font-weight: 600;
+  line-height: 1.5;
+  color: var(--td-paper-text-muted);
+}
+
+/* ---------- Branch grid ---------- */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.1rem;
+}
+
+.branchCard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.branchHead {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.branchIcon {
+  font-size: 1.6rem;
+  line-height: 1;
+}
+
+.branchName {
+  margin: 0;
+  font-family: var(--td-font-display);
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--td-paper-text);
+}
+
+.branchDesc {
+  margin: 0;
+  font-size: 0.94rem;
+  line-height: 1.55;
+  color: var(--td-paper-text);
+}
+
+.branchEffect {
+  margin: 0;
+  font-size: 0.88rem;
+  font-weight: 700;
+  line-height: 1.5;
+  color: #8a5a00; /* pinned: paper stays light in dark theme */
+}
+
+.tierRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.7rem;
+  margin-top: 0.25rem;
+}
+
+.pips {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.pipFilled,
+.pipEmpty {
+  width: 22px;
+  height: 22px;
+  border-radius: var(--td-radius-full, 999px);
+  border: 2px solid var(--td-ink);
+}
+
+.pipFilled {
+  background: linear-gradient(180deg, var(--td-gold-bright), var(--td-gold) 55%, var(--td-gold-deep));
+  box-shadow: inset 0 2px 0 rgba(255, 246, 224, 0.65);
+}
+
+.pipEmpty {
+  background: var(--td-paper-deep);
+  border-style: dashed;
+  border-color: var(--td-paper-text-muted);
+}
+
+.tierLabel {
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: var(--td-paper-text);
+}
+
+.unlockButton {
+  margin-top: auto;
+  align-self: flex-start;
+  font-size: 0.92rem;
+  padding: 0.6rem 1.1rem;
+  min-height: 44px;
+}
+
+/* ---------- Footer note ---------- */
+
+.bothLoopsNote {
+  margin: 0;
+  font-size: 0.92rem;
+  font-weight: 600;
+  line-height: 1.6;
+  color: var(--td-page-text-muted);
+}
+
+@media (max-width: 760px) {
+  .title {
+    font-size: 1.5rem;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .unlockButton {
+    align-self: stretch;
+  }
+}
