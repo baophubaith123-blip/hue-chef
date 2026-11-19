@@ -62,9 +62,13 @@ export function dailyChangeFor(ingredientId: string, dayKey: string): number {
 /**
  * Pantry shelf life in game days (Phần 11): fresh goods (protein,
  * vegetables) keep 2 days, dry goods (grain, spice, beans, other) 7.
- * Fridge/freezer extensions arrive with the support systems (H6).
+ * Cold storage multiplies the span (Gói H6, mục 8.2): tủ lạnh ×2,
+ * tủ đông ×4 — the factor comes from lib/support's shelfLifeFactor
+ * and is applied when the lot is bought, so a lot keeps the expiry
+ * it was bought under even if the gear is sold later (it never is).
  */
-export function shelfLifeDaysFor(ingredientId: string): number {
+export function shelfLifeDaysFor(ingredientId: string, storageFactor = 1): number {
   const category = getIngredientById(ingredientId)?.category ?? 'other';
-  return category === 'protein' || category === 'vegetable' ? 2 : 7;
+  const base = category === 'protein' || category === 'vegetable' ? 2 : 7;
+  return base * Math.max(1, Math.round(storageFactor));
 }

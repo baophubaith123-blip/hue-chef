@@ -26,10 +26,14 @@ export function tierRatiosForStars(stars: number): TierRatios {
   };
 }
 
-export function rollTier(stars: number, roll: number): CustomerTier {
+export function rollTier(stars: number, roll: number, vipBoost = 1): CustomerTier {
   const ratios = tierRatiosForStars(stars);
-  if (roll < ratios.vip) return 'vip';
-  if (roll < ratios.vip + ratios.giau) return 'giau';
+  // Stall level 5 (mục 8.3): VIPs visit more often — their share grows
+  // and the ordinary share gives the room up.
+  const vip = Math.min(0.9, ratios.vip * Math.max(1, vipBoost));
+  const giau = ratios.giau;
+  if (roll < vip) return 'vip';
+  if (roll < vip + giau) return 'giau';
   return 'thuong';
 }
 
@@ -90,11 +94,31 @@ export function pickDishForTier(
   return sellable[sellable.length - 1] ?? null;
 }
 
+/**
+ * Patience left in ms at a moment in time (Gói H6): a freeze card
+ * holds the clock still — while frozen, elapsed time is read at the
+ * freeze moment; after the freeze ends, the frozen span is excluded.
+ * Spans of earlier freezes accumulate in patienceBankedMs.
+ */
+export function patienceLeftMs(customer: StallCustomer, now: number): number {
+  const banked = customer.patienceBankedMs ?? 0;
+  let elapsed: number;
+  if (customer.freezeStart !== undefined && customer.freezeUntil !== undefined) {
+    if (now < customer.freezeUntil) {
+      elapsed = customer.freezeStart - customer.arrivedAt - banked;
+    } else {
+      elapsed = now - customer.arrivedAt - banked - (customer.freezeUntil - customer.freezeStart);
+    }
+  } else {
+    elapsed = now - customer.arrivedAt - banked;
+  }
+  return Math.max(0, customer.patienceMs - Math.max(0, elapsed));
+}
+
 /** Patience left as a 0..1 ratio at a moment in time. */
 export function patienceLeftRatio(customer: StallCustomer, now: number): number {
   if (customer.patienceMs <= 0) return 0;
-  const left = customer.patienceMs - (now - customer.arrivedAt);
-  return Math.min(1, Math.max(0, left / customer.patienceMs));
+  return Math.min(1, Math.max(0, patienceLeftMs(customer, now) / customer.patienceMs));
 }
 
 /**

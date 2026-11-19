@@ -1,6 +1,7 @@
 import type { CustomerTier } from '@/components/theme-d/assets';
 import type { DiagnosisKey } from '@/features/stall/lib/diagnosis';
 import type { RequestKind } from '@/features/stall/lib/substitutions';
+import type { CardKind, DecorKind, DishGroup, GearKind, StaffRole } from '@/features/stall/lib/support';
 
 /**
  * Sell-loop (vòng BÁN) state — Kế hoạch hợp nhất, Phần 5 + 6.
@@ -75,6 +76,22 @@ export interface StallCustomer {
   requestKind?: RequestKind;
   /** Set when the customer resolves (served / left) for the exit beat. */
   resolvedAt?: number;
+  /**
+   * Gói H6: a delivery-channel order (mục 8.2). Delivery customers
+   * never sit in the scene (tableIndex is −1); they live on the
+   * delivery board, are cooked for like any order, and can only be
+   * served by the hired server — somebody has to ride the road.
+   */
+  delivery?: boolean;
+  /**
+   * Gói H6 freeze card (mục 8.2): while now < freezeUntil the
+   * patience clock stands still at freezeStart; afterwards the whole
+   * frozen span is excluded from the elapsed time. patienceBankedMs
+   * accumulates spans of earlier, already-finished freezes.
+   */
+  freezeStart?: number;
+  freezeUntil?: number;
+  patienceBankedMs?: number;
 }
 
 export interface StallShift {
@@ -149,6 +166,53 @@ export interface KitchenUpgrades {
   pot: number;
 }
 
+/* ---------------- Gói H6: support systems (Phần 8) ---------------- */
+
+/** One hired staffer (mục 8.1). Rank derives from ordersDone. */
+export interface StaffMember {
+  id: string;
+  role: StaffRole;
+  /** Lifetime orders this staffer has worked — rank and wage follow. */
+  ordersDone: number;
+  /** Training specialty (đào tạo chuyên môn); null = untrained. */
+  specialty: DishGroup | null;
+  /** Game day the staffer was hired, yyyy-mm-dd. */
+  hiredDay: string;
+}
+
+/**
+ * Support gear (mục 8.2), distinct from the H5 kitchen lines: cold
+ * storage stretches shelf life, the two machines feed the gesture
+ * engine and the pots, extra stoves add parallel pots.
+ */
+export interface SupportGear {
+  fridge: boolean;
+  freezer: boolean;
+  slicer: boolean;
+  mixer: boolean;
+  /** Extra stoves owned: one bought at the market, one granted at stall level 3. */
+  extraStoves: number;
+}
+
+/** The return report of an AFK session (mục 5.9): what the crew sold,
+ * what ran out, what spoiled or was wasted while the owner was away. */
+export interface AfkReport {
+  startedAt: number;
+  endedAt: number;
+  revenueXu: number;
+  revenueCok: number;
+  servedCount: number;
+  /** Dishes sold, aggregated per recipe. */
+  dishes: { recipeId: string; qty: number }[];
+  /** Ingredient lots that expired during the absence. */
+  spoiledLots: { ingredientId: string; qty: number }[];
+  /** Batches cooked but lost to a walk-away customer. */
+  wasted: { recipeId: string; qty: number }[];
+  /** Why the stall stopped: the away time simply ran out, the pantry
+   * ran dry, or the essential crew was never complete (stall closed). */
+  closedReason: 'time' | 'ingredients' | 'staff';
+}
+
 export interface StallUserState {
   /** Cumulative stall EXP; stall stars derive from it (mục 6.7). */
   exp: number;
@@ -167,6 +231,45 @@ export interface StallUserState {
   starterPackClaimed: boolean;
   /** Last game day the spoilage pass ran for, yyyy-mm-dd. */
   lastDay: string;
+
+  /* ---- Gói H6 fields (absent on legacy records; safe defaults) ---- */
+  /** Stall SIZE level 1–5 (mục 8.3) — not the star reputation. */
+  stallLevel: number;
+  /** Hired crew, at most one per role. */
+  staff: StaffMember[];
+  gear: SupportGear;
+  /** One-use rescue / re-season cards on hand, by kind. */
+  cards: Record<CardKind, number>;
+  /** Decoration owned and placed on the scene (ý tưởng 17). */
+  decorIds: DecorKind[];
+  /**
+   * The player's chosen on-sale menu (recipe ids). Null = the first
+   * menuCap licensed dishes, until the player curates their own.
+   */
+  menuIds: string[] | null;
+  /** Advertising runs until this timestamp (0 = no ad running). */
+  adUntil: number;
+  /** Wages booked by day rollovers, waiting for the wallet to pay. */
+  wageDebtXu: number;
+  /**
+   * Xu/cok earned by crew work (auto-serve, AFK) that the page still
+   * has to credit through AuthContext — the wallets keep one writer.
+   */
+  pendingCreditXu: number;
+  pendingCreditCok: number;
+  /** Last moment the stall was tended; AFK measures from here. */
+  lastSeenAt: number;
+  /** Unread AFK return report, if the crew worked (or waited) away. */
+  afkReport: AfkReport | null;
+  /** Lifetime orders served at this stall (skin unlocks read it). */
+  totalServed: number;
+  /** Nồi Nồi skin currently worn + skins bought with cok. */
+  noiNoiSkinId: string;
+  ownedSkinIds: string[];
+  /** Last time the server auto-served a dish (tick pacing). */
+  lastAutoServeAt: number;
+  /** Next moment a delivery order may arrive (0 = unscheduled). */
+  nextDeliveryAt: number;
 }
 
 export function emptyStallState(day: string): StallUserState {
@@ -182,5 +285,24 @@ export function emptyStallState(day: string): StallUserState {
     spoiledNotices: [],
     starterPackClaimed: false,
     lastDay: day,
+    stallLevel: 1,
+    staff: [],
+    gear: { fridge: false, freezer: false, slicer: false, mixer: false, extraStoves: 0 },
+    cards: { patience: 0, swap: 0, freeze: 0, reseason: 0 },
+    decorIds: [],
+    menuIds: null,
+    adUntil: 0,
+    wageDebtXu: 0,
+    pendingCreditXu: 0,
+    pendingCreditCok: 0,
+    lastSeenAt: 0,
+    afkReport: null,
+    totalServed: 0,
+    noiNoiSkinId: 'mac-dinh',
+    ownedSkinIds: [],
+    lastAutoServeAt: 0,
+    nextDeliveryAt: 0,
   };
 }
+
+export type { CardKind, DecorKind, GearKind };

@@ -66,11 +66,17 @@ function branchOfGesture(gesture: GestureId): 'knife' | 'fire' | 'seasoning' | n
  * upgrade; fire moves with the fire branch and the stove upgrade;
  * seasoning moves with the seasoning branch alone. The combined
  * factor is capped at 1.6 so zones never swallow the whole track.
+ *
+ * Support machines (Gói H6, mục 8.2) are distinct from the H5 kitchen
+ * lines: the slicer (máy thái) widens only the slicing gesture it
+ * replaces by hand, the dough mixer (máy nhồi bột) only the mixing
+ * gesture — each a flat ×1.15 inside the same cap.
  */
 export function gestureZoneScale(
   gesture: GestureId,
   tiers: SkillTiers,
   kitchen: { knife: number; stove: number },
+  machines?: { slicer?: boolean; mixer?: boolean },
 ): number {
   const branch = branchOfGesture(gesture);
   let scale = 1;
@@ -81,6 +87,8 @@ export function gestureZoneScale(
   } else if (branch === 'seasoning') {
     scale = 1 + 0.06 * tiers.seasoning;
   }
+  if (gesture === 'thai' && machines?.slicer) scale *= 1.15;
+  if (gesture === 'tron' && machines?.mixer) scale *= 1.15;
   return Math.min(scale, 1.6);
 }
 

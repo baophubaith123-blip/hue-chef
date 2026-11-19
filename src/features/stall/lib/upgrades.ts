@@ -33,11 +33,12 @@ export function nextUpgradePrice(kind: UpgradeKind, level: number): number | nul
   return UPGRADE_PRICES[kind][level] ?? null;
 }
 
-/** Background pots that can simmer at once: 1 + pot level. Together
- * with the one active cook on the main stove, even a starter stall
- * runs 2 batches in parallel; a maxed Nồi lớn runs 4. */
-export function potCapacityFor(potLevel: number): number {
-  return 1 + Math.max(0, potLevel);
+/** Background pots that can simmer at once: 1 + pot level + extra
+ * stoves (Gói H6 support gear, mục 8.2 — bought at the market or
+ * granted at stall level 3). Together with the one active cook on
+ * the main stove, even a starter stall runs 2 batches in parallel. */
+export function potCapacityFor(potLevel: number, extraStoves = 0): number {
+  return 1 + Math.max(0, potLevel) + Math.max(0, extraStoves);
 }
 
 /**
