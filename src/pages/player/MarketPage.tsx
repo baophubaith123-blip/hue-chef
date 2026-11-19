@@ -14,7 +14,30 @@ import {
   dailyPriceFor,
   shelfLifeDaysFor,
 } from '@/features/stall/lib/market';
-import { buyIngredient, buyUpgrade, inventoryByIngredient, useStall } from '@/features/stall/store';
+import {
+  buyAd,
+  buyCard,
+  buyDecor,
+  buyGear,
+  buyIngredient,
+  buyUpgrade,
+  inventoryByIngredient,
+  useStall,
+} from '@/features/stall/store';
+import {
+  AD_PRICE,
+  CARD_KINDS,
+  CARD_PRICES,
+  DECOR_KINDS,
+  DECOR_PRICES,
+  GEAR_KINDS,
+  GEAR_PRICES,
+  MAX_EXTRA_STOVES,
+  shelfLifeFactor,
+  type CardKind,
+  type DecorKind,
+  type GearKind,
+} from '@/features/stall/lib/support';
 import {
   nextUpgradePrice,
   upgradeMaxLevel,
@@ -25,6 +48,28 @@ import { useTranslation } from '@/i18n/useTranslation';
 import styles from '@/pages/player/MarketPage.module.css';
 
 const CATEGORY_ORDER = ['protein', 'vegetable', 'grain', 'spice', 'dau-hat', 'other'];
+
+const GEAR_EMOJI: Record<GearKind, string> = {
+  fridge: '🧊',
+  freezer: '❄️',
+  slicer: '🔪',
+  mixer: '🥣',
+  extraStove: '🔥',
+};
+
+const CARD_EMOJI: Record<CardKind, string> = {
+  patience: '⏳',
+  swap: '🔀',
+  freeze: '🥶',
+  reseason: '🧂',
+};
+
+const DECOR_EMOJI: Record<DecorKind, string> = {
+  lanterns: '🏮',
+  flowers: '🌼',
+  goldSign: '🪧',
+  plant: '🪴',
+};
 
 export default function MarketPage() {
   const { dict } = useTranslation();
@@ -96,6 +141,36 @@ export default function MarketPage() {
     if (paid !== null) addCoins(-paid);
   };
 
+  // Support gear / cards / decor / ads (Gói H6): same book-first
+  // pattern as the kitchen upgrades — the store books the goods and
+  // reports the price, the wallet is charged only for what landed.
+  const handleBuyGear = (kind: GearKind) => {
+    const price = GEAR_PRICES[kind];
+    if (coins < price) return;
+    const paid = buyGear(user.id, kind);
+    if (paid !== null) addCoins(-paid);
+  };
+
+  const handleBuyCard = (kind: CardKind) => {
+    const price = CARD_PRICES[kind];
+    if (coins < price) return;
+    const paid = buyCard(user.id, kind);
+    addCoins(-paid);
+  };
+
+  const handleBuyDecor = (kind: DecorKind) => {
+    const price = DECOR_PRICES[kind];
+    if (coins < price) return;
+    const paid = buyDecor(user.id, kind);
+    if (paid !== null) addCoins(-paid);
+  };
+
+  const handleBuyAd = () => {
+    if (coins < AD_PRICE) return;
+    const paid = buyAd(user.id, Date.now());
+    addCoins(-paid);
+  };
+
   return (
     <div className={styles.page}>
       <img className={styles.sceneBg} src={SCENES.cho} alt="" draggable={false} />
@@ -150,7 +225,8 @@ export default function MarketPage() {
                       <div className={styles.itemNames}>
                         <strong>{ingredient.name}</strong>
                         <span className={styles.itemOwned}>
-                          {s.marketOwned(owned)} · {s.marketShelfLife(shelfLifeDaysFor(ingredient.id))}
+                          {s.marketOwned(owned)} ·{' '}
+                          {s.marketShelfLife(shelfLifeDaysFor(ingredient.id, shelfLifeFactor(stall.gear)))}
                         </span>
                       </div>
                     </div>
@@ -238,6 +314,116 @@ export default function MarketPage() {
                 </article>
               );
             })}
+          </div>
+        </section>
+
+        {/* Support stall (Gói H6): gear, rescue cards, decoration and
+            advertising for the sell loop (Phần 8.2). */}
+        <section className={styles.stallPanel} aria-label={s.support.supportStallTitle}>
+          <h2 className={styles.stallName}>🧰 {s.support.supportStallTitle}</h2>
+          <p className={styles.upgradeNote}>{s.support.supportStallNote}</p>
+          <div className={styles.grid}>
+            {GEAR_KINDS.map((kind) => {
+              const price = GEAR_PRICES[kind];
+              const owned =
+                kind === 'extraStove'
+                  ? stall.gear.extraStoves >= MAX_EXTRA_STOVES
+                  : stall.gear[kind];
+              return (
+                <article key={`gear-${kind}`} className={styles.item}>
+                  <div className={styles.itemHead}>
+                    <span className={styles.itemEmoji} aria-hidden>
+                      {GEAR_EMOJI[kind]}
+                    </span>
+                    <div className={styles.itemNames}>
+                      <strong>{s.support.gearNames[kind]}</strong>
+                      {kind === 'extraStove' ? (
+                        <span className={styles.itemOwned}>
+                          {stall.gear.extraStoves}/{MAX_EXTRA_STOVES}
+                        </span>
+                      ) : null}
+                    </div>
+                  </div>
+                  <p className={styles.upgradeDesc}>{s.support.gearDescs[kind]}</p>
+                  <div className={styles.buyRow}>
+                    {owned ? (
+                      <span className={styles.maxedNote}>✓ {s.support.gearOwned}</span>
+                    ) : (
+                      <GoldButton disabled={coins < price} onClick={() => handleBuyGear(kind)}>
+                        {coins < price ? s.marketNotEnoughXu : `${s.support.gearBuy} · ${price} xu`}
+                      </GoldButton>
+                    )}
+                  </div>
+                </article>
+              );
+            })}
+
+            {CARD_KINDS.map((kind) => {
+              const price = CARD_PRICES[kind];
+              return (
+                <article key={`card-${kind}`} className={styles.item}>
+                  <div className={styles.itemHead}>
+                    <span className={styles.itemEmoji} aria-hidden>
+                      {CARD_EMOJI[kind]}
+                    </span>
+                    <div className={styles.itemNames}>
+                      <strong>{s.support.cardNames[kind]}</strong>
+                      <span className={styles.itemOwned}>{s.support.cardOwned(stall.cards[kind])}</span>
+                    </div>
+                  </div>
+                  <p className={styles.upgradeDesc}>{s.support.cardDescs[kind]}</p>
+                  <div className={styles.buyRow}>
+                    <GoldButton disabled={coins < price} onClick={() => handleBuyCard(kind)}>
+                      {coins < price ? s.marketNotEnoughXu : `${s.support.cardBuy} · ${price} xu`}
+                    </GoldButton>
+                  </div>
+                </article>
+              );
+            })}
+
+            {DECOR_KINDS.map((kind) => {
+              const price = DECOR_PRICES[kind];
+              const owned = stall.decorIds.includes(kind);
+              return (
+                <article key={`decor-${kind}`} className={styles.item}>
+                  <div className={styles.itemHead}>
+                    <span className={styles.itemEmoji} aria-hidden>
+                      {DECOR_EMOJI[kind]}
+                    </span>
+                    <div className={styles.itemNames}>
+                      <strong>{s.support.decorNames[kind]}</strong>
+                    </div>
+                  </div>
+                  <p className={styles.upgradeDesc}>{s.support.decorDescs[kind]}</p>
+                  <div className={styles.buyRow}>
+                    {owned ? (
+                      <span className={styles.maxedNote}>✓ {s.support.decorOwned}</span>
+                    ) : (
+                      <GoldButton disabled={coins < price} onClick={() => handleBuyDecor(kind)}>
+                        {coins < price ? s.marketNotEnoughXu : `${s.support.decorBuy} · ${price} xu`}
+                      </GoldButton>
+                    )}
+                  </div>
+                </article>
+              );
+            })}
+
+            <article className={styles.item}>
+              <div className={styles.itemHead}>
+                <div className={styles.itemNames}>
+                  <strong>{s.support.adTitle}</strong>
+                </div>
+              </div>
+              <p className={styles.upgradeDesc}>{s.support.adDesc}</p>
+              {stall.adUntil > Date.now() ? (
+                <p className={styles.adActiveNote}>{s.support.adActiveNote}</p>
+              ) : null}
+              <div className={styles.buyRow}>
+                <GoldButton disabled={coins < AD_PRICE} onClick={handleBuyAd}>
+                  {coins < AD_PRICE ? s.marketNotEnoughXu : s.support.adBuy}
+                </GoldButton>
+              </div>
+            </article>
           </div>
         </section>
       </div>
