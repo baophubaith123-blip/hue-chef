@@ -207,7 +207,7 @@ function InfoRow({
   value: string;
   tone?: 'ok' | 'danger';
 }) {
-  const color = tone === 'danger' ? 'var(--color-danger)' : tone === 'ok' ? 'var(--color-success)' : 'var(--color-text)';
+  const color = tone === 'danger' ? 'var(--td-danger)' : tone === 'ok' ? 'var(--td-success)' : 'var(--td-paper-text)';
   return (
     <div>
       <div className={styles.infoLabel}>{label}</div>

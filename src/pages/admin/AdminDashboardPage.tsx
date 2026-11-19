@@ -25,8 +25,8 @@ import { AdminShell } from '@/pages/admin/AdminShell';
 import styles from '@/pages/admin/AdminDashboardPage.module.css';
 
 const STATUS_COLORS: Record<string, string> = {
-  draft: '#6b7280',
-  pending: '#e8450a',
+  draft: '#bfa07a',
+  pending: '#b03e26',
   approved: '#15803d',
   rejected: '#b42318',
 };
@@ -52,7 +52,7 @@ export default function AdminDashboardPage() {
     return Object.entries(counts).map(([name, value]) => ({
       name: t(`recipeStatus.${name}`),
       value,
-      fill: STATUS_COLORS[name] ?? '#9ca3af',
+      fill: STATUS_COLORS[name] ?? '#bfa07a',
     }));
   }, [recipes, t]);
 
@@ -128,22 +128,22 @@ export default function AdminDashboardPage() {
           <div className={styles.chartWrap}>
             <ResponsiveContainer width="100%" height={240}>
               <BarChart data={categoryStats} margin={{ top: 8, right: 16, left: -16, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" />
-                <XAxis dataKey="name" tick={{ fontSize: 12 }} stroke="var(--color-text-muted)" />
+                <CartesianGrid strokeDasharray="3 3" stroke="var(--td-paper-edge)" />
+                <XAxis dataKey="name" tick={{ fontSize: 12 }} stroke="var(--td-paper-text-muted)" />
                 <YAxis
                   allowDecimals={false}
                   tick={{ fontSize: 12 }}
-                  stroke="var(--color-text-muted)"
+                  stroke="var(--td-paper-text-muted)"
                 />
                 <Tooltip
                   contentStyle={{
                     borderRadius: 'var(--radius-md)',
-                    border: '1px solid var(--color-border)',
+                    border: '1px solid var(--td-paper-edge)',
                   }}
                 />
                 <Bar dataKey="value" radius={[8, 8, 0, 0]}>
                   {categoryStats.map((_, index) => (
-                    <Cell key={index} fill={index % 2 === 0 ? '#1b2a4a' : '#e8450a'} />
+                    <Cell key={index} fill={index % 2 === 0 ? '#4a1525' : '#e9a23b'} />
                   ))}
                 </Bar>
               </BarChart>
@@ -167,21 +167,21 @@ function StatCard({
   highlight?: boolean;
 }) {
   const bg: Record<string, string> = {
-    muted: 'var(--color-surface-muted)',
-    warning: 'var(--color-accent-soft)',
-    success: 'var(--color-success-soft)',
+    muted: 'var(--td-paper-deep)',
+    warning: 'rgba(233, 162, 59, 0.15)',
+    success: 'rgba(21, 128, 61, 0.12)',
   };
   const fg: Record<string, string> = {
-    muted: 'var(--color-text-muted)',
-    warning: 'var(--gold-text)',
-    success: 'var(--color-success)',
+    muted: 'var(--td-paper-text-muted)',
+    warning: 'var(--td-warning)',
+    success: 'var(--td-success)',
   };
   return (
     <div
       className={styles.stat}
       style={{
         background: bg[tone],
-        border: highlight ? `2px solid ${fg[tone]}` : '1px solid var(--color-border)',
+        border: highlight ? `2px solid ${fg[tone]}` : '1px solid var(--td-paper-edge)',
       }}
     >
       <span className={styles.statLabel} style={{ color: fg[tone] }}>

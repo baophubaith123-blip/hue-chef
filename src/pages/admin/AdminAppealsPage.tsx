@@ -116,10 +116,10 @@ export default function AdminAppealsPage() {
   };
 
   const statusTone: Record<AppealStatus, { bg: string; color: string }> = {
-    open: { bg: 'var(--color-accent-soft)', color: 'var(--gold-text)' },
-    recommended: { bg: 'var(--color-primary-soft, var(--color-surface-muted))', color: 'var(--color-primary)' },
-    rejected: { bg: 'var(--color-danger-soft)', color: 'var(--color-danger)' },
-    resolved: { bg: 'var(--color-success-soft)', color: 'var(--color-success)' },
+    open: { bg: 'rgba(233, 162, 59, 0.15)', color: 'var(--td-warning)' },
+    recommended: { bg: 'var(--td-brick-soft)', color: 'var(--td-plum)' },
+    rejected: { bg: 'var(--td-brick-soft)', color: 'var(--td-danger)' },
+    resolved: { bg: 'rgba(21, 128, 61, 0.12)', color: 'var(--td-success)' },
   };
 
   const typeLabels = dict.support.typeLabels;

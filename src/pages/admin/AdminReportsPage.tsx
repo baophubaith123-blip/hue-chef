@@ -92,9 +92,9 @@ export default function AdminReportsPage() {
   };
 
   const statusTone: Record<ReportRow['status'], { bg: string; color: string; label: string }> = {
-    open: { bg: 'var(--color-accent-soft)', color: 'var(--color-accent)', label: 'Open' },
-    resolved: { bg: 'var(--color-success-soft)', color: 'var(--color-success)', label: 'Resolved' },
-    dismissed: { bg: 'var(--color-surface-muted)', color: 'var(--color-text-muted)', label: 'Dismissed' },
+    open: { bg: 'rgba(233, 162, 59, 0.15)', color: 'var(--td-warning)', label: 'Open' },
+    resolved: { bg: 'rgba(21, 128, 61, 0.12)', color: 'var(--td-success)', label: 'Resolved' },
+    dismissed: { bg: 'var(--td-paper-deep)', color: 'var(--td-paper-text-muted)', label: 'Dismissed' },
   };
 
   return (

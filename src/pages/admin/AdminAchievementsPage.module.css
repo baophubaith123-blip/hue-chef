@@ -10,22 +10,27 @@
 .title {
   margin: 0;
   font-size: 1.75rem;
-  color: var(--color-text);
+  color: var(--td-page-text);
 }
 
 .intro {
   margin: 0.35rem 0 0;
-  color: var(--color-text-muted);
+  color: var(--td-page-text-muted);
 }
 
 .errorBanner {
   margin: 0 0 1rem;
   padding: 0.75rem 1rem;
-  background: var(--color-danger-soft);
-  color: var(--color-danger);
-  border: 1px solid var(--color-danger);
-  border-radius: var(--radius-md);
+  background: var(--td-brick-soft);
+  color: var(--td-danger);
+  border: 1px solid var(--td-danger);
+  border-radius: var(--td-radius-button);
   font-size: 0.9rem;
+}
+
+[data-theme='dark'] .errorBanner {
+  color: var(--td-cok-bright);
+  border-color: var(--td-cok-bright);
 }
 
 .tableOverflow {
@@ -42,24 +47,24 @@
 .table thead th {
   text-align: left;
   padding: 0.65rem 0.85rem;
-  border-bottom: 1px solid var(--color-border);
-  color: var(--color-text-muted);
+  border-bottom: 1px solid var(--td-paper-edge);
+  color: var(--td-paper-text-muted);
   font-size: 0.78rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.03em;
-  background: var(--color-surface-muted);
+  background: var(--td-paper-deep);
 }
 
 .table tbody td {
   padding: 0.75rem 0.85rem;
-  border-bottom: 1px solid var(--color-border);
-  color: var(--color-text);
+  border-bottom: 1px solid var(--td-paper-edge);
+  color: var(--td-paper-text);
   vertical-align: middle;
 }
 
 .row:hover td {
-  background: var(--color-surface-muted);
+  background: var(--td-paper-deep);
 }
 
 .iconCell {
@@ -75,10 +80,10 @@
 .code {
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 0.82rem;
-  background: var(--color-surface-muted);
+  background: var(--td-paper-deep);
   padding: 0.15rem 0.4rem;
-  border-radius: var(--radius-sm);
-  color: var(--color-text);
+  border-radius: 4px;
+  color: var(--td-paper-text);
 }
 
 .actionsCol {
@@ -101,11 +106,11 @@
 }
 
 .deleteBtn {
-  color: var(--color-danger);
+  color: var(--td-danger);
 }
 
 .deleteBtn:hover {
-  background: var(--color-danger-soft);
+  background: var(--td-brick-soft);
 }
 
 .form {
@@ -123,24 +128,24 @@
 .label {
   font-size: 0.85rem;
   font-weight: 600;
-  color: var(--color-text-muted);
+  color: var(--td-paper-text-muted);
 }
 
 .input,
 .textarea {
   width: 100%;
   padding: 0.55rem 0.75rem;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
-  background: var(--color-surface);
-  color: var(--color-text);
+  border: 1px solid var(--td-paper-edge);
+  border-radius: 4px;
+  background: var(--td-paper);
+  color: var(--td-paper-text);
   font-size: 0.95rem;
   font-family: inherit;
 }
 
 .input:focus,
 .textarea:focus {
-  outline: 2px solid var(--color-primary);
+  outline: 2px solid var(--td-plum);
   outline-offset: 1px;
 }
 
@@ -152,9 +157,9 @@
 .editorPendingSection {
   margin-bottom: 1.25rem;
   padding: 1rem;
-  border: 1px dashed var(--color-accent, #C8553D);
-  border-radius: 12px;
-  background: var(--color-surface-alt);
+  border: 1px dashed var(--td-gold);
+  border-radius: var(--td-radius-paper);
+  background: var(--td-paper-deep);
 }
 
 .sectionTitle {
@@ -176,9 +181,9 @@
   align-items: center;
   gap: 0.7rem;
   padding: 0.55rem 0.7rem;
-  border: 1px solid var(--color-border);
-  border-radius: 10px;
-  background: var(--color-surface);
+  border: 1px solid var(--td-paper-edge);
+  border-radius: var(--td-radius-button);
+  background: var(--td-paper);
 }
 
 .editorPendingMain {
@@ -189,6 +194,6 @@
 }
 
 .editorPendingMain span {
-  color: var(--color-text-muted);
+  color: var(--td-paper-text-muted);
   font-size: 0.85rem;
 }

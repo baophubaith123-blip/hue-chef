@@ -7,7 +7,7 @@
 
 .stat {
   padding: 0.85rem 1rem;
-  border-radius: var(--radius-md);
+  border-radius: var(--td-radius-button);
   display: flex;
   flex-direction: column;
   gap: 0.25rem;

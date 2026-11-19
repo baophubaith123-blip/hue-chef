@@ -72,14 +72,14 @@ export default function AdminAllRecipesPage() {
   const getStatusStyle = (status: RecipeStatus) => {
     switch (status) {
       case 'approved':
-        return { background: 'var(--color-success-soft)', color: 'var(--color-success)' };
+        return { background: 'rgba(21, 128, 61, 0.12)', color: 'var(--td-success)' };
       case 'rejected':
-        return { background: 'var(--color-danger-soft)', color: 'var(--color-danger)' };
+        return { background: 'var(--td-brick-soft)', color: 'var(--td-danger)' };
       case 'pending':
-        return { background: 'var(--color-primary-soft)', color: 'var(--color-primary)' };
+        return { background: 'var(--td-brick-soft)', color: 'var(--td-plum)' };
       case 'draft':
       default:
-        return { background: 'var(--color-surface-muted)', color: 'var(--color-text-muted)' };
+        return { background: 'var(--td-paper-deep)', color: 'var(--td-paper-text-muted)' };
     }
   };
 

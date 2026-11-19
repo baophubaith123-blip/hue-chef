@@ -10,22 +10,27 @@
 .title {
   margin: 0;
   font-size: 1.75rem;
-  color: var(--color-text);
+  color: var(--td-page-text);
 }
 
 .intro {
   margin: 0.35rem 0 0;
-  color: var(--color-text-muted);
+  color: var(--td-page-text-muted);
 }
 
 .errorBanner {
   margin: 0 0 1rem;
   padding: 0.75rem 1rem;
-  background: var(--color-danger-soft);
-  color: var(--color-danger);
-  border: 1px solid var(--color-danger);
-  border-radius: var(--radius-md);
+  background: var(--td-brick-soft);
+  color: var(--td-danger);
+  border: 1px solid var(--td-danger);
+  border-radius: var(--td-radius-button);
   font-size: 0.9rem;
+}
+
+[data-theme='dark'] .errorBanner {
+  color: var(--td-cok-bright);
+  border-color: var(--td-cok-bright);
 }
 
 .tableOverflow {
@@ -42,32 +47,32 @@
 .table thead th {
   text-align: left;
   padding: 0.65rem 0.85rem;
-  border-bottom: 1px solid var(--color-border);
-  color: var(--color-text-muted);
+  border-bottom: 1px solid var(--td-paper-edge);
+  color: var(--td-paper-text-muted);
   font-size: 0.78rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.03em;
-  background: var(--color-surface-muted);
+  background: var(--td-paper-deep);
 }
 
 .table tbody td {
   padding: 0.75rem 0.85rem;
-  border-bottom: 1px solid var(--color-border);
-  color: var(--color-text);
+  border-bottom: 1px solid var(--td-paper-edge);
+  color: var(--td-paper-text);
   vertical-align: middle;
 }
 
 .row:hover td {
-  background: var(--color-surface-muted);
+  background: var(--td-paper-deep);
 }
 
 .kindChip {
   display: inline-block;
   padding: 0.15rem 0.5rem;
-  background: var(--color-primary-soft, var(--color-surface-muted));
-  color: var(--color-primary);
-  border-radius: 999px;
+  background: var(--td-brick-soft);
+  color: var(--td-plum);
+  border-radius: var(--td-radius-full);
   font-size: 0.78rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -75,7 +80,7 @@
 }
 
 .link {
-  color: var(--color-primary);
+  color: var(--td-plum);
   font-weight: 600;
   text-decoration: none;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
@@ -94,14 +99,14 @@
 .statusChip {
   display: inline-block;
   padding: 0.2rem 0.55rem;
-  border-radius: 999px;
+  border-radius: var(--td-radius-full);
   font-size: 0.78rem;
   font-weight: 700;
 }
 
 .dateCell {
   white-space: nowrap;
-  color: var(--color-text-muted);
+  color: var(--td-paper-text-muted);
 }
 
 .actionsCol {
@@ -125,9 +130,9 @@
 }
 
 .deleteBtn {
-  color: var(--color-danger);
+  color: var(--td-danger);
 }
 
 .deleteBtn:hover {
-  background: var(--color-danger-soft);
+  background: var(--td-brick-soft);
 }

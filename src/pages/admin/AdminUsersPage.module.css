@@ -10,12 +10,12 @@
 .title {
   margin: 0;
   font-size: 1.75rem;
-  color: var(--color-text);
+  color: var(--td-page-text);
 }
 
 .intro {
   margin: 0.35rem 0 0;
-  color: var(--color-text-muted);
+  color: var(--td-page-text-muted);
 }
 
 .statsRow {
@@ -26,7 +26,7 @@
 
 .stat {
   padding: 0.85rem 1rem;
-  border-radius: var(--radius-md);
+  border-radius: var(--td-radius-button);
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
@@ -49,9 +49,14 @@
 .errorBanner {
   margin: 1rem 0;
   padding: 0.75rem 1rem;
-  background: var(--color-danger-soft);
-  color: var(--color-danger);
-  border: 1px solid var(--color-danger);
-  border-radius: var(--radius-md);
+  background: var(--td-brick-soft);
+  color: var(--td-danger);
+  border: 1px solid var(--td-danger);
+  border-radius: var(--td-radius-button);
   font-size: 0.9rem;
+}
+
+[data-theme='dark'] .errorBanner {
+  color: var(--td-cok-bright);
+  border-color: var(--td-cok-bright);
 }

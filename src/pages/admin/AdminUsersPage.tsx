@@ -166,21 +166,21 @@ function StatCard({
   tone?: 'muted' | 'warning' | 'success';
 }) {
   const bg: Record<string, string> = {
-    muted: 'var(--color-surface-muted)',
-    warning: 'var(--color-accent-soft)',
-    success: 'var(--color-success-soft)',
+    muted: 'var(--td-paper-deep)',
+    warning: 'rgba(233, 162, 59, 0.15)',
+    success: 'rgba(21, 128, 61, 0.12)',
   };
   const fg: Record<string, string> = {
-    muted: 'var(--color-text-muted)',
-    warning: 'var(--gold-text)',
-    success: 'var(--color-success)',
+    muted: 'var(--td-paper-text-muted)',
+    warning: 'var(--td-warning)',
+    success: 'var(--td-success)',
   };
   return (
     <div
       className={styles.stat}
       style={{
         background: bg[tone],
-        border: '1px solid var(--color-border)',
+        border: '1px solid var(--td-paper-edge)',
       }}
     >
       <span className={styles.statLabel} style={{ color: fg[tone] }}>

@@ -87,17 +87,17 @@ export default function EditorDashboardPage() {
 }
 
 const TONE: Record<string, string> = {
-  muted: 'var(--color-surface-muted)',
-  warning: 'var(--color-warning-soft)',
-  success: 'var(--color-success-soft)',
-  danger: 'var(--color-danger-soft)',
+  muted: 'var(--td-paper-deep)',
+  warning: 'rgba(233, 162, 59, 0.15)',
+  success: 'rgba(21, 128, 61, 0.12)',
+  danger: 'var(--td-brick-soft)',
 };
 
 const TONE_TEXT: Record<string, string> = {
-  muted: 'var(--color-text-muted)',
-  warning: 'var(--color-warning)',
-  success: 'var(--color-success)',
-  danger: 'var(--color-danger)',
+  muted: 'var(--td-paper-text-muted)',
+  warning: 'var(--td-warning)',
+  success: 'var(--td-success)',
+  danger: 'var(--td-danger)',
 };
 
 function Stat({
