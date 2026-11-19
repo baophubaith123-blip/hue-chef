@@ -21,19 +21,73 @@
 
 .signWrap {
   position: relative;
-  width: min(560px, 100%);
+  width: min(700px, 100%);
+  container-type: inline-size;
+  filter: drop-shadow(0 16px 26px rgba(0, 0, 0, 0.45));
+  transform-origin: 50% -30px;
+  animation: homeSignSway 6.5s ease-in-out infinite alternate;
 }
 
-.mainSign {
+@keyframes homeSignSway {
+  from {
+    transform: rotate(-0.35deg);
+  }
+  to {
+    transform: rotate(0.35deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .signWrap {
+    animation: none;
+  }
+}
+
+.signImg {
+  display: block;
   width: 100%;
-  box-sizing: border-box;
+  height: auto;
 }
 
-.signNoiNoi {
+.signText {
   position: absolute;
-  right: -64px;
-  bottom: -30px;
+  left: 4%;
+  top: 31%;
+  width: 58%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   pointer-events: none;
+}
+
+.signTitle {
+  font-family: var(--td-font-game-display);
+  font-size: 11cqw;
+  line-height: 1;
+  color: #fff6e0;
+  letter-spacing: 0.01em;
+  text-shadow:
+    0 3px 0 #8a5a00,
+    0 6px 0 rgba(67, 48, 27, 0.45),
+    0 12px 26px rgba(0, 0, 0, 0.4);
+}
+
+.signSub {
+  margin-top: 1.6cqw;
+  font-family: var(--td-font-game);
+  font-weight: 700;
+  font-size: 3.1cqw;
+  color: #ffe9bd;
+  text-shadow: 0 2px 0 rgba(67, 48, 27, 0.65);
+}
+
+.paintedIcon {
+  width: 44px;
+  height: 44px;
+  object-fit: cover;
+  border-radius: 10px;
+  display: block;
 }
 
 .playerTag {
@@ -145,13 +199,26 @@
   display: grid;
   grid-template-columns: 2fr 1fr;
   gap: 22px;
-  align-items: start;
+  align-items: stretch;
+}
+
+/* Left column stacks the festival board and the journey panel; the
+   board flexes so both columns end at the same baseline (luật cân đối:
+   không dư, không thiếu). */
+.leftCol {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  min-width: 0;
 }
 
 /* ---------- Scroll board (featured dishes) ---------- */
 
 .scrollBoard {
   position: relative;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
   padding: 22px 22px 26px;
   border-radius: 16px;
   background:
@@ -183,9 +250,9 @@
 
 .festivalTitle {
   margin: 0;
-  font-family: var(--td-font-display);
-  font-size: clamp(1.25rem, 2.6vw, 1.8rem);
-  font-weight: 800;
+  font-family: var(--td-font-game-display);
+  font-size: clamp(1.3rem, 2.6vw, 1.9rem);
+  font-weight: 400;
   letter-spacing: 0.04em;
   color: var(--td-brick);
 }
@@ -217,15 +284,18 @@
 }
 
 .dishRow {
+  flex: 1;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   gap: 14px;
+  align-items: stretch;
 }
 
 .dishCardLink {
   text-decoration: none;
   color: inherit;
   display: block;
+  height: 100%;
   transition: transform 0.15s ease;
 }
 
@@ -233,11 +303,17 @@
   transform: translateY(-4px);
 }
 
+.dishCardLink > * {
+  height: 100%;
+}
+
 .dishCard {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 6px;
+  height: 100%;
+  box-sizing: border-box;
   padding: 12px 10px 14px;
   text-align: center;
   color: var(--td-paper-text);
@@ -245,7 +321,8 @@
 
 .dishArt {
   width: 100%;
-  aspect-ratio: 4 / 3;
+  flex: 1 1 auto;
+  min-height: 110px;
   object-fit: cover;
   border-radius: 10px;
   border: 2px solid var(--td-paper-edge);
@@ -290,7 +367,8 @@
   display: flex;
   gap: 12px;
   flex-wrap: wrap;
-  margin-top: 20px;
+  margin-top: auto;
+  padding-top: 20px;
 }
 
 .boardPlayBtn {
@@ -316,9 +394,12 @@
 
 .boardNoiNoi {
   position: absolute;
-  right: -18px;
-  bottom: -34px;
+  right: -14px;
+  bottom: -30px;
+  width: 118px;
+  height: auto;
   pointer-events: none;
+  filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.35));
 }
 
 /* ---------- Side column ---------- */
@@ -437,8 +518,15 @@
 }
 
 .paperFrame {
+  flex: 1;
+  display: flex;
   border-radius: 14px;
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+}
+
+.paperFrame > * {
+  flex: 1;
+  min-width: 0;
 }
 
 /* ---------- Shared paper panels ---------- */

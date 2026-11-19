@@ -5,8 +5,7 @@ import { AchievementIcon } from '@/components/AchievementIcon';
 import { Button } from '@/components/Button';
 import { EmptyState } from '@/components/EmptyState';
 import { DishGradeFrame } from '@/components/theme-d/DishGradeFrame';
-import { NoiNoi } from '@/components/theme-d/NoiNoi';
-import { WoodSign } from '@/components/theme-d/WoodSign';
+import { GAME_ART, NOI_NOI_FLAT, gameIcon } from '@/components/theme-d/game-assets';
 import { dishArtFor } from '@/components/theme-d/dish-art';
 import { useAchievements } from '@/contexts/AchievementContext';
 import { useTaxonomy } from '@/contexts/TaxonomyContext';
@@ -185,12 +184,11 @@ export default function HomePage() {
         {/* Vùng biển hiệu: biển gỗ lớn + thẻ giấy người chơi */}
         <section className={styles.signArea} aria-label={dict.dashboard.heroTitleHue}>
           <div className={styles.signWrap}>
-            <WoodSign
-              title="Hue Chef"
-              subtitle={dict.dashboard.heroTitleHue}
-              className={styles.mainSign}
-            />
-            <NoiNoi pose="be-noi" size={148} alt="" className={styles.signNoiNoi} />
+            <img src={GAME_ART.signTitle} alt="" className={styles.signImg} draggable={false} />
+            <div className={styles.signText}>
+              <span className={styles.signTitle}>Hue Chef</span>
+              <span className={styles.signSub}>{dict.dashboard.heroTitleHue}</span>
+            </div>
           </div>
 
           <div className={styles.playerTag}>
@@ -236,6 +234,7 @@ export default function HomePage() {
 
         {/* Lưới chính: bảng giấy cuộn + cột phải */}
         <div className={styles.mainGrid}>
+          <div className={styles.leftCol}>
           <section className={styles.scrollBoard} aria-label={dict.scene.festivalTitle}>
             <div className={styles.festivalBanner}>
               <span className={styles.festivalLantern} aria-hidden="true">🏮</span>
@@ -301,8 +300,80 @@ export default function HomePage() {
               </Link>
             </div>
 
-            <NoiNoi pose="chao" size={132} alt="" className={styles.boardNoiNoi} />
+            <img
+              src={NOI_NOI_FLAT.wave}
+              alt=""
+              className={styles.boardNoiNoi}
+              draggable={false}
+            />
           </section>
+
+        {/* Tiếp tục hành trình */}
+        {nextRecipe ? (
+          <section className={styles.paperPanel} aria-label={t('dashboard.continueJourney')}>
+            <header className={styles.sectionHeading}>
+              <h2 className={styles.sectionTitle}>
+                <span aria-hidden>🧭</span>
+                <span>{t('dashboard.continueJourney')}</span>
+              </h2>
+              <p className={styles.sectionSubtitle}>{t('dashboard.continueJourneySubtitle')}</p>
+            </header>
+
+            <div className={styles.journeyCard}>
+              <div className={styles.journeyImageWrap}>
+                <img
+                  src={dishArtFor(nextRecipe)}
+                  alt={nextRecipe.name}
+                  className={styles.journeyImage}
+                />
+              </div>
+
+              <div className={styles.journeyBody}>
+                <div className={styles.journeyDetails}>
+                  <span className={styles.journeyCategory}>
+                    {recipeCategoryLabel(nextRecipe.category)}
+                  </span>
+                  <h3 className={styles.journeyName}>{nextRecipe.name}</h3>
+
+                  <div className={styles.journeyMeta}>
+                    <span>
+                      {t('dashboard.difficulty')}:{' '}
+                      <span className={styles.journeyStars}>
+                        {'★'.repeat(nextRecipe.difficulty)}
+                        {'☆'.repeat(5 - nextRecipe.difficulty)}
+                      </span>
+                    </span>
+                    <span>•</span>
+                    <span>
+                      {t('dashboard.time')}: {formatDuration(nextRecipe.duration)}
+                    </span>
+                    <span>•</span>
+                    <span
+                      className={`${styles.journeyStatusTag} ${
+                        isNextRecipeCooked ? styles.journeyStatusTagSuccess : ''
+                      }`}
+                    >
+                      {isNextRecipeCooked
+                        ? t('dashboard.bestScore', { score: nextRecipeBestScore } as Record<string, unknown>)
+                        : t('dashboard.notCookedYet')}
+                    </span>
+                  </div>
+                </div>
+
+                <div className={styles.journeyActions}>
+                  <Button variant="primary" onClick={handleCookNow}>
+                    🍳 {t('dashboard.cookThisDish')}
+                  </Button>
+                  <Link to={`/recipes/${nextRecipe.id}`}>
+                    <Button variant="secondary">{t('common.details')}</Button>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </section>
+        ) : null}
+
+          </div>
 
           <aside className={styles.sideCol}>
             <Link to="/quests" className={styles.todayPanel}>
@@ -361,7 +432,13 @@ export default function HomePage() {
           <h2 className={styles.panelHeading}>{dict.dashboard.quickModesTitle}</h2>
           <div className={styles.quickModesGrid}>
             <Link to="/recipes" className={styles.quickModeCard}>
-              <div className={styles.quickModeIcon} aria-hidden="true">👨‍🍳</div>
+              <div className={styles.quickModeIcon} aria-hidden="true">
+                {gameIcon('recipes') ? (
+                  <img src={gameIcon('recipes')} alt="" className={styles.paintedIcon} />
+                ) : (
+                  '👨‍🍳'
+                )}
+              </div>
               <div className={styles.quickModeInfo}>
                 <h3 className={styles.quickModeName}>{dict.dashboard.modeFreeCook}</h3>
                 <p className={styles.quickModeDesc}>{dict.dashboard.modeFreeCookDesc}</p>
@@ -373,7 +450,13 @@ export default function HomePage() {
               to={nextRecipe ? `/cooking/${nextRecipe.id}` : '/recipes'}
               className={styles.quickModeCard}
             >
-              <div className={styles.quickModeIcon} aria-hidden="true">📍</div>
+              <div className={styles.quickModeIcon} aria-hidden="true">
+                {gameIcon('map') ? (
+                  <img src={gameIcon('map')} alt="" className={styles.paintedIcon} />
+                ) : (
+                  '📍'
+                )}
+              </div>
               <div className={styles.quickModeInfo}>
                 <h3 className={styles.quickModeName}>{dict.dashboard.modeJourney}</h3>
                 <p className={styles.quickModeDesc}>{dict.dashboard.modeJourneyDesc}</p>
@@ -382,7 +465,13 @@ export default function HomePage() {
             </Link>
 
             <Link to="/leaderboard" className={styles.quickModeCard}>
-              <div className={styles.quickModeIcon} aria-hidden="true">🏆</div>
+              <div className={styles.quickModeIcon} aria-hidden="true">
+                {gameIcon('trophy') ? (
+                  <img src={gameIcon('trophy')} alt="" className={styles.paintedIcon} />
+                ) : (
+                  '🏆'
+                )}
+              </div>
               <div className={styles.quickModeInfo}>
                 <h3 className={styles.quickModeName}>{dict.dashboard.modeDuel}</h3>
                 <p className={styles.quickModeDesc}>{dict.dashboard.modeDuelDesc}</p>
@@ -391,10 +480,31 @@ export default function HomePage() {
             </Link>
 
             <Link to="/achievements" className={styles.quickModeCard}>
-              <div className={styles.quickModeIcon} aria-hidden="true">🎁</div>
+              <div className={styles.quickModeIcon} aria-hidden="true">
+                {gameIcon('mystery') ? (
+                  <img src={gameIcon('mystery')} alt="" className={styles.paintedIcon} />
+                ) : (
+                  '🎁'
+                )}
+              </div>
               <div className={styles.quickModeInfo}>
                 <h3 className={styles.quickModeName}>{dict.dashboard.modeSpecialEvents}</h3>
                 <p className={styles.quickModeDesc}>{dict.dashboard.modeSpecialEventsDesc}</p>
+              </div>
+              <span className={styles.quickModeArrow}>›</span>
+            </Link>
+
+            <Link to="/stall" className={styles.quickModeCard}>
+              <div className={styles.quickModeIcon} aria-hidden="true">
+                {gameIcon('stall') ? (
+                  <img src={gameIcon('stall')} alt="" className={styles.paintedIcon} />
+                ) : (
+                  '🏪'
+                )}
+              </div>
+              <div className={styles.quickModeInfo}>
+                <h3 className={styles.quickModeName}>{dict.nav.stall}</h3>
+                <p className={styles.quickModeDesc}>{dict.dashboard.modeStallDesc}</p>
               </div>
               <span className={styles.quickModeArrow}>›</span>
             </Link>
@@ -466,7 +576,13 @@ export default function HomePage() {
           <h2 className={styles.panelHeading}>{dict.events.homeCards.eventsTitle}</h2>
           <div className={styles.eventsGrid}>
             <Link to="/quests" className={styles.eventCard}>
-              <div className={styles.eventIcon} aria-hidden="true">📜</div>
+              <div className={styles.eventIcon} aria-hidden="true">
+                {gameIcon('quest') ? (
+                  <img src={gameIcon('quest')} alt="" className={styles.paintedIcon} />
+                ) : (
+                  '📜'
+                )}
+              </div>
               <div className={styles.eventInfo}>
                 <h3 className={styles.eventName}>{dict.nav.quests}</h3>
                 <p className={styles.eventDesc}>{dict.events.homeCards.questsCard}</p>
@@ -475,7 +591,13 @@ export default function HomePage() {
             </Link>
 
             <Link to="/survival" className={styles.eventCard}>
-              <div className={styles.eventIcon} aria-hidden="true">🔥</div>
+              <div className={styles.eventIcon} aria-hidden="true">
+                {gameIcon('survival') ? (
+                  <img src={gameIcon('survival')} alt="" className={styles.paintedIcon} />
+                ) : (
+                  '🔥'
+                )}
+              </div>
               <div className={styles.eventInfo}>
                 <h3 className={styles.eventName}>{dict.nav.survival}</h3>
                 <p className={styles.eventDesc}>{dict.events.homeCards.survivalCard}</p>
@@ -484,7 +606,13 @@ export default function HomePage() {
             </Link>
 
             <Link to="/mystery" className={styles.eventCard}>
-              <div className={styles.eventIcon} aria-hidden="true">🎁</div>
+              <div className={styles.eventIcon} aria-hidden="true">
+                {gameIcon('mystery') ? (
+                  <img src={gameIcon('mystery')} alt="" className={styles.paintedIcon} />
+                ) : (
+                  '🎁'
+                )}
+              </div>
               <div className={styles.eventInfo}>
                 <h3 className={styles.eventName}>{dict.nav.mystery}</h3>
                 <p className={styles.eventDesc}>{dict.events.homeCards.mysteryCard}</p>
@@ -493,71 +621,6 @@ export default function HomePage() {
             </Link>
           </div>
         </section>
-
-        {/* Tiếp tục hành trình */}
-        {nextRecipe ? (
-          <section className={styles.paperPanel} aria-label={t('dashboard.continueJourney')}>
-            <header className={styles.sectionHeading}>
-              <h2 className={styles.sectionTitle}>
-                <span aria-hidden>🧭</span>
-                <span>{t('dashboard.continueJourney')}</span>
-              </h2>
-              <p className={styles.sectionSubtitle}>{t('dashboard.continueJourneySubtitle')}</p>
-            </header>
-
-            <div className={styles.journeyCard}>
-              <div className={styles.journeyImageWrap}>
-                <img
-                  src={dishArtFor(nextRecipe)}
-                  alt={nextRecipe.name}
-                  className={styles.journeyImage}
-                />
-              </div>
-
-              <div className={styles.journeyBody}>
-                <div className={styles.journeyDetails}>
-                  <span className={styles.journeyCategory}>
-                    {recipeCategoryLabel(nextRecipe.category)}
-                  </span>
-                  <h3 className={styles.journeyName}>{nextRecipe.name}</h3>
-
-                  <div className={styles.journeyMeta}>
-                    <span>
-                      {t('dashboard.difficulty')}:{' '}
-                      <span className={styles.journeyStars}>
-                        {'★'.repeat(nextRecipe.difficulty)}
-                        {'☆'.repeat(5 - nextRecipe.difficulty)}
-                      </span>
-                    </span>
-                    <span>•</span>
-                    <span>
-                      {t('dashboard.time')}: {formatDuration(nextRecipe.duration)}
-                    </span>
-                    <span>•</span>
-                    <span
-                      className={`${styles.journeyStatusTag} ${
-                        isNextRecipeCooked ? styles.journeyStatusTagSuccess : ''
-                      }`}
-                    >
-                      {isNextRecipeCooked
-                        ? t('dashboard.bestScore', { score: nextRecipeBestScore } as Record<string, unknown>)
-                        : t('dashboard.notCookedYet')}
-                    </span>
-                  </div>
-                </div>
-
-                <div className={styles.journeyActions}>
-                  <Button variant="primary" onClick={handleCookNow}>
-                    🍳 {t('dashboard.cookThisDish')}
-                  </Button>
-                  <Link to={`/recipes/${nextRecipe.id}`}>
-                    <Button variant="secondary">{t('common.details')}</Button>
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </section>
-        ) : null}
 
         {/* Hai cột: Thành tích sắp đạt & Bảng vinh danh mini */}
         <section className={styles.twoColGrid}>
