@@ -15,7 +15,9 @@ export type DiagnosisKey =
   | 'ingredient-tired'
   | 'ingredient-bruised'
   | 'finish-off'
-  | 'overcooked-soft';
+  | 'overcooked-soft'
+  /** Gói H5: the batch broke its picky customer's request (mục 6.3). */
+  | 'request-violated';
 
 export interface DiagnosisInput {
   /** Earned ratio 0..1 per run component; absent = stage not played. */
@@ -76,4 +78,16 @@ export function diagnoseBatch(input: DiagnosisInput): DiagnosisKey[] {
     .sort((a, b) => b.severity - a.severity)
     .slice(0, 2)
     .map((fault) => fault.key);
+}
+
+/**
+ * Diagnosis of a background-pot batch (Gói H5): no run stages exist to
+ * read faults from, so the words follow the pot's rolled quality —
+ * steady simmering reads as balanced, a weak roll reads as the two
+ * faults an unattended pot plausibly earns.
+ */
+export function diagnoseBackgroundPot(qualityScore: number): DiagnosisKey[] {
+  if (qualityScore >= 65) return ['balanced'];
+  if (qualityScore >= 50) return ['season-off'];
+  return ['undercooked'];
 }

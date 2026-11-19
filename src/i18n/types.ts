@@ -93,6 +93,7 @@ export interface I18nDictionary {
     map: string;
     album: string;
     stall: string;
+    skills: string;
   };
   recipe: {
     name: string;
@@ -631,6 +632,59 @@ export interface I18nDictionary {
     stoveLabel: string;
     pantryDoorLabel: string;
     menuBoardLabel: string;
+    /** Gói H5 — rush hour scene state (mục 5.5). */
+    rushBanner: string;
+    rushBannerBody: string;
+    noiNoiRush: string;
+    /** Gói H5 — picky customers + substitution law (mục 6.3). */
+    requestNames: Record<string, string>;
+    requestChip: (name: string) => string;
+    requestOnOrder: (name: string) => string;
+    subPanelTitle: string;
+    subPanelBody: (requestName: string, offenders: string) => string;
+    subOptionReplace: (from: string, to: string) => string;
+    subOptionRemove: (name: string) => string;
+    subOptionKeep: string;
+    subConfirm: string;
+    subChosenNote: (choice: string) => string;
+    subPenaltyNote: string;
+    sellResultRequestOk: string;
+    sellResultRequestWrong: string;
+    sellResultRequestIgnored: string;
+    serveRequestBonus: string;
+    /** Gói H5 — background pots (ý tưởng 6). */
+    potStart: string;
+    potSlotsFull: string;
+    potBusy: string;
+    potsTitle: string;
+    potCooking: (dish: string, secondsLeft: number) => string;
+    potReadyToast: (dish: string) => string;
+    /** Gói H5 — kitchen upgrades (ý tưởng 5), sold at the market. */
+    upgradeStallTitle: string;
+    upgradeStallNote: string;
+    upgradeNames: Record<'knife' | 'stove' | 'pot', string>;
+    upgradeDescs: Record<'knife' | 'stove' | 'pot', string>;
+    upgradeLevel: (level: number, max: number) => string;
+    upgradePrice: (xu: number) => string;
+    upgradeBuy: string;
+    upgradeMaxed: string;
+    kitchenTitle: string;
+  };
+  /** Gói H5 — chef skill tree (mục 4.4): four branches, both loops. */
+  skills: {
+    title: string;
+    subtitle: string;
+    pointsLabel: (available: number, total: number) => string;
+    pointsHint: string;
+    levelNote: (level: number) => string;
+    branchNames: Record<'knife' | 'fire' | 'seasoning' | 'speed', string>;
+    branchDescs: Record<'knife' | 'fire' | 'seasoning' | 'speed', string>;
+    branchEffects: Record<'knife' | 'fire' | 'seasoning' | 'speed', string>;
+    tierLabel: (tier: number, max: number) => string;
+    unlock: string;
+    maxed: string;
+    needPoints: string;
+    bothLoopsNote: string;
   };
   home: {
     welcome: (name: string) => string;

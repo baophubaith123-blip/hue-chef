@@ -21,6 +21,7 @@ export const STORAGE_KEYS = {
   editorAchievements: 'hue-chef-editor-achievements',
   categoryMigrationV1: 'hue-chef-category-migration-v1',
   stall: 'hue-chef-stall',
+  skills: 'hue-chef-skills',
 } as const;
 
 export function getStorageItem(key: string): string | null {
