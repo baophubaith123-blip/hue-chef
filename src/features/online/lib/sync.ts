@@ -75,20 +75,44 @@ export async function syncNow(localUserId: string): Promise<SyncResult> {
     );
     if (snapshotError) return { status: 'error', at: Date.now() };
 
+    // The ONLINE display name belongs to the online account: it is the
+    // name typed into the online sign-up form (kept in the
+    // online_profiles row and mirrored in the auth metadata). Sync
+    // must NEVER overwrite it with the local profile name — the local
+    // name is only a one-time seed when neither source exists yet.
+    // Existing rows keep their current name untouched (level still
+    // refreshes from the merged snapshot).
+    const { data: existingProfileRow } = await client
+      .from('online_profiles')
+      .select('display_name')
+      .eq('id', user.id)
+      .maybeSingle();
+    const existingProfile =
+      existingProfileRow && typeof existingProfileRow === 'object'
+        ? (existingProfileRow as Record<string, unknown>)
+        : null;
+    const rowDisplayName =
+      typeof existingProfile?.display_name === 'string' ? existingProfile.display_name : '';
+    const metaDisplayName =
+      typeof user.user_metadata?.display_name === 'string'
+        ? user.user_metadata.display_name
+        : '';
+    const onlineDisplayName = rowDisplayName || metaDisplayName || merged.profile.name;
+
     const { error: profileError } = await client.from('online_profiles').upsert(
-      { id: user.id, display_name: merged.profile.name, level: merged.profile.level },
+      { id: user.id, display_name: onlineDisplayName, level: merged.profile.level },
       { onConflict: 'id' },
     );
     if (profileError) return { status: 'error', at: Date.now() };
 
-    await publishStallVisit(localUserId);
+    await publishStallVisit(localUserId, onlineDisplayName);
 
     const existingLink = loadOnlineUserState(localUserId).link;
     patchOnlineUserState(localUserId, {
       link: {
         onlineId: user.id,
         email: user.email ?? existingLink?.email ?? '',
-        displayName: merged.profile.name,
+        displayName: onlineDisplayName,
         lastSyncAt: Date.now(),
       },
     });
@@ -110,7 +134,10 @@ export async function syncNow(localUserId: string): Promise<SyncResult> {
  * by design: every failure is swallowed — a missing postcard must
  * never break a sync or a page.
  */
-export async function publishStallVisit(localUserId: string): Promise<void> {
+export async function publishStallVisit(
+  localUserId: string,
+  onlineDisplayName?: string,
+): Promise<void> {
   try {
     const client = getSupabase();
     if (!client) return;
@@ -132,7 +159,7 @@ export async function publishStallVisit(localUserId: string): Promise<void> {
     await client.from('stall_snapshots').upsert(
       {
         user_id: user.id,
-        display_name: snapshot.profile.name,
+        display_name: onlineDisplayName || snapshot.profile.name,
         stall_level: stall?.stallLevel ?? 1,
         stars: stallStarsForExp(stall?.exp ?? 0),
         decor_ids: [...(stall?.decorIds ?? [])],
