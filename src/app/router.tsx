@@ -32,6 +32,11 @@ import EditorRecipeFormPage from '@/pages/editor/EditorRecipeFormPage';
 import AchievementsPage from '@/pages/player/AchievementsPage';
 import AlbumPage from '@/pages/player/AlbumPage';
 import MysteryPage from '@/pages/player/MysteryPage';
+import OnlinePage from '@/pages/player/OnlinePage';
+import OnlineDuelsPage from '@/pages/player/OnlineDuelsPage';
+import OnlineTournamentPage from '@/pages/player/OnlineTournamentPage';
+import OnlineVisitPage from '@/pages/player/OnlineVisitPage';
+import OnlineVisitStallPage from '@/pages/player/OnlineVisitStallPage';
 import QuestsPage from '@/pages/player/QuestsPage';
 import SkillTreePage from '@/pages/player/SkillTreePage';
 import SurvivalPage from '@/pages/player/SurvivalPage';
@@ -121,6 +126,26 @@ export const router = createBrowserRouter([
       {
         path: '/mystery',
         element: <MysteryPage />,
+      },
+      {
+        path: '/online',
+        element: <OnlinePage />,
+      },
+      {
+        path: '/online/duels',
+        element: <OnlineDuelsPage />,
+      },
+      {
+        path: '/online/tournament',
+        element: <OnlineTournamentPage />,
+      },
+      {
+        path: '/online/visit',
+        element: <OnlineVisitPage />,
+      },
+      {
+        path: '/online/visit/:userId',
+        element: <OnlineVisitStallPage />,
       },
       {
         path: '/stall',

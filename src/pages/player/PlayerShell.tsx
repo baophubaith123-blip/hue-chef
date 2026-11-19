@@ -12,6 +12,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useMail } from '@/contexts/MailContext';
 import { WarningPopup } from '@/features/mail/components/WarningPopup';
 import { BanNoticePopup } from '@/features/mail/components/BanNoticePopup';
+import { OnlineSyncMount } from '@/features/online/components/OnlineSyncMount';
 import { useTranslation } from '@/i18n/useTranslation';
 
 import styles from '@/pages/player/PlayerShell.module.css';
@@ -63,6 +64,7 @@ export function PlayerShell({ children }: PlayerShellProps) {
     if (p === '/quests' || p.startsWith('/quests')) return dict.nav.quests;
     if (p === '/survival' || p.startsWith('/survival')) return dict.nav.survival;
     if (p === '/mystery' || p.startsWith('/mystery')) return dict.nav.mystery;
+    if (p.startsWith('/online')) return dict.nav.online;
     if (p === '/stall' || p === '/market') return dict.nav.stall;
     if (p === '/collection') return dict.nav.collection;
     if (p.startsWith('/inbox')) return dict.nav.inbox;
@@ -178,6 +180,16 @@ export function PlayerShell({ children }: PlayerShellProps) {
           >
             <span className={styles.navIcon}>🎁</span>
             <span className={styles.navLabel}>{t('nav.mystery')}</span>
+          </NavLink>
+
+          <NavLink
+            to="/online"
+            className={({ isActive }) =>
+              [styles.navLink, isActive ? styles.navLinkActive : ''].filter(Boolean).join(' ')
+            }
+          >
+            <span className={styles.navIcon}>⚔️</span>
+            <span className={styles.navLabel}>{t('nav.online')}</span>
           </NavLink>
 
           <NavLink
@@ -320,6 +332,7 @@ export function PlayerShell({ children }: PlayerShellProps) {
         </header>
 
         <FestivalGarland className={styles.garland} />
+        <OnlineSyncMount userId={userId ?? null} />
         <main className={styles.content}>
           <div key={location.pathname} className="page-transition">
             {children}

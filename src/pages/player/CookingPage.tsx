@@ -58,6 +58,17 @@ import {
 } from '@/features/events/lib/incidents';
 import { applyMysterySwaps } from '@/features/events/lib/mystery';
 import { SURVIVAL_MAX_STRIKES } from '@/features/events/lib/survival';
+import { DuelResultPanel } from '@/features/online/components/DuelResultPanel';
+import { GhostTicker } from '@/features/online/components/GhostTicker';
+import { TournamentResultPanel } from '@/features/online/components/TournamentResultPanel';
+import {
+  createChallenge,
+  submitChallengeAnswer,
+  submitTournamentEntry,
+} from '@/features/online/lib/api';
+import { currentWeekKey, tournamentRecipeId } from '@/features/online/lib/tournament';
+import { loadOnlineUserState, patchOnlineUserState } from '@/features/online/store';
+import type { Challenge, GhostRun } from '@/features/online/types';
 import { SellResultPanel } from '@/features/stall/components/SellResultPanel';
 import { SubstitutionPanel } from '@/features/stall/components/SubstitutionPanel';
 import {
@@ -228,6 +239,103 @@ export default function CookingPage() {
     null,
   );
   const feastAppliedRef = useRef(false);
+  // Online modes (Gói H9): ?duel=create sends this run's ghost to the
+  // chosen opponent; ?duel=<challengeId> answers a challenge against
+  // the challenger's ghost; ?tournament=<weekKey> submits the run to
+  // the weekly board. They never combine with preview, sell, boss or
+  // the H7 event modes, and they book their own outcomes online —
+  // learning progress is never touched, exactly like survival/mystery.
+  const duelParam = searchParams.get('duel');
+  const tournamentParam = searchParams.get('tournament');
+  const isDuelMode =
+    Boolean(duelParam) &&
+    !isPreview &&
+    !isSellMode &&
+    !bossChapter &&
+    !isSurvivalMode &&
+    !isMysteryMode &&
+    !isFeastMode;
+  const isTournamentMode =
+    !isDuelMode &&
+    Boolean(tournamentParam) &&
+    !isPreview &&
+    !isSellMode &&
+    !bossChapter &&
+    !isSurvivalMode &&
+    !isMysteryMode &&
+    !isFeastMode;
+  // The duel session the duels page prepared for this run (who to
+  // challenge, or which challenge + ghost to answer). Read once per
+  // mount from the online store; an absent or mismatched session sends
+  // the run back to the duels page (gate effect below).
+  const duelSession = useMemo(
+    () => (isDuelMode && user ? loadOnlineUserState(user.id).duelSession : null),
+    [isDuelMode, user],
+  );
+  const duelSessionValid = Boolean(
+    duelSession &&
+      id &&
+      duelSession.recipeId === id &&
+      ((duelParam === 'create' && duelSession.mode === 'create' && duelSession.opponentId) ||
+        (duelParam !== 'create' &&
+          duelSession.mode === 'answer' &&
+          duelSession.challengeId === duelParam &&
+          duelSession.ghost)),
+  );
+  const duelGuardRef = useRef<string | null>(null);
+  const tournamentGuardRef = useRef<string | null>(null);
+  const duelAppliedRef = useRef(false);
+  const tournamentAppliedRef = useRef(false);
+  const [duelOutcome, setDuelOutcome] = useState<
+    | { variant: 'sent' }
+    | { variant: 'answered'; challenge: Challenge }
+    | { variant: 'error' }
+    | null
+  >(null);
+  const [tournamentOutcome, setTournamentOutcome] = useState<
+    { variant: 'booked' | 'error' } | null
+  >(null);
+  // Ghost recording (Gói H9): wall-clock stamps of each stage's
+  // completion, watched off the session's phase transitions. The
+  // challenger run's ghost is assembled from these at booking time;
+  // the answer run ignores them (its own ghost is booked the same way
+  // for the record, but only its score is compared).
+  // The run's start instant is STATE, not a ref: the ghost ticker
+  // mounts off it, and a ref flip alone would never re-render the
+  // stage header while the player idles on a stage's intro card.
+  const [ghostStartedAt, setGhostStartedAt] = useState<number | null>(null);
+  const ghostStampsRef = useRef<Record<string, number>>({});
+  const ghostPrevPhaseRef = useRef<string | null>(null);
+  useEffect(() => {
+    if (!isDuelMode && !isTournamentMode) return;
+    if (!session) return;
+    if (ghostStartedAt === null) {
+      setGhostStartedAt(Date.now());
+      ghostPrevPhaseRef.current = session.phase;
+      return;
+    }
+    const prev = ghostPrevPhaseRef.current;
+    if (prev === session.phase) return;
+    ghostPrevPhaseRef.current = session.phase;
+    const elapsed = Date.now() - ghostStartedAt;
+    const endedKeys =
+      prev === 'market'
+        ? ['market']
+        : prev === 'catch'
+          ? ['catch']
+          : prev === 'running'
+            ? ['cook', 'season']
+            : prev === 'finish'
+              ? ['finish']
+              : prev === 'minigames'
+                ? ['quiz']
+                : [];
+    for (const key of endedKeys) {
+      if (ghostStampsRef.current[key] === undefined) {
+        ghostStampsRef.current[key] = elapsed;
+      }
+    }
+  }, [isDuelMode, isTournamentMode, session, ghostStartedAt]);
 
   // Result fanfare (Gói H8): once per finished run — a win jingle and
   // a Theme D burst for a boss pass or a 3+ star clear, a soft descent
@@ -400,6 +508,33 @@ export default function CookingPage() {
     }
   }, [isMysteryMode, user, events, boxValid, navigate]);
 
+  // Duel gate: the prepared duel session must match this URL and this
+  // dish — the challenge itself is the ticket in (like the mystery
+  // box), so the ownership guard below is skipped for valid duels.
+  useEffect(() => {
+    if (!isDuelMode || !duelParam || !user) return;
+    if (duelGuardRef.current === duelParam) return;
+    duelGuardRef.current = duelParam;
+    if (!duelSessionValid) {
+      navigate('/online/duels', { replace: true });
+    }
+  }, [isDuelMode, duelParam, user, duelSessionValid, navigate]);
+
+  // Tournament gate: the URL's week must be the current week and the
+  // dish the week's community dish. The tournament is open to every
+  // player, owned or not — the week itself is the ticket in.
+  useEffect(() => {
+    if (!isTournamentMode || !tournamentParam || !user || !id) return;
+    if (tournamentGuardRef.current === tournamentParam) return;
+    tournamentGuardRef.current = tournamentParam;
+    if (
+      tournamentParam !== currentWeekKey() ||
+      tournamentRecipeId(tournamentParam) !== id
+    ) {
+      navigate('/online/tournament', { replace: true });
+    }
+  }, [isTournamentMode, tournamentParam, user, id, navigate]);
+
   // Feast gate: the dish must be licensed for sale, the big pot owned,
   // today's feast not yet served, and the pantry able to cover the
   // village batch.
@@ -509,6 +644,8 @@ export default function CookingPage() {
     if (isSellMode) return;
     // Event modes book their own outcomes in their own effects/panels.
     if (isSurvivalMode || isMysteryMode || isFeastMode) return;
+    // Online modes (Gói H9) book their own outcomes online.
+    if (isDuelMode || isTournamentMode) return;
     if (appliedResult) return;
 
     const xpPerkPct = perkValueOf(session.perk, 'xp-bonus-pct');
@@ -763,6 +900,94 @@ export default function CookingPage() {
     setFeastBatch(batch);
   }, [isFeastMode, user, session]);
 
+  // Duel booking (Gói H9): the finished run becomes a ghost — sent as
+  // a new challenge (create mode) or submitted as the answer against
+  // the challenger's ghost (answer mode). Booked exactly once; the
+  // prepared duel session is consumed either way so it can never book
+  // twice. An online failure surfaces as an error panel, never a
+  // crash — and never touches learning progress.
+  useEffect(() => {
+    if (!isDuelMode || !user || !session || !duelSessionValid || !duelSession) return;
+    if (session.phase !== 'success' && session.phase !== 'failed') return;
+    if (duelAppliedRef.current) return;
+    duelAppliedRef.current = true;
+    if (session.phase === 'success') {
+      recordPlayEvent(user.id, 'cook', {
+        recipeId: session.recipe.id,
+        stars: session.stars,
+      });
+    }
+    const partKeys = ['market', 'catch', 'cook', 'season', 'finish', 'quiz'] as const;
+    const stampMax = Math.max(0, ...partKeys.map((k) => ghostStampsRef.current[k] ?? 0));
+    const durationMs = Math.max(
+      1,
+      stampMax,
+      ghostStartedAt ? Date.now() - ghostStartedAt : 0,
+    );
+    const ghost: GhostRun = {
+      totalScore: session.finalScore,
+      stars: session.stars,
+      durationMs,
+      stages: partKeys
+        .filter((key) => (session.scorePlan[key] ?? 0) > 0)
+        .map((key) => ({
+          key,
+          score: session.scoreParts[key] ?? 0,
+          atMs: ghostStampsRef.current[key] ?? durationMs,
+        })),
+      recordedAt: new Date().toISOString(),
+    };
+    const book = async () => {
+      try {
+        if (duelSession.mode === 'create' && duelSession.opponentId) {
+          await createChallenge(duelSession.opponentId, session.recipe.id, ghost);
+          setDuelOutcome({ variant: 'sent' });
+        } else if (duelSession.mode === 'answer' && duelSession.challengeId) {
+          const challenge = await submitChallengeAnswer(duelSession.challengeId, ghost);
+          setDuelOutcome({ variant: 'answered', challenge });
+        } else {
+          setDuelOutcome({ variant: 'error' });
+        }
+      } catch {
+        setDuelOutcome({ variant: 'error' });
+      } finally {
+        patchOnlineUserState(user.id, { duelSession: null });
+      }
+    };
+    void book();
+  }, [isDuelMode, user, session, duelSession, duelSessionValid, ghostStartedAt]);
+
+  // Tournament booking (Gói H9): the finished run is submitted as the
+  // player's score for the current week; the API keeps only the best.
+  useEffect(() => {
+    if (!isTournamentMode || !user || !session || !tournamentParam) return;
+    if (session.phase !== 'success' && session.phase !== 'failed') return;
+    if (tournamentAppliedRef.current) return;
+    tournamentAppliedRef.current = true;
+    if (session.phase === 'success') {
+      recordPlayEvent(user.id, 'cook', {
+        recipeId: session.recipe.id,
+        stars: session.stars,
+      });
+    }
+    const link = loadOnlineUserState(user.id).link;
+    const submit = async () => {
+      try {
+        await submitTournamentEntry(
+          tournamentParam,
+          session.recipe.id,
+          link?.displayName ?? user.name,
+          session.finalScore,
+          session.stars,
+        );
+        setTournamentOutcome({ variant: 'booked' });
+      } catch {
+        setTournamentOutcome({ variant: 'error' });
+      }
+    };
+    void submit();
+  }, [isTournamentMode, user, session, tournamentParam]);
+
   // Incident activation: when the running step matches a planned entry
   // that has not fired yet, the accident strikes and blocks the step.
   useEffect(() => {
@@ -854,7 +1079,14 @@ export default function CookingPage() {
     if (!currentPreview && user && guardCheckedIdRef.current !== current.id) {
       guardCheckedIdRef.current = current.id;
       // Mystery mode skips the ownership guard: the box is the ticket.
-      if (!(isMysteryMode && boxValid) && !isRecipeOwned(user, current)) {
+      // Duel and tournament runs (Gói H9) skip it too: the received
+      // challenge and the weekly community dish are the tickets in.
+      if (
+        !(isMysteryMode && boxValid) &&
+        !(isDuelMode && duelSessionValid) &&
+        !isTournamentMode &&
+        !isRecipeOwned(user, current)
+      ) {
         navigate(`/recipes/${current.id}`, { replace: true });
         return cleanupFx;
       }
@@ -875,7 +1107,11 @@ export default function CookingPage() {
           ? `:mystery:${mysteryId}`
           : isFeastMode
             ? ':feast'
-            : ''
+            : isDuelMode
+              ? `:duel:${duelParam}`
+              : isTournamentMode
+                ? `:tournament:${tournamentParam}`
+                : ''
     }`;
     if (startedKeyRef.current === startKey) {
       return cleanupFx;
@@ -895,6 +1131,13 @@ export default function CookingPage() {
     setFeastBatch(null);
     setFeastServed(null);
     feastAppliedRef.current = false;
+    setDuelOutcome(null);
+    duelAppliedRef.current = false;
+    setTournamentOutcome(null);
+    tournamentAppliedRef.current = false;
+    setGhostStartedAt(null);
+    ghostStampsRef.current = {};
+    ghostPrevPhaseRef.current = null;
     // Mystery runs play the box's swapped copy of the dish.
     const startRecipe =
       isMysteryMode && boxValid && box ? applyMysterySwaps(current, box.swaps) : current;
@@ -1243,6 +1486,59 @@ export default function CookingPage() {
       </div>
     </div>
   ) : null;
+  // Online framing (Gói H9): duel and tournament banners in the same
+  // frame, and the challenger's ghost ticking alongside answer runs.
+  const duelBanner = isDuelMode ? (
+    <div className={styles.bossBanner}>
+      <div className={styles.bossBannerText}>
+        <p className={styles.bossBannerTitle}>⚔️ {dict.online.duelsTitle} — {recipe.name}</p>
+        <p className={styles.bossBannerRule}>
+          {duelSession?.mode === 'answer'
+            ? dict.online.duelAnswerBanner(duelSession.opponentName ?? '')
+            : dict.online.duelCreateBanner}
+        </p>
+      </div>
+    </div>
+  ) : null;
+  const tournamentBanner = isTournamentMode ? (
+    <div className={styles.bossBanner}>
+      <div className={styles.bossBannerText}>
+        <p className={styles.bossBannerTitle}>
+          🏆 {dict.online.tournamentTitle} — {recipe.name}
+        </p>
+        <p className={styles.bossBannerRule}>{dict.online.tournamentBanner}</p>
+      </div>
+    </div>
+  ) : null;
+  const ghostTicker =
+    isDuelMode &&
+    duelSession?.mode === 'answer' &&
+    duelSession.ghost &&
+    ghostStartedAt !== null ? (
+      <GhostTicker ghost={duelSession.ghost} startedAt={ghostStartedAt} />
+    ) : null;
+  // Answered-duel verdict data for the result panel.
+  const myOnlineId = user ? (loadOnlineUserState(user.id).link?.onlineId ?? null) : null;
+  const duelChallenge =
+    duelOutcome && duelOutcome.variant === 'answered' ? duelOutcome.challenge : null;
+  const duelIAmChallenger = duelChallenge ? duelChallenge.challengerId === myOnlineId : false;
+  const duelMyScore = duelChallenge
+    ? duelIAmChallenger
+      ? duelChallenge.challengerScore
+      : (duelChallenge.opponentScore ?? session.finalScore)
+    : undefined;
+  const duelTheirScore = duelChallenge
+    ? duelIAmChallenger
+      ? (duelChallenge.opponentScore ?? 0)
+      : duelChallenge.challengerScore
+    : undefined;
+  const duelResultKind: 'win' | 'lose' | 'draw' | null = duelChallenge
+    ? duelChallenge.winnerId === null
+      ? 'draw'
+      : duelChallenge.winnerId === myOnlineId
+        ? 'win'
+        : 'lose'
+    : null;
   // Back link: each mode returns to its own home; sell and feast both
   // live at the stall.
   const backHref =
@@ -1252,7 +1548,11 @@ export default function CookingPage() {
         ? '/survival'
         : isMysteryMode
           ? '/mystery'
-          : `/recipes/${recipe.id}`;
+          : isDuelMode
+            ? '/online/duels'
+            : isTournamentMode
+              ? '/online/tournament'
+              : `/recipes/${recipe.id}`;
   const backLabel =
     isSellMode || isFeastMode
       ? dict.stall.backToStall
@@ -1260,7 +1560,11 @@ export default function CookingPage() {
         ? dict.events.survival.backToSurvival
         : isMysteryMode
           ? dict.events.mystery.backToMystery
-          : t('cooking.recipeDetail');
+          : isDuelMode
+            ? dict.online.backToDuels
+            : isTournamentMode
+              ? dict.online.backToTournament
+              : t('cooking.recipeDetail');
   // Substitution panel (Gói H5): rides under the sell banner through
   // every stage of a picky order's cook — the choice can be confirmed
   // at any point before the run ends; no choice = ignored = penalised.
@@ -1504,6 +1808,9 @@ export default function CookingPage() {
       {survivalBanner}
       {mysteryBanner}
       {feastBanner}
+      {duelBanner}
+      {tournamentBanner}
+      {ghostTicker}
       {subPanel}
       {assistantBar}
     </>
@@ -1584,6 +1891,9 @@ export default function CookingPage() {
         {survivalBanner}
         {mysteryBanner}
         {feastBanner}
+        {duelBanner}
+        {tournamentBanner}
+        {ghostTicker}
       {subPanel}
       {assistantBar}
 
@@ -1647,6 +1957,9 @@ export default function CookingPage() {
       {flowChips}
       {bossBanner}
       {sellBanner}
+      {duelBanner}
+      {tournamentBanner}
+      {ghostTicker}
       {subPanel}
       {assistantBar}
       {seasonToast ? <div className={styles.seasonToast}>{seasonToast}</div> : null}
@@ -1823,6 +2136,34 @@ export default function CookingPage() {
             onBack={() => {
               resetCooking();
               navigate('/stall');
+            }}
+          />
+        ) : null
+      ) : showResult && isDuelMode ? (
+        duelOutcome ? (
+          <DuelResultPanel
+            variant={duelOutcome.variant}
+            score={session.finalScore}
+            stars={session.stars}
+            opponentName={duelSession?.opponentName ?? ''}
+            myScore={duelMyScore}
+            theirScore={duelTheirScore}
+            result={duelResultKind}
+            onBack={() => {
+              resetCooking();
+              navigate('/online/duels');
+            }}
+          />
+        ) : null
+      ) : showResult && isTournamentMode ? (
+        tournamentOutcome ? (
+          <TournamentResultPanel
+            variant={tournamentOutcome.variant}
+            score={session.finalScore}
+            stars={session.stars}
+            onBack={() => {
+              resetCooking();
+              navigate('/online/tournament');
             }}
           />
         ) : null
