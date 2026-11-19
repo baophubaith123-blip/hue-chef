@@ -1,0 +1,202 @@
+/* Gói H6 — stall scene upgrade layers (mục 8.3 + 5.6). Drawn over the
+   painted scene, under every interactive element; Theme D colours
+   only (gold, brick red, cream), no purple anywhere. */
+
+.layers {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Level 2 — striped festival awning over the painted roof. */
+.awning {
+  position: absolute;
+  top: 15%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 52%;
+  height: 7%;
+  border-radius: 0 0 46% 46% / 0 0 90% 90%;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--td-brick) 0 34px,
+    var(--td-cream) 34px 68px
+  );
+  border-bottom: 4px solid var(--td-gold);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.35);
+  opacity: 0.96;
+}
+
+/* Level 3 — a swag of glowing lantern dots across the yard. */
+.lanternString {
+  position: absolute;
+  top: 21%;
+  left: 16%;
+  right: 16%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.lanternDot {
+  width: 15px;
+  height: 19px;
+  border-radius: 46%;
+  background: radial-gradient(circle at 40% 32%, var(--td-gold-bright), var(--td-brick));
+  border: 2px solid var(--td-gold-deep);
+  box-shadow: 0 0 14px 3px rgba(233, 162, 59, 0.55);
+  animation: layerSway 3.2s ease-in-out infinite;
+}
+
+@keyframes layerSway {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-3deg);
+  }
+  50% {
+    transform: translateY(3px) rotate(3deg);
+  }
+}
+
+/* Level 4 — flowered yard edges. */
+.yardPot {
+  position: absolute;
+  bottom: 4%;
+  font-size: 34px;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.4));
+}
+
+.yardPotLeft {
+  left: 3%;
+}
+
+.yardPotRight {
+  right: 3%;
+}
+
+.yardTrim {
+  position: absolute;
+  left: 6%;
+  right: 6%;
+  bottom: 1.5%;
+  height: 8px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, transparent, var(--td-gold) 18%, var(--td-gold) 82%, transparent);
+  opacity: 0.75;
+}
+
+/* Level 5 — imperial banner + gold lanterns. */
+.imperialBanner {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 64%;
+  height: 5.5%;
+  background: linear-gradient(180deg, var(--td-brick), #7e2413);
+  border: 3px solid var(--td-gold);
+  border-top: none;
+  border-radius: 0 0 14px 14px;
+  box-shadow:
+    inset 0 0 0 2px rgba(250, 245, 239, 0.35),
+    0 8px 18px rgba(0, 0, 0, 0.4);
+}
+
+.imperialLantern {
+  position: absolute;
+  top: 6%;
+  font-size: 40px;
+  filter: drop-shadow(0 0 12px rgba(233, 162, 59, 0.65));
+  animation: layerSway 3.8s ease-in-out infinite;
+}
+
+.imperialLanternLeft {
+  left: 12%;
+}
+
+.imperialLanternRight {
+  right: 12%;
+  animation-delay: 0.7s;
+}
+
+/* Player decoration. */
+.decorLantern {
+  position: absolute;
+  top: 26%;
+  font-size: 30px;
+  filter: drop-shadow(0 0 10px rgba(233, 162, 59, 0.55));
+  animation: layerSway 3.4s ease-in-out infinite;
+}
+
+.decorLanternLeft {
+  left: 5%;
+}
+
+.decorLanternRight {
+  right: 5%;
+  animation-delay: 0.5s;
+}
+
+.decorFlowers {
+  position: absolute;
+  bottom: 12%;
+  font-size: 26px;
+  filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.35));
+}
+
+.decorFlowersLeft {
+  left: 22%;
+}
+
+.decorFlowersRight {
+  right: 22%;
+}
+
+/* The gilded signboard: a gold-framed plaque beside the wooden sign. */
+.goldSign {
+  position: absolute;
+  top: 30%;
+  right: 6.5%;
+  width: 54px;
+  height: 40px;
+  border-radius: 8px;
+  background: linear-gradient(160deg, var(--td-gold-bright), var(--td-gold-deep));
+  border: 3px solid #7e2413;
+  box-shadow:
+    inset 0 0 0 2px rgba(250, 245, 239, 0.5),
+    0 8px 16px rgba(0, 0, 0, 0.4);
+}
+
+.decorPlant {
+  position: absolute;
+  bottom: 5%;
+  left: 10%;
+  font-size: 32px;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.4));
+}
+
+@media (max-width: 560px) {
+  .lanternDot {
+    width: 10px;
+    height: 13px;
+  }
+
+  .yardPot,
+  .imperialLantern {
+    font-size: 24px;
+  }
+
+  .decorLantern,
+  .decorPlant {
+    font-size: 21px;
+  }
+
+  .decorFlowers {
+    font-size: 18px;
+  }
+
+  .goldSign {
+    width: 38px;
+    height: 28px;
+  }
+}
