@@ -90,6 +90,13 @@
   flex-wrap: wrap;
 }
 
+/* Gói H8: audio controls nailed to the wooden sign, under the wallets. */
+.signAudio {
+  display: flex;
+  justify-content: center;
+  margin-top: 6px;
+}
+
 .shiftBar {
   display: flex;
   align-items: center;

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 import { SEED_INGREDIENTS } from '@/data/ingredients';
 import type { Ingredient } from '@/data/types';
-import { CoinPill, GoldButton, WoodSign } from '@/components/theme-d';
+import { AudioControls, CoinPill, GoldButton, WoodSign } from '@/components/theme-d';
 import { SCENES } from '@/components/theme-d/assets';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRecipes } from '@/contexts/RecipeContext';
@@ -44,6 +44,7 @@ import {
   type UpgradeKind,
 } from '@/features/stall/lib/upgrades';
 import { useTranslation } from '@/i18n/useTranslation';
+import { playSound } from '@/lib/sound';
 
 import styles from '@/pages/player/MarketPage.module.css';
 
@@ -129,6 +130,8 @@ export default function MarketPage() {
     if (coins < total) return;
     addCoins(-total);
     buyIngredient(user.id, ingredient.id, qty, price);
+    // Gói H8: a purchase gets the soft spend descent.
+    playSound('buy');
   };
 
   // Kitchen upgrades (Gói H5): the store books the new level first and
@@ -138,7 +141,10 @@ export default function MarketPage() {
     const price = nextUpgradePrice(kind, stall.upgrades[kind]);
     if (price === null || coins < price) return;
     const paid = buyUpgrade(user.id, kind);
-    if (paid !== null) addCoins(-paid);
+    if (paid !== null) {
+      addCoins(-paid);
+      playSound('buy');
+    }
   };
 
   // Support gear / cards / decor / ads (Gói H6): same book-first
@@ -148,7 +154,10 @@ export default function MarketPage() {
     const price = GEAR_PRICES[kind];
     if (coins < price) return;
     const paid = buyGear(user.id, kind);
-    if (paid !== null) addCoins(-paid);
+    if (paid !== null) {
+      addCoins(-paid);
+      playSound('buy');
+    }
   };
 
   const handleBuyCard = (kind: CardKind) => {
@@ -156,19 +165,24 @@ export default function MarketPage() {
     if (coins < price) return;
     const paid = buyCard(user.id, kind);
     addCoins(-paid);
+    playSound('buy');
   };
 
   const handleBuyDecor = (kind: DecorKind) => {
     const price = DECOR_PRICES[kind];
     if (coins < price) return;
     const paid = buyDecor(user.id, kind);
-    if (paid !== null) addCoins(-paid);
+    if (paid !== null) {
+      addCoins(-paid);
+      playSound('buy');
+    }
   };
 
   const handleBuyAd = () => {
     if (coins < AD_PRICE) return;
     const paid = buyAd(user.id, Date.now());
     addCoins(-paid);
+    playSound('buy');
   };
 
   return (
@@ -186,6 +200,12 @@ export default function MarketPage() {
               <span>{s.marketWallet}</span>
               <CoinPill amount={coins} currency="xu" />
               <CoinPill amount={user.cok ?? 0} currency="cok" />
+            </div>
+            {/* Gói H8: audio controls on the market sign, mirroring
+                the stall sign — the page keeps its single fixed
+                back button untouched. */}
+            <div className={styles.audioRow}>
+              <AudioControls compact />
             </div>
           </WoodSign>
           <span className={styles.headerSpacer} aria-hidden />

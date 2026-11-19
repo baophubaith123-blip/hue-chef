@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { getIngredientById } from '@/data/ingredients';
 import type { Recipe } from '@/data/types';
 import {
+  AudioControls,
   CoinPill,
   CustomerFace,
   DishGradeFrame,
@@ -109,6 +110,8 @@ import {
 } from '@/features/stall/store';
 import type { CookedBatch, StallCustomer } from '@/features/stall/types';
 import { useTranslation } from '@/i18n/useTranslation';
+import { buzz, celebrate } from '@/lib/juice';
+import { playSound } from '@/lib/sound';
 
 import styles from '@/pages/player/StallPage.module.css';
 
@@ -209,14 +212,20 @@ export default function StallPage() {
   }, [user, stall, addCoins, addCok, sup]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // A customer flipping to "left" is a lost order — say so out loud.
+  // Gói H8 adds the audible layer: a fresh arrival rings the bell, a
+  // departure plays the soft lose descent.
   useEffect(() => {
     if (!stall) return;
     const prev = prevStatesRef.current;
     for (const customer of stall.customers) {
       const before = prev.get(customer.id);
+      if (!before && customer.state === 'waiting' && Date.now() - customer.arrivedAt < 4000) {
+        playSound('bell');
+      }
       if (before && before !== 'left' && customer.state === 'left') {
         const dish = recipesRef.current.find((r) => r.id === customer.recipeId);
         showToast(s.customerLeftToast(dish?.name ?? customer.recipeId), 'error');
+        playSound('lose');
       }
       prev.set(customer.id, customer.state);
     }
@@ -233,10 +242,28 @@ export default function StallPage() {
       if (!currentIds.has(potId)) {
         const dish = recipesRef.current.find((r) => r.id === recipeId);
         showToast(s.potReadyToast(dish?.name ?? recipeId), 'success');
+        playSound('potready');
       }
     }
     prevPotsRef.current = new Map(stall.pots.map((pot) => [pot.id, pot.recipeId]));
   }, [stall, s]);
+
+  // Shift-summary fanfare (Gói H8): once per summary — a star gained
+  // gets the fanfare and a big burst; any other paid-out shift gets
+  // the coin sound.
+  const summaryFxRef = useRef<object | null>(null);
+  useEffect(() => {
+    if (!stall || stall.shift || !stall.lastSummary) return;
+    if (summaryFxRef.current === stall.lastSummary) return;
+    summaryFxRef.current = stall.lastSummary;
+    if (stall.lastSummary.starsAfter > stall.lastSummary.starsBefore) {
+      playSound('starup');
+      celebrate('big');
+      buzz([40, 40, 80]);
+    } else if (stall.lastSummary.revenueXu > 0) {
+      playSound('coin');
+    }
+  }, [stall]);
 
   const recipes = getApprovedRecipes();
   const sellable = useMemo(
@@ -332,6 +359,13 @@ export default function StallPage() {
     if (!result) return;
     if (result.totalXu > 0) addCoins(result.totalXu);
     if (result.cok > 0) addCok(result.cok);
+    // Gói H8: a served dish sweeps in, coins land, cok sparkles — plus
+    // a small Theme D burst and a short buzz on devices that have it.
+    playSound('serve');
+    if (result.totalXu > 0) playSound('coin');
+    if (result.cok > 0) playSound('cok');
+    celebrate('small');
+    buzz(25);
     setSelectedId(null);
     showToast(s.servedToast(result.totalXu), 'success');
   };
@@ -416,6 +450,12 @@ export default function StallPage() {
                 <CoinPill amount={user.coins ?? 0} currency="xu" label={s.xuBoard} />
                 <CoinPill amount={user.cok ?? 0} currency="cok" label={s.cokJar} />
               </div>
+              {/* Gói H8: the audio controls ride ON the wooden sign —
+                  an in-scene object, not a third fixed page button
+                  (the two fixed buttons of mục 5.1 stay untouched). */}
+              <div className={styles.signAudio}>
+                <AudioControls compact />
+              </div>
             </WoodSign>
             {stall.shift ? (
               <div className={styles.shiftBar}>
@@ -438,6 +478,8 @@ export default function StallPage() {
                     addCok(-FESTIVAL_TICKET_COK);
                     openFestivalShift(user.id, Date.now());
                     recordFestivalShift(user.id);
+                    // Gói H8: the cok ticket sparkles as it is spent.
+                    playSound('cok');
                     showToast(dict.events.festival.openedToast, 'success');
                   }}
                 >

@@ -72,6 +72,13 @@
   font-weight: 700;
 }
 
+/* Gói H8: audio controls under the market sign's wallets. */
+.audioRow {
+  display: flex;
+  justify-content: center;
+  margin-top: 6px;
+}
+
 .note {
   margin: 0;
   background: rgba(55, 14, 27, 0.82);
