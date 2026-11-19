@@ -108,6 +108,8 @@ import { isRecipeOwned } from '@/features/recipes/lib/ownership';
 import { buildTrayIngredientIds } from '@/features/cooking/lib/tray-ingredients';
 import { shuffleArray } from '@/features/cooking/lib/shuffle';
 import { useTranslation } from '@/i18n/useTranslation';
+import { buzz, celebrate } from '@/lib/juice';
+import { playSound } from '@/lib/sound';
 import { calculateXpFromStars } from '@/lib/score';
 import { PlayerShell } from '@/pages/player/PlayerShell';
 
@@ -737,6 +739,9 @@ export default function CookingPage() {
     firedStepsRef.current.add(entry.stepIndex);
     setIncidentNow(Date.now());
     setActiveIncident({ defId: entry.defId, startedAt: Date.now(), penalized: false });
+    // Gói H8: an incident announces itself — alarm + a short buzz.
+    playSound('alarm');
+    buzz([50, 30, 50]);
   }, [session, activeIncident, incidentPlan, isPreview]);
 
   // Grace countdown clock for the active incident.
@@ -777,6 +782,8 @@ export default function CookingPage() {
         ? dict.events.incidents.fixedLateToast
         : dict.events.incidents.fixedToast,
     );
+    // Gói H8: the repair gets its own rising arp.
+    playSound('fixed');
     setActiveIncident(null);
   }, [activeIncident, dict, showIncidentToast]);
 
@@ -1310,6 +1317,30 @@ export default function CookingPage() {
               body: dict.journey.bossResultFailBody,
             }
       : null;
+
+  // Result fanfare (Gói H8): once per finished run — a win jingle and
+  // a Theme D burst for a boss pass or a 3+ star clear, a soft descent
+  // for a failed run. Preview runs stay silent.
+  const resultFxKeyRef = useRef<string | null>(null);
+  useEffect(() => {
+    if (!showResult || isPreview) return;
+    const key = `${session.recipe.id}:${session.phase}:${session.stars}:${session.finalScore}`;
+    if (resultFxKeyRef.current === key) return;
+    resultFxKeyRef.current = key;
+    if (session.phase === 'success') {
+      if (bossNote?.passed) {
+        playSound('starup');
+        celebrate('big');
+        buzz([40, 40, 80]);
+      } else {
+        playSound('win');
+        if (!isSellMode && session.stars >= 3) celebrate('small');
+        buzz(35);
+      }
+    } else {
+      playSound('lose');
+    }
+  }, [showResult, isPreview, session, bossNote, isSellMode]);
 
   // Feast serve/discard/retry (Gói H7): serving books the village
   // payout through the stall store; the caller applies the xu and
