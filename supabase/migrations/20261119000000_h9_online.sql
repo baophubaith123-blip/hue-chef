@@ -143,3 +143,17 @@ create policy stall_snapshots_insert on public.stall_snapshots
 drop policy if exists stall_snapshots_update on public.stall_snapshots;
 create policy stall_snapshots_update on public.stall_snapshots
   for update using (auth.uid() = user_id) with check (auth.uid() = user_id);
+
+-- ---------------------------------------------------------------------
+-- API access grants.
+-- New Supabase projects do NOT auto-grant Data API privileges on
+-- tables created through SQL, so PostgREST answers
+-- "permission denied for table" (42501) even when RLS policies are
+-- in place. Grant the table-level privileges explicitly: anon may
+-- only read the three public boards (the RLS policies above still
+-- decide exactly which rows are visible), while authenticated
+-- players may read/write all five tables — their own rows only,
+-- per the policies above.
+-- ---------------------------------------------------------------------
+grant select on public.online_profiles, public.tournament_entries, public.stall_snapshots to anon;
+grant select, insert, update, delete on public.online_profiles, public.progress_snapshots, public.challenges, public.tournament_entries, public.stall_snapshots to authenticated;
