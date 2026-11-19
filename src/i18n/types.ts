@@ -1422,6 +1422,15 @@ export interface I18nDictionary {
     noResults: string;
     noResultsHint: string;
   };
+  game: {
+    menu: string;
+    openMenu: string;
+    close: string;
+    back: string;
+    destinations: string;
+    settings: string;
+    accountSection: string;
+  };
   dashboard: {
     greetingMorning: string;
     greetingAfternoon: string;
@@ -1463,6 +1472,7 @@ export interface I18nDictionary {
     quickModesTitle: string;
     modeFreeCook: string;
     modeFreeCookDesc: string;
+    modeStallDesc: string;
     modeJourney: string;
     modeJourneyDesc: string;
     modeDuel: string;

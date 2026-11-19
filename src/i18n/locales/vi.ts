@@ -1598,6 +1598,15 @@ export const vi: I18nDictionary = {
     noResults: 'Không tìm thấy món nào',
     noResultsHint: 'Thử đổi bộ lọc hoặc từ khoá tìm kiếm nhé.',
   },
+  game: {
+    menu: 'Menu trò chơi',
+    openMenu: 'Mở menu trò chơi',
+    close: 'Đóng menu',
+    back: 'Quay lại',
+    destinations: 'Khám phá',
+    settings: 'Cài đặt',
+    accountSection: 'Tài khoản & hệ thống',
+  },
   dashboard: {
     greetingMorning: 'Chào buổi sáng',
     greetingAfternoon: 'Chào buổi chiều',
@@ -1639,6 +1648,7 @@ export const vi: I18nDictionary = {
     quickModesTitle: 'Chế độ chơi nhanh',
     modeFreeCook: 'Tự do nấu ăn',
     modeFreeCookDesc: 'Khám phá công thức',
+    modeStallDesc: 'Mở quầy, nấu bán kiếm xu',
     modeJourney: 'Hành trình Huế',
     modeJourneyDesc: 'Vượt qua thử thách',
     modeDuel: 'Đấu bếp',

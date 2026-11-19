@@ -1597,6 +1597,15 @@ export const en: I18nDictionary = {
     noResults: 'No dishes found',
     noResultsHint: 'Try changing the filters or search keywords.',
   },
+  game: {
+    menu: 'Game menu',
+    openMenu: 'Open game menu',
+    close: 'Close menu',
+    back: 'Back',
+    destinations: 'Explore',
+    settings: 'Settings',
+    accountSection: 'Account & system',
+  },
   dashboard: {
     greetingMorning: 'Good morning',
     greetingAfternoon: 'Good afternoon',
@@ -1638,6 +1647,7 @@ export const en: I18nDictionary = {
     quickModesTitle: 'Quick Play Modes',
     modeFreeCook: 'Free Cooking',
     modeFreeCookDesc: 'Explore recipes',
+    modeStallDesc: 'Open your stall, cook & earn coins',
     modeJourney: 'Hue Journey',
     modeJourneyDesc: 'Overcome challenges',
     modeDuel: 'Chef Duel',
