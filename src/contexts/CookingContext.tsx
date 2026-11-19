@@ -293,13 +293,22 @@ function cookingReducer(state: CookingState, action: CookingAction): CookingStat
       // Combo shield (equipped perk): a charge absorbs the streak break —
       // the drop still counts as wrong, but the combo survives.
       const shielded = session.comboShieldLeft > 0;
+      // Once every required ingredient is in the pot, the step's action
+      // label must survive a wrong drop: re-dropping a potted ingredient
+      // is a no-op (see the isRequired branch), so nulling the label here
+      // would soft-lock the step forever. A wrong drop can still arrive
+      // off-tray — the kitchen-incident penalty (Gói H7) fires exactly
+      // this action after the tray is already complete.
+      const trayComplete = currentStep.requiredIngredients.every((id) =>
+        session.potIngredients.includes(id),
+      );
       return {
         session: {
           ...session,
           wrongCount: session.wrongCount + 1,
           cookEarnedExact: session.cookEarnedExact - convertedPenalty,
           runningScoreDelta: session.runningScoreDelta - convertedPenalty,
-          actionButtonLabel: null,
+          actionButtonLabel: trayComplete ? session.actionButtonLabel : null,
           comboShieldLeft: shielded ? session.comboShieldLeft - 1 : session.comboShieldLeft,
           // A wrong drop breaks the combo streak (banked bonus is kept).
           comboStreak: shielded ? session.comboStreak : 0,
