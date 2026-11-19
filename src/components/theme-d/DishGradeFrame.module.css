@@ -2,6 +2,7 @@
   position: relative;
   border-radius: 14px;
   padding: 5px;
+  border: 2px solid rgba(74, 44, 20, 0.55);
   box-shadow: 0 6px 18px rgba(74, 21, 37, 0.22);
 }
 
@@ -61,11 +62,43 @@
   z-index: 2;
   padding: 3px 12px;
   border-radius: var(--td-radius-full);
-  font-family: var(--td-font-body);
+  font-family: var(--td-font-game);
   font-size: var(--td-text-xs);
   font-weight: 800;
   letter-spacing: 0.06em;
   text-transform: uppercase;
+}
+
+/* Corner gem (Gói Game-Shell): a painted-style jewel socketed into the
+   frame's top-left corner from grade 3 up — silver-blue for Ngon,
+   amber for Cung đình, ruby for Đặc biệt. */
+.gem {
+  position: absolute;
+  top: -7px;
+  left: -7px;
+  z-index: 3;
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+  transform: rotate(45deg);
+  border: 2px solid rgba(67, 48, 27, 0.65);
+  box-shadow:
+    inset 0 2px 3px rgba(255, 255, 255, 0.65),
+    inset 0 -3px 4px rgba(0, 0, 0, 0.3),
+    0 3px 6px rgba(0, 0, 0, 0.35);
+}
+
+.grade3 .gem {
+  background: radial-gradient(circle at 35% 30%, #f2f6fa, #9fb2c3 55%, #6d8093);
+}
+
+.grade4 .gem {
+  background: radial-gradient(circle at 35% 30%, #ffe9a8, var(--td-gold) 55%, #b97a1c);
+}
+
+.grade5 .gem {
+  background: radial-gradient(circle at 35% 30%, #ffb3c1, #e11d48 55%, #881337);
+  animation: grade-spark-float 2.6s ease-in-out infinite;
 }
 
 .grade4 .ribbon {

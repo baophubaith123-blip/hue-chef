@@ -34,6 +34,7 @@ export function DishGradeFrame({ grade, gradeLabel, children, className = '' }: 
           <span className={`${styles.spark} ${styles.sparkC}`} />
         </span>
       ) : null}
+      {grade >= 3 ? <span className={styles.gem} aria-hidden /> : null}
       {grade >= 4 ? <span className={styles.ribbon}>{gradeLabel}</span> : null}
       <div className={styles.inner}>{children}</div>
     </div>
