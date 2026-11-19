@@ -3,10 +3,11 @@ import { Link, useNavigate } from 'react-router-dom';
 
 import { AchievementIcon } from '@/components/AchievementIcon';
 import { Button } from '@/components/Button';
-import { NoiNoi } from '@/components/theme-d/NoiNoi';
-import { SCENES } from '@/components/theme-d/assets';
 import { EmptyState } from '@/components/EmptyState';
-import { ImageWithFallback } from '@/components/ImageWithFallback';
+import { DishGradeFrame } from '@/components/theme-d/DishGradeFrame';
+import { NoiNoi } from '@/components/theme-d/NoiNoi';
+import { WoodSign } from '@/components/theme-d/WoodSign';
+import { dishArtFor } from '@/components/theme-d/dish-art';
 import { useAchievements } from '@/contexts/AchievementContext';
 import { useTaxonomy } from '@/contexts/TaxonomyContext';
 import { useAuth } from '@/contexts/AuthContext';
@@ -15,10 +16,14 @@ import { SEED_ACHIEVEMENTS } from '@/data/achievements';
 import type { Recipe } from '@/data/types';
 import { loadUsers } from '@/features/auth/store';
 import { CheckinPanel } from '@/features/events/components/CheckinPanel';
-import { RecipeCard } from '@/features/recipes/components/RecipeCard';
+import { questDefById } from '@/features/events/lib/quests';
+import { useEvents } from '@/features/events/store';
+import { dishGradeFor } from '@/features/recipes/lib/grade';
+import { isRecipeOwned } from '@/features/recipes/lib/ownership';
+import { useNextRecipe } from '@/features/recipes/hooks/useNextRecipe';
 import { formatDate, formatDuration } from '@/lib/format';
 import { useTranslation } from '@/i18n/useTranslation';
-import { PlayerShell } from '@/pages/player/PlayerShell';
+import { SceneShell } from '@/pages/player/SceneShell';
 
 import styles from '@/pages/player/HomePage.module.css';
 
@@ -29,6 +34,9 @@ export default function HomePage() {
   const navigate = useNavigate();
   const { getApprovedRecipes } = useRecipes();
   const { isUnlocked, getProgressPct, allAchievements } = useAchievements();
+  const { nextRecipe, isCooked: isNextRecipeCooked, bestScore: nextRecipeBestScore } =
+    useNextRecipe();
+  const eventsState = useEvents(user?.id ?? null);
 
   const approvedRecipes = useMemo(() => getApprovedRecipes(), [getApprovedRecipes]);
 
@@ -62,7 +70,7 @@ export default function HomePage() {
     if (level >= 5) return t('dashboard.titleMaster');
     if (level >= 3) return t('dashboard.titleCook');
     return t('dashboard.titleNovice');
-  }, [equippedBadge, level, t]);
+  }, [level, t]);
 
   // Greeting by hour
   const greeting = useMemo(() => {
@@ -107,40 +115,29 @@ export default function HomePage() {
     return SEED_ACHIEVEMENTS.filter((a) => isUnlocked(user.id, a.id)).length;
   }, [isUnlocked, user?.id]);
 
-  // Next recipe to cook: lowest difficulty uncompleted dish, or lowest scored dish
-  const nextRecipe = useMemo<Recipe | undefined>(() => {
-    if (approvedRecipes.length === 0) return undefined;
-    const uncooked = approvedRecipes
-      .filter((r) => !distinctCookedRecipeIds.has(r.id))
-      .sort((a, b) => a.difficulty - b.difficulty);
-    if (uncooked.length > 0) return uncooked[0];
-
-    const bestScoresByRecipe = new Map<string, number>();
-    for (const entry of cookedRecipes) {
-      const curr = bestScoresByRecipe.get(entry.recipeId) ?? 0;
-      if (entry.score > curr) bestScoresByRecipe.set(entry.recipeId, entry.score);
-    }
-    const sortedByScore = [...approvedRecipes].sort((a, b) => {
-      const scoreA = bestScoresByRecipe.get(a.id) ?? 0;
-      const scoreB = bestScoresByRecipe.get(b.id) ?? 0;
-      return scoreA - scoreB;
-    });
-    return sortedByScore[0];
-  }, [approvedRecipes, distinctCookedRecipeIds, cookedRecipes]);
-
-  const isNextRecipeCooked = nextRecipe ? distinctCookedRecipeIds.has(nextRecipe.id) : false;
-  const nextRecipeBestScore = useMemo(() => {
-    if (!nextRecipe) return 0;
-    const matching = cookedRecipes.filter((r) => r.recipeId === nextRecipe.id);
-    return matching.reduce((max, r) => Math.max(max, r.score), 0);
-  }, [nextRecipe, cookedRecipes]);
-
   // Thematic suggestions: e.g. Bánh Huế or top 4 recipes
   const themeRecipes = useMemo(() => {
     const banhList = approvedRecipes.filter((r) => r.category === 'banh');
     if (banhList.length >= 3) return banhList.slice(0, 4);
     return approvedRecipes.slice(0, 4);
   }, [approvedRecipes]);
+
+  // Featured row on the festival board: next dish first, then the
+  // thematic suggestions, at most 4 cards.
+  const featuredRecipes = useMemo(() => {
+    const list: Recipe[] = [];
+    if (nextRecipe) list.push(nextRecipe);
+    for (const recipe of themeRecipes) {
+      if (list.length >= 4) break;
+      if (!list.some((r) => r.id === recipe.id)) list.push(recipe);
+    }
+    return list;
+  }, [nextRecipe, themeRecipes]);
+
+  const bestStarsFor = (recipeId: string): number => {
+    const entries = cookedRecipes.filter((entry) => entry.recipeId === recipeId);
+    return entries.reduce((max, entry) => Math.max(max, entry.stars), 0);
+  };
 
   // Near achievements (top 2-3 closest to 100%)
   const nearAchievements = useMemo(() => {
@@ -164,6 +161,9 @@ export default function HomePage() {
     return [...cookedRecipes].reverse().slice(0, 5);
   }, [cookedRecipes]);
 
+  // Today's real daily quests for the taped paper panel
+  const dailyQuests = useMemo(() => eventsState?.daily?.quests ?? [], [eventsState]);
+
   const handleCookNow = () => {
     if (nextRecipe) {
       navigate(`/cooking/${nextRecipe.id}`);
@@ -180,60 +180,185 @@ export default function HomePage() {
   };
 
   return (
-    <PlayerShell>
-      <div className={styles.dashboard}>
-        {/* 1. Hero Banner mang phong cách Cố Đô Cung Đình Huế (Image 6 Target) */}
-        <section className={styles.heroBanner} aria-label={dict.dashboard.heroTitleHue}>
-          <div className={styles.heroBg} aria-hidden="true">
-            <img src={SCENES['san-le-hoi']} alt="" className={styles.heroBgImg} />
+    <SceneShell active="home">
+      <div className={styles.page}>
+        {/* Vùng biển hiệu: biển gỗ lớn + thẻ giấy người chơi */}
+        <section className={styles.signArea} aria-label={dict.dashboard.heroTitleHue}>
+          <div className={styles.signWrap}>
+            <WoodSign
+              title="Hue Chef"
+              subtitle={dict.dashboard.heroTitleHue}
+              className={styles.mainSign}
+            />
+            <NoiNoi pose="be-noi" size={148} alt="" className={styles.signNoiNoi} />
           </div>
 
-          <div className={styles.heroContent}>
-            <div className={styles.heroUserBadge}>
-              <div className={styles.avatarWrapSmall}>
-                {user?.avatar ? (
-                  <img src={user.avatar} alt={user.name} className={styles.avatarImg} />
-                ) : (
-                  <div className={styles.avatarInitialsSmall}>
-                    {user?.name?.charAt(0).toUpperCase() || '👨‍🍳'}
-                  </div>
-                )}
-                {user?.equippedAchievementId ? (
-                  <div className={styles.avatarBadgeOverlay}>
-                    <AchievementIcon badgeId={user.equippedAchievementId} size="xs" />
-                  </div>
-                ) : null}
+          <div className={styles.playerTag}>
+            <div className={styles.avatarWrapSmall}>
+              {user?.avatar ? (
+                <img src={user.avatar} alt={user.name} className={styles.avatarImg} />
+              ) : (
+                <div className={styles.avatarInitialsSmall}>
+                  {user?.name?.charAt(0).toUpperCase() || '👨‍🍳'}
+                </div>
+              )}
+              {user?.equippedAchievementId ? (
+                <div className={styles.avatarBadgeOverlay}>
+                  <AchievementIcon badgeId={user.equippedAchievementId} size="xs" />
+                </div>
+              ) : null}
+            </div>
+            <div className={styles.playerTagMeta}>
+              <span className={styles.greeting}>
+                {greeting}, <strong>{user?.name}</strong>
+              </span>
+              <span className={styles.titleTagText}>
+                {equippedBadge ? `🏅 ${equippedBadge.name}` : `⭐ ${chefTitle}`}
+              </span>
+            </div>
+            <div className={styles.playerTagExp}>
+              <span className={styles.playerTagLevel}>Lv.{level}</span>
+              <div
+                className={styles.progressBarTrack}
+                role="progressbar"
+                aria-valuenow={expPct}
+                aria-valuemin={0}
+                aria-valuemax={100}
+              >
+                <div className={styles.progressBarFill} style={{ width: `${expPct}%` }} />
               </div>
-              <div className={styles.heroUserMeta}>
-                <span className={styles.greeting}>{greeting}, <strong>{user?.name}</strong></span>
-                <span className={styles.titleTagText}>
-                  {equippedBadge ? `🏅 ${equippedBadge.name}` : `⭐ ${chefTitle}`}
-                </span>
-              </div>
+              <span className={styles.playerTagExpText}>
+                {exp} / {maxExp} EXP
+              </span>
+            </div>
+          </div>
+        </section>
+
+        {/* Lưới chính: bảng giấy cuộn + cột phải */}
+        <div className={styles.mainGrid}>
+          <section className={styles.scrollBoard} aria-label={dict.scene.festivalTitle}>
+            <div className={styles.festivalBanner}>
+              <span className={styles.festivalLantern} aria-hidden="true">🏮</span>
+              <h2 className={styles.festivalTitle}>{dict.scene.festivalTitle}</h2>
+              <span className={styles.liveChip}>{dict.scene.festivalLive}</span>
+              <span className={styles.festivalLantern} aria-hidden="true">🏮</span>
             </div>
 
-            <h1 className={styles.heroHeading}>
-              <span className={styles.heroSubHeading}>{dict.dashboard.heroTitle}</span>
-              <span className={styles.heroMainHeading}>{dict.dashboard.heroTitleHue}</span>
-            </h1>
-            <p className={styles.heroSubtitle}>{dict.dashboard.heroSubtitle}</p>
+            <span className={styles.featuredTag}>🍜 {dict.scene.featuredTag}</span>
 
-            <div className={styles.heroActions}>
-              <Button variant="primary" className={styles.heroPlayBtn} onClick={handleCookNow}>
+            {featuredRecipes.length > 0 ? (
+              <div className={styles.dishRow}>
+                {featuredRecipes.map((recipe) => {
+                  const grade = dishGradeFor(recipe);
+                  const gradeLabel = dict.recipe.gradeNames[grade - 1] ?? '';
+                  const owned = isRecipeOwned(user, recipe);
+                  const bestStars = bestStarsFor(recipe.id);
+                  return (
+                    <Link
+                      key={recipe.id}
+                      to={`/recipes/${recipe.id}`}
+                      className={styles.dishCardLink}
+                    >
+                      <DishGradeFrame grade={grade} gradeLabel={gradeLabel}>
+                        <div className={styles.dishCard}>
+                          <img
+                            src={dishArtFor(recipe)}
+                            alt={recipe.name}
+                            className={styles.dishArt}
+                            loading="lazy"
+                          />
+                          <h3 className={styles.dishName}>{recipe.name}</h3>
+                          <div className={styles.dishDifficulty} aria-hidden="true">
+                            {'★'.repeat(recipe.difficulty)}
+                            {'☆'.repeat(5 - recipe.difficulty)}
+                          </div>
+                          {bestStars > 0 ? (
+                            <p className={styles.dishYourStars}>
+                              {dict.recipe.yourStars(bestStars)}
+                            </p>
+                          ) : null}
+                          <div className={styles.pricePlaque}>
+                            {owned ? (
+                              <span>⭐ {recipe.baseScore.toLocaleString()}</span>
+                            ) : (
+                              <span>🔒 {recipe.priceCoins.toLocaleString()} xu</span>
+                            )}
+                          </div>
+                        </div>
+                      </DishGradeFrame>
+                    </Link>
+                  );
+                })}
+              </div>
+            ) : null}
+
+            <div className={styles.boardActions}>
+              <Button variant="primary" className={styles.boardPlayBtn} onClick={handleCookNow}>
                 🔥 {dict.dashboard.heroPlayNow}
               </Button>
-              <Link to="/recipes" className={styles.heroExploreBtn}>
+              <Link to="/recipes" className={styles.boardExploreBtn}>
                 🍲 {dict.dashboard.heroExplore}
               </Link>
             </div>
-          </div>
 
-          <NoiNoi pose="chao" size={168} alt="" className={styles.heroNoiNoi} />
-        </section>
+            <NoiNoi pose="chao" size={132} alt="" className={styles.boardNoiNoi} />
+          </section>
 
-        {/* 2. Chế độ chơi nhanh (Image 1 - 4 interactive cards) */}
-        <section className={styles.quickModesSection} aria-label={dict.dashboard.quickModesTitle}>
-          <h2 className={styles.quickModesTitle}>{dict.dashboard.quickModesTitle}</h2>
+          <aside className={styles.sideCol}>
+            <Link to="/quests" className={styles.todayPanel}>
+              <span className={styles.tape} aria-hidden="true" />
+              <h2 className={styles.todayTitle}>
+                <span aria-hidden="true">✅</span> {dict.scene.todayTitle}
+              </h2>
+              <p className={styles.todayHint}>{dict.scene.todayHint}</p>
+              <ul className={styles.todayList}>
+                {dailyQuests.map((instance) => {
+                  const def = questDefById(instance.defId);
+                  if (!def) return null;
+                  const textFn = dict.events.quests.metricText[def.metric];
+                  const done = instance.progress >= def.target;
+                  return (
+                    <li key={instance.defId} className={styles.todayItem}>
+                      <span
+                        className={`${styles.todayCheck} ${
+                          instance.claimed || done ? styles.todayCheckDone : ''
+                        }`}
+                        aria-hidden="true"
+                      >
+                        {instance.claimed || done ? '✓' : ''}
+                      </span>
+                      <span className={styles.todayText}>
+                        {textFn ? textFn(def.target) : instance.defId}
+                        {instance.claimed ? (
+                          <span className={styles.todayClaimed}>
+                            {' '}
+                            · ✓ {dict.events.quests.claimed}
+                          </span>
+                        ) : !done ? (
+                          <span className={styles.todayProgress}>
+                            {' '}
+                            · {instance.progress}/{def.target}
+                          </span>
+                        ) : null}
+                      </span>
+                      <span className={styles.todayReward}>
+                        {dict.events.quests.rewardLabel(def.rewardXu)}
+                      </span>
+                    </li>
+                  );
+                })}
+              </ul>
+            </Link>
+
+            <div className={styles.paperFrame}>
+              <CheckinPanel />
+            </div>
+          </aside>
+        </div>
+
+        {/* Chế độ chơi nhanh (4 link) */}
+        <section className={styles.paperPanel} aria-label={dict.dashboard.quickModesTitle}>
+          <h2 className={styles.panelHeading}>{dict.dashboard.quickModesTitle}</h2>
           <div className={styles.quickModesGrid}>
             <Link to="/recipes" className={styles.quickModeCard}>
               <div className={styles.quickModeIcon} aria-hidden="true">👨‍🍳</div>
@@ -276,9 +401,8 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* 3. Thống kê nhanh (4 card) */}
+        {/* Thống kê nhanh (4 chỉ số) */}
         <section className={styles.statsGrid} aria-label={t('dashboard.statLevel')}>
-          {/* Card 1: Level & EXP */}
           <div className={styles.statCard}>
             <div className={styles.statCardHeader}>
               <span className={styles.statLabel}>{t('dashboard.statLevel')}</span>
@@ -295,7 +419,6 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Card 2: Total score */}
           <div className={styles.statCard}>
             <div className={styles.statCardHeader}>
               <span className={styles.statLabel}>{t('dashboard.statTotalScore')}</span>
@@ -307,7 +430,6 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Card 3: Cooked dishes */}
           <div className={styles.statCard}>
             <div className={styles.statCardHeader}>
               <span className={styles.statLabel}>{t('dashboard.statCookedCount')}</span>
@@ -323,7 +445,6 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Card 4: Badges & Rank */}
           <div className={styles.statCard}>
             <div className={styles.statCardHeader}>
               <span className={styles.statLabel}>{t('dashboard.statBadges')}</span>
@@ -340,12 +461,9 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* 3b. Điểm danh & món của ngày (Gói H7) */}
-        <CheckinPanel />
-
-        {/* 3c. Thẻ sự kiện (Gói H7) */}
-        <section className={styles.eventsSection} aria-label={dict.events.homeCards.eventsTitle}>
-          <h2 className={styles.eventsTitle}>{dict.events.homeCards.eventsTitle}</h2>
+        {/* Thẻ sự kiện (quests / survival / mystery) */}
+        <section className={styles.paperPanel} aria-label={dict.events.homeCards.eventsTitle}>
+          <h2 className={styles.panelHeading}>{dict.events.homeCards.eventsTitle}</h2>
           <div className={styles.eventsGrid}>
             <Link to="/quests" className={styles.eventCard}>
               <div className={styles.eventIcon} aria-hidden="true">📜</div>
@@ -376,9 +494,9 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* 3. Tiếp tục hành trình (Khối nổi bật) */}
+        {/* Tiếp tục hành trình */}
         {nextRecipe ? (
-          <section className={styles.featuredBox} aria-label={t('dashboard.continueJourney')}>
+          <section className={styles.paperPanel} aria-label={t('dashboard.continueJourney')}>
             <header className={styles.sectionHeading}>
               <h2 className={styles.sectionTitle}>
                 <span aria-hidden>🧭</span>
@@ -389,10 +507,9 @@ export default function HomePage() {
 
             <div className={styles.journeyCard}>
               <div className={styles.journeyImageWrap}>
-                <ImageWithFallback
-                  src={nextRecipe.image}
+                <img
+                  src={dishArtFor(nextRecipe)}
                   alt={nextRecipe.name}
-                  fallbackTitle={nextRecipe.name}
                   className={styles.journeyImage}
                 />
               </div>
@@ -442,29 +559,9 @@ export default function HomePage() {
           </section>
         ) : null}
 
-        {/* 4. Gợi ý theo mùa/chủ đề */}
-        {themeRecipes.length > 0 ? (
-          <section className={styles.themeSection} aria-label={t('dashboard.themeTitle')}>
-            <header className={styles.sectionHeading}>
-              <h2 className={styles.sectionTitle}>
-                <span aria-hidden>👑</span>
-                <span>{t('dashboard.themeTitle')}</span>
-              </h2>
-              <p className={styles.sectionSubtitle}>{t('dashboard.themeSubtitle')}</p>
-            </header>
-
-            <div className={styles.recipeGrid}>
-              {themeRecipes.map((recipe) => (
-                <RecipeCard key={recipe.id} recipe={recipe} />
-              ))}
-            </div>
-          </section>
-        ) : null}
-
-        {/* 5. Hai cột: Thành tích sắp đạt & Bảng vinh danh mini */}
+        {/* Hai cột: Thành tích sắp đạt & Bảng vinh danh mini */}
         <section className={styles.twoColGrid}>
-          {/* Cột trái: Thành tích sắp đạt */}
-          <div className={styles.panelBox}>
+          <div className={styles.paperPanel}>
             <div className={styles.panelHeader}>
               <div className={styles.panelHeaderLeft}>
                 <h3 className={styles.panelTitle}>
@@ -503,8 +600,7 @@ export default function HomePage() {
             )}
           </div>
 
-          {/* Cột phải: Bảng vinh danh mini */}
-          <div className={styles.panelBox}>
+          <div className={styles.paperPanel}>
             <div className={styles.panelHeader}>
               <div className={styles.panelHeaderLeft}>
                 <h3 className={styles.panelTitle}>
@@ -553,8 +649,8 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* 6. Lịch sử bếp gần đây */}
-        <section className={styles.historySection} aria-label={t('dashboard.recentHistoryTitle')}>
+        {/* Lịch sử bếp gần đây */}
+        <section className={styles.paperPanel} aria-label={t('dashboard.recentHistoryTitle')}>
           <header className={styles.sectionHeading}>
             <h2 className={styles.sectionTitle}>
               <span aria-hidden>📜</span>
@@ -578,10 +674,9 @@ export default function HomePage() {
               {recentCookedHistory.map((entry, idx) => (
                 <div key={`${entry.recipeId}-${idx}-${entry.cookedAt}`} className={styles.historyItem}>
                   <div className={styles.historyItemLeft}>
-                    <ImageWithFallback
-                      src={entry.image}
+                    <img
+                      src={dishArtFor({ id: entry.recipeId, image: entry.image })}
                       alt={entry.recipeName}
-                      fallbackTitle={entry.recipeName}
                       className={styles.historyThumb}
                     />
                     <div className={styles.historyDishInfo}>
@@ -605,6 +700,6 @@ export default function HomePage() {
           )}
         </section>
       </div>
-    </PlayerShell>
+    </SceneShell>
   );
 }

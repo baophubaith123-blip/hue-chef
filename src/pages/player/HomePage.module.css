@@ -1,681 +1,743 @@
-.dashboard {
+/* HomePage — festival scene layout per the approved Theme D target
+   drawing: wooden sign, scroll board of featured dishes, taped paper
+   quest panel, and the remaining dashboard blocks as paper panels on
+   the plum scene (Gói Mẫu Căn Chỉnh). */
+
+.page {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
-  padding-bottom: 3rem;
+  gap: 22px;
 }
 
-/* 1. Hero Banner 3D — nguyên liệu hoảng sợ nhảy vào nồi (v3 redesign) */
-.heroBanner {
-  position: relative;
-  overflow: hidden;
-  border-radius: var(--radius-2xl, 24px);
-  background: var(--gradient-banner);
-  border: 1.5px solid rgba(233, 162, 59, 0.35);
-  box-shadow: var(--shadow-glow-plum);
-  padding: 2.75rem 3rem;
-  min-height: 380px;
+/* ---------- Sign area ---------- */
+
+.signArea {
   display: flex;
+  flex-direction: column;
   align-items: center;
+  gap: 14px;
+  padding-top: 6px;
 }
 
-.heroBg {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
+.signWrap {
+  position: relative;
+  width: min(560px, 100%);
 }
 
-.heroBgImg {
+.mainSign {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: right center;
-  display: block;
+  box-sizing: border-box;
 }
 
-/* Plum scrim so the copy stays readable over the artwork in both themes */
-.heroBg::after {
-  content: '';
+.signNoiNoi {
   position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    100deg,
-    rgba(55, 14, 27, 0.92) 0%,
-    rgba(55, 14, 27, 0.78) 38%,
-    rgba(55, 14, 27, 0.25) 68%,
-    rgba(55, 14, 27, 0) 100%
-  );
+  right: -64px;
+  bottom: -30px;
+  pointer-events: none;
 }
 
-@media (max-width: 900px) {
-  .heroBanner {
-    padding: 2rem 1.5rem;
-    min-height: 340px;
-  }
-
-  .heroBgImg {
-    object-position: center;
-  }
-
-  .heroBg::after {
-    background: linear-gradient(
-      180deg,
-      rgba(55, 14, 27, 0.82) 0%,
-      rgba(55, 14, 27, 0.65) 60%,
-      rgba(55, 14, 27, 0.45) 100%
-    );
-  }
-}
-
-.heroContent {
-  position: relative;
-  z-index: 2;
+.playerTag {
   display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  max-width: 580px;
-}
-
-.heroUserBadge {
-  display: inline-flex;
   align-items: center;
-  gap: 0.75rem;
-  background: rgba(55, 14, 27, 0.55);
-  border: 1px solid rgba(248, 239, 234, 0.28);
-  padding: 0.35rem 0.85rem 0.35rem 0.35rem;
-  border-radius: var(--td-radius-full);
-  width: fit-content;
-  backdrop-filter: blur(8px);
+  gap: 14px;
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: 640px;
+  padding: 10px 18px;
+  border-radius: 12px;
+  background: linear-gradient(180deg, var(--td-paper), var(--td-paper-deep));
+  border: 2px solid var(--td-paper-edge);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.3);
+  color: var(--td-paper-text);
 }
 
 .avatarWrapSmall {
   position: relative;
-  width: 34px;
-  height: 34px;
-  flex-shrink: 0;
+  width: 52px;
+  height: 52px;
+  flex: none;
 }
 
 .avatarImg {
-  width: 100%;
-  height: 100%;
+  width: 52px;
+  height: 52px;
   border-radius: 50%;
   object-fit: cover;
-  display: block;
+  border: 2px solid var(--td-gold);
+}
+
+.avatarInitialsSmall {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--td-gold);
+  color: var(--td-ink);
+  font-size: 1.4rem;
+  font-weight: 800;
+  border: 2px solid var(--td-gold-deep);
+  box-sizing: border-box;
 }
 
 .avatarBadgeOverlay {
   position: absolute;
-  bottom: -2px;
-  right: -2px;
-  z-index: 2;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  right: -4px;
+  bottom: -4px;
 }
 
-.avatarInitialsSmall {
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  background: #b03e26; /* pinned: white initials must pass in both themes */
-  color: #FFFFFF;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
-  font-size: 0.95rem;
-}
-
-.heroUserMeta {
+.playerTagMeta {
   display: flex;
   flex-direction: column;
-  line-height: 1.25;
+  gap: 2px;
+  min-width: 0;
 }
 
 .greeting {
-  font-size: 0.82rem;
-  color: #f8efea;
+  font-size: 1rem;
 }
 
 .titleTagText {
-  font-size: 0.72rem;
-  font-weight: 700;
-  color: #f6c453;
+  font-size: 0.85rem;
+  color: var(--td-paper-text-muted);
+  font-weight: 600;
 }
 
-.heroHeading {
-  margin: 0.25rem 0 0.5rem;
+.playerTagExp {
   display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-  line-height: normal;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  min-width: 180px;
 }
 
-.heroSubHeading {
-  font-family: var(--font-sans);
-  font-size: 0.95rem;
-  font-weight: 700;
-  color: #f6c453;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  display: block;
-}
-
-.heroMainHeading {
-  font-family: var(--font-display, var(--td-font-display), Georgia, serif);
-  font-size: 2.85rem;
+.playerTagLevel {
   font-weight: 800;
-  color: #f8efea;
-  letter-spacing: -0.02em;
-  display: block;
-  line-height: 1.15;
-  text-shadow: 0 3px 18px rgba(30, 6, 14, 0.55);
+  color: var(--td-gold-text);
+  white-space: nowrap;
 }
 
-.heroSubtitle {
-  margin: 0;
-  font-size: 1rem;
-  color: rgba(248, 239, 234, 0.88);
-  line-height: 1.5;
-  max-width: 520px;
+.playerTagExpText {
+  font-size: 0.8rem;
+  color: var(--td-paper-text-muted);
+  white-space: nowrap;
 }
 
-.heroActions {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-top: 0.5rem;
-  flex-wrap: wrap;
+.progressBarTrack {
+  flex: 1;
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(67, 48, 27, 0.15);
+  overflow: hidden;
 }
 
-.heroPlayBtn {
-  background: var(--gradient-fire) !important;
-  color: #FFFFFF !important;
-  padding: 0.8rem 1.85rem;
-  font-size: 1rem;
-  font-weight: 700;
-  border-radius: var(--td-radius-full);
-  box-shadow: var(--shadow-glow-fire);
-  transition: all 0.2s ease;
-  border: none;
+.progressBarFill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--td-gold), var(--td-gold-bright));
+  transition: width 0.4s ease;
 }
 
-.heroPlayBtn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 16px 36px rgba(200, 85, 61, 0.5);
-}
+/* ---------- Main grid ---------- */
 
-.heroExploreBtn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.8rem 1.75rem;
-  background: rgba(255, 253, 249, 0.12);
-  border: 1.5px solid rgba(248, 239, 234, 0.45);
-  border-radius: var(--td-radius-full);
-  color: #f8efea;
-  font-weight: 700;
-  font-size: 0.95rem;
-  text-decoration: none;
-  backdrop-filter: blur(6px);
-  transition: all 0.2s ease;
-}
-
-.heroExploreBtn:hover {
-  background: rgba(255, 253, 249, 0.2);
-  border-color: #f6c453;
-  color: #f6c453;
-  transform: translateY(-2px);
-}
-
-
-/* 2. Chế độ chơi nhanh (Image 1 Quick Modes Grid) */
-.quickModesSection {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.quickModesTitle {
-  font-family: var(--td-font-display);
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: var(--color-text);
-  margin: 0;
-}
-
-.quickModesGrid {
+.mainGrid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1.25rem;
+  grid-template-columns: 2fr 1fr;
+  gap: 22px;
+  align-items: start;
 }
 
-@media (max-width: 1100px) {
-  .quickModesGrid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
+/* ---------- Scroll board (featured dishes) ---------- */
 
-@media (max-width: 580px) {
-  .quickModesGrid {
-    grid-template-columns: 1fr;
-  }
-}
-
-.quickModeCard {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--td-radius-paper);
-  padding: 1.25rem;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  text-decoration: none;
-  color: inherit;
-  box-shadow: var(--shadow-sm);
-  transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+.scrollBoard {
   position: relative;
+  padding: 22px 22px 26px;
+  border-radius: 16px;
+  background:
+    radial-gradient(600px 200px at 50% 0%, rgba(233, 162, 59, 0.12), transparent 70%),
+    linear-gradient(180deg, rgba(94, 29, 49, 0.85), rgba(55, 14, 27, 0.9));
+  border: 3px solid var(--td-wood-dark);
+  box-shadow:
+    inset 0 0 0 2px rgba(233, 162, 59, 0.35),
+    0 14px 30px rgba(0, 0, 0, 0.4);
 }
 
-.quickModeCard:hover {
-  transform: translateY(-3px);
-  border-color: var(--color-accent);
-  box-shadow: var(--shadow-md);
-  background: var(--color-surface-alt);
-}
-
-.quickModeIcon {
-  width: 48px;
-  height: 48px;
-  border-radius: var(--radius-md);
-  background: rgba(233, 162, 59, 0.12);
-  border: 1px solid rgba(233, 162, 59, 0.3);
+.festivalBanner {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.6rem;
-  flex-shrink: 0;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 14px 18px;
+  border-radius: 10px;
+  background: linear-gradient(180deg, var(--td-paper), var(--td-paper-deep));
+  border: 2px solid var(--td-paper-edge);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
+  text-align: center;
 }
 
-.quickModeInfo {
+.festivalLantern {
+  font-size: 1.5rem;
+}
+
+.festivalTitle {
+  margin: 0;
+  font-family: var(--td-font-display);
+  font-size: clamp(1.25rem, 2.6vw, 1.8rem);
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: var(--td-brick);
+}
+
+.liveChip {
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: var(--td-brick);
+  color: var(--td-cream);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+}
+
+.featuredTag {
+  display: inline-block;
+  margin: 18px 0 12px;
+  padding: 7px 16px;
+  border-radius: 8px;
+  background: var(--td-wood-gradient);
+  border: 2px solid var(--td-wood-dark);
+  color: var(--td-paper);
+  font-weight: 800;
+  font-size: 0.9rem;
+  letter-spacing: 0.05em;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+  transform: rotate(-1.5deg);
+}
+
+.dishRow {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 14px;
+}
+
+.dishCardLink {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  transition: transform 0.15s ease;
+}
+
+.dishCardLink:hover {
+  transform: translateY(-4px);
+}
+
+.dishCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 10px 14px;
+  text-align: center;
+  color: var(--td-paper-text);
+}
+
+.dishArt {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 2px solid var(--td-paper-edge);
+  background: var(--td-paper-deep);
+}
+
+.dishName {
+  margin: 4px 0 0;
+  font-size: 1.02rem;
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+.dishDifficulty {
+  color: var(--td-gold-deep);
+  font-size: 0.95rem;
+  letter-spacing: 0.12em;
+}
+
+.dishYourStars {
+  margin: 0;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--td-brick);
+}
+
+.pricePlaque {
+  margin-top: 4px;
+  padding: 6px 16px;
+  border-radius: 999px;
+  background: var(--td-wood-gradient-soft);
+  border: 2px solid var(--td-wood-dark);
+  color: var(--td-ink);
+  font-weight: 800;
+  font-size: 0.95rem;
+  box-shadow: inset 0 1px 0 rgba(255, 246, 224, 0.55);
+  white-space: nowrap;
+}
+
+.boardActions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.boardPlayBtn {
+  font-size: 1rem;
+}
+
+.boardExploreBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: 999px;
+  border: 2px solid var(--td-gold-deep);
+  background: rgba(255, 246, 224, 0.1);
+  color: var(--td-gold-bright);
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.boardExploreBtn:hover {
+  background: rgba(255, 246, 224, 0.2);
+}
+
+.boardNoiNoi {
+  position: absolute;
+  right: -18px;
+  bottom: -34px;
+  pointer-events: none;
+}
+
+/* ---------- Side column ---------- */
+
+.sideCol {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 0;
+}
+
+.todayPanel {
+  position: relative;
+  display: block;
+  padding: 26px 18px 16px;
+  border-radius: 6px;
+  background: linear-gradient(180deg, var(--td-paper), var(--td-paper-deep));
+  border: 2px solid var(--td-paper-edge);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.35);
+  color: var(--td-paper-text);
+  text-decoration: none;
+  transform: rotate(0.6deg);
+}
+
+.tape {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-2deg);
+  width: 110px;
+  height: 24px;
+  background: rgba(246, 196, 83, 0.55);
+  border-left: 2px dashed rgba(138, 90, 43, 0.35);
+  border-right: 2px dashed rgba(138, 90, 43, 0.35);
+  border-radius: 2px;
+}
+
+.todayTitle {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  text-align: center;
+  color: var(--td-ink);
+}
+
+.todayHint {
+  margin: 4px 0 12px;
+  text-align: center;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--td-paper-text-muted);
+}
+
+.todayList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.todayItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 2px;
+  border-top: 1px solid rgba(67, 48, 27, 0.15);
+}
+
+.todayCheck {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  border: 2px solid rgba(67, 48, 27, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  color: #2e7d32;
+  background: rgba(255, 255, 255, 0.5);
+  margin-top: 1px;
+}
+
+.todayCheckDone {
+  border-color: #2e7d32;
+  background: rgba(46, 125, 50, 0.12);
+}
+
+.todayText {
+  flex: 1;
+  font-size: 0.92rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.todayClaimed {
+  color: #2e7d32;
+  font-weight: 700;
+}
+
+.todayProgress {
+  color: var(--td-paper-text-muted);
+  font-weight: 700;
+}
+
+.todayReward {
+  flex: none;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--td-gold);
+  border: 1.5px solid var(--td-gold-deep);
+  color: var(--td-ink);
+  font-size: 0.8rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.paperFrame {
+  border-radius: 14px;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+}
+
+/* ---------- Shared paper panels ---------- */
+
+.paperPanel {
+  padding: 20px 22px;
+  border-radius: 14px;
+  background: linear-gradient(180deg, var(--td-paper), var(--td-paper-deep));
+  border: 2px solid var(--td-paper-edge);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+  color: var(--td-paper-text);
+}
+
+.panelHeading {
+  margin: 0 0 14px;
+  font-family: var(--td-font-display);
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--td-ink);
+}
+
+.sectionHeading {
+  margin-bottom: 14px;
+}
+
+.sectionTitle {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--td-font-display);
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--td-ink);
+}
+
+.sectionSubtitle {
+  margin: 4px 0 0;
+  font-size: 0.9rem;
+  color: var(--td-paper-text-muted);
+}
+
+/* ---------- Quick modes & event cards ---------- */
+
+.quickModesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 12px;
+}
+
+.quickModeCard,
+.eventCard {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.55);
+  border: 2px solid var(--td-paper-edge);
+  color: var(--td-paper-text);
+  text-decoration: none;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.quickModeCard:hover,
+.eventCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(67, 48, 27, 0.18);
+}
+
+.quickModeIcon,
+.eventIcon {
+  font-size: 1.8rem;
+  line-height: 1;
+  flex: none;
+}
+
+.quickModeInfo,
+.eventInfo {
   flex: 1;
   min-width: 0;
 }
 
-.quickModeName {
+.quickModeName,
+.eventName {
   margin: 0;
   font-size: 1rem;
-  font-weight: 700;
-  color: var(--color-text);
-  line-height: 1.3;
-}
-
-.quickModeDesc {
-  margin: 0.25rem 0 0;
-  font-size: 0.82rem;
-  color: var(--color-text-muted);
-}
-
-.quickModeArrow {
-  font-size: 1.4rem;
-  color: var(--color-text-muted);
-  transition: transform 0.2s ease, color 0.2s ease;
-}
-
-.quickModeCard:hover .quickModeArrow {
-  color: var(--td-brick);
-  transform: translateX(3px);
-}
-
-.greeting {
-  font-size: 0.95rem;
-  color: #f8efea;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.userName {
-  font-size: 1.85rem;
   font-weight: 800;
-  color: var(--color-text);
-  line-height: 1.2;
 }
 
-.titleTag {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  margin-top: 0.35rem;
-  padding: 0.25rem 0.75rem;
-  border-radius: var(--td-radius-full);
-  background: var(--color-primary-soft);
-  color: var(--td-brick);
+.quickModeDesc,
+.eventDesc {
+  margin: 2px 0 0;
   font-size: 0.85rem;
-  font-weight: 700;
-  width: fit-content;
+  color: var(--td-paper-text-muted);
 }
 
-.bannerActions {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  z-index: 1;
+.quickModeArrow,
+.eventArrow {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--td-gold-deep);
 }
 
-.bannerDecoration {
-  position: absolute;
-  right: 1.5rem;
-  bottom: -0.5rem;
-  opacity: 0.15;
-  pointer-events: none;
-  display: flex;
-  gap: 0.5rem;
+.eventsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 12px;
 }
 
-.steamIcon {
-  font-size: 3.5rem;
-  animation: floatSteam 3s ease-in-out infinite alternate;
-}
+/* ---------- Stats ---------- */
 
-.steamIcon:nth-child(2) {
-  animation-delay: 1.5s;
-}
-
-@keyframes floatSteam {
-  from {
-    transform: translateY(0) scale(0.95);
-  }
-  to {
-    transform: translateY(-8px) scale(1.05);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .steamIcon {
-    animation: none;
-  }
-}
-
-/* 2. Thống kê nhanh */
 .statsGrid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 14px;
 }
 
 .statCard {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--td-radius-paper);
-  padding: 1.25rem;
+  padding: 16px 18px;
+  border-radius: 14px;
+  background: linear-gradient(180deg, var(--td-paper), var(--td-paper-deep));
+  border: 2px solid var(--td-paper-edge);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.28);
+  color: var(--td-paper-text);
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  box-shadow: var(--shadow-sm);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.statCard:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
+  gap: 10px;
 }
 
 .statCardHeader {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 0.75rem;
-}
-
-.statIcon {
-  font-size: 1.5rem;
 }
 
 .statLabel {
   font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--color-text-muted);
+  font-weight: 700;
+  color: var(--td-paper-text-muted);
+}
+
+.statIcon {
+  font-size: 1.2rem;
 }
 
 .statValue {
-  font-size: 1.75rem;
+  font-size: 1.6rem;
   font-weight: 800;
-  color: var(--color-text);
-  line-height: 1.1;
-  margin-bottom: 0.5rem;
+  color: var(--td-ink);
 }
 
 .statSub {
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: var(--color-text-muted);
+  font-size: 0.85rem;
+  color: var(--td-paper-text-muted);
+  margin-bottom: 6px;
 }
 
-.progressBarTrack {
-  width: 100%;
-  height: 6px;
-  background: var(--color-surface-muted);
-  border-radius: var(--td-radius-full);
-  overflow: hidden;
-  margin-top: 0.35rem;
-}
-
-.progressBarFill {
-  height: 100%;
-  background: linear-gradient(90deg, var(--td-brick), var(--color-accent));
-  border-radius: var(--td-radius-full);
-  transition: width 0.3s ease;
-}
-
-/* 3. Tiếp tục hành trình (Hero Box) */
-.featuredBox {
-  background: linear-gradient(135deg, var(--color-surface), var(--color-surface-alt));
-  border: 1px solid var(--color-border);
-  border-radius: var(--td-radius-wood);
-  padding: 1.75rem;
-  box-shadow: var(--shadow-md);
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
-}
-
-.sectionHeading {
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
-}
-
-.sectionTitle {
-  font-size: 1.35rem;
-  font-weight: 800;
-  color: var(--color-text);
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.sectionSubtitle {
-  font-size: 0.9rem;
-  color: var(--color-text-muted);
-}
+/* ---------- Journey ---------- */
 
 .journeyCard {
-  display: grid;
-  grid-template-columns: 280px 1fr;
-  gap: 1.5rem;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--td-radius-paper);
-  overflow: hidden;
-  box-shadow: var(--shadow-sm);
+  display: flex;
+  gap: 18px;
+  flex-wrap: wrap;
 }
 
 .journeyImageWrap {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  min-height: 200px;
+  flex: none;
+  width: 240px;
+  max-width: 100%;
 }
 
 .journeyImage {
   width: 100%;
-  height: 100%;
+  aspect-ratio: 4 / 3;
   object-fit: cover;
+  border-radius: 12px;
+  border: 2px solid var(--td-paper-edge);
+  display: block;
 }
 
 .journeyBody {
-  padding: 1.5rem;
+  flex: 1;
+  min-width: 240px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap: 1rem;
-}
-
-.journeyDetails {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+  gap: 14px;
 }
 
 .journeyCategory {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--td-brick-soft);
+  color: var(--td-brick);
   font-size: 0.8rem;
-  font-weight: 700;
-  color: #b03e26; /* pinned for paper */
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  font-weight: 800;
 }
 
 .journeyName {
+  margin: 8px 0 6px;
   font-size: 1.5rem;
   font-weight: 800;
-  color: var(--color-text);
+  color: var(--td-ink);
 }
 
 .journeyMeta {
   display: flex;
   align-items: center;
-  gap: 1rem;
   flex-wrap: wrap;
-  font-size: 0.9rem;
-  color: var(--color-text-muted);
+  gap: 8px;
+  font-size: 0.92rem;
 }
 
 .journeyStars {
-  color: var(--color-accent);
-  font-size: 1rem;
+  color: var(--td-gold-deep);
+  letter-spacing: 0.08em;
 }
 
 .journeyStatusTag {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  padding: 0.2rem 0.6rem;
-  border-radius: var(--td-radius-full);
-  background: var(--color-surface-muted);
-  color: var(--color-text-muted);
-  font-size: 0.8rem;
-  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: rgba(67, 48, 27, 0.1);
+  font-weight: 700;
+  font-size: 0.85rem;
 }
 
 .journeyStatusTagSuccess {
-  background: var(--color-success-soft);
-  color: var(--color-success);
+  background: rgba(46, 125, 50, 0.15);
+  color: #2e7d32;
 }
 
 .journeyActions {
   display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 1rem;
 }
 
-/* 4. Gợi ý theo chủ đề */
-.themeSection {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
+/* ---------- Two-column panels ---------- */
 
-.recipeGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 1.25rem;
-}
-
-/* 5. Hai cột */
 .twoColGrid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
-}
-
-.panelBox {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--td-radius-wood);
-  padding: 1.5rem;
-  box-shadow: var(--shadow-sm);
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+  gap: 22px;
+  align-items: start;
 }
 
 .panelHeader {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
-  gap: 0.5rem;
+  gap: 12px;
+  margin-bottom: 12px;
 }
 
 .panelHeaderLeft {
   display: flex;
   flex-direction: column;
-  gap: 0.15rem;
+  gap: 2px;
 }
 
 .panelTitle {
-  font-size: 1.15rem;
-  font-weight: 800;
-  color: var(--color-text);
+  margin: 0;
   display: flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: 8px;
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--td-ink);
 }
 
 .panelSubtitle {
-  font-size: 0.8rem;
-  color: var(--color-text-muted);
+  font-size: 0.85rem;
+  color: var(--td-paper-text-muted);
 }
 
 .viewAllLink {
-  font-size: 0.85rem;
-  font-weight: 700;
-  color: #b03e26; /* pinned for paper */
+  color: var(--td-brick);
+  font-weight: 800;
+  font-size: 0.88rem;
   text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.25rem;
-  transition: color 0.15s ease;
+  white-space: nowrap;
 }
 
 .viewAllLink:hover {
-  color: #8f2f1c;
+  text-decoration: underline;
 }
 
 .achievementList {
   display: flex;
   flex-direction: column;
-  gap: 0.85rem;
+  gap: 12px;
 }
 
 .achievementItem {
   display: flex;
   align-items: center;
-  gap: 0.85rem;
-  padding: 0.75rem;
-  background: var(--color-surface-alt);
-  border-radius: var(--td-radius-paper);
-  border: 1px solid var(--color-border);
+  gap: 12px;
 }
 
 .achievementInfo {
@@ -683,532 +745,177 @@
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: 3px;
 }
 
 .achievementName {
-  font-size: 0.95rem;
-  font-weight: 700;
-  color: var(--color-text);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  font-weight: 800;
 }
 
 .achievementDesc {
-  font-size: 0.8rem;
-  color: var(--color-text-muted);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  font-size: 0.85rem;
+  color: var(--td-paper-text-muted);
 }
 
 .achievementPct {
-  font-size: 0.85rem;
   font-weight: 800;
-  color: var(--td-brick);
+  color: var(--td-gold-text);
 }
 
-/* Leaderboard List */
 .leaderboardList {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 8px;
 }
 
 .leaderboardItem {
   display: flex;
   align-items: center;
-  gap: 0.85rem;
-  padding: 0.75rem;
-  background: var(--color-surface-alt);
-  border-radius: var(--td-radius-paper);
-  border: 1px solid var(--color-border);
-  transition: all 0.2s ease;
+  gap: 12px;
+  padding: 8px 10px;
+  border-radius: 10px;
 }
 
 .leaderboardItemHighlight {
-  border-color: var(--td-brick);
-  background: var(--color-primary-soft);
+  background: rgba(233, 162, 59, 0.18);
+  border: 1.5px solid var(--td-gold);
 }
 
 .rankBadge {
-  font-size: 1.25rem;
-  width: 2rem;
-  display: grid;
-  place-items: center;
-  font-weight: 800;
+  font-size: 1.2rem;
+  width: 34px;
+  text-align: center;
+  flex: none;
 }
 
 .leaderboardAvatar {
-  width: 2.25rem;
-  height: 2.25rem;
-  border-radius: var(--td-radius-full);
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
   object-fit: cover;
-  border: 2px solid var(--color-border);
+  flex: none;
 }
 
 .leaderboardAvatarInitials {
-  width: 2.25rem;
-  height: 2.25rem;
-  border-radius: var(--td-radius-full);
-  background: #b03e26; /* pinned for both themes */
-  color: var(--color-primary-contrast);
-  display: grid;
-  place-items: center;
-  font-weight: 700;
-  font-size: 0.9rem;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--td-gold);
+  color: var(--td-ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  flex: none;
 }
 
 .leaderboardName {
   flex: 1;
-  font-size: 0.95rem;
   font-weight: 700;
-  color: var(--color-text);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  min-width: 0;
 }
 
 .leaderboardScore {
-  font-size: 0.95rem;
   font-weight: 800;
-  color: var(--color-accent);
+  color: var(--td-gold-text);
+  white-space: nowrap;
 }
 
-/* 6. Lịch sử bếp gần đây */
-.historySection {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--td-radius-wood);
-  padding: 1.5rem;
-  box-shadow: var(--shadow-sm);
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
-}
+/* ---------- History ---------- */
 
 .historyList {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
 }
 
 .historyItem {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
-  padding: 0.85rem 1rem;
-  border-radius: var(--td-radius-paper);
-  background: var(--color-surface-alt);
-  border: 1px solid var(--color-border);
-  transition: transform 0.15s ease;
+  gap: 12px;
+  padding: 10px 2px;
+  border-top: 1px solid rgba(67, 48, 27, 0.12);
 }
 
-.historyItem:hover {
-  transform: translateX(4px);
+.historyItem:first-child {
+  border-top: none;
 }
 
 .historyItemLeft {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 12px;
   min-width: 0;
 }
 
 .historyThumb {
-  width: 3.25rem;
-  height: 3.25rem;
-  border-radius: var(--radius-md);
+  width: 56px;
+  height: 44px;
   object-fit: cover;
-  flex-shrink: 0;
+  border-radius: 8px;
+  border: 1.5px solid var(--td-paper-edge);
+  flex: none;
 }
 
 .historyDishInfo {
   display: flex;
   flex-direction: column;
-  gap: 0.2rem;
-  min-width: 0;
+  gap: 2px;
 }
 
 .historyDishName {
-  font-size: 1rem;
-  font-weight: 700;
-  color: var(--color-text);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  font-weight: 800;
 }
 
 .historyDishStars {
-  color: var(--color-accent);
+  color: var(--td-gold-deep);
   font-size: 0.85rem;
+  letter-spacing: 0.08em;
 }
 
 .historyItemRight {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: 0.2rem;
-  flex-shrink: 0;
+  gap: 2px;
 }
 
 .historyScore {
-  font-size: 1rem;
   font-weight: 800;
-  color: var(--td-brick);
+  color: #2e7d32;
 }
 
 .historyDate {
-  font-size: 0.8rem;
-  color: var(--color-text-muted);
+  font-size: 0.82rem;
+  color: var(--td-paper-text-muted);
 }
 
-/* Responsive Breakpoints */
-@media (max-width: 900px) {
-  .statsGrid {
-    grid-template-columns: repeat(2, 1fr);
+/* ---------- Responsive ---------- */
+
+@media (max-width: 1020px) {
+  .mainGrid {
+    grid-template-columns: 1fr;
   }
 
   .twoColGrid {
     grid-template-columns: 1fr;
   }
 
-  .journeyCard {
-    grid-template-columns: 1fr;
-  }
-
-  .journeyImageWrap {
-    height: 180px;
-  }
-}
-
-@media (max-width: 600px) {
-  .banner {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 1.25rem;
-  }
-
-  .bannerContent {
-    flex-direction: row;
-    align-items: center;
-    gap: 1rem;
-  }
-
-  .avatarWrap {
-    width: 3.75rem;
-    height: 3.75rem;
-  }
-
-  .userName {
-    font-size: 1.4rem;
-  }
-
-  .bannerActions {
-    width: 100%;
-  }
-
-  .bannerActions button {
-    width: 100%;
-  }
-
-  .statsGrid {
-    grid-template-columns: 1fr 1fr;
-    gap: 0.75rem;
-  }
-
-  .statCard {
-    padding: 1rem;
-  }
-
-  .statValue {
-    font-size: 1.35rem;
-  }
-
-  .historyItem {
-    padding: 0.65rem 0.75rem;
-  }
-
-  .historyThumb {
-    width: 2.75rem;
-    height: 2.75rem;
-  }
-}
-
-@media (max-width: 375px) {
-  .statsGrid {
-    grid-template-columns: 1fr;
-  }
-
-  .bannerContent {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .journeyActions button {
-    width: 100%;
-  }
-}
-
-
-/* ===== Phase 16 — theme D overrides ===== */
-.heroBanner {
-  border: 3px solid var(--td-ink);
-  border-radius: 26px;
-  box-shadow: 0 8px 0 rgba(0, 0, 0, 0.3), 0 24px 44px rgba(74, 21, 37, 0.35);
-  overflow: hidden;
-}
-
-.heroPlayBtn {
-  background: var(--gradient-gold, linear-gradient(135deg, #f6c453, #e9a23b)) !important;
-  border: 3px solid var(--td-ink, #200f04) !important;
-  color: #43301b !important;
-  box-shadow: 0 5px 0 rgba(0, 0, 0, 0.4) !important;
-  border-radius: var(--td-radius-wood) !important;
-}
-
-.heroExploreBtn {
-  background: var(--td-wood-gradient) !important;
-  border: 3px solid var(--td-ink, #200f04) !important;
-  color: #fff6e0 !important;
-  box-shadow: 0 5px 0 rgba(0, 0, 0, 0.4) !important;
-  border-radius: var(--td-radius-wood) !important;
-}
-
-.statCard,
-.quickModeCard,
-.panelBox,
-.journeyCard,
-.historyItem {
-  background: var(--td-paper, #fff6e0);
-  color: var(--td-paper-text, #43301b);
-  border: 3px solid var(--td-ink);
-  border-radius: 22px;
-  box-shadow: var(--shadow-game-card, 0 12px 28px rgba(59, 42, 32, 0.12));
-}
-
-.statCard:hover,
-.quickModeCard:hover {
-  border-color: var(--td-ink, #4a2c14);
-}
-
-.statLabel,
-.statSub,
-.quickModeDesc,
-.panelSubtitle,
-.journeyMeta,
-.historyDate,
-.achievementDesc {
-  color: var(--td-paper-text-muted, #7a5c38);
-}
-
-.statValue,
-.quickModeName,
-.panelTitle,
-.journeyName,
-.historyDishName,
-.achievementName,
-.leaderboardName {
-  color: var(--td-paper-text, #43301b);
-}
-
-.journeyImageWrap {
-  border: 5px solid var(--td-wood-dark, #8a5a2b);
-  box-shadow: inset 0 0 0 2px rgba(233, 162, 59, 0.75);
-}
-
-.quickModeIcon {
-  background: var(--gradient-gold, linear-gradient(135deg, #f6c453, #e9a23b));
-  border: 2.5px solid var(--td-ink, #4a2c14);
-  box-shadow: 0 3px 0 var(--td-ink-soft, rgba(74, 44, 20, 0.45));
-}
-
-.progressBarTrack {
-  border: 2px solid var(--td-ink, #4a2c14);
-  background: var(--td-paper-deep, #f7e8c6);
-}
-
-.leaderboardItem {
-  border-radius: var(--td-radius-wood);
-}
-
-.leaderboardItemHighlight {
-  background: var(--td-paper-deep, #f7e8c6);
-  border: 2.5px solid var(--wood, #b57e40);
-}
-
-.rankBadge {
-  background: var(--gradient-gold, linear-gradient(135deg, #f6c453, #e9a23b));
-  border: 2px solid var(--td-ink, #4a2c14);
-  color: #43301b;
-}
-
-.historyScore,
-.leaderboardScore {
-  color: var(--td-paper-text, #43301b);
-}
-
-.viewAllLink {
-  color: #b03e26; /* pinned for paper */
-  font-weight: 800;
-}
-
-
-/* ===== Phase 17 — readable rows inside the two home panels (dark) =====
-   The panel cards are cream paper in both themes, but the inner rows
-   take the theme surface (dark plum-brown in dark mode), so their
-   text must switch to cream/gold in dark mode to stay readable. */
-[data-theme='dark'] .achievementItem,
-[data-theme='dark'] .leaderboardItem {
-  border-color: rgba(233, 162, 59, 0.35);
-}
-
-[data-theme='dark'] .achievementName,
-[data-theme='dark'] .leaderboardName {
-  color: #fff3da;
-}
-
-[data-theme='dark'] .achievementDesc {
-  color: #d9c39a;
-}
-
-[data-theme='dark'] .achievementPct {
-  color: #ffa25e;
-}
-
-[data-theme='dark'] .leaderboardScore {
-  color: #f6c453;
-}
-
-[data-theme='dark'] .leaderboardItemHighlight {
-  background: rgba(233, 162, 59, 0.16);
-  border-color: var(--td-gold, #e9a23b);
-}
-
-
-/* ===== Phase 17 — festival scene strip ===== */
-.dashboard::before {
-  content: '';
-  display: block;
-  height: 84px;
-  margin-bottom: 1.1rem;
-  border: 3px solid var(--td-ink);
-  border-radius: 20px;
-  background-image: url('/images/festival-day.webp');
-  background-size: cover;
-  background-position: center 16%;
-  box-shadow: var(--shadow-game-card, 0 12px 28px rgba(59, 42, 32, 0.12));
-}
-
-[data-theme='dark'] .dashboard::before {
-  background-image: url('/images/festival-night.webp');
-}
-
-/* ===== Gói H2 — Nồi Nồi chào ở hero (asset Theme D H1) ===== */
-.heroNoiNoi {
-  position: absolute;
-  right: 2rem;
-  bottom: 0.25rem;
-  z-index: 2;
-  pointer-events: none;
-}
-
-@media (max-width: 900px) {
-  .heroNoiNoi {
+  .boardNoiNoi {
     display: none;
   }
 }
 
-/* ===== Gói H7 — event cards on the player home =====
-   Paper surfaces in both themes (same family as the quick-mode cards
-   above), so text stays on the pinned paper ink tokens. */
-.eventsSection {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.eventsTitle {
-  font-family: var(--td-font-display);
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: var(--color-text);
-  margin: 0;
-}
-
-.eventsGrid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.25rem;
-}
-
-@media (max-width: 900px) {
-  .eventsGrid {
-    grid-template-columns: 1fr;
+@media (max-width: 640px) {
+  .signNoiNoi {
+    display: none;
   }
-}
 
-.eventCard {
-  background: var(--td-paper, #fff6e0);
-  color: var(--td-paper-text, #43301b);
-  border: 3px solid var(--td-ink);
-  border-radius: 22px;
-  box-shadow: var(--shadow-game-card, 0 12px 28px rgba(59, 42, 32, 0.12));
-  padding: 1.25rem;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  text-decoration: none;
-  transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
-}
+  .dishRow {
+    grid-template-columns: repeat(auto-fit, minmax(132px, 1fr));
+  }
 
-.eventCard:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-md);
-}
-
-.eventIcon {
-  width: 48px;
-  height: 48px;
-  border-radius: var(--radius-md);
-  background: var(--gradient-gold, linear-gradient(135deg, #f6c453, #e9a23b));
-  border: 2.5px solid var(--td-ink, #4a2c14);
-  box-shadow: 0 3px 0 var(--td-ink-soft, rgba(74, 44, 20, 0.45));
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.6rem;
-  flex-shrink: 0;
-}
-
-.eventInfo {
-  flex: 1;
-  min-width: 0;
-}
-
-.eventName {
-  margin: 0;
-  font-size: 1rem;
-  font-weight: 700;
-  color: var(--td-paper-text, #43301b);
-  line-height: 1.3;
-}
-
-.eventDesc {
-  margin: 0.25rem 0 0;
-  font-size: 0.82rem;
-  color: var(--td-paper-text-muted, #7a5c38);
-}
-
-.eventArrow {
-  font-size: 1.4rem;
-  color: var(--td-paper-text-muted, #7a5c38);
-  transition: transform 0.2s ease, color 0.2s ease;
-}
-
-.eventCard:hover .eventArrow {
-  color: var(--td-brick);
-  transform: translateX(3px);
+  .journeyImageWrap {
+    width: 100%;
+  }
 }
