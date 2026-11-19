@@ -53,6 +53,15 @@ export function SellResultPanel({
             <li key={key}>{s.diagnosisNames[key] ?? key}</li>
           ))}
         </ul>
+        {batch.requestOutcome ? (
+          <p className={batch.requestOutcome === 'ok' ? styles.requestOk : styles.requestBad}>
+            {batch.requestOutcome === 'ok'
+              ? s.sellResultRequestOk
+              : batch.requestOutcome === 'wrong'
+                ? s.sellResultRequestWrong
+                : s.sellResultRequestIgnored}
+          </p>
+        ) : null}
         <div className={styles.numbers}>
           <p>
             {s.sellResultCost}: <strong>{batch.cost} xu</strong>

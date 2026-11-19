@@ -1,6 +1,6 @@
 import { useCallback, useRef, useState, type ComponentType } from 'react';
 
-import { gestureParams, type GestureId } from '@/data/gesture-map';
+import { gestureParams, type GestureId, type GestureParams } from '@/data/gesture-map';
 import { NoiNoi } from '@/components/theme-d/NoiNoi';
 import type { NoiNoiPose } from '@/components/theme-d/assets';
 import type { GestureMode, GestureModuleProps } from '@/features/gestures/engine/types';
@@ -72,6 +72,15 @@ export interface GestureStepProps {
   stepLabel: string;
   difficulty: number;
   ingredientNames: string[];
+  /**
+   * Engine-parameter boosts from the chef skill tree and the kitchen
+   * upgrades (Gói H5): zoneScale widens this gesture's target zone,
+   * timeScale stretches its time budget. They change how forgiving
+   * the move is, never how it is scored — the shared 0–100 frame in
+   * engine/scoring is untouched. Defaults: no boost.
+   */
+  zoneScale?: number;
+  timeScale?: number;
   /** Fires once, after the result splash, with the action score 0–100. */
   onComplete: (score: number) => void;
 }
@@ -88,6 +97,8 @@ export function GestureStep({
   stepLabel,
   difficulty,
   ingredientNames,
+  zoneScale = 1,
+  timeScale = 1,
   onComplete,
 }: GestureStepProps) {
   const { dict } = useTranslation();
@@ -121,7 +132,12 @@ export function GestureStep({
   };
 
   const Module = MODULES[gesture];
-  const params = gestureParams(gesture, difficulty);
+  const baseParams = gestureParams(gesture, difficulty);
+  const params: GestureParams = {
+    ...baseParams,
+    zone: Math.min(0.6, baseParams.zone * zoneScale),
+    maxMs: Math.round(baseParams.maxMs * timeScale),
+  };
   const quality = result !== null ? qualityForScore(result) : null;
   const qualityText =
     quality === 'perfect'

@@ -29,8 +29,25 @@ import { BOSS_JUDGE_IMAGE } from '@/components/theme-d/assets';
 import { chapterById, dishesOfChapter } from '@/features/journey/lib/chapters';
 import { BOSS_PASS_STARS, bestStarsByRecipe, bossStateFor } from '@/features/journey/lib/journey';
 import { SellResultPanel } from '@/features/stall/components/SellResultPanel';
-import { diagnoseBatch, type DiagnosisInput } from '@/features/stall/lib/diagnosis';
+import { SubstitutionPanel } from '@/features/stall/components/SubstitutionPanel';
+import {
+  diagnoseBatch,
+  type DiagnosisInput,
+  type DiagnosisKey,
+} from '@/features/stall/lib/diagnosis';
 import { priceForBatch, qualityBandForScore } from '@/features/stall/lib/pricing-sell';
+import {
+  requestForKind,
+  type SubstitutionOption,
+} from '@/features/stall/lib/substitutions';
+import { SUBSTITUTION_PENALTY } from '@/features/stall/lib/rush';
+import {
+  gestureTimeScale,
+  gestureZoneScale,
+  seasonZoneScale,
+} from '@/features/skills/lib/skills';
+import { useSkills } from '@/features/skills/store';
+import { emptySkillTiers } from '@/features/skills/lib/skills';
 import { dishGradeFor } from '@/features/recipes/lib/grade';
 import {
   canCookBatch,
@@ -88,11 +105,40 @@ export default function CookingPage() {
   // instead of learning progress. Boss and sell never combine.
   const sellOrderId = searchParams.get('sell');
   const isSellMode = Boolean(sellOrderId) && !isPreview;
-  const stall = useStall(isSellMode && user ? user.id : null);
+  // The stall record is loaded in every mode (Gói H5): the kitchen
+  // upgrades it holds boost the gesture engine in BOTH loops, exactly
+  // like the skill tree — the chef cooks with their own tools wherever
+  // they cook. Preview runs stay unboosted, like perks.
+  const stall = useStall(user ? user.id : null);
   const sellCustomer = useMemo(
     () => (isSellMode ? stall?.customers.find((c) => c.id === sellOrderId) ?? null : null),
     [isSellMode, stall, sellOrderId],
   );
+  // Skill tree + kitchen boosts (Gói H5): pure engine parameters —
+  // wider target zones, longer time budgets — fed into GestureStep and
+  // the SeasonBar. They never touch the scoring frame itself.
+  const skillTiers = useSkills(user ? user.id : null) ?? emptySkillTiers();
+  const kitchen = stall?.upgrades ?? { knife: 0, stove: 0, pot: 0 };
+  const boostActive = !isPreview && Boolean(user);
+  const zoneScaleForGesture = (gesture: ReturnType<typeof gestureForStep>): number =>
+    boostActive ? gestureZoneScale(gesture, skillTiers, kitchen) : 1;
+  const runTimeScale = boostActive ? gestureTimeScale(skillTiers) : 1;
+  const runSeasonZoneScale = boostActive ? seasonZoneScale(skillTiers) : 1;
+  // Picky-customer substitution (Gói H5, mục 6.3): the applicable
+  // request of this sell order, derived from the dish itself. The
+  // cook's confirmed choice lives in state (for the panel) and in a
+  // ref (for the end-of-run conversion effect).
+  const sellRequest = useMemo(() => {
+    if (!isSellMode || !sellCustomer?.requestKind || !id) return null;
+    const current = getRecipeById(id);
+    return current ? requestForKind(current, sellCustomer.requestKind) : null;
+  }, [isSellMode, sellCustomer, id, getRecipeById]);
+  const [subChoice, setSubChoice] = useState<SubstitutionOption | null>(null);
+  const subChoiceRef = useRef<SubstitutionOption | null>(null);
+  const handleSubConfirm = useCallback((option: SubstitutionOption) => {
+    subChoiceRef.current = option;
+    setSubChoice(option);
+  }, []);
   // Ngự thiện boss mode (Gói H3): ?boss=<chapterId> turns the chapter's
   // signature dish run into its boss stage. A mismatched chapter/dish
   // pair is ignored — the run simply plays as a normal learning run.
@@ -375,8 +421,8 @@ export default function CookingPage() {
       session.recipe.baseScore > 0
         ? Math.min(1, Math.max(0, session.finalScore / session.recipe.baseScore))
         : 0;
-    const qualityScore = Math.round(ratio * 100);
-    const band = qualityBandForScore(qualityScore);
+    let qualityScore = Math.round(ratio * 100);
+    let band = qualityBandForScore(qualityScore);
     const ratios: DiagnosisInput['ratios'] = {};
     const partKeys = ['market', 'catch', 'cook', 'season', 'finish', 'quiz'] as const;
     for (const key of partKeys) {
@@ -386,20 +432,40 @@ export default function CookingPage() {
     if (session.totalDurationSeconds > 0) {
       ratios.time = session.timeRemainingSeconds / session.totalDurationSeconds;
     }
-    const diagnosis = diagnoseBatch({
+    let diagnosis = diagnoseBatch({
       ratios,
       wrongCount: session.wrongCount,
       seasonDeviation: seasonDeviationRef.current,
     });
+    // Substitution verdict (Gói H5, mục 6.3): honouring the picky
+    // customer's request by the book keeps the quality whole (and tips
+    // better at serve time); a wrong swap — or never choosing at all —
+    // costs a heavy, fixed slice of the batch's quality, and the
+    // diagnosis says so in plain words.
+    let requestOutcome: CookedBatch['requestOutcome'];
+    if (sellRequest) {
+      const choice = subChoiceRef.current;
+      requestOutcome = choice ? (choice.correct ? 'ok' : 'wrong') : 'ignored';
+      if (requestOutcome !== 'ok') {
+        qualityScore = Math.max(0, qualityScore - SUBSTITUTION_PENALTY);
+        band = qualityBandForScore(qualityScore);
+        const violated: DiagnosisKey[] = [
+          'request-violated',
+          ...diagnosis.filter((key) => key !== 'balanced'),
+        ];
+        diagnosis = violated.slice(0, 2);
+      }
+    }
     const batch = finishCook(user.id, {
       recipe: session.recipe,
       qty: sellCustomer?.qty ?? 1,
       qualityScore,
       level: band.level,
       diagnosis,
+      requestOutcome,
     });
     setSellBatch(batch);
-  }, [isSellMode, sellOrderId, user, session, sellCustomer]);
+  }, [isSellMode, sellOrderId, user, session, sellCustomer, sellRequest]);
 
   useEffect(() => {
     // The cleanup only ever clears visual-effect timers. The session
@@ -455,6 +521,8 @@ export default function CookingPage() {
     setSellBatch(null);
     sellAppliedRef.current = false;
     seasonDeviationRef.current = null;
+    subChoiceRef.current = null;
+    setSubChoice(null);
     startCooking(current, equippedPerk);
     return cleanupFx;
   }, [
@@ -765,6 +833,13 @@ export default function CookingPage() {
       </div>
     </div>
   ) : null;
+  // Substitution panel (Gói H5): rides under the sell banner through
+  // every stage of a picky order's cook — the choice can be confirmed
+  // at any point before the run ends; no choice = ignored = penalised.
+  const subPanel =
+    isSellMode && sellRequest ? (
+      <SubstitutionPanel request={sellRequest} chosen={subChoice} onConfirm={handleSubConfirm} />
+    ) : null;
   const bossNote =
     bossChapter && showResult
       ? session.phase === 'success' && session.stars >= BOSS_PASS_STARS
@@ -891,6 +966,7 @@ export default function CookingPage() {
       {flowChips}
       {bossBanner}
       {sellBanner}
+      {subPanel}
     </>
   );
 
@@ -966,6 +1042,7 @@ export default function CookingPage() {
         {flowChips}
         {bossBanner}
         {sellBanner}
+      {subPanel}
 
         <MinigameRunner
           minigames={session.recipe.minigames ?? []}
@@ -1027,6 +1104,7 @@ export default function CookingPage() {
       {flowChips}
       {bossBanner}
       {sellBanner}
+      {subPanel}
       {seasonToast ? <div className={styles.seasonToast}>{seasonToast}</div> : null}
 
       <div className={styles.gridWrap}>
@@ -1082,6 +1160,8 @@ export default function CookingPage() {
             gesture={gestureForStep(activeStep)}
             stepLabel={session.actionButtonLabel}
             difficulty={recipe.difficulty}
+            zoneScale={zoneScaleForGesture(gestureForStep(activeStep))}
+            timeScale={runTimeScale}
             ingredientNames={currentRequiredIds.map(
               (ingredientId) => getIngredientById(ingredientId)?.name ?? ingredientId,
             )}
@@ -1096,7 +1176,7 @@ export default function CookingPage() {
           stepPoints={seasonVirtualStepPoints}
           difficulty={recipe.difficulty}
           ingredientCount={Math.max(1, currentRequiredIds.length)}
-          zoneScale={1 + perkValueOf(session.perk, 'season-zone-plus') / 100}
+          zoneScale={(1 + perkValueOf(session.perk, 'season-zone-plus') / 100) * runSeasonZoneScale}
           onResult={handleSeasonResult}
         />
       ) : null}
@@ -1118,6 +1198,8 @@ export default function CookingPage() {
               setSellBatch(null);
               sellAppliedRef.current = false;
               seasonDeviationRef.current = null;
+              subChoiceRef.current = null;
+              setSubChoice(null);
               startCooking(recipe);
             }}
             onBackToStall={() => {

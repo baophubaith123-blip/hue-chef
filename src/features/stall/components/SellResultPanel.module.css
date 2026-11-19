@@ -68,6 +68,19 @@
   font-weight: 700;
 }
 
+.requestOk {
+  color: var(--td-success);
+  font-weight: 700;
+  margin: 2px 0 0;
+}
+
+.requestBad {
+  /* Paper-surface text: fixed brick, as with .quality_burned. */
+  color: #b03e26;
+  font-weight: 700;
+  margin: 2px 0 0;
+}
+
 .actions {
   display: flex;
   gap: 10px;
