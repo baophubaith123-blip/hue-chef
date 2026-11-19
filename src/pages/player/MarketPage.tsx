@@ -14,7 +14,12 @@ import {
   dailyPriceFor,
   shelfLifeDaysFor,
 } from '@/features/stall/lib/market';
-import { buyIngredient, inventoryByIngredient, useStall } from '@/features/stall/store';
+import { buyIngredient, buyUpgrade, inventoryByIngredient, useStall } from '@/features/stall/store';
+import {
+  nextUpgradePrice,
+  upgradeMaxLevel,
+  type UpgradeKind,
+} from '@/features/stall/lib/upgrades';
 import { useTranslation } from '@/i18n/useTranslation';
 
 import styles from '@/pages/player/MarketPage.module.css';
@@ -79,6 +84,16 @@ export default function MarketPage() {
     if (coins < total) return;
     addCoins(-total);
     buyIngredient(user.id, ingredient.id, qty, price);
+  };
+
+  // Kitchen upgrades (Gói H5): the store books the new level first and
+  // reports the price, so the wallet is only charged for a level that
+  // actually landed.
+  const handleBuyUpgrade = (kind: UpgradeKind) => {
+    const price = nextUpgradePrice(kind, stall.upgrades[kind]);
+    if (price === null || coins < price) return;
+    const paid = buyUpgrade(user.id, kind);
+    if (paid !== null) addCoins(-paid);
   };
 
   return (
@@ -183,6 +198,48 @@ export default function MarketPage() {
             </div>
           </section>
         ))}
+
+        {/* Kitchenware stall (Gói H5): one-time equipment purchases —
+            the stall loop's long-term xu sink (Phần 11). */}
+        <section className={styles.stallPanel} aria-label={s.upgradeStallTitle}>
+          <h2 className={styles.stallName}>🔪 {s.upgradeStallTitle}</h2>
+          <p className={styles.upgradeNote}>{s.upgradeStallNote}</p>
+          <div className={styles.grid}>
+            {(['knife', 'stove', 'pot'] as UpgradeKind[]).map((kind) => {
+              const level = stall.upgrades[kind];
+              const max = upgradeMaxLevel(kind);
+              const price = nextUpgradePrice(kind, level);
+              return (
+                <article key={kind} className={styles.item}>
+                  <div className={styles.itemHead}>
+                    <span className={styles.itemEmoji} aria-hidden>
+                      {kind === 'knife' ? '🔪' : kind === 'stove' ? '🔥' : '🍲'}
+                    </span>
+                    <div className={styles.itemNames}>
+                      <strong>{s.upgradeNames[kind]}</strong>
+                      <span className={styles.itemOwned}>{s.upgradeLevel(level, max)}</span>
+                    </div>
+                  </div>
+                  <span className={styles.levelPips} aria-hidden>
+                    {Array.from({ length: max }, (_, i) => (
+                      <span key={i} className={i < level ? styles.pipOn : styles.pipOff} />
+                    ))}
+                  </span>
+                  <p className={styles.upgradeDesc}>{s.upgradeDescs[kind]}</p>
+                  <div className={styles.buyRow}>
+                    {price === null ? (
+                      <span className={styles.maxedNote}>✓ {s.upgradeMaxed}</span>
+                    ) : (
+                      <GoldButton disabled={coins < price} onClick={() => handleBuyUpgrade(kind)}>
+                        {coins < price ? s.marketNotEnoughXu : `${s.upgradeBuy} · ${s.upgradePrice(price)}`}
+                      </GoldButton>
+                    )}
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        </section>
       </div>
     </div>
   );

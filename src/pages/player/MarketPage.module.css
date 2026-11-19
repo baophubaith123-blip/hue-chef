@@ -199,3 +199,47 @@
   font-weight: 800;
   cursor: pointer;
 }
+
+/* ---------------- Gói H5: kitchenware stall ---------------- */
+
+.upgradeNote {
+  margin: 0 0 10px;
+  font-size: 13.5px;
+  color: var(--td-paper-text-muted);
+}
+
+.upgradeDesc {
+  margin: 6px 0 10px;
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--td-paper-text);
+}
+
+.levelPips {
+  display: flex;
+  gap: 5px;
+  margin-top: 6px;
+}
+
+.pipOn,
+.pipOff {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid var(--td-gold-deep);
+  display: block;
+}
+
+.pipOn {
+  background: linear-gradient(180deg, var(--td-gold-bright), var(--td-gold-deep));
+}
+
+.pipOff {
+  background: transparent;
+  opacity: 0.55;
+}
+
+.maxedNote {
+  font-weight: 800;
+  color: var(--td-success);
+}

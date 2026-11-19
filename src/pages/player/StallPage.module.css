@@ -199,6 +199,7 @@
 .bubble {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 6px;
   background: var(--td-paper);
   color: var(--td-paper-text);
@@ -583,4 +584,142 @@
     height: 44px;
     font-size: 20px;
   }
+}
+
+/* ---------------- Gói H5: rush hour, requests, background pots ---------------- */
+
+.rushShade {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 90% 55% at 50% 100%, rgba(233, 162, 59, 0.34), rgba(233, 162, 59, 0) 70%),
+    linear-gradient(180deg, rgba(176, 62, 38, 0.14), rgba(176, 62, 38, 0) 45%);
+  animation: rushPulse 1.6s ease-in-out infinite;
+}
+
+@keyframes rushPulse {
+  0%,
+  100% {
+    opacity: 0.65;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.rushBanner {
+  margin-top: 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  background: linear-gradient(180deg, #b03e26, #8c2f1c);
+  color: #fff6e0;
+  border: 2px solid var(--td-gold-bright);
+  border-radius: 12px;
+  padding: 5px 14px 7px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.45);
+  animation: rushPulse 1.6s ease-in-out infinite;
+  text-align: center;
+}
+
+.rushBanner strong {
+  font-size: 15px;
+  letter-spacing: 0.06em;
+}
+
+.rushBanner span {
+  font-size: 12px;
+}
+
+.bubbleRequest {
+  flex-basis: 100%;
+  font-size: 11.5px;
+  font-weight: 800;
+  /* Fixed brick on the paper bubble, both themes. */
+  color: #b03e26;
+  text-align: left;
+}
+
+.orderRequest {
+  font-weight: 800;
+  color: #b03e26;
+}
+
+.requestLine {
+  font-weight: 700;
+  color: #b03e26;
+  margin: 4px 0 0;
+}
+
+.potNote {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--td-paper-text-muted);
+}
+
+.potList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.potCard {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--td-cream);
+  border: 2px solid var(--td-paper-edge);
+  border-radius: 12px;
+  padding: 8px 10px;
+  flex-wrap: wrap;
+}
+
+.potDish {
+  font-weight: 700;
+  font-size: 13.5px;
+  min-width: 140px;
+}
+
+.potBar {
+  flex: 1;
+  min-width: 120px;
+  height: 14px;
+  border-radius: 999px;
+  background: var(--td-paper-edge);
+  overflow: hidden;
+  display: block;
+}
+
+.potFill {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--td-gold-deep), var(--td-gold-bright));
+  transition: width 0.9s linear;
+}
+
+.potTime {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.kitchenBox {
+  background: var(--td-cream);
+  border: 2px solid var(--td-paper-edge);
+  border-radius: 12px;
+  padding: 10px 12px;
+  margin-bottom: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.kitchenBox p {
+  margin: 0;
+  font-size: 13.5px;
 }

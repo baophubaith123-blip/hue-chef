@@ -30,6 +30,9 @@ import {
   stallStarsForExp,
   tipForBatch,
 } from '@/features/stall/lib/pricing-sell';
+import { REQUEST_ICONS } from '@/features/stall/lib/substitutions';
+import { REQUEST_OK_TIP_FACTOR, shiftPhaseAt } from '@/features/stall/lib/rush';
+import { potCapacityFor, upgradeMaxLevel } from '@/features/stall/lib/upgrades';
 import {
   acceptOrder,
   canCookBatch,
@@ -42,6 +45,7 @@ import {
   missingForBatch,
   openShift,
   serveBatch,
+  startBackgroundPot,
   tickStall,
   useStall,
 } from '@/features/stall/store';
@@ -119,6 +123,22 @@ export default function StallPage() {
     }
   }, [stall, s]);
 
+  // A background pot leaving the stove means its batch just landed on
+  // the counter (Gói H5) — announce it like the lost-order toast does.
+  const prevPotsRef = useRef<Map<string, string>>(new Map());
+  useEffect(() => {
+    if (!stall) return;
+    const prev = prevPotsRef.current;
+    const currentIds = new Set(stall.pots.map((pot) => pot.id));
+    for (const [potId, recipeId] of prev) {
+      if (!currentIds.has(potId)) {
+        const dish = recipesRef.current.find((r) => r.id === recipeId);
+        showToast(s.potReadyToast(dish?.name ?? recipeId), 'success');
+      }
+    }
+    prevPotsRef.current = new Map(stall.pots.map((pot) => [pot.id, pot.recipeId]));
+  }, [stall, s]);
+
   const recipes = getApprovedRecipes();
   const sellable = useMemo(
     () => (user ? sellableRecipes(user, recipes) : []),
@@ -139,6 +159,10 @@ export default function StallPage() {
       )
     : [];
   const shiftLeft = stall?.shift ? stall.shift.endsAt - now : 0;
+  // Rush hour (Gói H5, mục 5.5): the middle of the shift repaints the
+  // scene — warmer light, a rush banner, a livelier Nồi Nồi.
+  const isRush = Boolean(stall?.shift && shiftPhaseAt(stall.shift, now) === 'rush');
+  const potCapacity = potCapacityFor(stall?.upgrades.pot ?? 0);
   const cheapestDish = useMemo(() => {
     let best: Recipe | null = null;
     let bestCost = Number.POSITIVE_INFINITY;
@@ -187,11 +211,13 @@ export default function StallPage() {
       bestStars: bestStars.get(batch.recipeId) ?? 0,
       level: batch.level,
     });
-    const tip = tipForBatch({
+    let tip = tipForBatch({
       price,
       level: batch.level,
       patienceLeftRatio: patienceLeftRatio(customer, now),
     });
+    // Mirror the store: an honoured picky request tips extra (Gói H5).
+    if (batch.requestOutcome === 'ok') tip = Math.round(tip * REQUEST_OK_TIP_FACTOR);
     return { price, tip, total: price + tip };
   };
 
@@ -201,6 +227,7 @@ export default function StallPage() {
         <div className={styles.stage}>
           <img className={styles.scene} src={SCENES['canh-quay']} alt="" draggable={false} />
           <div className={styles.nightShade} aria-hidden />
+          {isRush ? <div className={styles.rushShade} aria-hidden /> : null}
 
           {/* The only two fixed buttons of the page (mục 5.1). */}
           <Link className={styles.backBtn} to="/home" aria-label={s.backHome}>
@@ -235,14 +262,20 @@ export default function StallPage() {
                 🔔 {s.openShift}
               </GoldButton>
             )}
+            {isRush ? (
+              <div className={styles.rushBanner} role="status">
+                <strong>{s.rushBanner}</strong>
+                <span>{s.rushBannerBody}</span>
+              </div>
+            ) : null}
           </div>
 
           <div className={styles.noiNoiBox}>
             <NoiNoi
-              pose={stall.shift ? 'chao' : 'ngu'}
+              pose={isRush ? 'mc' : stall.shift ? 'chao' : 'ngu'}
               size={132}
               alt={s.noiNoiAlt}
-              speech={stall.shift ? s.noiNoiShift : s.noiNoiIdle}
+              speech={isRush ? s.noiNoiRush : stall.shift ? s.noiNoiShift : s.noiNoiIdle}
             />
           </div>
 
@@ -292,6 +325,11 @@ export default function StallPage() {
                   <span className={styles.bubbleText}>
                     {recipe?.name} ×{customer.qty}
                   </span>
+                  {customer.requestKind ? (
+                    <span className={styles.bubbleRequest}>
+                      {REQUEST_ICONS[customer.requestKind]} {s.requestNames[customer.requestKind]}
+                    </span>
+                  ) : null}
                   {customer.state === 'waiting' ? (
                     <span className={styles.bubbleState}>{s.acceptOrder}</span>
                   ) : customer.state === 'accepted' ? (
@@ -361,6 +399,11 @@ export default function StallPage() {
                         <span className={styles.orderPatience}>
                           ⏳ {formatClock(customer.patienceMs - (now - customer.arrivedAt))}
                         </span>
+                        {customer.requestKind ? (
+                          <span className={styles.orderRequest}>
+                            {REQUEST_ICONS[customer.requestKind]} {s.requestChip(s.requestNames[customer.requestKind] ?? customer.requestKind)}
+                          </span>
+                        ) : null}
                       </div>
                       {ready ? (
                         <GoldButton onClick={() => setSelectedId(customer.id)}>{s.serveOrder}</GoldButton>
@@ -373,6 +416,24 @@ export default function StallPage() {
                         </GoldButton>
                       )}
                       {!cookable && !ready ? <span className={styles.orderWarn}>{s.cookOrderMissing}</span> : null}
+                      {(() => {
+                        const pot = stall.pots.find((p) => p.customerId === customer.id);
+                        if (pot) {
+                          const left = Math.max(0, Math.ceil((pot.readyAt - now) / 1000));
+                          return <span className={styles.potNote}>🫕 {s.potCooking(recipe.name, left)}</span>;
+                        }
+                        if (ready || !cookable) return null;
+                        if (stall.pots.length >= potCapacity) {
+                          return <span className={styles.potNote}>{s.potSlotsFull}</span>;
+                        }
+                        return (
+                          <WoodButton
+                            onClick={() => startBackgroundPot(user.id, user, customer.id, recipes, Date.now())}
+                          >
+                            {s.potStart}
+                          </WoodButton>
+                        );
+                      })()}
                     </li>
                   );
                 })}
@@ -425,6 +486,42 @@ export default function StallPage() {
             </ul>
           )}
         </section>
+
+        {/* Background pots (Gói H5): orders simmering in parallel with
+            whatever the player cooks by hand on the main stove. */}
+        {stall.pots.length > 0 ? (
+          <section className={styles.board} aria-label={s.potsTitle}>
+            <h2 className={styles.dockTitle}>
+              {s.potsTitle} · {stall.pots.length}/{potCapacity}
+            </h2>
+            <ul className={styles.potList}>
+              {stall.pots.map((pot) => {
+                const recipe = recipeById.get(pot.recipeId);
+                const total = Math.max(1, pot.readyAt - pot.startedAt);
+                const pct = Math.min(100, Math.max(0, ((now - pot.startedAt) / total) * 100));
+                const left = Math.max(0, Math.ceil((pot.readyAt - now) / 1000));
+                return (
+                  <li key={pot.id} className={styles.potCard}>
+                    <span className={styles.potDish}>
+                      🫕 {recipe?.name ?? pot.recipeId} ×{pot.qty}
+                    </span>
+                    <span
+                      className={styles.potBar}
+                      role="progressbar"
+                      aria-valuemin={0}
+                      aria-valuemax={100}
+                      aria-valuenow={Math.round(pct)}
+                      aria-label={s.potsTitle}
+                    >
+                      <span className={styles.potFill} style={{ width: `${pct}%` }} />
+                    </span>
+                    <span className={styles.potTime}>⏳ {left}s</span>
+                  </li>
+                );
+              })}
+            </ul>
+          </section>
+        ) : null}
       </div>
 
       {/* Customer panel: accept / cook / serve for the tapped customer. */}
@@ -450,6 +547,11 @@ export default function StallPage() {
                   <strong>{s.tierNames[selected.tier]}</strong> · {s.orderQty(selected.qty)}
                 </p>
                 <p>⏳ {formatClock(selected.patienceMs - (now - selected.arrivedAt))}</p>
+                {selected.requestKind ? (
+                  <p className={styles.requestLine}>
+                    {REQUEST_ICONS[selected.requestKind]} {s.requestOnOrder(s.requestNames[selected.requestKind] ?? selected.requestKind)}
+                  </p>
+                ) : null}
                 {selected.state === 'waiting' ? <p>{s.waitingCustomer}</p> : null}
               </div>
             </div>
@@ -483,6 +585,7 @@ export default function StallPage() {
                             {selected.tier === 'vip' && (batch.level === 'perfect' || batch.level === 'standard')
                               ? ` · +${batch.level === 'perfect' ? 2 : 1} cok`
                               : ''}
+                            {batch.requestOutcome === 'ok' ? ` · ✓ ${s.serveRequestBonus}` : ''}
                           </span>
                         ) : (
                           <span>{s.sellResultSpoiled}</span>
@@ -548,6 +651,16 @@ export default function StallPage() {
 
       {/* Pantry panel. */}
       <Modal open={panel === 'pantry'} title={s.pantryTitle} onClose={() => setPanel(null)} closeLabel={s.summaryClose}>
+        <div className={styles.kitchenBox}>
+          <strong>🍳 {s.kitchenTitle}</strong>
+          {(['knife', 'stove', 'pot'] as const).map((kind) => (
+            <p key={kind}>
+              {kind === 'knife' ? '🔪' : kind === 'stove' ? '🔥' : '🍲'} {s.upgradeNames[kind]} —{' '}
+              {s.upgradeLevel(stall.upgrades[kind], upgradeMaxLevel(kind))}
+              {kind === 'pot' ? ` · ${stall.pots.length}/${potCapacity}` : ''}
+            </p>
+          ))}
+        </div>
         {stall.spoiledNotices.length > 0 ? (
           <div className={styles.spoiledBox}>
             {stall.spoiledNotices.slice(-4).map((notice, idx) => (
