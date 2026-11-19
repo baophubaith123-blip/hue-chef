@@ -1,79 +1,163 @@
-.container {
+/* Theme D recipe catalogue scene — one big paper board pinned on the
+   plum scene (the SceneShell carries the plum background + festival
+   frame): riveted paper panel, hanging "Công thức" tag, wooden title
+   sign, scene-styled filters, the dish grid and a wooden status bar
+   along the board's foot — exactly the bottom-left sheet of the mẫu. */
+
+.board {
+  position: relative;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
-  padding-bottom: 3rem;
+  gap: 1.1rem;
+  padding: 1.6rem 1.5rem 1.25rem;
+  background:
+    radial-gradient(ellipse at 18% 0%, rgba(233, 162, 59, 0.1), transparent 55%),
+    linear-gradient(180deg, var(--td-paper) 0%, var(--td-paper-deep) 100%);
+  color: var(--td-paper-text);
+  border: 4px solid var(--td-ink);
+  border-radius: 22px;
+  box-shadow: var(--td-shadow-paper);
 }
 
-/* Page head — big hanging wooden sign */
+/* Gold rivets pinning the board's four corners, as drawn on the mẫu. */
+.rivet {
+  position: absolute;
+  width: 13px;
+  height: 13px;
+  border-radius: var(--td-radius-full);
+  background: radial-gradient(circle at 35% 30%, var(--td-gold-bright), var(--td-gold-deep));
+  border: 1.5px solid rgba(74, 44, 20, 0.55);
+  box-shadow: inset 0 -2px 3px rgba(59, 32, 8, 0.5);
+  z-index: 3;
+  pointer-events: none;
+}
+
+.rivetTl {
+  top: 10px;
+  left: 10px;
+}
+
+.rivetTr {
+  top: 10px;
+  right: 10px;
+}
+
+.rivetBl {
+  bottom: 10px;
+  left: 10px;
+}
+
+.rivetBr {
+  bottom: 10px;
+  right: 10px;
+}
+
+/* Page head — hanging tag + the wooden title sign. */
 .head {
+  position: relative;
   display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-  background: var(--td-wood-gradient, linear-gradient(180deg, #ce9550, #b57e40));
+  justify-content: center;
+  padding-top: 0.4rem;
+}
+
+/* Small wooden tag hanging off the board's top-left edge, like the
+   "Công thức" tab pinned over the sheet corner in the mẫu. */
+.hangTag {
+  position: absolute;
+  top: -2.35rem;
+  left: 0.9rem;
+  z-index: 4;
+  padding: 0.32rem 1rem;
+  background: var(--td-wood-gradient);
   border: 3px solid var(--td-ink);
-  border-radius: var(--radius-2xl);
-  box-shadow: var(--shadow-chunky, 0 4px 0 rgba(74, 44, 20, 0.45));
-  padding: 1.4rem 1.75rem;
-}
-
-.titleRow {
-  display: flex;
-  align-items: center;
-  gap: 0.65rem;
-}
-
-.titleIcon {
-  font-size: 1.75rem;
-}
-
-.title {
-  margin: 0;
-  font-family: var(--td-font-display);
-  font-size: 1.85rem;
+  border-radius: var(--td-radius-full);
+  box-shadow: 0 3px 0 rgba(74, 44, 20, 0.45);
+  color: #fff6e0;
+  font-family: var(--td-font-body);
+  font-size: 0.85rem;
   font-weight: 800;
-  color: #fff6e0;
-  text-shadow: 0 2px 0 rgba(32, 15, 4, 0.45);
+  letter-spacing: 0.02em;
+  text-shadow: 0 1px 0 rgba(32, 15, 4, 0.45);
+  transform: rotate(-2deg);
 }
 
-.subtitle {
+/* Dish grid — mobile 2 columns, tablet 3, desktop 4 (per brief). */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
   margin: 0;
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: #fff6e0;
+  padding: 0.35rem 0.1rem 0.1rem;
+  list-style: none;
 }
 
-/* The search/filter stays put while the recipe grid scrolls on its own */
-.gridScroll {
-  max-height: calc(100vh - 22rem);
-  min-height: 18rem;
-  overflow-y: auto;
-  padding: 0.15rem 0.5rem 0.5rem 0.15rem;
-  border-radius: var(--radius-xl, 18px);
+.item {
+  min-width: 0;
 }
 
-@media (max-width: 768px) {
-  .gridScroll {
-    max-height: none;
-    overflow-y: visible;
+@media (min-width: 700px) {
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.1rem;
   }
 }
 
-
-/* ===== Phase 17 — festival scene strip ===== */
-.container::before {
-  content: '';
-  display: block;
-  height: 84px;
-  margin-bottom: 1.1rem;
-  border: 3px solid var(--td-ink);
-  border-radius: 20px;
-  background-image: url('/images/festival-day.webp');
-  background-size: cover;
-  background-position: center 16%;
-  box-shadow: var(--shadow-game-card, 0 12px 28px rgba(59, 42, 32, 0.12));
+@media (min-width: 1080px) {
+  .grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1.2rem;
+  }
 }
 
-[data-theme='dark'] .container::before {
-  background-image: url('/images/festival-night.webp');
+/* Wooden status bar along the board's foot: visible count on the left,
+   owned/total progress on the right (the mẫu's bottom strip). */
+.statusBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 0.15rem;
+  padding: 0.65rem 1.15rem;
+  background: var(--td-wood-gradient);
+  border: 3px solid var(--td-ink);
+  border-radius: var(--td-radius-wood);
+  box-shadow:
+    inset 0 2px 0 rgba(255, 226, 160, 0.3),
+    inset 0 -3px 0 rgba(59, 32, 8, 0.35),
+    0 4px 0 rgba(74, 44, 20, 0.35);
+  color: #fff6e0;
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-shadow: 0 1px 0 rgba(32, 15, 4, 0.45);
+}
+
+.statusLeft {
+  min-width: 0;
+}
+
+.statusRight {
+  flex: none;
+  padding: 0.2rem 0.85rem;
+  border-radius: var(--td-radius-full);
+  border: 2px solid rgba(255, 246, 224, 0.5);
+  background: rgba(45, 11, 22, 0.35);
+  font-weight: 800;
+}
+
+@media (max-width: 560px) {
+  .board {
+    padding: 1.35rem 0.85rem 1rem;
+    gap: 0.9rem;
+  }
+
+  .hangTag {
+    top: -2.05rem;
+    left: 0.4rem;
+  }
+
+  .statusBar {
+    font-size: 0.82rem;
+    padding: 0.55rem 0.85rem;
+  }
 }

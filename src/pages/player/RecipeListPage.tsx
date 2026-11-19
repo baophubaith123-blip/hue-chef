@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 
+import { EmptyState } from '@/components/EmptyState';
 import { Loading } from '@/components/Loading';
 import { WoodSign } from '@/components/theme-d/WoodSign';
 import { useAuth } from '@/contexts/AuthContext';
@@ -10,10 +11,10 @@ import {
   RecipeFilter,
   type RecipeFilterState,
 } from '@/features/recipes/components/RecipeFilter';
-import { RecipeGrid } from '@/features/recipes/components/RecipeGrid';
+import { SceneDishCard } from '@/features/recipes/components/SceneDishCard';
 import { filterAndSortRecipes } from '@/features/recipes/lib/filter-recipes';
-import { isRecipeOwned } from '@/features/recipes/lib/ownership';
-import { PlayerShell } from '@/pages/player/PlayerShell';
+import { countOwnedRecipes, isRecipeOwned } from '@/features/recipes/lib/ownership';
+import { SceneShell } from '@/pages/player/SceneShell';
 
 import styles from '@/pages/player/RecipeListPage.module.css';
 
@@ -33,15 +34,28 @@ export default function RecipeListPage() {
   const lockedPriceFor = (recipe: Recipe): number | undefined =>
     isRecipeOwned(user, recipe) ? undefined : recipe.priceCoins;
 
-  const visibleRecipes = useMemo(() => {
-    const approved = getApprovedRecipes();
-    return filterAndSortRecipes(approved, filters);
-  }, [filters, getApprovedRecipes]);
+  const approvedRecipes = useMemo(() => getApprovedRecipes(), [getApprovedRecipes]);
+
+  const visibleRecipes = useMemo(
+    () => filterAndSortRecipes(approvedRecipes, filters),
+    [approvedRecipes, filters],
+  );
+
+  const ownedCount = useMemo(
+    () => countOwnedRecipes(user, approvedRecipes),
+    [user, approvedRecipes],
+  );
 
   return (
-    <PlayerShell>
-      <div className={styles.container}>
+    <SceneShell active="recipes">
+      <section className={styles.board}>
+        <span className={`${styles.rivet} ${styles.rivetTl}`} aria-hidden="true" />
+        <span className={`${styles.rivet} ${styles.rivetTr}`} aria-hidden="true" />
+        <span className={`${styles.rivet} ${styles.rivetBl}`} aria-hidden="true" />
+        <span className={`${styles.rivet} ${styles.rivetBr}`} aria-hidden="true" />
+
         <header className={styles.head}>
+          <span className={styles.hangTag}>{dict.nav.recipes}</span>
           <WoodSign
             title={`🍲 ${dict.recipe.listTitle}`}
             subtitle={dict.recipe.listSubtitle(visibleRecipes.length)}
@@ -52,12 +66,27 @@ export default function RecipeListPage() {
 
         {isLoading ? (
           <Loading label={dict.recipe.listLoading} />
+        ) : visibleRecipes.length === 0 ? (
+          <EmptyState title={dict.scene.noResults} description={dict.scene.noResultsHint} />
         ) : (
-          <div className={`${styles.gridScroll} scroll-slim`}>
-            <RecipeGrid recipes={visibleRecipes} lockedPriceFor={lockedPriceFor} />
-          </div>
+          <ul className={styles.grid}>
+            {visibleRecipes.map((recipe) => (
+              <li key={recipe.id} className={styles.item}>
+                <SceneDishCard recipe={recipe} lockedPrice={lockedPriceFor(recipe)} />
+              </li>
+            ))}
+          </ul>
         )}
-      </div>
-    </PlayerShell>
+
+        <footer className={styles.statusBar}>
+          <span className={styles.statusLeft}>
+            {dict.recipe.listSubtitle(visibleRecipes.length)}
+          </span>
+          <span className={styles.statusRight}>
+            {dict.scene.openedCount(ownedCount, approvedRecipes.length)}
+          </span>
+        </footer>
+      </section>
+    </SceneShell>
   );
 }
