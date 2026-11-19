@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 
 import { ImageWithFallback } from '@/components/ImageWithFallback';
 import { Badge } from '@/components/theme-d/Badge';
+import { dishArtFor } from '@/components/theme-d/dish-art';
 import { DishGradeFrame } from '@/components/theme-d/DishGradeFrame';
 import { GoldButton } from '@/components/theme-d/GoldButton';
 import { KraftCard } from '@/components/theme-d/KraftCard';
@@ -151,7 +152,7 @@ export function CheckinPanel() {
         <div className={styles.dotd}>
           <DishGradeFrame grade={dotdGrade} gradeLabel={dotdGradeLabel} className={styles.dotdFrame}>
             <ImageWithFallback
-              src={dotdRecipe.image}
+              src={dishArtFor(dotdRecipe)}
               alt={dotdRecipe.name}
               fallbackTitle={dotdRecipe.name}
               className={styles.dotdImage}

@@ -257,6 +257,7 @@
   font-size: 1.02rem;
   font-weight: 800;
   line-height: 1.25;
+  color: var(--td-paper-text);
 }
 
 .dishDifficulty {
@@ -303,14 +304,14 @@
   padding: 10px 20px;
   border-radius: 999px;
   border: 2px solid var(--td-gold-deep);
-  background: rgba(255, 246, 224, 0.1);
-  color: var(--td-gold-bright);
+  background: var(--td-plum-deep);
+  color: var(--td-cream);
   font-weight: 800;
   text-decoration: none;
 }
 
 .boardExploreBtn:hover {
-  background: rgba(255, 246, 224, 0.2);
+  background: var(--td-plum-active);
 }
 
 .boardNoiNoi {
@@ -526,6 +527,7 @@
   margin: 0;
   font-size: 1rem;
   font-weight: 800;
+  color: var(--td-paper-text);
 }
 
 .quickModeDesc,

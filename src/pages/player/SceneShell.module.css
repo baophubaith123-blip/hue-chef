@@ -2,6 +2,25 @@
    bottom navigation bar (Gói Mẫu Căn Chỉnh, Theme D target drawing). */
 
 .scene {
+  /* Scene pages pin the fixed festival palette in BOTH app themes: the
+     target drawings are one night-festival look and the paper surfaces
+     never flip (the same rule the --td-paper tokens already follow).
+     Without this pin, the dark theme's lightened --td-brick /
+     --td-gold-text / --td-page-text land on cream paper and fail
+     contrast (acceptance scan, Gói Mẫu). */
+  --td-brick: #b03e26;
+  --td-brick-hover: #99331e;
+  --td-brick-soft: rgba(176, 62, 38, 0.12);
+  --td-gold-text: #8a5a00;
+  --td-page-text: #3b2a20;
+  --td-page-text-muted: #7a6455;
+  --td-cok: #be123c;
+  --td-cok-soft: rgba(190, 18, 60, 0.12);
+  --td-cream-muted: #d8c3ae;
+  /* Legacy palette vars used by global element styles (h1-h3 color)
+     and older blocks embedded in the scene: pin them too. */
+  --color-text: #3b2a20;
+  --color-primary: #b03e26;
   position: relative;
   min-height: 100vh;
   min-height: 100dvh;
@@ -141,6 +160,7 @@
   border-radius: 12px;
   border: 2px solid rgba(67, 48, 27, 0.55);
   background: linear-gradient(180deg, rgba(255, 246, 224, 0.22), rgba(255, 246, 224, 0.06));
+  background-color: #6e4520;
   color: var(--td-paper);
   font-weight: 700;
   font-size: 0.95rem;
