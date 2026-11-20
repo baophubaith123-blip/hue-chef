@@ -1,4 +1,9 @@
-/* Gói H4 — sell-run result panel: paper card over the finished run. */
+/* Gói H4 — sell-run result panel over the finished run.
+   Án A pass (Đợt lan 3): this is a page-level overlay panel, so the
+   card itself is now a hanging WoodPanel — its carved sign carries
+   the existing result title, and the old paper-card shell (plus the
+   R1 wood-ring override) is gone. The outer .card keeps only the
+   dialog sizing; frame, ropes, sign and cream body live in WoodPanel. */
 .overlay {
   position: fixed;
   inset: 0;
@@ -11,25 +16,21 @@
 }
 
 .card {
-  background: var(--td-paper);
-  color: var(--td-paper-text);
-  border: 3px solid var(--td-paper-edge);
-  border-radius: 18px;
   max-width: 480px;
   width: 100%;
-  padding: 20px 22px;
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+}
+
+/* WoodPanel root: a little top margin so the hanging sign (≈33px
+   above the frame) keeps clear air inside the overlay. */
+.panel {
+  margin-top: 26px;
+}
+
+/* WoodPanel body: the old card's column layout lives here now. */
+.panelBody {
   display: flex;
   flex-direction: column;
   gap: 10px;
-}
-
-.title {
-  margin: 0;
-  font-size: 21px;
-  /* Pin against the global h2 rule: the card is fixed paper in both
-     themes, while var(--color-text) turns light in the dark theme. */
-  color: var(--td-paper-text);
 }
 
 .dishRow {
@@ -43,6 +44,7 @@
   height: 64px;
   border-radius: 12px;
   object-fit: cover;
+  border: 2.5px solid var(--td-ink, #4a2c14);
 }
 
 .dishRow p {
@@ -115,21 +117,4 @@
 .quality_spoiled {
   color: var(--td-danger);
   font-weight: 800;
-}
-
-/* ===== Đợt lan R1 — wood-ring game card ===== */
-.card {
-  border: 3px solid var(--td-ink, #4a2c14);
-  border-radius: 20px;
-  box-shadow:
-    0 0 0 5px var(--td-wood-dark, #8a5a2b),
-    0 24px 60px rgba(0, 0, 0, 0.5);
-}
-
-.title {
-  font-family: var(--td-font-game);
-}
-
-.dishImg {
-  border: 2.5px solid var(--td-ink, #4a2c14);
 }

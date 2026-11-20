@@ -18,6 +18,7 @@ import {
   type ToastTone,
 } from '@/components/theme-d';
 import { SCENES } from '@/components/theme-d/assets';
+import { WoodPanel } from '@/components/theme-d/WoodPanel';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRecipes } from '@/contexts/RecipeContext';
 import { bestStarsByRecipe, sellableRecipes } from '@/features/journey/lib/journey';
@@ -658,8 +659,8 @@ export default function StallPage() {
 
       {/* Dock: order board + counter — the stall's working surface. */}
       <div className={styles.dock}>
-        <section className={styles.board} id="stall-orders" aria-label={s.orderBoardTitle}>
-          <h2 className={styles.dockTitle}>📌 {s.orderBoardTitle}</h2>
+        <section className={styles.dockSection} id="stall-orders" aria-label={s.orderBoardTitle}>
+          <WoodPanel className={styles.dockPanel} title={s.orderBoardTitle} titleLevel="h2">
           {sellable.length === 0 ? (
             <div className={styles.noLicense}>
               <p className={styles.noLicenseTitle}>{s.noLicenseTitle}</p>
@@ -733,14 +734,19 @@ export default function StallPage() {
                 })}
             </ul>
           )}
+          </WoodPanel>
         </section>
 
         {/* Delivery board (Gói H6, mục 8.2): a separate order stream
             from stall level 4 — cooked like any order, served only by
             the hired server, paid with a delivery fee on top. */}
         {stallLevel >= 4 ? (
-          <section className={styles.board} aria-label={sup.deliveryTitle}>
-            <h2 className={styles.dockTitle}>{sup.deliveryTitle}</h2>
+          <section className={styles.dockSection} aria-label={sup.deliveryTitle}>
+            <WoodPanel
+              className={styles.dockPanel}
+              title={sup.deliveryTitle.replace(/^[^\p{L}]+/u, '')}
+              titleLevel="h2"
+            >
             {!staffOf(stall, 'server') ? (
               <p className={styles.dockEmpty}>{sup.deliveryNeedServer}</p>
             ) : deliveryCustomers.filter((c) => c.state === 'waiting' || c.state === 'accepted').length === 0 ? (
@@ -794,11 +800,12 @@ export default function StallPage() {
                   })}
               </ul>
             )}
+            </WoodPanel>
           </section>
         ) : null}
 
-        <section className={styles.board} aria-label={s.counterTitle}>
-          <h2 className={styles.dockTitle}>🍽️ {s.counterTitle}</h2>
+        <section className={styles.dockSection} aria-label={s.counterTitle}>
+          <WoodPanel className={styles.dockPanel} title={s.counterTitle} titleLevel="h2">
           {stall.batches.length === 0 ? (
             <p className={styles.dockEmpty}>{s.counterEmpty}</p>
           ) : (
@@ -854,15 +861,18 @@ export default function StallPage() {
               })}
             </ul>
           )}
+          </WoodPanel>
         </section>
 
         {/* Background pots (Gói H5): orders simmering in parallel with
             whatever the player cooks by hand on the main stove. */}
         {stall.pots.length > 0 ? (
-          <section className={styles.board} aria-label={s.potsTitle}>
-            <h2 className={styles.dockTitle}>
-              {s.potsTitle} · {stall.pots.length}/{potCapacity}
-            </h2>
+          <section className={styles.dockSection} aria-label={s.potsTitle}>
+            <WoodPanel
+              className={styles.dockPanel}
+              title={`${s.potsTitle.replace(/^[^\p{L}]+/u, '')} · ${stall.pots.length}/${potCapacity}`}
+              titleLevel="h2"
+            >
             <ul className={styles.potList}>
               {stall.pots.map((pot) => {
                 const recipe = recipeById.get(pot.recipeId);
@@ -889,6 +899,7 @@ export default function StallPage() {
                 );
               })}
             </ul>
+            </WoodPanel>
           </section>
         ) : null}
       </div>

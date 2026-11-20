@@ -1,4 +1,5 @@
 import { GoldButton, WoodButton } from '@/components/theme-d';
+import { WoodPanel } from '@/components/theme-d/WoodPanel';
 import { qualityBandForLevel } from '@/features/stall/lib/pricing-sell';
 import type { CookedBatch } from '@/features/stall/types';
 import { useTranslation } from '@/i18n/useTranslation';
@@ -37,7 +38,7 @@ export function SellResultPanel({
   return (
     <div className={styles.overlay}>
       <div className={styles.card} role="dialog" aria-modal="true" aria-label={s.sellResultTitle}>
-        <h2 className={styles.title}>🍲 {s.sellResultTitle}</h2>
+        <WoodPanel className={styles.panel} bodyClassName={styles.panelBody} title={s.sellResultTitle} titleLevel="h2">
         <div className={styles.dishRow}>
           <img src={recipeImage} alt="" className={styles.dishImg} />
           <div>
@@ -80,6 +81,7 @@ export function SellResultPanel({
           </WoodButton>
           <GoldButton onClick={onBackToStall}>🏪 {s.sellToCounter}</GoldButton>
         </div>
+        </WoodPanel>
       </div>
     </div>
   );

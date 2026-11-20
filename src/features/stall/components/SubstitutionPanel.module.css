@@ -1,16 +1,28 @@
 /* Gói H5 — picky-customer substitution panel: a paper card pinned to
    the sell cook, in the same fixed-paper language as the sell result
-   panel (paper stays paper in both themes, ink stays pinned). */
+   panel (paper stays paper in both themes, ink stays pinned).
+   Án A pass (Đợt lan 3): the panel is an inline card in the cooking
+   flow, not a page-level panel, so it takes the WoodPanel body
+   language (cream gradient + wood-texture frame) rather than the
+   hanging board itself. */
 
 .card {
-  background: var(--td-paper);
+  background:
+    linear-gradient(180deg, #fffdf4 0%, #f9edcb 100%) padding-box,
+    url('../../../assets/theme-d/game/wood-texture.webp') border-box;
+  background-size:
+    auto,
+    360px 270px;
   color: var(--td-paper-text);
-  border: 3px solid var(--td-paper-edge);
+  border: 3px solid transparent;
   border-radius: 16px;
   padding: 14px 16px;
   margin: 10px auto;
   max-width: 860px;
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
+  box-shadow:
+    inset 0 0 0 2px rgba(60, 32, 8, 0.45),
+    inset 0 0 16px rgba(60, 32, 8, 0.12),
+    0 10px 28px rgba(0, 0, 0, 0.35);
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -88,9 +100,9 @@
 }
 
 .chosenCard {
-  background: var(--td-paper);
+  background: linear-gradient(180deg, #fffdf4 0%, #f9edcb 100%);
   color: var(--td-paper-text);
-  border: 2px solid var(--td-paper-edge);
+  border: 2px solid var(--td-wood-dark);
   border-radius: 999px;
   padding: 6px 14px;
   margin: 8px auto;

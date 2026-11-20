@@ -190,7 +190,23 @@
   align-items: center;
   gap: 2px;
   padding: 0;
-  animation: stall-bob 2.6s ease-in-out infinite;
+  animation:
+    stall-customer-in 0.45s ease-out 1,
+    stall-bob 2.6s ease-in-out infinite;
+}
+
+/* Entrance: a light pop/fade as the customer takes their table (the
+   keyframes carry the -50%,-88% placement transform so the pop never
+   fights the positioning). The bob below is the idle motion. */
+@keyframes stall-customer-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -88%) scale(0.6);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -88%) scale(1);
+  }
 }
 
 @keyframes stall-bob {
@@ -200,6 +216,12 @@
   }
   50% {
     margin-top: -4px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .customer {
+    animation: none;
   }
 }
 
@@ -260,20 +282,28 @@
   gap: 14px;
 }
 
-.board {
-  background: var(--td-paper);
-  color: var(--td-paper-text);
-  border: 3px solid var(--td-paper-edge);
-  border-radius: 16px;
-  padding: 14px 16px;
-  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.35);
+/* Án A pass (Đợt lan 3): the four dock boards are hanging WoodPanels
+   now — the section keeps only the region semantics (the stall-orders
+   anchor id + aria-label) and stretches its panel to the grid row's
+   height; frame, ropes, carved sign and cream body live in WoodPanel.
+   The 26px top margin plus the 14px row gap give the hanging sign
+   (≈33px above the frame) clear air — neither dư nor thiếu. */
+.dockSection {
+  display: flex;
+  min-width: 0;
 }
 
-.dockTitle {
-  margin: 0 0 10px;
-  font-size: 18px;
-  color: var(--td-paper-text);
+.dockPanel {
+  flex: 1;
+  margin-top: 26px;
 }
+
+/* Modal interiors + dock cards (Án A pass): no hanging WoodPanel inside
+   a modal (it would fight the modal's own wooden header), so the inner
+   boxes and list cards speak the WoodPanel BODY language instead —
+   the same cream gradient (#fffdf4 → #f9edcb), the same wood-texture
+   border and the same warm-brown inset shadows as WoodPanel.module.css,
+   at card thickness (3px frame, 1–2px inset ring). */
 
 .dockEmpty {
   color: var(--td-paper-text-muted);
@@ -312,9 +342,17 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  background: var(--td-cream);
-  border: 2px solid var(--td-paper-edge);
+  background:
+    linear-gradient(180deg, #fffdf4 0%, #f9edcb 100%) padding-box,
+    url('../../assets/theme-d/game/wood-texture.webp') border-box;
+  background-size:
+    auto,
+    360px 270px;
+  border: 3px solid transparent;
   border-radius: 12px;
+  box-shadow:
+    inset 0 0 0 1px rgba(60, 32, 8, 0.35),
+    0 3px 8px rgba(40, 20, 4, 0.16);
   padding: 8px 10px;
   flex-wrap: wrap;
 }
@@ -397,9 +435,17 @@
   display: flex;
   gap: 12px;
   align-items: center;
-  background: var(--td-cream);
-  border: 2px solid var(--td-paper-edge);
+  background:
+    linear-gradient(180deg, #fffdf4 0%, #f9edcb 100%) padding-box,
+    url('../../assets/theme-d/game/wood-texture.webp') border-box;
+  background-size:
+    auto,
+    360px 270px;
+  border: 3px solid transparent;
   border-radius: 12px;
+  box-shadow:
+    inset 0 0 0 1px rgba(60, 32, 8, 0.35),
+    0 3px 8px rgba(40, 20, 4, 0.16);
   padding: 10px;
   flex-wrap: wrap;
 }
@@ -443,8 +489,17 @@
 }
 
 .spoiledBox {
-  background: var(--td-brick-soft);
-  border-radius: 10px;
+  background:
+    linear-gradient(180deg, #fdf1e6 0%, #f8ddc4 100%) padding-box,
+    url('../../assets/theme-d/game/wood-texture.webp') border-box;
+  background-size:
+    auto,
+    360px 270px;
+  border: 3px solid transparent;
+  border-radius: 12px;
+  box-shadow:
+    inset 0 0 0 1px rgba(60, 32, 8, 0.35),
+    0 3px 8px rgba(40, 20, 4, 0.16);
   padding: 8px 12px;
   margin-bottom: 12px;
 }
@@ -454,9 +509,12 @@
 }
 
 .starterBox {
-  background: var(--td-cok-soft);
+  background: linear-gradient(180deg, #fffdf4 0%, #f9edcb 100%);
   border: 2px dashed var(--td-cok);
   border-radius: 12px;
+  box-shadow:
+    inset 0 0 0 1px rgba(60, 32, 8, 0.18),
+    0 3px 8px rgba(40, 20, 4, 0.14);
   padding: 12px;
   margin-bottom: 12px;
   display: flex;
@@ -473,6 +531,19 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
+  background:
+    linear-gradient(180deg, #fffdf4 0%, #f9edcb 100%) padding-box,
+    url('../../assets/theme-d/game/wood-texture.webp') border-box;
+  background-size:
+    auto,
+    360px 270px;
+  border: 3px solid transparent;
+  border-radius: 12px;
+  box-shadow:
+    inset 0 0 0 2px rgba(60, 32, 8, 0.45),
+    inset 0 0 16px rgba(60, 32, 8, 0.12),
+    0 4px 10px rgba(40, 20, 4, 0.16);
+  padding: 12px 14px;
 }
 
 .summary p {
@@ -686,9 +757,17 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  background: var(--td-cream);
-  border: 2px solid var(--td-paper-edge);
+  background:
+    linear-gradient(180deg, #fffdf4 0%, #f9edcb 100%) padding-box,
+    url('../../assets/theme-d/game/wood-texture.webp') border-box;
+  background-size:
+    auto,
+    360px 270px;
+  border: 3px solid transparent;
   border-radius: 12px;
+  box-shadow:
+    inset 0 0 0 1px rgba(60, 32, 8, 0.35),
+    0 3px 8px rgba(40, 20, 4, 0.16);
   padding: 8px 10px;
   flex-wrap: wrap;
 }
@@ -723,9 +802,18 @@
 }
 
 .kitchenBox {
-  background: var(--td-cream);
-  border: 2px solid var(--td-paper-edge);
+  background:
+    linear-gradient(180deg, #fffdf4 0%, #f9edcb 100%) padding-box,
+    url('../../assets/theme-d/game/wood-texture.webp') border-box;
+  background-size:
+    auto,
+    360px 270px;
+  border: 3px solid transparent;
   border-radius: 12px;
+  box-shadow:
+    inset 0 0 0 2px rgba(60, 32, 8, 0.45),
+    inset 0 0 16px rgba(60, 32, 8, 0.12),
+    0 4px 10px rgba(40, 20, 4, 0.16);
   padding: 10px 12px;
   margin-bottom: 12px;
   display: flex;
@@ -821,9 +909,18 @@
 
 .remoteBox,
 .supportBox {
-  background: var(--td-paper-deep);
-  border: 2px solid var(--td-paper-edge);
+  background:
+    linear-gradient(180deg, #fffdf4 0%, #f9edcb 100%) padding-box,
+    url('../../assets/theme-d/game/wood-texture.webp') border-box;
+  background-size:
+    auto,
+    360px 270px;
+  border: 3px solid transparent;
   border-radius: 12px;
+  box-shadow:
+    inset 0 0 0 2px rgba(60, 32, 8, 0.45),
+    inset 0 0 16px rgba(60, 32, 8, 0.12),
+    0 4px 10px rgba(40, 20, 4, 0.16);
   padding: 10px 12px;
   margin-top: 12px;
   display: flex;
@@ -862,9 +959,17 @@
 }
 
 .staffCard {
-  background: var(--td-paper-deep);
-  border: 2px solid var(--td-paper-edge);
+  background:
+    linear-gradient(180deg, #fffdf4 0%, #f9edcb 100%) padding-box,
+    url('../../assets/theme-d/game/wood-texture.webp') border-box;
+  background-size:
+    auto,
+    360px 270px;
+  border: 3px solid transparent;
   border-radius: 12px;
+  box-shadow:
+    inset 0 0 0 1px rgba(60, 32, 8, 0.35),
+    0 3px 8px rgba(40, 20, 4, 0.16);
   padding: 10px 12px;
   display: flex;
   align-items: flex-start;
@@ -905,9 +1010,17 @@
   align-items: center;
   gap: 6px;
   text-align: center;
-  background: var(--td-paper);
-  border: 2px solid var(--td-paper-edge);
+  background:
+    linear-gradient(180deg, #fffdf4 0%, #f9edcb 100%) padding-box,
+    url('../../assets/theme-d/game/wood-texture.webp') border-box;
+  background-size:
+    auto,
+    360px 270px;
+  border: 3px solid transparent;
   border-radius: 12px;
+  box-shadow:
+    inset 0 0 0 1px rgba(60, 32, 8, 0.35),
+    0 3px 8px rgba(40, 20, 4, 0.16);
   padding: 10px 8px;
   font-size: 13px;
 }
@@ -1078,6 +1191,19 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
+  background:
+    linear-gradient(180deg, #fffdf4 0%, #f9edcb 100%) padding-box,
+    url('../../assets/theme-d/game/wood-texture.webp') border-box;
+  background-size:
+    auto,
+    360px 270px;
+  border: 3px solid transparent;
+  border-radius: 12px;
+  box-shadow:
+    inset 0 0 0 2px rgba(60, 32, 8, 0.45),
+    inset 0 0 16px rgba(60, 32, 8, 0.12),
+    0 4px 10px rgba(40, 20, 4, 0.16);
+  padding: 12px 14px;
 }
 
 .feastBox p {
@@ -1094,9 +1220,17 @@
 }
 
 .feastRow {
-  background: var(--td-paper-deep);
-  border: 2px solid var(--td-paper-edge);
+  background:
+    linear-gradient(180deg, #fffdf4 0%, #f9edcb 100%) padding-box,
+    url('../../assets/theme-d/game/wood-texture.webp') border-box;
+  background-size:
+    auto,
+    360px 270px;
+  border: 3px solid transparent;
   border-radius: 12px;
+  box-shadow:
+    inset 0 0 0 1px rgba(60, 32, 8, 0.35),
+    0 3px 8px rgba(40, 20, 4, 0.16);
   padding: 10px 12px;
   display: flex;
   align-items: center;
