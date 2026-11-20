@@ -1,5 +1,7 @@
 /* Gói H4 — Đông Ba market scene (mục 6.1): full-screen market backdrop,
-   stalls grouped by ingredient family on kraft panels. */
+   stalls grouped by ingredient family. Đợt lan R3: every stall is an
+   Án A hanging WoodPanel (carved sign = the stall name) and the price
+   note is a signless WoodPanel, in the Quests/Mystery board language. */
 .page {
   position: relative;
   min-height: 100dvh;
@@ -79,31 +81,40 @@
   margin-top: 6px;
 }
 
-.note {
-  margin: 0;
-  background: rgba(55, 14, 27, 0.82);
-  border: 1px solid var(--td-gold-deep);
-  color: var(--td-cream);
-  border-radius: 12px;
-  padding: 10px 14px;
-  font-size: 14.5px;
-}
-
-.stallPanel {
-  background: var(--td-paper);
+/* Price note — Án A hanging board without a sign (WoodPanel): the
+   panel's own top margin keeps its ropes clear of the header sign,
+   and the body carries the one-line note on the panel's cream paper.
+   The ink colour is pinned here because the page's inherited colour
+   is the scene cream, which would vanish on the panel body. */
+.notePanel {
   color: var(--td-paper-text);
-  border: 3px solid var(--td-paper-edge);
-  border-radius: 16px;
-  padding: 14px 16px;
-  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.35);
 }
 
-.stallName {
-  margin: 0 0 12px;
-  font-size: 19px;
-  /* Pin the paper text color: the global h2 rule (var(--color-text))
-     would otherwise paint light text on the fixed-light paper panel
-     in the dark theme. */
+.noteBody {
+  padding: 0.7rem 1rem;
+}
+
+.noteText {
+  margin: 0;
+  font-size: 14.5px;
+  line-height: 1.55;
+}
+
+/* Stall wrapper: the <section> keeps the stall's aria-label landmark
+   and supplies the hanging clearance for the WoodPanel inside — the
+   panel itself is flushed (panelFlush), so the rope/sign spacing is
+   counted once, here: the content gap (14px) + this margin (28px)
+   leave the carved sign (≈33px above the frame) ≈9px of air, so the
+   stack reads neither dư nor thiếu. */
+.stallSection {
+  margin-top: 28px;
+}
+
+/* WoodPanel root for a stall: flush the shared 32px top margin (the
+   wrapper above owns the clearance) and pin the paper ink colour the
+   stall's texts inherit on the panel's cream body. */
+.panelFlush {
+  margin-top: 0;
   color: var(--td-paper-text);
 }
 
@@ -113,14 +124,20 @@
   gap: 10px;
 }
 
+/* Item card — a cream paper slip with a wood-brown edge and a soft
+   lift, sitting on the WoodPanel body's cream paper; the price /
+   trend / stepper rows keep their layout from the H4 original. */
 .item {
   background: var(--td-cream);
-  border: 2px solid var(--td-paper-edge);
-  border-radius: 12px;
+  border: 2px solid var(--td-wood-dark);
+  border-radius: var(--td-radius-paper);
   padding: 10px;
   display: flex;
   flex-direction: column;
   gap: 8px;
+  box-shadow:
+    0 3px 8px rgba(60, 32, 8, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.65);
 }
 
 .itemHead {

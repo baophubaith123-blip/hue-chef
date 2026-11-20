@@ -5,6 +5,7 @@ import { SEED_INGREDIENTS } from '@/data/ingredients';
 import type { Ingredient } from '@/data/types';
 import { AudioControls, CoinPill, GoldButton, WoodSign } from '@/components/theme-d';
 import { SCENES } from '@/components/theme-d/assets';
+import { WoodPanel } from '@/components/theme-d/WoodPanel';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRecipes } from '@/contexts/RecipeContext';
 import { todayKey } from '@/features/stall/lib/day';
@@ -211,240 +212,236 @@ export default function MarketPage() {
           <span className={styles.headerSpacer} aria-hidden />
         </header>
 
-        <p className={styles.note}>{s.marketPricesNote}</p>
+        <WoodPanel className={styles.notePanel} bodyClassName={styles.noteBody}>
+          <p className={styles.noteText}>{s.marketPricesNote}</p>
+        </WoodPanel>
 
         {stalls.map((stallGroup) => (
-          <section key={stallGroup.key} className={styles.stallPanel} aria-label={s.marketStallNames[stallGroup.key]}>
-            <h2 className={styles.stallName}>
-              {stallGroup.key === 'protein'
-                ? '🥩'
-                : stallGroup.key === 'vegetable'
-                  ? '🥬'
-                  : stallGroup.key === 'spice'
-                    ? '🌶️'
-                    : stallGroup.key === 'grain'
-                      ? '🍚'
-                      : stallGroup.key === 'dau-hat'
-                        ? '🫘'
-                        : '🎁'}{' '}
-              {s.marketStallNames[stallGroup.key] ?? stallGroup.key}
-            </h2>
-            <div className={styles.grid}>
-              {stallGroup.items.map((ingredient) => {
-                const price = dailyPriceFor(ingredient.id, today);
-                const change = dailyChangeFor(ingredient.id, today);
-                const qty = qtyById[ingredient.id] ?? 1;
-                const total = price * qty;
-                const owned = inventory.get(ingredient.id) ?? 0;
-                return (
-                  <article key={ingredient.id} className={styles.item}>
-                    <div className={styles.itemHead}>
-                      <span className={styles.itemEmoji} aria-hidden>
-                        {ingredient.fallbackEmoji}
-                      </span>
-                      <div className={styles.itemNames}>
-                        <strong>{ingredient.name}</strong>
-                        <span className={styles.itemOwned}>
-                          {s.marketOwned(owned)} ·{' '}
-                          {s.marketShelfLife(shelfLifeDaysFor(ingredient.id, shelfLifeFactor(stall.gear)))}
+          <section key={stallGroup.key} className={styles.stallSection} aria-label={s.marketStallNames[stallGroup.key]}>
+            <WoodPanel
+              title={s.marketStallNames[stallGroup.key] ?? stallGroup.key}
+              titleLevel="h2"
+              className={styles.panelFlush}
+            >
+              <div className={styles.grid}>
+                {stallGroup.items.map((ingredient) => {
+                  const price = dailyPriceFor(ingredient.id, today);
+                  const change = dailyChangeFor(ingredient.id, today);
+                  const qty = qtyById[ingredient.id] ?? 1;
+                  const total = price * qty;
+                  const owned = inventory.get(ingredient.id) ?? 0;
+                  return (
+                    <article key={ingredient.id} className={styles.item}>
+                      <div className={styles.itemHead}>
+                        <span className={styles.itemEmoji} aria-hidden>
+                          {ingredient.fallbackEmoji}
+                        </span>
+                        <div className={styles.itemNames}>
+                          <strong>{ingredient.name}</strong>
+                          <span className={styles.itemOwned}>
+                            {s.marketOwned(owned)} ·{' '}
+                            {s.marketShelfLife(shelfLifeDaysFor(ingredient.id, shelfLifeFactor(stall.gear)))}
+                          </span>
+                        </div>
+                      </div>
+                      <div className={styles.priceRow}>
+                        <span className={styles.price}>{price} xu</span>
+                        <span
+                          className={
+                            change > 0.005 ? styles.trendUp : change < -0.005 ? styles.trendDown : styles.trendFlat
+                          }
+                          aria-label={`${Math.round(change * 100)}%`}
+                        >
+                          {change > 0.005 ? '▲' : change < -0.005 ? '▼' : '•'} {Math.abs(Math.round(change * 100))}%
+                          <span className={styles.baseHint}> / {basePriceFor(ingredient.id)} xu</span>
                         </span>
                       </div>
-                    </div>
-                    <div className={styles.priceRow}>
-                      <span className={styles.price}>{price} xu</span>
-                      <span
-                        className={
-                          change > 0.005 ? styles.trendUp : change < -0.005 ? styles.trendDown : styles.trendFlat
-                        }
-                        aria-label={`${Math.round(change * 100)}%`}
-                      >
-                        {change > 0.005 ? '▲' : change < -0.005 ? '▼' : '•'} {Math.abs(Math.round(change * 100))}%
-                        <span className={styles.baseHint}> / {basePriceFor(ingredient.id)} xu</span>
-                      </span>
-                    </div>
-                    <div className={styles.buyRow}>
-                      <div className={styles.stepper}>
-                        <button
-                          type="button"
-                          aria-label="-"
-                          onClick={() =>
-                            setQtyById((prev) => ({ ...prev, [ingredient.id]: Math.max(1, qty - 1) }))
-                          }
-                        >
-                          −
-                        </button>
-                        <span>{qty}</span>
-                        <button
-                          type="button"
-                          aria-label="+"
-                          onClick={() =>
-                            setQtyById((prev) => ({ ...prev, [ingredient.id]: Math.min(20, qty + 1) }))
-                          }
-                        >
-                          +
-                        </button>
+                      <div className={styles.buyRow}>
+                        <div className={styles.stepper}>
+                          <button
+                            type="button"
+                            aria-label="-"
+                            onClick={() =>
+                              setQtyById((prev) => ({ ...prev, [ingredient.id]: Math.max(1, qty - 1) }))
+                            }
+                          >
+                            −
+                          </button>
+                          <span>{qty}</span>
+                          <button
+                            type="button"
+                            aria-label="+"
+                            onClick={() =>
+                              setQtyById((prev) => ({ ...prev, [ingredient.id]: Math.min(20, qty + 1) }))
+                            }
+                          >
+                            +
+                          </button>
+                        </div>
+                        <GoldButton disabled={coins < total} onClick={() => handleBuy(ingredient)}>
+                          {coins < total ? s.marketNotEnoughXu : `${s.marketBuy} · ${total} xu`}
+                        </GoldButton>
                       </div>
-                      <GoldButton disabled={coins < total} onClick={() => handleBuy(ingredient)}>
-                        {coins < total ? s.marketNotEnoughXu : `${s.marketBuy} · ${total} xu`}
-                      </GoldButton>
-                    </div>
-                  </article>
-                );
-              })}
-            </div>
+                    </article>
+                  );
+                })}
+              </div>
+            </WoodPanel>
           </section>
         ))}
 
         {/* Kitchenware stall (Gói H5): one-time equipment purchases —
             the stall loop's long-term xu sink (Phần 11). */}
-        <section className={styles.stallPanel} aria-label={s.upgradeStallTitle}>
-          <h2 className={styles.stallName}>🔪 {s.upgradeStallTitle}</h2>
-          <p className={styles.upgradeNote}>{s.upgradeStallNote}</p>
-          <div className={styles.grid}>
-            {(['knife', 'stove', 'pot'] as UpgradeKind[]).map((kind) => {
-              const level = stall.upgrades[kind];
-              const max = upgradeMaxLevel(kind);
-              const price = nextUpgradePrice(kind, level);
-              return (
-                <article key={kind} className={styles.item}>
-                  <div className={styles.itemHead}>
-                    <span className={styles.itemEmoji} aria-hidden>
-                      {kind === 'knife' ? '🔪' : kind === 'stove' ? '🔥' : '🍲'}
-                    </span>
-                    <div className={styles.itemNames}>
-                      <strong>{s.upgradeNames[kind]}</strong>
-                      <span className={styles.itemOwned}>{s.upgradeLevel(level, max)}</span>
+        <section className={styles.stallSection} aria-label={s.upgradeStallTitle}>
+          <WoodPanel title={s.upgradeStallTitle} titleLevel="h2" className={styles.panelFlush}>
+            <p className={styles.upgradeNote}>{s.upgradeStallNote}</p>
+            <div className={styles.grid}>
+              {(['knife', 'stove', 'pot'] as UpgradeKind[]).map((kind) => {
+                const level = stall.upgrades[kind];
+                const max = upgradeMaxLevel(kind);
+                const price = nextUpgradePrice(kind, level);
+                return (
+                  <article key={kind} className={styles.item}>
+                    <div className={styles.itemHead}>
+                      <span className={styles.itemEmoji} aria-hidden>
+                        {kind === 'knife' ? '🔪' : kind === 'stove' ? '🔥' : '🍲'}
+                      </span>
+                      <div className={styles.itemNames}>
+                        <strong>{s.upgradeNames[kind]}</strong>
+                        <span className={styles.itemOwned}>{s.upgradeLevel(level, max)}</span>
+                      </div>
                     </div>
-                  </div>
-                  <span className={styles.levelPips} aria-hidden>
-                    {Array.from({ length: max }, (_, i) => (
-                      <span key={i} className={i < level ? styles.pipOn : styles.pipOff} />
-                    ))}
-                  </span>
-                  <p className={styles.upgradeDesc}>{s.upgradeDescs[kind]}</p>
-                  <div className={styles.buyRow}>
-                    {price === null ? (
-                      <span className={styles.maxedNote}>✓ {s.upgradeMaxed}</span>
-                    ) : (
-                      <GoldButton disabled={coins < price} onClick={() => handleBuyUpgrade(kind)}>
-                        {coins < price ? s.marketNotEnoughXu : `${s.upgradeBuy} · ${s.upgradePrice(price)}`}
-                      </GoldButton>
-                    )}
-                  </div>
-                </article>
-              );
-            })}
-          </div>
+                    <span className={styles.levelPips} aria-hidden>
+                      {Array.from({ length: max }, (_, i) => (
+                        <span key={i} className={i < level ? styles.pipOn : styles.pipOff} />
+                      ))}
+                    </span>
+                    <p className={styles.upgradeDesc}>{s.upgradeDescs[kind]}</p>
+                    <div className={styles.buyRow}>
+                      {price === null ? (
+                        <span className={styles.maxedNote}>✓ {s.upgradeMaxed}</span>
+                      ) : (
+                        <GoldButton disabled={coins < price} onClick={() => handleBuyUpgrade(kind)}>
+                          {coins < price ? s.marketNotEnoughXu : `${s.upgradeBuy} · ${s.upgradePrice(price)}`}
+                        </GoldButton>
+                      )}
+                    </div>
+                  </article>
+                );
+              })}
+            </div>
+          </WoodPanel>
         </section>
 
         {/* Support stall (Gói H6): gear, rescue cards, decoration and
             advertising for the sell loop (Phần 8.2). */}
-        <section className={styles.stallPanel} aria-label={s.support.supportStallTitle}>
-          <h2 className={styles.stallName}>🧰 {s.support.supportStallTitle}</h2>
-          <p className={styles.upgradeNote}>{s.support.supportStallNote}</p>
-          <div className={styles.grid}>
-            {GEAR_KINDS.map((kind) => {
-              const price = GEAR_PRICES[kind];
-              const owned =
-                kind === 'extraStove'
-                  ? stall.gear.extraStoves >= MAX_EXTRA_STOVES
-                  : stall.gear[kind];
-              return (
-                <article key={`gear-${kind}`} className={styles.item}>
-                  <div className={styles.itemHead}>
-                    <span className={styles.itemEmoji} aria-hidden>
-                      {GEAR_EMOJI[kind]}
-                    </span>
-                    <div className={styles.itemNames}>
-                      <strong>{s.support.gearNames[kind]}</strong>
-                      {kind === 'extraStove' ? (
-                        <span className={styles.itemOwned}>
-                          {stall.gear.extraStoves}/{MAX_EXTRA_STOVES}
-                        </span>
-                      ) : null}
+        <section className={styles.stallSection} aria-label={s.support.supportStallTitle}>
+          <WoodPanel title={s.support.supportStallTitle} titleLevel="h2" className={styles.panelFlush}>
+            <p className={styles.upgradeNote}>{s.support.supportStallNote}</p>
+            <div className={styles.grid}>
+              {GEAR_KINDS.map((kind) => {
+                const price = GEAR_PRICES[kind];
+                const owned =
+                  kind === 'extraStove'
+                    ? stall.gear.extraStoves >= MAX_EXTRA_STOVES
+                    : stall.gear[kind];
+                return (
+                  <article key={`gear-${kind}`} className={styles.item}>
+                    <div className={styles.itemHead}>
+                      <span className={styles.itemEmoji} aria-hidden>
+                        {GEAR_EMOJI[kind]}
+                      </span>
+                      <div className={styles.itemNames}>
+                        <strong>{s.support.gearNames[kind]}</strong>
+                        {kind === 'extraStove' ? (
+                          <span className={styles.itemOwned}>
+                            {stall.gear.extraStoves}/{MAX_EXTRA_STOVES}
+                          </span>
+                        ) : null}
+                      </div>
                     </div>
-                  </div>
-                  <p className={styles.upgradeDesc}>{s.support.gearDescs[kind]}</p>
-                  <div className={styles.buyRow}>
-                    {owned ? (
-                      <span className={styles.maxedNote}>✓ {s.support.gearOwned}</span>
-                    ) : (
-                      <GoldButton disabled={coins < price} onClick={() => handleBuyGear(kind)}>
-                        {coins < price ? s.marketNotEnoughXu : `${s.support.gearBuy} · ${price} xu`}
+                    <p className={styles.upgradeDesc}>{s.support.gearDescs[kind]}</p>
+                    <div className={styles.buyRow}>
+                      {owned ? (
+                        <span className={styles.maxedNote}>✓ {s.support.gearOwned}</span>
+                      ) : (
+                        <GoldButton disabled={coins < price} onClick={() => handleBuyGear(kind)}>
+                          {coins < price ? s.marketNotEnoughXu : `${s.support.gearBuy} · ${price} xu`}
+                        </GoldButton>
+                      )}
+                    </div>
+                  </article>
+                );
+              })}
+
+              {CARD_KINDS.map((kind) => {
+                const price = CARD_PRICES[kind];
+                return (
+                  <article key={`card-${kind}`} className={styles.item}>
+                    <div className={styles.itemHead}>
+                      <span className={styles.itemEmoji} aria-hidden>
+                        {CARD_EMOJI[kind]}
+                      </span>
+                      <div className={styles.itemNames}>
+                        <strong>{s.support.cardNames[kind]}</strong>
+                        <span className={styles.itemOwned}>{s.support.cardOwned(stall.cards[kind])}</span>
+                      </div>
+                    </div>
+                    <p className={styles.upgradeDesc}>{s.support.cardDescs[kind]}</p>
+                    <div className={styles.buyRow}>
+                      <GoldButton disabled={coins < price} onClick={() => handleBuyCard(kind)}>
+                        {coins < price ? s.marketNotEnoughXu : `${s.support.cardBuy} · ${price} xu`}
                       </GoldButton>
-                    )}
-                  </div>
-                </article>
-              );
-            })}
-
-            {CARD_KINDS.map((kind) => {
-              const price = CARD_PRICES[kind];
-              return (
-                <article key={`card-${kind}`} className={styles.item}>
-                  <div className={styles.itemHead}>
-                    <span className={styles.itemEmoji} aria-hidden>
-                      {CARD_EMOJI[kind]}
-                    </span>
-                    <div className={styles.itemNames}>
-                      <strong>{s.support.cardNames[kind]}</strong>
-                      <span className={styles.itemOwned}>{s.support.cardOwned(stall.cards[kind])}</span>
                     </div>
-                  </div>
-                  <p className={styles.upgradeDesc}>{s.support.cardDescs[kind]}</p>
-                  <div className={styles.buyRow}>
-                    <GoldButton disabled={coins < price} onClick={() => handleBuyCard(kind)}>
-                      {coins < price ? s.marketNotEnoughXu : `${s.support.cardBuy} · ${price} xu`}
-                    </GoldButton>
-                  </div>
-                </article>
-              );
-            })}
+                  </article>
+                );
+              })}
 
-            {DECOR_KINDS.map((kind) => {
-              const price = DECOR_PRICES[kind];
-              const owned = stall.decorIds.includes(kind);
-              return (
-                <article key={`decor-${kind}`} className={styles.item}>
-                  <div className={styles.itemHead}>
-                    <span className={styles.itemEmoji} aria-hidden>
-                      {DECOR_EMOJI[kind]}
-                    </span>
-                    <div className={styles.itemNames}>
-                      <strong>{s.support.decorNames[kind]}</strong>
+              {DECOR_KINDS.map((kind) => {
+                const price = DECOR_PRICES[kind];
+                const owned = stall.decorIds.includes(kind);
+                return (
+                  <article key={`decor-${kind}`} className={styles.item}>
+                    <div className={styles.itemHead}>
+                      <span className={styles.itemEmoji} aria-hidden>
+                        {DECOR_EMOJI[kind]}
+                      </span>
+                      <div className={styles.itemNames}>
+                        <strong>{s.support.decorNames[kind]}</strong>
+                      </div>
                     </div>
-                  </div>
-                  <p className={styles.upgradeDesc}>{s.support.decorDescs[kind]}</p>
-                  <div className={styles.buyRow}>
-                    {owned ? (
-                      <span className={styles.maxedNote}>✓ {s.support.decorOwned}</span>
-                    ) : (
-                      <GoldButton disabled={coins < price} onClick={() => handleBuyDecor(kind)}>
-                        {coins < price ? s.marketNotEnoughXu : `${s.support.decorBuy} · ${price} xu`}
-                      </GoldButton>
-                    )}
-                  </div>
-                </article>
-              );
-            })}
+                    <p className={styles.upgradeDesc}>{s.support.decorDescs[kind]}</p>
+                    <div className={styles.buyRow}>
+                      {owned ? (
+                        <span className={styles.maxedNote}>✓ {s.support.decorOwned}</span>
+                      ) : (
+                        <GoldButton disabled={coins < price} onClick={() => handleBuyDecor(kind)}>
+                          {coins < price ? s.marketNotEnoughXu : `${s.support.decorBuy} · ${price} xu`}
+                        </GoldButton>
+                      )}
+                    </div>
+                  </article>
+                );
+              })}
 
-            <article className={styles.item}>
-              <div className={styles.itemHead}>
-                <div className={styles.itemNames}>
-                  <strong>{s.support.adTitle}</strong>
+              <article className={styles.item}>
+                <div className={styles.itemHead}>
+                  <div className={styles.itemNames}>
+                    <strong>{s.support.adTitle}</strong>
+                  </div>
                 </div>
-              </div>
-              <p className={styles.upgradeDesc}>{s.support.adDesc}</p>
-              {stall.adUntil > Date.now() ? (
-                <p className={styles.adActiveNote}>{s.support.adActiveNote}</p>
-              ) : null}
-              <div className={styles.buyRow}>
-                <GoldButton disabled={coins < AD_PRICE} onClick={handleBuyAd}>
-                  {coins < AD_PRICE ? s.marketNotEnoughXu : s.support.adBuy}
-                </GoldButton>
-              </div>
-            </article>
-          </div>
+                <p className={styles.upgradeDesc}>{s.support.adDesc}</p>
+                {stall.adUntil > Date.now() ? (
+                  <p className={styles.adActiveNote}>{s.support.adActiveNote}</p>
+                ) : null}
+                <div className={styles.buyRow}>
+                  <GoldButton disabled={coins < AD_PRICE} onClick={handleBuyAd}>
+                    {coins < AD_PRICE ? s.marketNotEnoughXu : s.support.adBuy}
+                  </GoldButton>
+                </div>
+              </article>
+            </div>
+          </WoodPanel>
         </section>
       </div>
     </div>
