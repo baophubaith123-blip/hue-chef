@@ -7,7 +7,7 @@ import { useAppeals } from '@/contexts/AppealContext';
 import { useSupport } from '@/contexts/SupportContext';
 import { useTranslation } from '@/i18n/useTranslation';
 
-import styles from '@/pages/common/RoleShell.module.css';
+import styles from '@/pages/support/SupportShell.module.css';
 
 interface SupportShellProps {
   children: ReactNode;

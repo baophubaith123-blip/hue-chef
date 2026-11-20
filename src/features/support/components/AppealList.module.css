@@ -24,9 +24,9 @@
   padding: 0.6rem 0.75rem;
   font-size: 0.75rem;
   font-weight: 600;
-  color: var(--color-text-muted);
-  background: var(--color-surface-muted);
-  border-radius: var(--radius-md);
+  color: var(--td-paper-text-muted);
+  background: var(--td-paper-deep);
+  border-radius: var(--td-radius-paper);
   align-items: center;
 }
 
@@ -50,16 +50,17 @@
   gap: 0.65rem;
   align-items: center;
   padding: 0.75rem 0.85rem;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
+  background: var(--td-paper);
+  border: 1.5px solid var(--td-paper-edge);
+  border-left: 4px solid var(--td-brick);
+  border-radius: var(--td-radius-paper);
   cursor: pointer;
-  transition: border-color 120ms ease, transform 120ms ease, box-shadow 120ms ease;
+  transition: border-color 120ms ease, transform 120ms ease, box-shadow 120ms ease, background 120ms ease;
 }
 
 .row:hover {
-  border-color: var(--color-primary);
-  box-shadow: var(--shadow-sm);
+  background: var(--td-brick-soft);
+  box-shadow: var(--td-shadow-paper);
   transform: translateY(-1px);
 }
 
@@ -71,43 +72,35 @@
 .typeChip {
   display: inline-block;
   padding: 0.15rem 0.5rem;
-  border-radius: 999px;
+  border-radius: var(--td-radius-full);
   font-size: 0.7rem;
   font-weight: 600;
   white-space: nowrap;
 }
 
 .type_ban {
-  background: var(--color-danger-soft);
-  color: var(--color-danger);
-}
-
-/* Dark mode: the ban chip sits on the table's dark surface; #ef4444 on
-   its own dark red wash measured 3.43:1 — a lighter red of the same
-   family reaches ~5.9:1 (H10 contrast pass). */
-[data-theme='dark'] .type_ban {
-  background: rgba(239, 68, 68, 0.22);
-  color: #fca5a5;
+  background: rgba(180, 35, 24, 0.08);
+  color: var(--td-danger);
 }
 
 .type_warning {
-  background: var(--color-warning-soft);
-  color: var(--color-warning);
+  background: rgba(154, 91, 0, 0.12);
+  color: var(--td-warning-strong);
 }
 
 .type_account {
-  background: var(--color-primary-soft);
-  color: var(--color-primary);
+  background: var(--td-brick-soft);
+  color: var(--td-brick);
 }
 
 .type_recipe {
-  background: rgba(232, 69, 10, 0.14);
-  color: var(--color-accent);
+  background: rgba(233, 162, 59, 0.15);
+  color: var(--td-gold-text);
 }
 
 .type_other {
-  background: var(--color-surface-muted);
-  color: var(--color-text-muted);
+  background: var(--td-paper-deep);
+  color: var(--td-paper-text-muted);
 }
 
 .appellantCell {
@@ -120,26 +113,30 @@
 .avatar {
   width: 36px;
   height: 36px;
-  border-radius: 999px;
-  border: 1px solid var(--color-border);
-  background: var(--color-surface-muted);
+  border-radius: var(--td-radius-full);
+  border: 1px solid var(--td-paper-edge);
+  background: var(--td-paper-deep);
   flex-shrink: 0;
 }
 
 .avatarFallback {
   width: 36px;
   height: 36px;
-  border-radius: 999px;
-  /* Pinned brick: --color-primary flips to light #e8884d in dark mode,
-     where white initials measured 2.61:1 (H10 contrast pass). */
-  background: #b03e26;
-  color: var(--color-primary-contrast);
+  border-radius: var(--td-radius-full);
+  background: var(--td-brick);
+  color: var(--td-cream);
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 700;
   font-size: 0.85rem;
   flex-shrink: 0;
+}
+
+/* Dark theme: the brick token flips light, so the initials switch to
+   deep plum to stay readable on it. */
+[data-theme='dark'] .avatarFallback {
+  color: var(--td-plum-deep);
 }
 
 .appellantInfo {
@@ -152,7 +149,7 @@
 .appellantName {
   font-weight: 600;
   font-size: 0.85rem;
-  color: var(--color-text);
+  color: var(--td-paper-text);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -160,7 +157,7 @@
 
 .subjectLine {
   font-size: 0.75rem;
-  color: var(--color-text-muted);
+  color: var(--td-paper-text-muted);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -174,42 +171,42 @@
 .statusChip {
   display: inline-block;
   padding: 0.15rem 0.55rem;
-  border-radius: 999px;
+  border-radius: var(--td-radius-full);
   font-size: 0.7rem;
   font-weight: 600;
 }
 
 .status_open {
-  background: var(--color-warning-soft);
-  color: var(--color-warning);
+  background: rgba(154, 91, 0, 0.12);
+  color: var(--td-warning-strong);
 }
 
 .status_recommended {
-  background: var(--color-primary-soft);
-  color: var(--color-primary);
+  background: rgba(233, 162, 59, 0.15);
+  color: var(--td-gold-text);
 }
 
 .status_rejected {
-  background: var(--color-danger-soft);
-  color: var(--color-danger);
+  background: rgba(180, 35, 24, 0.08);
+  color: var(--td-danger);
 }
 
 .status_resolved {
-  background: var(--color-success-soft);
-  color: var(--color-success);
+  background: rgba(21, 128, 61, 0.10);
+  color: var(--td-success-strong);
 }
 
 .createdCell {
   font-size: 0.75rem;
-  color: var(--color-text-muted);
+  color: var(--td-paper-text-muted);
 }
 
 .viewButton {
   border: none;
-  background: var(--color-accent-soft);
-  color: var(--gold-text, #8a5a00);
+  background: rgba(233, 162, 59, 0.15);
+  color: var(--td-gold-text);
   padding: 0.3rem 0.65rem;
-  border-radius: var(--radius-md);
+  border-radius: var(--td-radius-paper);
   font-size: 0.75rem;
   font-weight: 600;
   cursor: pointer;
@@ -218,5 +215,6 @@
 }
 
 .viewButton:hover {
-  background: rgba(232, 69, 10, 0.25);
+  background: var(--td-gold);
+  color: var(--td-plum-deep);
 }

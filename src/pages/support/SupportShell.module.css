@@ -1,0 +1,110 @@
+/* Support shell — "Quầy hỗ trợ": paper plaque with a brick frame.
+   Restrained work-area styling on Theme D tokens; no game-scene art. */
+.layout {
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 2.5rem;
+}
+
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+  background: var(--td-paper);
+  border: 2px solid var(--td-brick);
+  border-bottom: 4px solid var(--td-brick);
+  border-radius: var(--td-radius-wood);
+  padding: 1rem 1.25rem;
+  box-shadow: var(--td-shadow-paper);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.brandAccent {
+  font-size: 1.6rem;
+  line-height: 1;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.5rem;
+  color: var(--td-brick);
+  font-family: var(--td-font-display);
+}
+
+/* Dark theme: --td-brick flips to a light tone, which washes out on
+   the always-light paper plaque — pin the deep brick for the title. */
+[data-theme='dark'] .title {
+  color: #b03e26;
+}
+
+.nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  align-items: center;
+}
+
+.navLink {
+  font-size: 0.9rem;
+  text-decoration: none;
+  color: var(--td-paper-text-muted);
+  padding: 0.35rem 0.55rem;
+  border-radius: var(--td-radius-button);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.navLinkCta {
+  background: var(--td-gold);
+  color: var(--td-plum-deep);
+  font-weight: 600;
+  border-radius: var(--td-radius-button);
+  transition: background 150ms ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.navLinkCta:hover {
+  background: var(--td-gold-deep);
+}
+
+.navLinkActive {
+  background: var(--td-brick);
+  color: var(--td-cream);
+  font-weight: 600;
+}
+
+/* Dark theme: the active chip uses the light brick token, so its label
+   switches to deep plum to stay readable. */
+[data-theme='dark'] .navLinkActive {
+  color: var(--td-plum-deep);
+}
+
+.badgeAccent {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.25rem;
+  height: 1.25rem;
+  padding: 0 0.35rem;
+  border-radius: var(--td-radius-full);
+  background: var(--td-brick);
+  color: var(--td-cream);
+  font-size: 0.7rem;
+  font-weight: 700;
+  margin-left: 0.35rem;
+}
+
+[data-theme='dark'] .badgeAccent {
+  color: var(--td-plum-deep);
+}

@@ -15,7 +15,7 @@
 .title {
   margin: 0;
   font-size: 1.3rem;
-  color: var(--td-page-text, #3b2a20);
+  color: var(--td-page-text);
 }
 
 .layout {
@@ -33,10 +33,11 @@
 }
 
 .threadListCol {
-  background: var(--td-paper, #fff6e0);
-  color: var(--td-paper-text, #43301b);
-  border: 1px solid var(--td-paper-edge, #e8d5ae);
-  border-radius: var(--td-radius-paper, 12px);
+  background: var(--td-paper);
+  color: var(--td-paper-text);
+  border: 1.5px solid var(--td-paper-edge);
+  border-top: 4px solid var(--td-brick);
+  border-radius: var(--td-radius-paper);
   padding: 0.5rem;
   overflow: hidden;
   display: flex;
@@ -65,7 +66,7 @@
   padding: 0.55rem 0.65rem;
   border: 1px solid transparent;
   background: transparent;
-  border-radius: var(--td-radius-button, 10px);
+  border-radius: var(--td-radius-button);
   color: inherit;
   text-align: left;
   font-family: inherit;
@@ -74,20 +75,20 @@
 }
 
 .threadItem:hover {
-  background: var(--td-paper-deep, #f7e8c6);
+  background: var(--td-paper-deep);
 }
 
 .threadItemActive {
-  background: var(--td-brick-soft, rgba(176, 62, 38, 0.12));
-  border-color: var(--td-plum, #4a1525);
+  background: var(--td-brick-soft);
+  border-color: var(--td-plum);
 }
 
 .avatar {
   width: 34px;
   height: 34px;
-  border-radius: 999px;
-  background: var(--td-plum, #4a1525);
-  color: var(--td-cream, #faf5ef);
+  border-radius: var(--td-radius-full);
+  background: var(--td-plum);
+  color: var(--td-cream);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -112,14 +113,14 @@
 
 .threadMeta {
   font-size: 0.7rem;
-  color: var(--td-paper-text-muted, #7a5c38);
+  color: var(--td-paper-text-muted);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
 .tagClosed {
-  color: var(--td-paper-text-muted, #7a5c38);
+  color: var(--td-paper-text-muted);
   font-weight: 500;
 }
 
@@ -127,9 +128,9 @@
   min-width: 1.1rem;
   height: 1.1rem;
   padding: 0 0.3rem;
-  border-radius: 999px;
-  background: var(--td-gold, #e9a23b);
-  color: var(--td-ink, #4a2c14);
+  border-radius: var(--td-radius-full);
+  background: var(--td-gold);
+  color: var(--td-ink);
   font-size: 0.65rem;
   font-weight: 700;
   display: inline-flex;
@@ -144,10 +145,10 @@
 }
 
 .banBanner {
-  background: var(--td-brick-soft, rgba(176, 62, 38, 0.12));
-  border: 1.5px solid var(--td-brick, #b03e26);
-  color: var(--td-danger, #b42318);
-  border-radius: 10px;
+  background: var(--td-brick-soft);
+  border: 1.5px solid var(--td-brick);
+  color: var(--td-danger);
+  border-radius: var(--td-radius-button);
   padding: 0.75rem 1rem;
   margin-bottom: 1rem;
   font-size: 0.9rem;

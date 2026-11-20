@@ -3,10 +3,11 @@
   flex-direction: column;
   height: 100%;
   min-height: 520px;
-  border-radius: var(--td-radius-paper);
+  border-radius: var(--td-radius-wood);
   background: var(--td-paper);
   color: var(--td-paper-text);
-  border: 1px solid var(--td-paper-edge);
+  border: 1.5px solid var(--td-paper-edge);
+  box-shadow: var(--td-shadow-paper);
   overflow: hidden;
 }
 
@@ -22,8 +23,9 @@
 
 .chatHeader {
   padding: 0.85rem 1rem;
-  border-bottom: 1px solid var(--td-paper-edge);
-  background: var(--td-paper-deep);
+  border-bottom: 1px solid var(--td-brick);
+  background: var(--td-brick);
+  color: var(--td-cream);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -32,14 +34,24 @@
 .title {
   margin: 0;
   font-size: 1rem;
-  color: var(--td-paper-text);
+  color: var(--td-cream);
 }
 
 .sub {
   margin: 0;
   font-size: 0.75rem;
-  color: var(--td-paper-text-muted);
+  color: var(--td-cream-muted);
   margin-top: 0.15rem;
+}
+
+/* Dark theme: the header band uses the light brick token, so its text
+   switches to deep plum to stay readable. */
+[data-theme='dark'] .title {
+  color: var(--td-plum-deep);
+}
+
+[data-theme='dark'] .sub {
+  color: var(--td-plum-deep);
 }
 
 .messages {
@@ -80,7 +92,7 @@
 .senderAvatar {
   width: 32px;
   height: 32px;
-  border-radius: 999px;
+  border-radius: var(--td-radius-full);
   background: var(--td-plum);
   color: var(--td-cream);
   font-weight: 700;
@@ -102,9 +114,11 @@
   box-shadow: 0 1px 2px rgba(74, 21, 37, 0.08);
 }
 
+/* In the support area "me" is the support agent: brick-tinted bubble.
+   The player's bubbles stay on the deep paper tone. */
 .meBubble {
-  background: var(--td-gold);
-  color: var(--td-ink);
+  background: var(--td-brick-soft);
+  color: var(--td-paper-text);
   border-bottom-right-radius: 4px;
 }
 
@@ -174,9 +188,9 @@
 .input {
   resize: vertical;
   padding: 0.55rem 0.7rem;
-  border: 1px solid var(--td-paper-edge);
+  border: 1.5px solid var(--td-paper-edge);
   border-radius: var(--td-radius-button);
-  background: #fffdf4;
+  background: var(--td-paper);
   color: var(--td-paper-text);
   font-family: inherit;
   font-size: 0.88rem;
@@ -185,9 +199,9 @@
 }
 
 .input:focus {
-  outline: 2px solid var(--td-brick);
-  outline-offset: -1px;
-  border-color: var(--td-brick);
+  outline: none;
+  border-color: var(--td-gold-deep);
+  box-shadow: 0 0 0 2px rgba(233, 162, 59, 0.35);
 }
 
 .composerActions {
@@ -205,7 +219,7 @@
   padding: 0.25rem 0.45rem 0.25rem 0.6rem;
   background: var(--td-brick-soft);
   color: var(--td-plum);
-  border-radius: 999px;
+  border-radius: var(--td-radius-full);
   font-size: 0.75rem;
   font-weight: 500;
 }
@@ -261,26 +275,38 @@
 
 .select {
   padding: 0.4rem 0.6rem;
-  border: 1px solid var(--td-paper-edge);
+  border: 1.5px solid var(--td-paper-edge);
   border-radius: var(--td-radius-button);
-  background: #fffdf4;
+  background: var(--td-paper);
   color: var(--td-paper-text);
   font-size: 0.85rem;
   font-family: inherit;
 }
 
+.select:focus {
+  outline: none;
+  border-color: var(--td-gold-deep);
+  box-shadow: 0 0 0 2px rgba(233, 162, 59, 0.35);
+}
+
 .textarea {
   width: 100%;
   padding: 0.5rem 0.7rem;
-  border: 1px solid var(--td-paper-edge);
+  border: 1.5px solid var(--td-paper-edge);
   border-radius: var(--td-radius-button);
-  background: #fffdf4;
+  background: var(--td-paper);
   color: var(--td-paper-text);
   font-family: inherit;
   font-size: 0.85rem;
   line-height: 1.4;
   resize: vertical;
   min-height: 72px;
+}
+
+.textarea:focus {
+  outline: none;
+  border-color: var(--td-gold-deep);
+  box-shadow: 0 0 0 2px rgba(233, 162, 59, 0.35);
 }
 
 .appealActions {
@@ -291,8 +317,8 @@
 
 .success {
   padding: 0.5rem 0.7rem;
-  background: rgba(21, 128, 61, 0.12);
-  color: var(--td-success);
+  background: rgba(21, 128, 61, 0.10);
+  color: var(--td-success-strong);
   border-radius: var(--td-radius-button);
   font-size: 0.82rem;
   font-weight: 500;

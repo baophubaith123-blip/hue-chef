@@ -13,19 +13,19 @@
 .title {
   margin: 0;
   font-size: 1.5rem;
-  color: var(--td-page-text, #3b2a20);
+  color: var(--td-page-text);
 }
 
 .greeting {
   margin: 0;
   font-size: 0.9rem;
-  color: var(--td-page-text-muted, #7a6455);
+  color: var(--td-page-text-muted);
 }
 
 .introText {
   margin: 0;
   font-size: 0.9rem;
-  color: var(--td-page-text-muted, #7a6455);
+  color: var(--td-page-text-muted);
   line-height: 1.5;
 }
 
@@ -37,10 +37,11 @@
 
 .stat {
   padding: 0.85rem 1rem;
-  border-radius: var(--td-radius-paper, 12px);
-  background: var(--td-paper, #fff6e0);
-  color: var(--td-paper-text, #43301b);
-  border: 1px solid var(--td-paper-edge, #e8d5ae);
+  border-radius: var(--td-radius-paper);
+  background: var(--td-paper);
+  color: var(--td-paper-text);
+  border: 1.5px solid var(--td-paper-edge);
+  border-top: 4px solid var(--td-brick);
   display: flex;
   flex-direction: column;
   gap: 0.2rem;
@@ -53,13 +54,13 @@
 }
 
 .statAccent {
-  background: linear-gradient(135deg, var(--td-gold, #e9a23b), var(--td-gold-deep, #c97a1f));
-  color: var(--td-ink, #4a2c14);
+  background: linear-gradient(135deg, var(--td-gold), var(--td-gold-deep));
+  color: var(--td-ink);
   border: none;
 }
 
 .statAccent .statLabel {
-  color: var(--td-ink, #4a2c14);
+  color: var(--td-ink);
 }
 
 .statValue {
@@ -71,7 +72,7 @@
 
 .statLabel {
   font-size: 0.78rem;
-  color: var(--td-paper-text-muted, #7a5c38);
+  color: var(--td-paper-text-muted);
   font-weight: 500;
 }
 
@@ -84,7 +85,7 @@
 .muted {
   margin: 0;
   padding: 0.5rem 0;
-  color: var(--td-paper-text-muted, #7a5c38);
+  color: var(--td-paper-text-muted);
   font-size: 0.88rem;
 }
 
@@ -103,25 +104,25 @@
   gap: 0.65rem;
   align-items: center;
   padding: 0.55rem 0.65rem;
-  border: 1px solid var(--td-paper-edge, #e8d5ae);
-  border-radius: var(--td-radius-button, 10px);
-  background: var(--td-paper-deep, #f7e8c6);
+  border: 1px solid var(--td-paper-edge);
+  border-radius: var(--td-radius-button);
+  background: var(--td-paper-deep);
   text-decoration: none;
   color: inherit;
   transition: border-color 120ms ease, transform 120ms ease;
 }
 
 .threadLink:hover {
-  border-color: var(--td-plum, #4a1525);
+  border-color: var(--td-wood-light);
   transform: translateX(2px);
 }
 
 .threadAvatar {
   width: 34px;
   height: 34px;
-  border-radius: 999px;
-  background: var(--td-plum, #4a1525);
-  color: var(--td-cream, #faf5ef);
+  border-radius: var(--td-radius-full);
+  background: var(--td-plum);
+  color: var(--td-cream);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -139,7 +140,7 @@
 
 .threadSubject {
   font-size: 0.88rem;
-  color: var(--td-paper-text, #43301b);
+  color: var(--td-paper-text);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -147,14 +148,14 @@
 
 .threadMeta {
   font-size: 0.72rem;
-  color: var(--td-paper-text-muted, #7a5c38);
+  color: var(--td-paper-text-muted);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
 .chev {
-  color: var(--td-paper-text-muted, #7a5c38);
+  color: var(--td-paper-text-muted);
   font-size: 1.5rem;
   line-height: 1;
 }
@@ -164,5 +165,5 @@
   justify-content: flex-end;
   margin-top: 0.75rem;
   padding-top: 0.5rem;
-  border-top: 1px dashed var(--td-paper-edge, #e8d5ae);
+  border-top: 1px dashed var(--td-paper-edge);
 }
