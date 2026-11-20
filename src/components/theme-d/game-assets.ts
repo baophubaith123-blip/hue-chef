@@ -19,6 +19,17 @@ import garlandBottom from '@/assets/theme-d/game/garland-bottom.webp';
 import signHero from '@/assets/theme-d/game/sign-hero.webp';
 import btnPlayHero from '@/assets/theme-d/game/btn-play-hero.webp';
 import tagHero from '@/assets/theme-d/game/tag-hero.webp';
+// Án A "Bảng gỗ treo" (duyệt 2026-11-20): cắt trực tiếp từ bản vẽ án A —
+// hai bảng hoàn chỉnh, biển hiệu trống, nút mũi tên, plaque số bước, dây
+// thừng và vân gỗ (xem ~/workspace/hue-chef-proof/panel-assets/extract.py).
+import panelBoard from '@/assets/theme-d/game/panel-board.webp';
+import panelBoardSteps from '@/assets/theme-d/game/panel-board-steps.webp';
+import signBlank from '@/assets/theme-d/game/sign-blank.webp';
+import plaqueStep from '@/assets/theme-d/game/plaque-step.webp';
+import btnArrowLeft from '@/assets/theme-d/game/btn-arrow-left.webp';
+import btnArrowRight from '@/assets/theme-d/game/btn-arrow-right.webp';
+import rope from '@/assets/theme-d/game/rope.webp';
+import woodTexture from '@/assets/theme-d/game/wood-texture.webp';
 
 import noiNoiPot from '@/assets/theme-d/noi-noi-flat/noinoi-pot.webp';
 import noiNoiWave from '@/assets/theme-d/noi-noi-flat/noinoi-wave.webp';
@@ -42,6 +53,14 @@ export const GAME_ART = {
   signHero,
   btnPlayHero,
   tagHero,
+  panelBoard,
+  panelBoardSteps,
+  signBlank,
+  plaqueStep,
+  btnArrowLeft,
+  btnArrowRight,
+  rope,
+  woodTexture,
 } as const;
 
 export type NoiNoiFlatPose = 'pot' | 'wave' | 'cook' | 'happy' | 'sad' | 'sleep';
