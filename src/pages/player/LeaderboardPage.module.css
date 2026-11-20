@@ -115,11 +115,16 @@
 /* ---------- Rank list panel inside r4-rank-list-frame ---------- */
 
 .rankPanel {
+  position: relative;
   display: flex;
   flex-direction: column;
   background: url('../../assets/theme-d/game/r4-rank-list-frame.webp') center / 100% 100%
     no-repeat;
-  padding: 19% 8.5% 13%;
+  /* The frame art's interior is transparent — without this base the
+     courtyard scene shows through between rows; the approved drawing
+     (83b061d2) has a solid parchment board there. */
+  background-color: #f6dcab;
+  padding: 19% 8.5% 17%;
   animation: boardIn 0.7s ease-out 1;
   transform-origin: 50% -20px;
 }
@@ -193,11 +198,23 @@
 /* ---------- Pagination: round wooden buttons (r4-page-btn) ---------- */
 
 .pagination {
+  /* The frame art carries a PAINTED page-button strip along its bottom
+     edge (fake ‹ 1 2 3 5 › + "Trang 2/5" baked into the drawing). The
+     real nav is laid over that strip as an opaque band of the same tan,
+     so only the real wooden buttons show. */
+  position: absolute;
+  left: 1.5%;
+  right: 7.5%;
+  bottom: 0.5%;
+  height: 13.5%;
+  min-height: 54px;
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 0.45rem;
-  padding-top: 0.7rem;
+  background: linear-gradient(180deg, #f7cf92, #eeb96f);
+  border-top: 3px solid #9c6527;
+  border-radius: 6px;
 }
 
 .pageBtn {
@@ -224,6 +241,6 @@
 @media (max-width: 720px) {
   .container { padding: 1rem 0.8rem 1.1rem; }
   .boardLayout { grid-template-columns: 1fr; }
-  .rankPanel { padding: 21% 9% 14%; min-height: 430px; }
+  .rankPanel { padding: 21% 9% 18%; min-height: 430px; }
   .title { font-size: 1.35rem; }
 }
