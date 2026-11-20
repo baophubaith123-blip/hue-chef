@@ -326,14 +326,14 @@
     width: 100%;
     min-width: 0;
     aspect-ratio: auto;
-    height: 104px;
+    height: 122px;
   }
 
   .journeyScrollText {
-    top: 8%;
-    bottom: 16%;
-    font-size: 0.85rem;
-    line-height: 1.35;
+    top: 7%;
+    bottom: 14%;
+    font-size: 0.8rem;
+    line-height: 1.3;
   }
 
   .journeySide {
@@ -1173,7 +1173,9 @@
 }
 
 /* Form viết bình luận nằm phẳng trên trang giấy của sổ, không còn
-   hộp trắng kiểu web nổi lên trên (chỉ giữ ô nhập liệu có nền riêng). */
+   hộp trắng kiểu web nổi lên trên (chính thẻ section của
+   RecipeComments sơn nền thẻ — làm phẳng cả section lẫn form). */
+.commentBookPage > section,
 .commentBookPage > section > div {
   background: transparent;
   border: none;
