@@ -18,9 +18,8 @@ import {
   type ToastTone,
 } from '@/components/theme-d';
 import r3Abacus from '@/assets/theme-d/game/r3-abacus.webp';
-import r3Awning from '@/assets/theme-d/game/r3-awning.webp';
-import r3Chest from '@/assets/theme-d/game/r3-chest.webp';
-import r3Clip from '@/assets/theme-d/game/r3-clip.webp';
+import r4StallAwning from '@/assets/theme-d/game/r4-stall-awning.webp';
+import r4StallOrderString from '@/assets/theme-d/game/r4-stall-order-string.webp';
 import { SCENES } from '@/components/theme-d/assets';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRecipes } from '@/contexts/RecipeContext';
@@ -418,6 +417,15 @@ export default function StallPage() {
       <div className={styles.stageWrap}>
         <div className={styles.stage}>
           <img className={styles.scene} src={SCENES['canh-quay']} alt="" draggable={false} />
+          {/* Đợt 4 backdrop (ảnh duyệt 996715a4): the painted base keeps
+              the counter/tables; the stall's own dressing is rebuilt from
+              the approved cut assets — striped awning on top, a repeating
+              brick band behind the counter, the order-ticket string
+              across the wall. Pure backdrop layers: every gameplay anchor
+              (sign, stove, customers, buttons) stays exactly in place. */}
+          <div className={styles.sceneBrick} aria-hidden="true" />
+          <img className={styles.sceneAwning} src={r4StallAwning} alt="" draggable={false} aria-hidden="true" />
+          <img className={styles.sceneOrders} src={r4StallOrderString} alt="" draggable={false} aria-hidden="true" />
           {/* ONE scene-layer system (mục 5.5), painted back to front:
               base vignette → evening dusk (Gói H8) → festival night
               (Gói H7, replaces the dusk) → rush-hour warmth (Gói H5)
@@ -1081,8 +1089,15 @@ export default function StallPage() {
 
       {/* Menu board panel: licensed dishes + the on-sale curation of
           the stall level (Gói H6, mục 8.3). */}
-      <Modal open={panel === 'menu'} title={s.menuTitle} onClose={() => setPanel(null)} closeLabel={s.summaryClose}>
-        <img className={styles.menuAwning} src={r3Awning} alt="" aria-hidden="true" />
+      <Modal
+        open={panel === 'menu'}
+        title={s.menuTitle}
+        onClose={() => setPanel(null)}
+        closeLabel={s.summaryClose}
+        shellClass={styles.menuShell}
+        headerClass={styles.menuHead}
+        bodyClass={styles.menuBody}
+      >
         {sellable.length === 0 ? (
           <p>{s.menuEmpty}</p>
         ) : (
@@ -1117,8 +1132,15 @@ export default function StallPage() {
       </Modal>
 
       {/* Pantry panel. */}
-      <Modal open={panel === 'pantry'} title={s.pantryTitle} onClose={() => setPanel(null)} closeLabel={s.summaryClose}>
-        <img className={styles.pantryChest} src={r3Chest} alt="" aria-hidden="true" />
+      <Modal
+        open={panel === 'pantry'}
+        title={s.pantryTitle}
+        onClose={() => setPanel(null)}
+        closeLabel={s.summaryClose}
+        shellClass={styles.chestShell}
+        headerClass={styles.chestHead}
+        bodyClass={styles.chestBody}
+      >
         <div className={styles.kitchenBox}>
           <strong>🍳 {s.kitchenTitle}</strong>
           {(['knife', 'stove', 'pot'] as const).map((kind) => (
@@ -1241,9 +1263,17 @@ export default function StallPage() {
       </Modal>
 
       {/* Staff panel (Gói H6, mục 8.1): five roles, ranks, wages, training. */}
-      <Modal open={panel === 'staff'} title={sup.staffTitle} onClose={() => setPanel(null)} closeLabel={s.summaryClose}>
+      <Modal
+        open={panel === 'staff'}
+        title={sup.staffTitle}
+        onClose={() => setPanel(null)}
+        closeLabel={s.summaryClose}
+        shellClass={styles.clipShell}
+        headerClass={styles.clipHead}
+        bodyClass={styles.clipBody}
+        titleClass={styles.clipTitle}
+      >
         <div className={styles.clipboard}>
-          <img className={styles.clipboardClip} src={r3Clip} alt="" aria-hidden="true" />
         {stallLevel < 2 ? (
           <p>{sup.staffLocked(2)}</p>
         ) : (
@@ -1516,27 +1546,32 @@ export default function StallPage() {
         title={s.summaryTitle}
         onClose={handleDismissSummary}
         closeLabel={s.summaryClose}
+        shellClass={styles.ledgerShell}
+        headerClass={styles.ledgerHead}
+        bodyClass={styles.ledgerBody}
       >
         {stall.lastSummary ? (
-          <div className={`${styles.summary} ${styles.ledger}`}>
-            <img className={styles.ledgerAbacus} src={r3Abacus} alt="" aria-hidden="true" />
-            <p>💰 {s.summaryRevenue}: <strong>{stall.lastSummary.revenueXu} xu</strong></p>
-            <p>♦ {s.summaryCok}: <strong>{stall.lastSummary.revenueCok} cok</strong></p>
-            {stall.lastSummary.festivalCokBonus ? (
-              <p>{dict.events.festival.summaryBonus(stall.lastSummary.festivalCokBonus)}</p>
-            ) : null}
-            <p>✅ {s.summaryServedOk}: {stall.lastSummary.servedOk}</p>
-            <p>🟡 {s.summaryServedPoor}: {stall.lastSummary.servedPoor}</p>
-            <p>🚶 {s.summaryLost}: {stall.lastSummary.lost}</p>
-            <p>⌛ {s.summaryUnserved}: {stall.lastSummary.unserved}</p>
-            <p>🗑️ {s.summarySpoiled}: {stall.lastSummary.spoiledBatches}</p>
-            <p>⭐ {s.summaryExp}: +{stall.lastSummary.expGained}</p>
-            <p>
-              {stall.lastSummary.starsAfter > stall.lastSummary.starsBefore
-                ? s.summaryStarsUp(stall.lastSummary.starsAfter)
-                : s.summaryStarsSame(stall.lastSummary.starsAfter)}
-            </p>
-            <GoldButton onClick={handleDismissSummary}>{s.summaryClose}</GoldButton>
+          <div className={styles.ledgerBook}>
+            <div className={styles.ledgerLines}>
+              <p>💰 {s.summaryRevenue}: <strong>{stall.lastSummary.revenueXu} xu</strong></p>
+              <p>♦ {s.summaryCok}: <strong>{stall.lastSummary.revenueCok} cok</strong></p>
+              {stall.lastSummary.festivalCokBonus ? (
+                <p>{dict.events.festival.summaryBonus(stall.lastSummary.festivalCokBonus)}</p>
+              ) : null}
+              <p>✅ {s.summaryServedOk}: {stall.lastSummary.servedOk}</p>
+              <p>🟡 {s.summaryServedPoor}: {stall.lastSummary.servedPoor}</p>
+              <p>🚶 {s.summaryLost}: {stall.lastSummary.lost}</p>
+              <p>⌛ {s.summaryUnserved}: {stall.lastSummary.unserved}</p>
+              <p>🗑️ {s.summarySpoiled}: {stall.lastSummary.spoiledBatches}</p>
+              <p>⭐ {s.summaryExp}: +{stall.lastSummary.expGained}</p>
+              <p>
+                {stall.lastSummary.starsAfter > stall.lastSummary.starsBefore
+                  ? s.summaryStarsUp(stall.lastSummary.starsAfter)
+                  : s.summaryStarsSame(stall.lastSummary.starsAfter)}
+              </p>
+              <GoldButton onClick={handleDismissSummary}>{s.summaryClose}</GoldButton>
+            </div>
+            <img className={styles.ledgerAbacusSide} src={r3Abacus} alt="" aria-hidden="true" />
           </div>
         ) : null}
       </Modal>
