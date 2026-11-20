@@ -244,12 +244,13 @@
 }
 
 .signDauHat {
-  background:
-    repeating-linear-gradient(45deg, rgba(160, 118, 52, 0.35) 0 6px, transparent 6px 12px),
-    repeating-linear-gradient(-45deg, rgba(160, 118, 52, 0.35) 0 6px, transparent 6px 12px),
-    linear-gradient(180deg, #e6c98c 0%, #d9b877 100%);
+  background-color: #f2daa2;
+  background-image:
+    repeating-linear-gradient(45deg, rgba(160, 118, 52, 0.16) 0 6px, transparent 6px 12px),
+    repeating-linear-gradient(-45deg, rgba(160, 118, 52, 0.16) 0 6px, transparent 6px 12px),
+    linear-gradient(180deg, #f2daa2 0%, #e7cb8a 100%);
   border-color: #a07634;
-  color: #5a3d16;
+  color: #472d0c;
 }
 
 .signOther {
@@ -259,15 +260,15 @@
 }
 
 .signUpgrade {
-  background: linear-gradient(180deg, #c9973f 0%, #9a6d1d 100%);
+  background: linear-gradient(180deg, #d9ab4d 0%, #b5852c 100%);
   border-color: #6e4d0e;
-  color: #fff6dd;
-  text-shadow: 0 1px 0 rgba(60, 40, 4, 0.55);
+  color: #38230a;
+  text-shadow: 0 1px 0 rgba(255, 240, 200, 0.45);
 }
 
 .signSupport {
-  background: linear-gradient(180deg, #c4502f 0%, #99331e 100%);
-  border-color: #6e2113;
+  background: linear-gradient(180deg, #a83c20 0%, #7e2a16 100%);
+  border-color: #5c1d0f;
   color: #ffe9c9;
   text-shadow: 0 2px 0 rgba(50, 12, 4, 0.5);
 }
@@ -458,8 +459,12 @@
 
 .upgradeNote {
   margin: 0 0 10px;
+  padding: 7px 10px;
+  border-radius: 8px;
+  background: #f8ecd4;
+  border: 1px solid rgba(122, 72, 32, 0.35);
   font-size: 13.5px;
-  color: var(--td-paper-text-muted);
+  color: #54380f;
 }
 
 .upgradeDesc {
