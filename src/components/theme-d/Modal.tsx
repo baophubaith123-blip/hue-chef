@@ -10,10 +10,18 @@ interface ModalProps {
   children: ReactNode;
   onClose: () => void;
   closeLabel: string;
+  /** Đợt 4: optional object-shell variants — extra classes for the
+   *  dialog / header / body so a caller can make the dialog itself take
+   *  the shape of a physical object (awning, chest, clipboard, ledger).
+   *  All optional; omitted = the original wood-frame + paper body. */
+  shellClass?: string;
+  headerClass?: string;
+  bodyClass?: string;
+  titleClass?: string;
 }
 
 /** Theme D modal — wood-framed dialog on a paper body (Kế hoạch 1, Phần 2.2). */
-export function Modal({ open, title, children, onClose, closeLabel }: ModalProps) {
+export function Modal({ open, title, children, onClose, closeLabel, shellClass, headerClass, bodyClass, titleClass }: ModalProps) {
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => {
@@ -30,19 +38,19 @@ export function Modal({ open, title, children, onClose, closeLabel }: ModalProps
   return createPortal(
     <div className={styles.overlay} role="presentation" onClick={onClose}>
       <div
-        className={styles.dialog}
+        className={shellClass ? `${styles.dialog} ${shellClass}` : styles.dialog}
         role="dialog"
         aria-modal="true"
         aria-label={title}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className={styles.header}>
-          <h2 className={styles.title}>{title}</h2>
+        <div className={headerClass ? `${styles.header} ${headerClass}` : styles.header}>
+          <h2 className={titleClass ? `${styles.title} ${titleClass}` : styles.title}>{title}</h2>
           <button type="button" className={styles.close} onClick={onClose} aria-label={closeLabel}>
             ×
           </button>
         </div>
-        <div className={styles.body}>{children}</div>
+        <div className={bodyClass ? `${styles.body} ${bodyClass}` : styles.body}>{children}</div>
       </div>
     </div>,
     document.body,
