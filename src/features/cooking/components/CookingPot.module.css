@@ -404,3 +404,32 @@
   aspect-ratio: auto;
   object-fit: contain;
 }
+
+/* ===== Đợt lan 4 — nút hành động chính của nồi = nút tròn vàng lớn ===== */
+.actionButton {
+  background: url('../../../assets/theme-d/game/r4-btn-action-big.webp') center / 100% 100%
+    no-repeat;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  width: 172px;
+  max-width: 60vw;
+  height: 115px;
+  padding: 0 12px 12px;
+  display: inline-flex;
+  align-items: flex-end;
+  justify-content: center;
+  font-family: var(--td-font-game);
+  font-size: 14.5px;
+  color: #5d3410;
+  text-shadow: 0 1px 0 rgba(255, 246, 224, 0.7);
+}
+
+.actionButton:hover {
+  filter: brightness(1.06);
+  transform: translateY(-2px);
+}
+
+.actionButton:active {
+  transform: scale(0.94);
+}

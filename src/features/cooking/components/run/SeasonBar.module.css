@@ -159,3 +159,21 @@
 .stopBtn {
   font-family: var(--td-font-game);
 }
+
+/* ===== Đợt lan 4 — plaque nêm vị đồng thau (r4-season-plaque):
+   nội dung thật nằm trong lòng oval, cán muỗng chừa ở góc phải-dưới ===== */
+.card {
+  width: min(600px, 100%);
+  aspect-ratio: 606 / 440;
+  background: url('../../../../assets/theme-d/game/r4-season-plaque.webp') center / 100% 100%
+    no-repeat;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 13% 21% 15% 14%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 24px 34px rgba(0, 0, 0, 0.5));
+}

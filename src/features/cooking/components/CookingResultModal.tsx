@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import type { Achievement } from '@/data/types';
 import { GoldButton } from '@/components/theme-d/GoldButton';
 import { Modal } from '@/components/theme-d/Modal';
-import { NOI_NOI_FLAT } from '@/components/theme-d/game-assets';
+import resultBannerArt from '@/assets/theme-d/game/r4-result-banner.webp';
 import { WoodButton } from '@/components/theme-d/WoodButton';
 import type { CookingSession } from '@/features/cooking/types';
 import { useTranslation } from '@/i18n/useTranslation';
@@ -66,6 +66,8 @@ export function CookingResultModal({
       title={title}
       onClose={isSuccess ? onClose : BLOCKED_CLOSE}
       closeLabel={t('common.close')}
+      shellClass={styles.resultShell}
+      bodyClass={styles.resultBody}
     >
       <div className={styles.content}>
         {isSuccess ? (
@@ -76,31 +78,26 @@ export function CookingResultModal({
               ))}
             </div>
 
-            {/* Top Celebration Banner */}
-            <div className={styles.celebrationHero}>
-              <img
-                className={styles.trophyBadge}
-                src={NOI_NOI_FLAT.happy}
-                alt=""
-                aria-hidden="true"
-              />
-              <h3 className={styles.recipeName}>{session.recipe.name}</h3>
-              <div className={styles.starsDisplay} aria-label={`${session.stars} sao`}>
-                {Array.from({ length: 5 }).map((_, idx) => (
-                  <span
-                    key={idx}
-                    className={`${idx < session.stars ? styles.starFilled : styles.starEmpty} anim-pop anim-delay-${idx + 1}`}
-                  >
-                    ★
-                  </span>
-                ))}
+            {/* Đợt 4: băng rôn ăn mừng (r4-result-banner) — sao và điểm
+                là chữ thật đè lên cuộn giấy trống của băng rôn. */}
+            <div className={styles.resultBanner}>
+              <img className={styles.resultBannerImg} src={resultBannerArt} alt="" aria-hidden="true" />
+              <div className={styles.resultBannerText}>
+                <h3 className={styles.recipeName}>{session.recipe.name}</h3>
+                <div className={styles.starsDisplay} aria-label={`${session.stars} sao`}>
+                  {Array.from({ length: 5 }).map((_, idx) => (
+                    <span
+                      key={idx}
+                      className={`${idx < session.stars ? styles.starFilled : styles.starEmpty} anim-pop anim-delay-${idx + 1}`}
+                    >
+                      ★
+                    </span>
+                  ))}
+                </div>
+                <span className={styles.resultBannerScore}>
+                  {t('cooking.result.score')}: {session.finalScore.toLocaleString()}
+                </span>
               </div>
-            </div>
-
-            {/* Big Score Card */}
-            <div className={styles.scoreHero}>
-              <span className={styles.scoreHeroLabel}>{t('cooking.result.score')}</span>
-              <span className={styles.scoreHeroValue}>{session.finalScore.toLocaleString()}</span>
             </div>
 
             {/* Metrics Grid */}

@@ -555,3 +555,36 @@
 .hostAvatar {
   border-radius: 22px;
 }
+
+/* ===== Đợt lan 4 — 4 thẻ đáp án quiz = 4 chất liệu như ảnh duyệt:
+   A tre đan · B sứ trắng hoa xanh · C đồng thau · D lụa đỏ.
+   Trạng thái đúng/sai dùng !important ở trên nên không bị đè. ===== */
+.optionButton:nth-child(1):not(.optionCorrect):not(.optionWrong) {
+  background:
+    repeating-linear-gradient(90deg, rgba(122, 68, 22, 0.16) 0 6px, transparent 6px 12px),
+    repeating-linear-gradient(0deg, rgba(122, 68, 22, 0.12) 0 5px, transparent 5px 10px),
+    linear-gradient(180deg, #e8cf9e, #dcbd82);
+  border: 2.5px solid #8a5a2b;
+  color: #43301b;
+}
+
+.optionButton:nth-child(2):not(.optionCorrect):not(.optionWrong) {
+  background: linear-gradient(180deg, #ffffff, #eef3fb);
+  border: 2.5px double #2b50aa;
+  color: #1d3f8f;
+  box-shadow: inset 0 0 0 3px rgba(43, 80, 170, 0.14);
+}
+
+.optionButton:nth-child(3):not(.optionCorrect):not(.optionWrong) {
+  background: linear-gradient(160deg, #f6d789, #dfae4e 55%, #c98f2e);
+  border: 2.5px solid #8a5a00;
+  color: #43301b;
+  box-shadow: inset 0 2px 0 rgba(255, 246, 224, 0.65);
+}
+
+.optionButton:nth-child(4):not(.optionCorrect):not(.optionWrong) {
+  background: linear-gradient(170deg, #c0392b, #93291d);
+  border: 2.5px solid #6e1423;
+  color: #fff6e0;
+  text-shadow: 0 1px 0 rgba(32, 15, 4, 0.4);
+}

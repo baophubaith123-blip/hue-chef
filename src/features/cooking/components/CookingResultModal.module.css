@@ -519,3 +519,59 @@
 .modalFooter a {
   text-decoration: none;
 }
+
+/* ===== Đợt lan 4 — modal kết quả: vỏ ăn mừng + băng rôn (r4-result-banner) ===== */
+.resultShell {
+  border-color: var(--td-gold-deep, #b57e40);
+}
+
+.resultBody {
+  padding-top: 6px;
+}
+
+.resultBanner {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 900 / 411;
+  margin-bottom: 10px;
+}
+
+.resultBannerImg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 10px 14px rgba(32, 15, 4, 0.35));
+}
+
+.resultBannerText {
+  position: absolute;
+  left: 19%;
+  right: 19%;
+  top: 57%;
+  bottom: 9%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  text-align: center;
+}
+
+.resultBannerText .recipeName {
+  margin: 0;
+  font-size: clamp(0.95rem, 2.6vw, 1.25rem);
+  line-height: 1.15;
+}
+
+.resultBannerText .starsDisplay {
+  line-height: 1.1;
+}
+
+.resultBannerScore {
+  font-family: var(--td-font-game);
+  font-size: clamp(0.95rem, 2.6vw, 1.2rem);
+  font-weight: 800;
+  color: #8a5a00;
+  font-variant-numeric: tabular-nums;
+}
