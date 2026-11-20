@@ -5,7 +5,9 @@ import { EmptyState } from '@/components/EmptyState';
 import { useAuth } from '@/contexts/AuthContext';
 import { loadUsers } from '@/features/auth/store';
 import { useTranslation } from '@/i18n/useTranslation';
-import { PlayerShell } from '@/pages/player/PlayerShell';
+import { SceneShell } from '@/pages/player/SceneShell';
+
+import podiumArt from '@/assets/theme-d/game/r4-podium.webp';
 
 import styles from './LeaderboardPage.module.css';
 
@@ -16,6 +18,8 @@ export default function LeaderboardPage() {
   const { t } = useTranslation();
   const { user } = useAuth();
   const [timeFrame, setTimeFrame] = useState<TimeFrame>('weekly');
+  const [page, setPage] = useState(0);
+  useEffect(() => { setPage(0); }, [timeFrame]);
 
   // Real-time board: re-read the stored scores when this tab regains focus,
   // when another tab writes storage, and on a light 5s heartbeat. Combined
@@ -97,7 +101,7 @@ export default function LeaderboardPage() {
   const restPlayers = leaderboardData.slice(3);
 
   return (
-    <PlayerShell>
+    <SceneShell>
       <div className={styles.container}>
         <header className={styles.header}>
           <div className={styles.titleRow}>
@@ -144,96 +148,42 @@ export default function LeaderboardPage() {
           />
         ) : (
           <div className={styles.boardLayout}>
-            {/* Top 3 Podium (Image 1 Style) */}
-            <div className={styles.podiumSection}>
-              {/* Rank 2 (Silver) */}
-              {rank2 && (
-                <div className={`${styles.podiumCol} ${styles.colRank2}`}>
-                  <div className={styles.podiumAvatarWrap}>
-                    <span className={styles.rankMedalIcon}>🥈</span>
-                    {rank2.avatar ? (
-                      <img src={rank2.avatar} alt={rank2.name} className={styles.podiumAvatar} />
-                    ) : (
-                      <div className={styles.podiumInitials}>
-                        {rank2.name.charAt(0).toUpperCase()}
-                      </div>
-                    )}
-                  </div>
-                  <div className={styles.podiumName}>{rank2.name}</div>
-                  <div className={styles.podiumScore}>{rank2.totalScore.toLocaleString()} pts</div>
-                  <div className={styles.podiumLevel}>Lv.{rank2.level}</div>
-                  <div className={styles.podiumPillar2}>
-                    <span className={styles.pillarNumber}>2</span>
-                  </div>
-                </div>
-              )}
+            {/* Top 3 podium panel (Đợt 4): the painted r4-podium carries
+                the steps and medals; real names/scores sit under their
+                columns. Balance law: this panel and the rank-list panel
+                are grid siblings stretched to the exact same height. */}
+            <section className={styles.podiumPanel} data-board="podium">
+              <img className={styles.podiumArt} src={podiumArt} alt="" aria-hidden="true" />
+              <div className={styles.podiumCols}>
+                {[rank2, rank1, rank3].map((entry, i) => {
+                  const rank = [2, 1, 3][i];
+                  if (!entry) return <div key={rank} />;
+                  return (
+                    <div key={rank} className={styles.podiumColInfo}>
+                      <span className={styles.podiumName}>{entry.name}</span>
+                      <span className={styles.podiumScore}>
+                        {entry.totalScore.toLocaleString()} pts
+                      </span>
+                      <span className={styles.podiumLevel}>Lv.{entry.level}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            </section>
 
-              {/* Rank 1 (Gold - Center) */}
-              {rank1 && (
-                <div className={`${styles.podiumCol} ${styles.colRank1}`}>
-                  <div className={styles.crownWrap} aria-hidden="true">👑</div>
-                  <div className={`${styles.podiumAvatarWrap} ${styles.avatarGold}`}>
-                    <span className={styles.rankMedalIcon}>🥇</span>
-                    {rank1.avatar ? (
-                      <img src={rank1.avatar} alt={rank1.name} className={styles.podiumAvatar} />
-                    ) : (
-                      <div className={styles.podiumInitials}>
-                        {rank1.name.charAt(0).toUpperCase()}
-                      </div>
-                    )}
-                  </div>
-                  <div className={styles.podiumName}>{rank1.name}</div>
-                  <div className={styles.podiumScoreGold}>{rank1.totalScore.toLocaleString()} pts</div>
-                  <div className={styles.podiumLevel}>
-                    Lv.{rank1.level} ·{' '}
-                    {timeFrame === 'weekly'
-                      ? t('leaderboard.kingWeekly')
-                      : timeFrame === 'monthly'
-                        ? t('leaderboard.kingMonthly')
-                        : t('leaderboard.kingAllTime')}
-                  </div>
-                  <div className={styles.podiumPillar1}>
-                    <span className={styles.pillarNumber}>1</span>
-                  </div>
-                </div>
-              )}
-
-              {/* Rank 3 (Bronze) */}
-              {rank3 && (
-                <div className={`${styles.podiumCol} ${styles.colRank3}`}>
-                  <div className={styles.podiumAvatarWrap}>
-                    <span className={styles.rankMedalIcon}>🥉</span>
-                    {rank3.avatar ? (
-                      <img src={rank3.avatar} alt={rank3.name} className={styles.podiumAvatar} />
-                    ) : (
-                      <div className={styles.podiumInitials}>
-                        {rank3.name.charAt(0).toUpperCase()}
-                      </div>
-                    )}
-                  </div>
-                  <div className={styles.podiumName}>{rank3.name}</div>
-                  <div className={styles.podiumScore}>{rank3.totalScore.toLocaleString()} pts</div>
-                  <div className={styles.podiumLevel}>Lv.{rank3.level}</div>
-                  <div className={styles.podiumPillar3}>
-                    <span className={styles.pillarNumber}>3</span>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* Remaining Ranks List (Rank 4+) */}
-            <div className={styles.rankingsCard}>
-              <div className={`${styles.rankingsList} scroll-slim`}>
-                {restPlayers.map((player, idx) => {
-                  const rank = idx + 4;
+            {/* Rank list panel (Đợt 4): r4-rank-list-frame shell, exactly
+                5 compact rows per page, round wooden page buttons. */}
+            <section className={styles.rankPanel} data-board="ranklist">
+              <div className={styles.rankRows}>
+                {restPlayers.slice(page * 5, page * 5 + 5).map((player, idx) => {
+                  const rank = page * 5 + idx + 4;
                   const isCurrentUser = player.id === user?.id;
-
                   return (
                     <div
                       key={player.id}
                       className={`${styles.rankingRow} ${isCurrentUser ? styles.currentUserRow : ''}`}
                     >
-                      <div className={styles.rankIndex}>{rank}</div>
+                      <div className={styles.rankIndex}>#{rank}</div>
                       <div className={styles.playerInfo}>
                         <div className={styles.rowAvatarWrap}>
                           {player.avatar ? (
@@ -262,22 +212,37 @@ export default function LeaderboardPage() {
                           const prev = prevRankById.get(player.id);
                           if (prev === undefined) return null;
                           const delta = prev - rank;
-                          if (delta > 0) {
-                            return <span className={styles.trendUp}>▲ {delta}</span>;
-                          }
-                          if (delta < 0) {
-                            return <span className={styles.trendDown}>▼ {Math.abs(delta)}</span>;
-                          }
+                          if (delta > 0) return <span className={styles.trendUp}>▲ {delta}</span>;
+                          if (delta < 0) return <span className={styles.trendDown}>▼ {Math.abs(delta)}</span>;
                           return <span className={styles.trendFlat}>— 0</span>;
                         })()}
                       </div>
                     </div>
                   );
                 })}
-
-                {/* Own row pinned when the current player is not ranked yet */}
-                {user && !leaderboardData.some((p) => p.id === user.id) ? (
-                  <div className={`${styles.rankingRow} ${styles.currentUserRow}`}>
+                {restPlayers.length === 0 ? (
+                  <p className={styles.stateText}>{t('leaderboard.emptyHint')}</p>
+                ) : null}
+              </div>
+              {Math.max(1, Math.ceil(restPlayers.length / 5)) > 1 ? (
+                <nav className={styles.pagination} aria-label="Phân trang bảng xếp hạng">
+                  <button type="button" className={styles.pageBtn} disabled={page === 0}
+                    onClick={() => setPage((n) => Math.max(0, n - 1))} aria-label="Trang trước">‹</button>
+                  {Array.from({ length: Math.ceil(restPlayers.length / 5) }, (_, i) => (
+                    <button key={i} type="button"
+                      className={`${styles.pageBtn} ${i === page ? styles.pageBtnActive : ''}`}
+                      onClick={() => setPage(i)} aria-label={`Trang ${i + 1}`}>{i + 1}</button>
+                  ))}
+                  <button type="button" className={styles.pageBtn}
+                    disabled={page >= Math.ceil(restPlayers.length / 5) - 1}
+                    onClick={() => setPage((n) => n + 1)} aria-label="Trang sau">›</button>
+                </nav>
+              ) : null}
+            </section>
+          </div>
+          {/* Own row pinned under the balanced boards when unranked */}
+          {user && !leaderboardData.some((p) => p.id === user.id) ? (
+                  <div className={`${styles.rankingRow} ${styles.ownRow} ${styles.currentUserRow}`}>
                     <div className={styles.rankIndex}>{leaderboardData.length + 1}</div>
                     <div className={styles.playerInfo}>
                       <div className={styles.rowAvatarWrap}>
@@ -299,11 +264,8 @@ export default function LeaderboardPage() {
                     </div>
                   </div>
                 ) : null}
-              </div>
-            </div>
-          </div>
         )}
       </div>
-    </PlayerShell>
+    </SceneShell>
   );
 }
