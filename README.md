@@ -466,6 +466,20 @@ Sau khi bản mẫu game-shell + thẻ món được duyệt, đợt lan đầu 
 
 ---
 
+## 🖥️ Đợt lan R5 — khu Admin / Editor / Support: ba khung riêng theo hệ token Theme D (2026-11-20)
+
+Đợt lan cuối của lan giao diện: sơn lại **khu làm việc** (Admin, Editor, Support) theo hệ token + khung chung của game — mức **tiết chế** đúng tính chất khu làm việc, không bê cảnh game vào. Trước đợt này cả ba khu dùng chung một `RoleShell` và nhiều component còn dùng hệ biến legacy `--color-*` (gồm cả màu tím `#7A4B7A` và xanh dương ngoài palette). Nay **mỗi khu có khung riêng tách biệt**, toàn bộ CSS của ba khu dùng token `--td-*`:
+
+- **Admin — "Phòng chỉ huy" (mận + vàng):** `AdminShell.module.css` riêng — header thành **plaque mận** viền dưới gold, link active nền gold chữ mận, CTA gạch; cột nội dung 1180px. Bảng dữ liệu (người dùng, nhật ký, hàng đợi duyệt, chi tiết duyệt) có **hàng tiêu đề mận chữ kem** trên khung giấy có shadow; panel thêm sọc mận trên đầu; input theo chuẩn viền giấy + focus vàng.
+- **Editor — "Bàn biên tập" (gỗ + giấy):** `EditorShell.module.css` riêng — header **plaque gỗ** (wood gradient) viền gold đậm, link active nền giấy chữ mực, CTA mận; cột 1080px. Bảng nguyên liệu header gỗ; thẻ công thức của tôi + panel form có sọc gỗ trên đầu; **chip trạng thái công thức** (nháp / chờ duyệt / đã duyệt / từ chối) theo token strong trên tint mềm; `DynamicFormList` (chỉ form editor dùng) cũng di trú sang token giấy để nền không lật tối ở dark.
+- **Support — "Quầy hỗ trợ" (gạch + giấy):** `SupportShell.module.css` riêng — header **plaque giấy viền gạch**, tiêu đề gạch, link active nền gạch; cột 920px. Danh sách khiếu nại thành thẻ giấy viền trái gạch + chip trạng thái theo họ màu; khung chat là panel giấy có dải header gạch, bong bóng đội hỗ trợ nền brick-soft.
+- **Chung:** `RoleShell.module.css` dùng chung bị xoá hẳn; nút/chip/input/modal của ba khu theo cùng ngôn ngữ khung (bo góc token, shadow giấy ấm, focus vàng); trạng thái rỗng/loading giữ component dùng chung. **Không đổi bất kỳ chức năng/luật vận hành nào của ba khu** (đã nghiệm thu ở H10), không đổi luật chơi/kinh tế khu người chơi, `src/lib/score.ts` diff = 0.
+- **Vá tương phản dark (trong đợt):** token brick/gold-text/cream-muted **lật sáng ở dark** trong khi bề mặt giấy giữ sáng — ghim lại màu bản sáng cho CTA admin, nav editor, link/chip trên giấy; badge trạng thái lót nền giấy đặc dưới lớp tint ở dark để đọc được cả khi nằm trên nền trang tối.
+- **Kiểm chứng:** `tsc` 0 lỗi, build đạt; quét tương phản **0 lỗi** trên toàn bộ route của ba khu × 2 theme ở 1440×900, cộng các trang chính ở 390×844 × 2 theme; kiểm chứng chức năng ba khu **25 PASS / 0 FAIL** (đăng nhập từng vai, dashboard, bảng người dùng, form công thức, bảng nguyên liệu, danh sách khiếu nại, mở hội thoại chat, và **chốt chặn vai trò** player/support vào nhầm khu); bot khu người chơi chấm lại: **H4 FAILURES = 0** (bản chạy đầy đủ từ profile sạch: 73 PASS ở lượt đầu, 4 pha bấm chợ thời gian thực trượt vì tải máy chung, chạy tiếp bằng checkpoint xanh toàn bộ), **H6 65/65 PASS**. Ảnh toàn khung từng khu đặt cạnh ảnh H10 để đối chiếu.
+- **Giới hạn còn lại (nói thẳng):** thẻ thống kê ở dashboard Admin giữ nguyên CSS (đã toàn token từ trước; số liệu nhận màu qua inline style trong TSX nên không thêm khung bằng CSS thuần mà không đổi markup); modal Cấm người dùng dùng khung giấy + sọc mận qua class form vì tiêu đề do Modal dùng chung render (không sửa component dùng chung trong đợt này).
+
+---
+
 ## 📞 Liên hệ
 
 | Thông tin | Chi tiết |
