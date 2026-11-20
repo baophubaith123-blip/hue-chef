@@ -337,20 +337,162 @@
   gap: 10px;
 }
 
-/* Item card — a cream paper slip with a wood-brown edge and a soft
-   lift, sitting on the stall body's cream paper; the price /
-   trend / stepper rows keep their layout from the H4 original. */
+/* ---------------- Đợt 4: thẻ mua theo chất liệu sạp ----------------
+   Bảo chỉ đích danh (22:09): lưới thẻ mua còn là THẺ KEM TRƠN. Nay
+   MỖI thẻ là một vật thật đồng bộ với sạp chứa nó — toàn bộ mặt thẻ
+   mang vân chất liệu, chữ thật nằm trên mặt vật, giá là THẺ TREO
+   (có dây + lỗ xỏ) chứ không in trên nền. Biến theo thẻ:
+   --mkt-ink / --mkt-muted = chữ chính / chữ phụ trên mặt vật;
+   --mkt-line = viền trong; --mkt-band = dải hàng mua chìm vào vật;
+   --mkt-tag-bg / --mkt-tag-ink = thẻ giá treo riêng từng chất liệu. */
 .item {
-  background: var(--td-cream);
-  border: 2px solid var(--td-wood-dark);
-  border-radius: var(--td-radius-paper);
-  padding: 10px;
+  --mkt-ink: #3d2408;
+  --mkt-muted: #5d3d14;
+  --mkt-line: rgba(62, 36, 10, 0.45);
+  --mkt-band: rgba(62, 36, 10, 0.16);
+  --mkt-tag-bg: linear-gradient(180deg, #5d3410 0%, #472708 100%);
+  --mkt-tag-ink: #ffd873;
+  --mkt-tag-line: var(--td-gold-deep);
+  position: relative;
+  border: 3px solid var(--td-wood-dark);
+  border-radius: 14px;
+  padding: 12px 11px 11px;
   display: flex;
   flex-direction: column;
   gap: 8px;
+  color: var(--mkt-ink);
   box-shadow:
-    0 3px 8px rgba(60, 32, 8, 0.18),
-    inset 0 1px 0 rgba(255, 255, 255, 0.65);
+    0 4px 10px rgba(60, 32, 8, 0.3),
+    inset 0 0 0 2px var(--mkt-line),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+/* Rau củ — KHAY TRE ĐAN: nan ngang/dọc đan chéo trên nền tre vàng. */
+.itemVegetable {
+  background-color: #d3af62;
+  background-image:
+    repeating-linear-gradient(0deg, rgba(122, 84, 28, 0.22) 0 3px, transparent 3px 15px),
+    repeating-linear-gradient(90deg, rgba(255, 241, 199, 0.28) 0 3px, transparent 3px 15px),
+    repeating-linear-gradient(45deg, rgba(122, 84, 28, 0.1) 0 7px, transparent 7px 14px),
+    repeating-linear-gradient(-45deg, rgba(255, 241, 199, 0.12) 0 7px, transparent 7px 14px);
+  border-color: #7a541c;
+}
+
+/* Thịt cá — THẺ GỖ TREO: vân gỗ thật phủ stain nâu sẫm, chữ kem. */
+.itemProtein {
+  --mkt-ink: #fdf3d8;
+  --mkt-muted: #f0d9a8;
+  --mkt-line: rgba(255, 216, 115, 0.4);
+  --mkt-band: rgba(20, 8, 2, 0.35);
+  --mkt-tag-bg: linear-gradient(180deg, #e9a23b 0%, #c07f1d 100%);
+  --mkt-tag-ink: #38230a;
+  --mkt-tag-line: #6e4d0e;
+  background-color: #6b4423;
+  background-image:
+    linear-gradient(180deg, rgba(46, 26, 8, 0.42), rgba(46, 26, 8, 0.18)),
+    url('../../assets/theme-d/game/wood-texture.webp');
+  background-size: auto, 360px 270px;
+  border-color: #2e1c0a;
+}
+
+/* Gia vị & mắm — NGÓI/GỐM NUNG: hàng ngói vảy cá đất nung, chữ kem. */
+.itemSpice {
+  --mkt-ink: #ffe9c9;
+  --mkt-muted: #f3cfa3;
+  --mkt-line: rgba(255, 210, 160, 0.35);
+  --mkt-band: rgba(30, 8, 2, 0.32);
+  --mkt-tag-bg: linear-gradient(180deg, #fdf6e3 0%, #e8dcc0 100%);
+  --mkt-tag-ink: #17456b;
+  --mkt-tag-line: #17456b;
+  background-color: #77341f;
+  background-image:
+    radial-gradient(circle at 50% -8px, transparent 17px, rgba(30, 8, 2, 0.35) 18px, rgba(255, 190, 130, 0.22) 19px, transparent 20px),
+    radial-gradient(circle at 50% -8px, transparent 17px, rgba(30, 8, 2, 0.35) 18px, rgba(255, 190, 130, 0.22) 19px, transparent 20px);
+  background-size:
+    36px 22px,
+    36px 22px;
+  background-position:
+    0 0,
+    18px 11px;
+  border-color: #431c0d;
+}
+
+/* Gạo bột & bún — BẠT XANH dệt (biển vải sạp cá trong ảnh duyệt):
+   sợi dệt chéo xanh biển, chỉ khâu đứt quãng ở viền trong, chữ trắng. */
+.itemGrain {
+  --mkt-ink: #f2f8fd;
+  --mkt-muted: #c3ddef;
+  --mkt-line: rgba(230, 244, 255, 0.5);
+  --mkt-band: rgba(4, 22, 38, 0.35);
+  --mkt-tag-bg: linear-gradient(180deg, #fdf6e3 0%, #e8dcc0 100%);
+  --mkt-tag-ink: #7e1220;
+  --mkt-tag-line: #7e1220;
+  background-color: #1d5a80;
+  background-image:
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.07) 0 2px, transparent 2px 7px),
+    repeating-linear-gradient(90deg, rgba(4, 22, 38, 0.14) 0 2px, transparent 2px 7px),
+    linear-gradient(115deg, rgba(255, 255, 255, 0.13) 0%, transparent 45%);
+  border-color: #0f2f4a;
+}
+
+/* Đậu hạt — BAO GAI: sợi gai thô đan ô lớn trên nền bao tải. */
+.itemDauHat {
+  background-color: #c39a58;
+  background-image:
+    repeating-linear-gradient(0deg, rgba(94, 62, 20, 0.28) 0 4px, rgba(255, 238, 196, 0.16) 4px 8px, transparent 8px 16px),
+    repeating-linear-gradient(90deg, rgba(94, 62, 20, 0.24) 0 4px, rgba(255, 238, 196, 0.13) 4px 8px, transparent 8px 16px);
+  border-color: #7a541c;
+}
+
+/* Đặc sản — VẢI SỌC mái hiên: sọc đỏ gạch chìm trên nền vải bạt,
+   sợi ngang mảnh, chữ kem. */
+.itemOther {
+  --mkt-ink: #ffe9c9;
+  --mkt-muted: #f3cf9f;
+  --mkt-line: rgba(255, 220, 170, 0.35);
+  --mkt-band: rgba(30, 6, 2, 0.32);
+  --mkt-tag-bg: linear-gradient(180deg, #e9a23b 0%, #c07f1d 100%);
+  --mkt-tag-ink: #38230a;
+  --mkt-tag-line: #6e4d0e;
+  background-color: #7e2a16;
+  background-image:
+    repeating-linear-gradient(90deg, rgba(40, 8, 2, 0.22) 0 16px, rgba(255, 190, 130, 0.1) 16px 32px),
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.05) 0 2px, transparent 2px 6px);
+  border-color: #431708;
+}
+
+/* Đồ bếp — GỖ + ĐỒNG THAU: vân gỗ phủ nâu đồng, dải thau ở mép. */
+.itemUpgrade {
+  --mkt-ink: #ffe9a8;
+  --mkt-muted: #ecd28d;
+  --mkt-line: rgba(255, 216, 115, 0.45);
+  --mkt-band: rgba(20, 12, 2, 0.38);
+  --mkt-tag-bg: linear-gradient(180deg, #5d3410 0%, #472708 100%);
+  --mkt-tag-ink: #ffd873;
+  --mkt-tag-line: var(--td-gold-deep);
+  background-color: #54401c;
+  background-image:
+    linear-gradient(180deg, rgba(30, 18, 4, 0.45), rgba(30, 18, 4, 0.2)),
+    url('../../assets/theme-d/game/wood-texture.webp');
+  background-size: auto, 360px 270px;
+  border-color: #2e2008;
+}
+
+/* Hỗ trợ — SƠN MÀI ĐỎ: mặt sơn mài bóng sẫm, vân nứt mảnh, chữ kem. */
+.itemSupport {
+  --mkt-ink: #ffe9c9;
+  --mkt-muted: #f0c9a0;
+  --mkt-line: rgba(255, 205, 150, 0.35);
+  --mkt-band: rgba(24, 4, 2, 0.35);
+  --mkt-tag-bg: linear-gradient(180deg, #e9a23b 0%, #c07f1d 100%);
+  --mkt-tag-ink: #38230a;
+  --mkt-tag-line: #6e4d0e;
+  background-color: #6e2015;
+  background-image:
+    radial-gradient(ellipse 90% 55% at 50% -10%, rgba(255, 190, 130, 0.22), transparent 60%),
+    repeating-linear-gradient(37deg, rgba(255, 205, 150, 0.05) 0 2px, transparent 2px 11px),
+    repeating-linear-gradient(-53deg, rgba(20, 4, 2, 0.16) 0 2px, transparent 2px 13px);
+  border-color: #380f06;
 }
 
 .itemHead {
@@ -359,8 +501,19 @@
   align-items: center;
 }
 
+/* Emoji nguyên liệu ngồi trong huy hiệu tròn đan/viền theo vật. */
 .itemEmoji {
-  font-size: 28px;
+  flex: none;
+  width: 46px;
+  height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.35), rgba(0, 0, 0, 0.14));
+  border: 2px solid var(--mkt-line);
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.22);
 }
 
 .itemNames {
@@ -369,71 +522,130 @@
   font-size: 13px;
 }
 
-.itemOwned {
-  color: var(--td-paper-text-muted);
+.itemNames strong {
+  font-size: 14.5px;
+  line-height: 1.25;
 }
 
+.itemOwned {
+  color: var(--mkt-muted);
+}
+
+/* Hàng giá: chừa 9px phía trên cho hai sợi dây của thẻ treo. */
 .priceRow {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 8px;
   flex-wrap: wrap;
+  padding-top: 9px;
 }
 
-/* Giá tiền = thẻ treo: plaque nâu sẫm chữ vàng, xoay nhẹ -2deg. */
-.price {
+/* GIÁ = THẺ TREO: hai sợi dây thừng từ mép trên hàng giá xuống thẻ,
+   thẻ có lỗ xỏ đinh vàng ở đầu trái và đầu nhọn ở cuối phải. */
+.priceTag {
+  position: relative;
   display: inline-block;
   transform: rotate(-2deg);
-  background: linear-gradient(180deg, #5d3410 0%, #472708 100%);
-  border: 1.5px solid var(--td-gold-deep);
-  border-radius: 8px;
-  padding: 3px 10px;
+}
+
+.priceTag::before,
+.priceTag::after {
+  content: '';
+  position: absolute;
+  top: -10px;
+  width: 2.5px;
+  height: 12px;
+  border-radius: 2px;
+  background: repeating-linear-gradient(0deg, #8a5a2b 0 3px, #6e4520 3px 6px);
+}
+
+.priceTag::before {
+  left: 13px;
+  transform: rotate(14deg);
+}
+
+.priceTag::after {
+  right: 15px;
+  transform: rotate(-14deg);
+}
+
+.price {
+  position: relative;
+  display: inline-block;
+  background: var(--mkt-tag-bg);
+  border: 1.5px solid var(--mkt-tag-line);
+  border-radius: 7px;
+  padding: 3px 12px 3px 20px;
+  clip-path: polygon(0 0, calc(100% - 9px) 0, 100% 50%, calc(100% - 9px) 100%, 0 100%);
   box-shadow: 0 2px 5px rgba(60, 32, 8, 0.35);
   font-size: 16px;
   font-weight: 800;
-  color: #ffd873;
+  color: var(--mkt-tag-ink);
+}
+
+/* Lỗ xỏ dây trên thẻ giá. */
+.price::before {
+  content: '';
+  position: absolute;
+  left: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(40, 20, 4, 0.55);
+  border: 1.5px solid var(--mkt-tag-line);
+  box-sizing: border-box;
 }
 
 .trendUp {
-  /* Item cards are fixed cream in both themes; dark-theme --td-brick
-     (#e8884d) only reaches 2.4:1 on them, so pin the full brick. */
-  color: #b03e26;
+  color: var(--mkt-trend-up, #b03e26);
   font-weight: 800;
   font-size: 13px;
 }
 
 .trendDown {
-  color: var(--td-success);
+  color: var(--mkt-trend-down, #14632f);
   font-weight: 800;
   font-size: 13px;
 }
 
 .trendFlat {
-  color: var(--td-paper-text-muted);
+  color: var(--mkt-muted);
   font-weight: 700;
   font-size: 13px;
 }
 
 .baseHint {
-  color: var(--td-paper-text-muted);
+  color: var(--mkt-muted);
   font-weight: 400;
 }
 
-/* Hàng mua nằm trên khay tre đan (hai lớp gradient chéo tông tre),
-   ghim xuống đáy thẻ để các thẻ trong hàng cao đều nhau. */
+/* Tông xu hướng trên các mặt vật sẫm: dùng màu sáng tương phản. */
+.itemProtein,
+.itemSpice,
+.itemGrain,
+.itemOther,
+.itemUpgrade,
+.itemSupport {
+  --mkt-trend-up: #ffb59d;
+  --mkt-trend-down: #9fe8a9;
+}
+
+/* Hàng mua = dải vật chìm vào mặt thẻ (bóng trong + viền trong của
+   chính chất liệu), ghim đáy để các thẻ trong hàng cao đều nhau. */
 .buyRow {
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 8px;
   margin-top: auto;
-  padding: 6px 8px;
-  border: 1.5px solid rgba(138, 90, 43, 0.55);
+  padding: 7px 8px;
+  border: 1.5px solid var(--mkt-line);
   border-radius: 10px;
-  background:
-    repeating-linear-gradient(45deg, rgba(201, 163, 95, 0.28) 0 6px, rgba(185, 141, 69, 0.28) 6px 12px),
-    repeating-linear-gradient(-45deg, rgba(201, 163, 95, 0.22) 0 6px, rgba(160, 118, 52, 0.22) 6px 12px),
-    #efe0bd;
+  background: var(--mkt-band);
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.22);
 }
 
 .stepper {
@@ -441,6 +653,7 @@
   align-items: center;
   gap: 6px;
   font-weight: 800;
+  color: var(--mkt-ink);
 }
 
 .stepper button {
@@ -471,7 +684,7 @@
   margin: 6px 0 10px;
   font-size: 13px;
   line-height: 1.45;
-  color: var(--td-paper-text);
+  color: var(--mkt-ink, var(--td-paper-text));
 }
 
 .levelPips {
@@ -503,13 +716,23 @@
 .maxedNote {
   display: inline-block;
   font-weight: 800;
-  color: var(--td-success);
-  border: 2px solid var(--td-success);
+  color: var(--mkt-maxed, var(--td-success));
+  border: 2px solid var(--mkt-maxed, var(--td-success));
   border-radius: 6px;
   padding: 2px 9px;
   transform: rotate(-3deg);
   background: rgba(21, 128, 61, 0.07);
   letter-spacing: 0.01em;
+}
+
+/* Dấu đã sở hữu trên mặt vật sẫm: xanh lá sáng mới đủ tương phản. */
+.itemProtein,
+.itemSpice,
+.itemGrain,
+.itemOther,
+.itemUpgrade,
+.itemSupport {
+  --mkt-maxed: #9fe8a9;
 }
 
 /* ---------------- Gói H6: support stall ---------------- */
@@ -519,7 +742,7 @@
   font-size: 13px;
   font-weight: 700;
   line-height: 1.45;
-  color: var(--td-success);
+  color: var(--mkt-maxed, var(--td-success));
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -96,6 +96,23 @@ const STALL_ART: Record<string, { roof: string; plaque: string }> = {
   other: { roof: awningImg, plaque: styles.signOther },
 };
 
+/**
+ * Đợt 4 — thẻ MUA đồng bộ chất liệu với sạp chứa nó (Bảo chỉ đích
+ * danh 22:09: thẻ kem trơn chưa đạt bộ duyệt): rau = khay tre đan,
+ * thịt cá = thẻ gỗ treo, gia vị = ngói/gốm nung, gạo bột = bạt xanh
+ * (biển vải của sạp cá trong ảnh duyệt), đậu hạt = bao gai, đặc sản
+ * = vải sọc mái hiên. Sạp đồ bếp = gỗ + đồng thau, sạp hỗ trợ =
+ * sơn mài đỏ. Không còn thân thẻ kem/trắng trơn nào.
+ */
+const CARD_ART: Record<string, string> = {
+  protein: styles.itemProtein,
+  vegetable: styles.itemVegetable,
+  spice: styles.itemSpice,
+  grain: styles.itemGrain,
+  'dau-hat': styles.itemDauHat,
+  other: styles.itemOther,
+};
+
 export default function MarketPage() {
   const { dict } = useTranslation();
   const s = dict.stall;
@@ -277,8 +294,9 @@ export default function MarketPage() {
                   const qty = qtyById[ingredient.id] ?? 1;
                   const total = price * qty;
                   const owned = inventory.get(ingredient.id) ?? 0;
+                  const cardArt = CARD_ART[stallGroup.key] ?? styles.itemOther;
                   return (
-                    <article key={ingredient.id} className={styles.item}>
+                    <article key={ingredient.id} className={`${styles.item} ${cardArt}`}>
                       <div className={styles.itemHead}>
                         <span className={styles.itemEmoji} aria-hidden>
                           {ingredient.fallbackEmoji}
@@ -292,7 +310,9 @@ export default function MarketPage() {
                         </div>
                       </div>
                       <div className={styles.priceRow}>
-                        <span className={styles.price}>{price} xu</span>
+                        <span className={styles.priceTag}>
+                          <span className={styles.price}>{price} xu</span>
+                        </span>
                         <span
                           className={
                             change > 0.005 ? styles.trendUp : change < -0.005 ? styles.trendDown : styles.trendFlat
@@ -355,7 +375,7 @@ export default function MarketPage() {
                 const max = upgradeMaxLevel(kind);
                 const price = nextUpgradePrice(kind, level);
                 return (
-                  <article key={kind} className={styles.item}>
+                  <article key={kind} className={`${styles.item} ${styles.itemUpgrade}`}>
                     <div className={styles.itemHead}>
                       <span className={styles.itemEmoji} aria-hidden>
                         {kind === 'knife' ? '🔪' : kind === 'stove' ? '🔥' : '🍲'}
@@ -406,7 +426,7 @@ export default function MarketPage() {
                     ? stall.gear.extraStoves >= MAX_EXTRA_STOVES
                     : stall.gear[kind];
                 return (
-                  <article key={`gear-${kind}`} className={styles.item}>
+                  <article key={`gear-${kind}`} className={`${styles.item} ${styles.itemSupport}`}>
                     <div className={styles.itemHead}>
                       <span className={styles.itemEmoji} aria-hidden>
                         {GEAR_EMOJI[kind]}
@@ -437,7 +457,7 @@ export default function MarketPage() {
               {CARD_KINDS.map((kind) => {
                 const price = CARD_PRICES[kind];
                 return (
-                  <article key={`card-${kind}`} className={styles.item}>
+                  <article key={`card-${kind}`} className={`${styles.item} ${styles.itemSupport}`}>
                     <div className={styles.itemHead}>
                       <span className={styles.itemEmoji} aria-hidden>
                         {CARD_EMOJI[kind]}
@@ -461,7 +481,7 @@ export default function MarketPage() {
                 const price = DECOR_PRICES[kind];
                 const owned = stall.decorIds.includes(kind);
                 return (
-                  <article key={`decor-${kind}`} className={styles.item}>
+                  <article key={`decor-${kind}`} className={`${styles.item} ${styles.itemSupport}`}>
                     <div className={styles.itemHead}>
                       <span className={styles.itemEmoji} aria-hidden>
                         {DECOR_EMOJI[kind]}
@@ -484,7 +504,7 @@ export default function MarketPage() {
                 );
               })}
 
-              <article className={styles.item}>
+              <article className={`${styles.item} ${styles.itemSupport}`}>
                 <div className={styles.itemHead}>
                   <div className={styles.itemNames}>
                     <strong>{s.support.adTitle}</strong>
