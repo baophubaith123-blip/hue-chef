@@ -11,7 +11,10 @@ import { findUserById, loadUsers } from '@/features/auth/store';
 import { getJsonStorage, STORAGE_KEYS } from '@/lib/storage';
 import { countOwnedRecipes } from '@/features/recipes/lib/ownership';
 import { useTranslation } from '@/i18n/useTranslation';
-import { PlayerShell } from '@/pages/player/PlayerShell';
+import { SceneShell } from '@/pages/player/SceneShell';
+
+import frameArt from '@/assets/theme-d/game/r4-profile-frame.webp';
+import shelfArt from '@/assets/theme-d/game/r4-medal-shelf.webp';
 
 import styles from './ProfilePage.module.css';
 
@@ -43,12 +46,12 @@ export default function ProfilePage() {
 
   if (!targetUser) {
     return (
-      <PlayerShell>
+      <SceneShell>
         <EmptyState
           title="Không tìm thấy người dùng"
           description="Tài khoản này không tồn tại hoặc đã bị xóa."
         />
-      </PlayerShell>
+      </SceneShell>
     );
   }
 
@@ -182,7 +185,8 @@ export default function ProfilePage() {
   };
 
   return (
-    <PlayerShell>
+    <SceneShell>
+     <div className={styles.page}>
       <header className={styles.header}>
         <h1 className={styles.title}>
           {isOwnProfile ? t('profile.title') : t('profile.viewTitle')}
@@ -193,26 +197,26 @@ export default function ProfilePage() {
       <div className={styles.grid}>
         {/* Profile Card Summary */}
         <div className={styles.profileCard}>
-          <div className={styles.cover} aria-hidden>
-            <img src="/images/noi-noi-2d.webp" alt="" className={styles.coverPot} />
-          </div>
-          <div className={styles.avatarContainer}>
-            {avatar || targetUser.avatar ? (
-              <img
-                src={avatar || targetUser.avatar}
-                alt={targetUser.name}
-                className={styles.avatarImage}
-              />
-            ) : (
-              <div className={styles.avatarFallback}>
-                {targetUser.name.charAt(0).toUpperCase()}
-              </div>
-            )}
-            {targetUser.equippedAchievementId ? (
-              <div className={styles.equippedOverlay}>
-                <AchievementIcon badgeId={targetUser.equippedAchievementId} size="sm" />
-              </div>
-            ) : null}
+          <div className={styles.frameWrap}>
+            <img className={styles.frameImg} src={frameArt} alt="" aria-hidden="true" />
+            <div className={styles.frameAvatar}>
+              {avatar || targetUser.avatar ? (
+                <img
+                  src={avatar || targetUser.avatar}
+                  alt={targetUser.name}
+                  className={styles.avatarImage}
+                />
+              ) : (
+                <div className={styles.avatarFallback}>
+                  {targetUser.name.charAt(0).toUpperCase()}
+                </div>
+              )}
+              {targetUser.equippedAchievementId ? (
+                <div className={styles.equippedOverlay}>
+                  <AchievementIcon badgeId={targetUser.equippedAchievementId} size="sm" />
+                </div>
+              ) : null}
+            </div>
           </div>
 
           <div className={styles.nameRow}>
@@ -312,6 +316,7 @@ export default function ProfilePage() {
                 );
               })}
             </div>
+            <img className={styles.shelfImg} src={shelfArt} alt="" aria-hidden="true" />
           </div>
         </div>
 
@@ -452,6 +457,7 @@ export default function ProfilePage() {
           </div>
         )}
       </div>
-    </PlayerShell>
+     </div>
+    </SceneShell>
   );
 }
