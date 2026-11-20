@@ -3,9 +3,11 @@ import { useNavigate } from 'react-router-dom';
 
 import { Badge } from '@/components/theme-d/Badge';
 import { GoldButton } from '@/components/theme-d/GoldButton';
-import { KraftCard } from '@/components/theme-d/KraftCard';
 import { Toast, type ToastTone } from '@/components/theme-d/Toast';
 import { WoodButton } from '@/components/theme-d/WoodButton';
+import { WoodPanel } from '@/components/theme-d/WoodPanel';
+import { dishArtFor } from '@/components/theme-d/dish-art';
+import { gameIcon } from '@/components/theme-d/game-assets';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRecipes } from '@/contexts/RecipeContext';
 import { getIngredientById } from '@/data/ingredients';
@@ -22,7 +24,7 @@ import { todayKey } from '@/features/stall/lib/day';
 import { CARD_KINDS } from '@/features/stall/lib/support';
 import { useTranslation } from '@/i18n/useTranslation';
 import { playSound } from '@/lib/sound';
-import { PlayerShell } from '@/pages/player/PlayerShell';
+import { SceneShell } from '@/pages/player/SceneShell';
 
 import styles from '@/pages/player/MysteryPage.module.css';
 
@@ -50,9 +52,11 @@ export default function MysteryPage() {
 
   if (!events) {
     return (
-      <PlayerShell>
-        <div className={styles.container} />
-      </PlayerShell>
+      <SceneShell>
+        <section className={styles.board}>
+          <div className={styles.container} />
+        </section>
+      </SceneShell>
     );
   }
 
@@ -126,33 +130,48 @@ export default function MysteryPage() {
   };
 
   return (
-    <PlayerShell>
-      <div className={styles.container}>
-        <div className={styles.head}>
-          <h1 className={styles.title}>{m.title}</h1>
-          <p className={styles.subtitle}>{m.subtitle}</p>
-        </div>
+    <SceneShell>
+      <section className={styles.board}>
+        <header className={styles.head}>
+          <span className={styles.hangTag}>{dict.nav.mystery}</span>
+          <div className={styles.titlePlaque}>
+            <h1 className={styles.pageTitle}>{m.title}</h1>
+            <p className={styles.pageSub}>{m.subtitle}</p>
+          </div>
+        </header>
 
         <p className={styles.intro}>{m.intro}</p>
 
-        <p className={styles.stats}>{m.statsLabel(events.mystery.boxesOpened, events.mystery.bestScore)}</p>
+        {/* Record/history line — Án A hanging wooden board (WoodPanel),
+            signless: the stats line is the panel's whole content. */}
+        <WoodPanel className={styles.panelFlush} bodyClassName={styles.statsBody}>
+          <p className={styles.statsText}>
+            {m.statsLabel(events.mystery.boxesOpened, events.mystery.bestScore)}
+          </p>
+        </WoodPanel>
 
         {activeBox ? (
-          <KraftCard as="section" className={styles.activeCard}>
-            <div className={styles.activeHead}>
-              <h2 className={styles.activeTitle}>{m.activeTitle}</h2>
-              {activeBox.premium ? (
+          <WoodPanel
+            title={m.activeTitle}
+            titleLevel="h2"
+            className={`${styles.panelFlush} ${activeBox.premium ? styles.activePremium : ''}`}
+            bodyClassName={styles.activeCard}
+          >
+            {activeBox.premium ? (
+              <div className={styles.activeHead}>
                 <Badge tone="cok" className={styles.premiumBadge}>
                   {m.premiumBadge}
                 </Badge>
-              ) : null}
-            </div>
+              </div>
+            ) : null}
 
             {activeDish ? (
               <div className={styles.dishRow}>
-                {activeDish.image ? (
-                  <img className={styles.dishImage} src={activeDish.image} alt={activeDish.name} />
-                ) : null}
+                <img
+                  className={styles.dishImage}
+                  src={dishArtFor(activeDish)}
+                  alt={activeDish.name}
+                />
                 <div className={styles.dishMeta}>
                   <span className={styles.dishLabel}>{m.dishLabel}</span>
                   <span className={styles.dishName}>
@@ -194,9 +213,20 @@ export default function MysteryPage() {
             </GoldButton>
 
             <p className={styles.boxNote}>{m.boxNote}</p>
-          </KraftCard>
+          </WoodPanel>
         ) : (
-          <KraftCard as="section" className={styles.openCard}>
+          <WoodPanel className={styles.panelFlush} bodyClassName={styles.openCard}>
+            {/* The gift box is the panel's visual centre: the painted
+                mystery icon inside a wooden medallion (emoji fallback
+                when the painted icon is missing). */}
+            <div className={styles.giftMedallion} aria-hidden="true">
+              {gameIcon('mystery') ? (
+                <img className={styles.giftIcon} src={gameIcon('mystery')} alt="" />
+              ) : (
+                <span className={styles.giftEmoji}>🎁</span>
+              )}
+            </div>
+
             <div className={styles.openActions}>
               <GoldButton
                 className={styles.openButton}
@@ -221,20 +251,25 @@ export default function MysteryPage() {
                 </WoodButton>
               ) : null}
 
-              <GoldButton
-                className={styles.openButton}
-                disabled={!user}
-                onClick={() => openBox(true)}
-              >
-                {m.openPremium(MYSTERY_PREMIUM_PRICE_COK)}
-              </GoldButton>
-              <p className={styles.premiumNote}>{m.premiumNote}</p>
+              <div className={styles.premiumPanel}>
+                <Badge tone="cok" className={styles.premiumBadge}>
+                  {m.premiumBadge}
+                </Badge>
+                <GoldButton
+                  className={styles.openButton}
+                  disabled={!user}
+                  onClick={() => openBox(true)}
+                >
+                  {m.openPremium(MYSTERY_PREMIUM_PRICE_COK)}
+                </GoldButton>
+                <p className={styles.premiumNote}>{m.premiumNote}</p>
+              </div>
             </div>
-          </KraftCard>
+          </WoodPanel>
         )}
 
         {toast ? <Toast message={toast.message} tone={toast.tone} /> : null}
-      </div>
-    </PlayerShell>
+      </section>
+    </SceneShell>
   );
 }

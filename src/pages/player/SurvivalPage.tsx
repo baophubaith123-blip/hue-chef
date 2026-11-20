@@ -1,8 +1,10 @@
 import { useNavigate } from 'react-router-dom';
 
 import { GoldButton } from '@/components/theme-d/GoldButton';
-import { KraftCard } from '@/components/theme-d/KraftCard';
 import { WoodButton } from '@/components/theme-d/WoodButton';
+import { WoodPanel } from '@/components/theme-d/WoodPanel';
+import { dishArtFor } from '@/components/theme-d/dish-art';
+import { gameIcon } from '@/components/theme-d/game-assets';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRecipes } from '@/contexts/RecipeContext';
 import {
@@ -14,7 +16,7 @@ import {
 import { abandonSurvivalRun, startSurvivalRun, useEvents } from '@/features/events/store';
 import { isRecipeOwned } from '@/features/recipes/lib/ownership';
 import { useTranslation } from '@/i18n/useTranslation';
-import { PlayerShell } from '@/pages/player/PlayerShell';
+import { SceneShell } from '@/pages/player/SceneShell';
 
 import styles from '@/pages/player/SurvivalPage.module.css';
 
@@ -28,9 +30,11 @@ export default function SurvivalPage() {
 
   if (!events) {
     return (
-      <PlayerShell>
-        <div className={styles.container} />
-      </PlayerShell>
+      <SceneShell>
+        <section className={styles.board}>
+          <div className={styles.container} />
+        </section>
+      </SceneShell>
     );
   }
 
@@ -57,34 +61,88 @@ export default function SurvivalPage() {
   const canStart = owned.length >= SURVIVAL_MIN_OWNED;
 
   return (
-    <PlayerShell>
-      <div className={styles.container}>
-        <div className={styles.head}>
-          <h1 className={styles.title}>{s.title}</h1>
-          <p className={styles.subtitle}>{s.subtitle}</p>
-        </div>
+    <SceneShell>
+      <section className={styles.board}>
+        <header className={styles.head}>
+          <span className={styles.hangTag}>{dict.nav.survival}</span>
+          <div className={styles.titlePlaque}>
+            <h1 className={styles.pageTitle}>{s.title}</h1>
+            <p className={styles.pageSub}>{s.subtitle}</p>
+          </div>
+        </header>
 
         <p className={styles.intro}>{s.intro}</p>
 
-        <KraftCard className={styles.recordCard}>
+        {/* Record panel — Án A hanging wooden board (WoodPanel); the
+            decorative star row, the record line as its headline and
+            the runs-played count stay as the panel's content. The
+            panel has no title of its own, so the board is signless. */}
+        <WoodPanel className={styles.panelFlush} bodyClassName={styles.recordBody}>
+          <div className={styles.recordStars} aria-hidden="true">
+            <span>★</span>
+            <span>★</span>
+            <span>★</span>
+            <span>★</span>
+            <span>★</span>
+          </div>
           <p className={styles.recordLabel}>
             {events.survival.bestDishes > 0
               ? s.bestLabel(events.survival.bestDishes, events.survival.bestScore)
               : s.noRecord}
           </p>
           <p className={styles.runsLabel}>{s.runsLabel(events.survival.runsPlayed)}</p>
-        </KraftCard>
+        </WoodPanel>
 
         {current ? (
-          <KraftCard as="section" className={styles.currentCard}>
-            <p className={styles.progressLabel}>
-              {s.progressLabel(current.index + 1, current.queue.length)}
-            </p>
-            <p className={styles.strikesLabel}>
-              {s.strikesLabel(current.strikes, SURVIVAL_MAX_STRIKES)}
-            </p>
+          <WoodPanel
+            className={styles.panelFlush}
+            bodyClassName={styles.currentCard}
+            title={s.progressLabel(current.index + 1, current.queue.length)}
+          >
+            <div className={styles.progressHead}>
+              <div className={styles.strikesBlock}>
+                <span className={styles.strikesRow} aria-hidden="true">
+                  {Array.from({ length: SURVIVAL_MAX_STRIKES }, (_, i) => (
+                    <span
+                      key={i}
+                      className={`${styles.strikeMark} ${
+                        i < current.strikes ? styles.strikeHit : styles.strikeSafe
+                      }`}
+                    >
+                      {i < current.strikes ? '✖' : '🌶'}
+                    </span>
+                  ))}
+                </span>
+                <p className={styles.strikesLabel}>
+                  {s.strikesLabel(current.strikes, SURVIVAL_MAX_STRIKES)}
+                </p>
+              </div>
+            </div>
+
+            <div className={styles.progressDots} aria-hidden="true">
+              {current.queue.map((dishId, i) => (
+                <span
+                  key={`${dishId}-${i}`}
+                  className={`${styles.progressDot} ${
+                    i < current.index
+                      ? styles.progressDotDone
+                      : i === current.index
+                        ? styles.progressDotCurrent
+                        : styles.progressDotTodo
+                  }`}
+                />
+              ))}
+            </div>
+
             {currentDish ? (
-              <p className={styles.currentDishName}>{currentDish.name}</p>
+              <div className={styles.currentDishRow}>
+                <img
+                  className={styles.currentDishThumb}
+                  src={dishArtFor(currentDish)}
+                  alt={currentDish.name}
+                />
+                <p className={styles.currentDishName}>{currentDish.name}</p>
+              </div>
             ) : null}
 
             <div className={styles.currentActions}>
@@ -108,11 +166,18 @@ export default function SurvivalPage() {
                 {s.abandon}
               </WoodButton>
             </div>
-          </KraftCard>
+          </WoodPanel>
         ) : (
-          <KraftCard as="section" className={styles.startCard}>
+          <WoodPanel className={styles.panelFlush} bodyClassName={styles.startCard}>
+            <div className={styles.startMedallion} aria-hidden="true">
+              {gameIcon('survival') ? (
+                <img className={styles.startMedallionIcon} src={gameIcon('survival')} alt="" />
+              ) : (
+                <span className={styles.startMedallionEmoji}>🔥</span>
+              )}
+            </div>
             <GoldButton
-              className={styles.actionButton}
+              className={styles.startButton}
               disabled={!user || !canStart}
               onClick={start}
             >
@@ -120,9 +185,9 @@ export default function SurvivalPage() {
             </GoldButton>
             {!canStart ? <p className={styles.needOwned}>{s.needOwned(SURVIVAL_MIN_OWNED)}</p> : null}
             <p className={styles.queueHint}>{s.queueLabel(SURVIVAL_QUEUE_LENGTH)}</p>
-          </KraftCard>
+          </WoodPanel>
         )}
-      </div>
-    </PlayerShell>
+      </section>
+    </SceneShell>
   );
 }

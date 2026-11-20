@@ -1,39 +1,74 @@
+/* Theme D survival scene — the same riveted paper board as the
+   approved Recipes board (SceneShell carries the plum festival
+   scene): hanging tag + wooden title plaque, then the record,
+   current-run and start panels as Án A hanging wooden boards
+   (WoodPanel). */
+
+.board {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  padding: 1.4rem 1.5rem 1.1rem;
+  background: linear-gradient(180deg, var(--td-paper) 0%, var(--td-paper-deep) 100%);
+  color: var(--td-paper-text);
+  border: 30px solid transparent;
+  border-image: url('../../assets/theme-d/game/frame-scroll.webp') 30% / 1 / 0 stretch;
+  border-radius: 18px;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+}
+
 .container {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  padding-bottom: 3rem;
+  min-height: 12rem;
 }
 
-/* Page head — big hanging wooden sign (same pattern as SkillTreePage).
-   The wood surface is fixed in both themes, so its text stays pinned
-   to the light cream that reads on wood. */
+/* Page head — hanging tag + title plaque (same pattern as Recipes). */
 .head {
+  position: relative;
   display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-  background: var(--td-wood-gradient, linear-gradient(180deg, #ce9550, #b57e40));
+  justify-content: center;
+  padding-top: 0.4rem;
+}
+
+.hangTag {
+  position: absolute;
+  top: -2.35rem;
+  left: 0.9rem;
+  z-index: 4;
+  padding: 0.32rem 1rem;
+  background: var(--td-wood-gradient);
   border: 3px solid var(--td-ink);
-  border-radius: var(--radius-2xl);
-  box-shadow: var(--shadow-chunky, 0 4px 0 rgba(74, 44, 20, 0.45));
-  padding: 1.4rem 1.75rem;
-}
-
-.title {
-  margin: 0;
-  font-family: var(--td-font-display);
-  font-size: 1.85rem;
+  border-radius: var(--td-radius-full);
+  box-shadow: 0 3px 0 rgba(74, 44, 20, 0.45);
+  color: #fff6e0;
+  font-family: var(--td-font-body);
+  font-size: 0.85rem;
   font-weight: 800;
-  color: #fff6e0;
-  text-shadow: 0 2px 0 rgba(32, 15, 4, 0.45);
+  letter-spacing: 0.02em;
+  text-shadow: 0 1px 0 rgba(32, 15, 4, 0.45);
+  transform: rotate(-2deg);
 }
 
-.subtitle {
+.titlePlaque {
+  text-align: center;
+  padding: 0.4rem 1rem 0.2rem;
+}
+
+.pageTitle {
   margin: 0;
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: #fff6e0;
-  line-height: 1.55;
+  font-family: var(--td-font-game-display);
+  font-size: clamp(1.7rem, 4vw, 2.5rem);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  color: var(--td-brick);
+  text-shadow: 0 2px 0 rgba(255, 246, 224, 0.9);
+}
+
+.pageSub {
+  margin: 0.35rem 0 0;
+  font-family: var(--td-font-game);
+  font-weight: 700;
+  color: var(--td-paper-text-muted);
 }
 
 .intro {
@@ -41,31 +76,52 @@
   font-size: 0.95rem;
   font-weight: 600;
   line-height: 1.6;
-  color: var(--td-page-text-muted);
+  color: var(--td-paper-text-muted);
 }
 
-/* ---------- Record card (on a KraftCard paper body) ---------- */
+/* ---------- Record panel (Án A WoodPanel body) ---------- */
 
-.recordCard {
+/* WoodPanel carries a 32px top margin for its ropes/sign; inside the
+   board's flex column the gap already separates the panels. */
+.panelFlush {
+  margin-top: 0;
+}
+
+.recordBody {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 0.3rem;
+  text-align: center;
+}
+
+.recordStars {
+  display: flex;
+  gap: 0.3rem;
+  font-size: 1.05rem;
+  line-height: 1;
+  color: var(--td-gold-deep);
+  text-shadow: 0 1px 0 rgba(255, 246, 224, 0.9);
 }
 
 .recordLabel {
   margin: 0;
-  font-family: var(--td-font-display);
+  font-family: var(--td-font-game);
   font-size: 1.3rem;
-  font-weight: 800;
+  font-weight: 700;
+  line-height: 1.35;
   color: var(--td-paper-text);
 }
 
 .runsLabel {
   margin: 0;
-  font-size: 0.92rem;
-  font-weight: 600;
-  line-height: 1.5;
-  color: var(--td-paper-text-muted);
+  padding: 0.18rem 0.85rem;
+  border-radius: var(--td-radius-full);
+  border: 2px solid var(--td-paper-edge);
+  background: rgba(255, 246, 224, 0.65);
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--td-paper-text);
 }
 
 /* ---------- Current run ---------- */
@@ -73,29 +129,112 @@
 .currentCard {
   display: flex;
   flex-direction: column;
-  gap: 0.55rem;
+  gap: 0.7rem;
 }
 
-.progressLabel {
-  margin: 0;
-  font-family: var(--td-font-display);
-  font-size: 1.2rem;
-  font-weight: 800;
-  color: var(--td-paper-text);
+/* The progress label moved onto the WoodPanel sign; the head row
+   now only carries the strikes block, kept at the end of the row. */
+.progressHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: flex-end;
+  gap: 0.6rem 1rem;
+}
+
+.strikesBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.25rem;
+}
+
+.strikesRow {
+  display: flex;
+  gap: 0.35rem;
+}
+
+.strikeMark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: var(--td-radius-full);
+  font-size: 0.85rem;
+  line-height: 1;
+}
+
+.strikeHit {
+  background: var(--td-brick);
+  border: 2px solid #7c2d1c;
+  color: #fff6e0;
+  font-weight: 900;
+}
+
+.strikeSafe {
+  background: rgba(255, 246, 224, 0.65);
+  border: 2px dashed rgba(122, 92, 56, 0.55);
 }
 
 .strikesLabel {
   margin: 0;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   font-weight: 700;
-  color: #8a5a00; /* pinned: paper stays light in dark theme */
+  color: var(--td-gold-text);
+}
+
+/* Queue progress — one medallion dot per dish in the run. */
+.progressDots {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.progressDot {
+  width: 16px;
+  height: 16px;
+  border-radius: var(--td-radius-full);
+  border: 2px solid rgba(74, 44, 20, 0.55);
+}
+
+.progressDotDone {
+  background: radial-gradient(circle at 35% 30%, var(--td-gold-bright), var(--td-gold-deep));
+}
+
+.progressDotCurrent {
+  background: var(--td-brick);
+  box-shadow: 0 0 0 3px rgba(176, 62, 38, 0.3);
+}
+
+.progressDotTodo {
+  background: rgba(255, 246, 224, 0.6);
+}
+
+.currentDishRow {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Exact 1:1 art cell — the flat dish illustration is never cropped. */
+.currentDishThumb {
+  width: 96px;
+  height: 96px;
+  aspect-ratio: 1;
+  object-fit: contain;
+  flex-shrink: 0;
+  background: rgba(255, 246, 224, 0.6);
+  border: 2px solid var(--td-paper-edge);
+  border-radius: var(--td-radius-paper);
 }
 
 .currentDishName {
   margin: 0;
-  font-size: 1.05rem;
-  font-weight: 800;
-  line-height: 1.4;
+  font-family: var(--td-font-game);
+  font-size: 1.2rem;
+  font-weight: 700;
+  line-height: 1.35;
   color: var(--td-paper-text);
 }
 
@@ -110,13 +249,45 @@
   min-height: 44px;
 }
 
-/* ---------- Start card ---------- */
+/* ---------- Start panel ---------- */
 
 .startCard {
   display: flex;
   flex-direction: column;
-  gap: 0.6rem;
-  align-items: flex-start;
+  align-items: center;
+  gap: 0.65rem;
+  text-align: center;
+}
+
+.startMedallion {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 92px;
+  height: 92px;
+  border-radius: var(--td-radius-full);
+  background: radial-gradient(circle at 35% 30%, var(--td-gold-bright), var(--td-gold-deep));
+  border: 3px solid var(--td-ink);
+  box-shadow:
+    inset 0 -4px 0 rgba(59, 32, 8, 0.3),
+    0 4px 0 rgba(74, 44, 20, 0.35);
+}
+
+.startMedallionIcon {
+  width: 58px;
+  height: 58px;
+  object-fit: contain;
+}
+
+.startMedallionEmoji {
+  font-size: 2.4rem;
+  line-height: 1;
+}
+
+.startButton {
+  min-height: 52px;
+  padding-inline: 2rem;
+  font-size: 1.05rem;
 }
 
 .needOwned {
@@ -135,9 +306,34 @@
   color: var(--td-paper-text-muted);
 }
 
-@media (max-width: 760px) {
-  .title {
-    font-size: 1.5rem;
+@media (max-width: 640px) {
+  .board {
+    border-width: 20px;
+    padding: 1rem 0.9rem 0.9rem;
+    gap: 0.9rem;
+  }
+
+  .hangTag {
+    top: -2.05rem;
+    left: 0.4rem;
+  }
+
+  .progressHead {
+    flex-direction: column;
+  }
+
+  .strikesBlock {
+    align-items: flex-start;
+  }
+
+  .currentDishRow {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .currentDishThumb {
+    width: 120px;
+    height: 120px;
   }
 
   .currentActions {
@@ -145,11 +341,8 @@
     align-items: stretch;
   }
 
-  .actionButton {
+  .actionButton,
+  .startButton {
     width: 100%;
-  }
-
-  .startCard {
-    align-items: stretch;
   }
 }
