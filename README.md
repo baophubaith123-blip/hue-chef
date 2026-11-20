@@ -419,6 +419,18 @@ Phản hồi của tác giả khi duyệt bản mẫu game-shell (kèm ảnh ch�
 
 ---
 
+## 🍳 Đợt lan R1 — chi tiết món + 5 màn nấu theo bản vẽ đích (2026-11-20)
+
+Sau khi bản mẫu game-shell + thẻ món được duyệt, đợt lan đầu tiên dựng lại **phần chơi chính** theo các bản vẽ đích riêng của đợt (dich-2 chi tiết món, dich-3 màn nấu, dich-4 hoàn thiện, sheet stage 1–5 và sheet4-minigames):
+
+- **Chi tiết món (`/recipes/:id`)** trong `SceneShell`: một bảng giấy lớn khung cuộn — tranh món phẳng hiển thị **trọn vẹn ô 1:1** trong khung cấp món, hàng chip giấy (thời gian / độ khó / số bước / điểm cơ bản), panel giấy **Nguyên liệu** kẻ đứt nét có ô icon viền gỗ, panel **Các bước** với vòng số vàng, khối mua bằng plaque gỗ + nút vàng; khối hành trình H3 (chặng, giấy phép bán, ván trùm) và bình luận giữ nguyên 100% chức năng, bình luận nằm trên panel giấy riêng với palette giấy được ghim cố định cả ở theme tối.
+- **5 màn nấu** (dùng chung cho học `/cooking/:id`, bán `?sell=`, trùm `?boss=` và các chế độ sinh tồn/hộp bí ẩn): trang nấu chuyển hẳn sang `SceneShell`; thanh trên thành **thanh gạch** kiểu dich-3 với plaque kem cho thời gian/điểm; chợ có plaque mận + danh sách giấy ô tích + thẻ sạp biển gỗ/rổ đan; hứng dùng nồi Nồi Nồi phẳng trên **xe đẩy có bánh xe** + sàn gỗ; nấu dùng nồi tranh phẳng trọn vẹn, danh sách bước viền mực, khay viền vòng gỗ, dialog nêm plaque vàng; hoàn thiện có **bếp củi + sàn gỗ + viền thổ cẩm** và vòng vàng phát sáng; quiz/minigame dùng header gạch Coiny và avatar nồi phẳng. **Modal kết quả** chuyển sang khung gỗ theme-d (sao bung, plaque điểm vàng; trạng thái thua vẫn không tự đóng như luật H2), các panel kết quả bán/sự kiện/online đồng bộ cùng khung gỗ.
+- **Luật khung:** hiệu chỉnh lại chiều cao khung ván theo HUD + thanh gỗ đáy ở mọi kích thước (trước bị che 40–93px tuỳ máy), nén header ván thành hai hàng gọn ở ≤768px để màn nấu/hoàn thiện đủ chiều cao làm việc ở 390×844; kiểm đủ 1920×1080 + 1440×900 + 390×844 cho chi tiết món và từng màn nấu, ảnh đặt cạnh bản vẽ đích.
+- **Kiểm chứng:** `tsc` 0 lỗi, build đạt; bot chơi **trọn một ván học ở cả 2 theme** (5 sao, 196 điểm, nêm 40/40, quiz 40/40, ví học bất biến, tiến độ +1 món) và **trọn bộ kiểm ván bán H4** (mẻ FIFO đúng giá vốn, cấp chất lượng khớp điểm, có chẩn đoán vị, giá/tip khớp tính tay, tổng kết ca, khách VIP/cok, cổng giấy phép — **0 FAIL**); **quét tương phản 0 lỗi** trên mọi màn thuộc đợt × sáng/tối. Luật chơi, dữ liệu, `localStorage`, guest-scope và `src/lib/score.ts` không đổi (diff `score.ts` = 0).
+- **Giới hạn còn lại (nói thẳng):** bot nghiệm thu lái bằng sự kiện tổng hợp trong trang nên hai màn hứng/hoàn thiện ghi 0 điểm kỹ thuật (màn vẫn hoàn thành và cộng điểm các màn còn lại bình thường; người chơi thật bấm trực tiếp thì ghi điểm như cũ); ở 390×844 tiêu đề modal kết quả bị plaque ví HUD che một phần nhỏ (hành vi chung của Modal theme-d ở vỏ game, modal vẫn cuộn và đóng mở bình thường); màn nấu ở bề rộng điện thoại dùng bố cục xếp chồng cuộn nội bộ kế thừa từ trước (header đã nén gọn để chừa chiều cao làm việc).
+
+---
+
 ## 📞 Liên hệ
 
 | Thông tin | Chi tiết |
