@@ -431,6 +431,24 @@ Sau khi bản mẫu game-shell + thẻ món được duyệt, đợt lan đầu 
 
 ---
 
+## 🪵 Đợt lan R2 — hệ bảng gỗ treo (án A) + bản đồ, album, kỹ năng, nhiệm vụ, sinh tồn, hộp bí ẩn (2026-11-20)
+
+Đợt lan thứ hai thay toàn bộ **bảng/panel** trong khu người chơi — vốn bị nhận xét "còn web quá" — bằng **hệ bảng gỗ treo theo bản vẽ án A đã duyệt** (Bảo chọn trong 3 phương án A/B/C và yêu cầu bản dựng giống 100% bản vẽ), đồng thời xử lý luật khung mới: **cấm khoảng trống do cột/danh sách dài lệch nhau**.
+
+- **Hệ bảng dùng chung (`WoodPanel`):** asset **cắt trực tiếp từ bản vẽ án A** — bảng gỗ treo, dây thừng, biển tiêu đề chạm khắc, đinh tán góc, nút mũi tên gỗ, plaque số bước — chữ và dữ liệu thật của game đặt lên trên asset; bảng đu nhẹ khi xuất hiện, nảy khi bấm, tôn trọng `prefers-reduced-motion`.
+- **Chi tiết món:** hai bảng Nguyên liệu + Các bước theo án A; panel bước đổi thành **khung gọn chỉ hiển thị đúng 1 bước** với nút chuyển ‹ › và plaque "Bước x/N" — hai cột luôn kết thúc cùng nhau, cuộn xuống cuối trang **không còn khoảng trống chết** ở cột trái như trước.
+- **Bản đồ Huế (`/map`):** cảnh game minh hoạ toàn khung (sông Hương, chợ Đông Ba, phố cổ, Hoàng thành) với đường hành trình và huy hiệu món/trùm theo dữ liệu thật; luật H3 giữ nguyên.
+- **Album (`/album`):** thẻ văn hoá song ngữ với tranh cấp món trọn vẹn trong khung án A, trạng thái mở/khoá theo sao thật.
+- **Cây kỹ năng (`/skills`):** 4 nhánh × 5 bậc thành các bảng thang treo, điểm kỹ năng và trạng thái nâng cấp thật.
+- **Nhiệm vụ + điểm danh (`/quests`):** bảng nhiệm vụ ngày/tuần/chuỗi theo án A; lịch điểm danh 7 ngày với **ô ngày 7 rộng hơn** (hết chật chữ như gói H7), món của ngày giữ nguyên dữ liệu.
+- **Sinh tồn + hộp bí ẩn:** các màn hình bao quanh (vào chế độ, kỷ lục, mở hộp, kết quả) bọc panel án A; ván nấu dùng chung engine của Đợt 1, luật chơi không đổi.
+- **Trang chủ + panel chặn khách:** các bảng ở trang chủ và panel "Cần tài khoản" cho khách đồng bộ ngôn ngữ bảng A; phạm vi chặn khách (`guest-scope`) giữ nguyên.
+- **Vá nit modal dùng chung:** Modal theme-d nay **portal ra `body`** — ở 390×844 tiêu đề modal kết quả/thẻ văn hoá **không còn bị plaque ví HUD che** (đã kiểm bằng đo hình học: overlay phủ toàn viewport, dialog và tiêu đề nằm trọn trong màn hình, kèm ảnh chụp).
+- **Kiểm chứng:** `tsc` 0 lỗi, build đạt; bot chức năng **25 PASS / 0 FAIL** (cổng trùm bản đồ, mở thẻ album + modal, nâng cấp kỹ năng, nhận thưởng nhiệm vụ + điểm danh, sinh tồn bắt đầu/tiếp tục/huỷ, hộp bí ẩn mở hộp, chặn khách đúng 5 khu và bản đồ mở cho khách, 0 lỗi trang); **quét tương phản 0 lỗi** trên 6 route thuộc đợt × sáng/tối; kiểm khung toàn khung 1920×1080 + 1440×900 + 390×844. Luật chơi, dữ liệu, `localStorage`, guest-scope và `src/lib/score.ts` không đổi (diff `score.ts` = 0).
+- **Giới hạn còn lại (nói thẳng):** lượt bot kiểm chứng gộp ban đầu bị sập ở mục đo hình học modal do trình duyệt headless bị đóng giữa chừng — mục đó đã được kiểm lại riêng bằng script tối thiểu và đạt, kèm ảnh chụp modal 390; trong lượt quét nhanh cuối, các ảnh 390 bị sập trình duyệt vì áp lực bộ nhớ của máy ảo dùng chung, nên ảnh 390 dùng bộ ảnh đã chụp ở lượt trước trong cùng đợt.
+
+---
+
 ## 📞 Liên hệ
 
 | Thông tin | Chi tiết |
