@@ -2,7 +2,6 @@ import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 
 import { ImageWithFallback } from '@/components/ImageWithFallback';
-import { DishGradeFrame } from '@/components/theme-d/DishGradeFrame';
 import { dishArtFor } from '@/components/theme-d/dish-art';
 import { gameIcon } from '@/components/theme-d/game-assets';
 import { useAuth } from '@/contexts/AuthContext';
@@ -13,6 +12,12 @@ import { dishGradeFor } from '@/features/recipes/lib/grade';
 import { formatDuration } from '@/lib/format';
 import { useTranslation } from '@/i18n/useTranslation';
 
+import cardEasy from '@/assets/theme-d/game/r4-card-easy.webp';
+import cardNormal from '@/assets/theme-d/game/r4-card-normal.webp';
+import cardHard from '@/assets/theme-d/game/r4-card-hard.webp';
+import cardVhard from '@/assets/theme-d/game/r4-card-vhard.webp';
+import cardSpecial from '@/assets/theme-d/game/r4-card-special.webp';
+
 import styles from '@/features/recipes/components/SceneDishCard.module.css';
 
 interface SceneDishCardProps {
@@ -21,12 +26,38 @@ interface SceneDishCardProps {
   lockedPrice?: number;
 }
 
+type DifficultyTier = 1 | 2 | 3 | 4 | 5;
+
+/** Đợt lan 4: one approved card frame per difficulty tier — the beauty
+ *  escalates with the tier exactly as on the approved card sheet
+ *  (Dễ bamboo → Thường wood → Khó carved + ribbon → Rất khó black
+ *  lacquer + gold → Đặc biệt golden dragons). The frame art carries
+ *  the tier name on its own sign, so no real text duplicates it. */
+const TIER_FRAMES: Record<DifficultyTier, string> = {
+  1: cardEasy,
+  2: cardNormal,
+  3: cardHard,
+  4: cardVhard,
+  5: cardSpecial,
+};
+
+const TIER_CLASS: Record<DifficultyTier, string> = {
+  1: styles.tier1,
+  2: styles.tier2,
+  3: styles.tier3,
+  4: styles.tier4,
+  5: styles.tier5,
+};
+
+function tierFor(difficulty: number): DifficultyTier {
+  return Math.min(5, Math.max(1, difficulty)) as DifficultyTier;
+}
+
 /**
- * Theme D scene dish card for the recipe catalogue scene (Gói Mẫu Căn
- * Chỉnh): a paper card inside the dish's grade frame, illustrated dish
- * art (never the old photo), a round difficulty medallion on the art's
- * top-left corner and a wooden plaque at the foot — lock + price when
- * the dish is not owned yet, base score when it is playable.
+ * Theme D scene dish card (Đợt lan 4): the dish lives inside the
+ * approved per-tier card frame — square dish art (never cropped) in
+ * the frame's transparent interior, real text (name, category, time,
+ * score/price) on the paper face inside the frame.
  */
 export function SceneDishCard({ recipe, lockedPrice }: SceneDishCardProps) {
   const { dict } = useTranslation();
@@ -37,6 +68,7 @@ export function SceneDishCard({ recipe, lockedPrice }: SceneDishCardProps) {
   const tierName = difficultyName(dict.recipe.difficultyNames, recipe.difficulty);
   const grade = dishGradeFor(recipe);
   const gradeLabel = dict.recipe.gradeNames[grade - 1] ?? '';
+  const tier = tierFor(recipe.difficulty);
   const isLocked = lockedPrice !== undefined;
 
   // The player's own best stars for this dish (same rule as RecipeCard:
@@ -47,8 +79,9 @@ export function SceneDishCard({ recipe, lockedPrice }: SceneDishCardProps) {
   }, [user?.cookedRecipes, recipe.id]);
 
   return (
-    <DishGradeFrame grade={grade} gradeLabel={gradeLabel} className={styles.frameWrap}>
-      <article className={`${styles.card} ${isLocked ? styles.cardLocked : ''}`}>
+    <article className={`${styles.card} ${TIER_CLASS[tier]} ${isLocked ? styles.cardLocked : ''}`}>
+      <img src={TIER_FRAMES[tier]} alt="" className={styles.frameImg} draggable={false} />
+      <div className={styles.inner}>
         <Link
           to={`/recipes/${recipe.id}`}
           className={styles.imageLink}
@@ -117,7 +150,7 @@ export function SceneDishCard({ recipe, lockedPrice }: SceneDishCardProps) {
             )}
           </div>
         </div>
-      </article>
-    </DishGradeFrame>
+      </div>
+    </article>
   );
 }

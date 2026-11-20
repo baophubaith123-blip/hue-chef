@@ -1,26 +1,87 @@
-/* Theme D scene dish card — paper card inside the shared DishGradeFrame,
-   matching the catalogue sheet of the Theme D mẫu: illustrated dish art,
-   a round difficulty medallion pinned on the art's top-left corner and a
-   wooden/orange plaque at the foot of the card. Paper stays light in
-   both themes, so paper text colours are pinned via the --td-paper-*
-   tokens (never the page text tokens). */
-
-.frameWrap {
-  height: 100%;
-}
+/* Theme D scene dish card — Đợt lan 4: the card IS the approved
+   per-tier frame art (r4-card-*): bamboo for Dễ, light wood for
+   Thường, carved wood + red ribbon for Khó, black lacquer + gold for
+   Rất khó, golden dragons for Đặc biệt. The frame's interior is
+   transparent in the asset, so the paper face below is the card's own
+   inner panel, inset per tier to sit exactly inside that tier's frame
+   (measured on the assets). Paper stays light in both themes, so text
+   colours stay pinned via the --td-paper-* tokens. */
 
 .card {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  background: var(--td-paper);
-  color: var(--td-paper-text);
   position: relative;
+  width: 100%;
+  /* Mean aspect of the five frame assets (0.51–0.59): the box keeps
+     the frames' proportions in every grid, and the frame art itself
+     stretches the last few percent to fill it. */
+  aspect-ratio: 59 / 100;
+  color: var(--td-paper-text);
   transition: transform 0.18s ease;
 }
 
 .card:hover {
-  transform: translateY(-3px);
+  transform: translateY(-4px);
+}
+
+/* The frame art stretches to the card box (tiers differ by <11% in
+   aspect, so the stretch is invisible on frame ornament) and floats
+   above the paper face's edges, pointer-transparent so the links
+   inside stay clickable. */
+.frameImg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+  filter: drop-shadow(0 8px 14px rgba(40, 16, 4, 0.35));
+}
+
+/* Paper face inside the frame. Per-tier insets (top / side / bottom)
+   measured from the r4-card assets: below the tier sign, inside the
+   side rails, above the bottom rail / tassels / dragon ornament. */
+.inner {
+  position: absolute;
+  top: var(--card-inset-top);
+  right: var(--card-inset-side);
+  bottom: var(--card-inset-bottom);
+  left: var(--card-inset-side);
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 8px;
+  background: linear-gradient(180deg, #fffdf4 0%, var(--td-paper) 55%, var(--td-paper-deep) 100%);
+  box-shadow: inset 0 0 0 2px rgba(120, 84, 32, 0.25);
+}
+
+.tier1 {
+  --card-inset-top: 10.5%;
+  --card-inset-side: 10%;
+  --card-inset-bottom: 7.5%;
+}
+
+.tier2 {
+  --card-inset-top: 10%;
+  --card-inset-side: 8.5%;
+  --card-inset-bottom: 7%;
+}
+
+.tier3 {
+  --card-inset-top: 11%;
+  --card-inset-side: 9.5%;
+  --card-inset-bottom: 7.5%;
+}
+
+.tier4 {
+  --card-inset-top: 10%;
+  --card-inset-side: 9.5%;
+  --card-inset-bottom: 10.5%;
+}
+
+.tier5 {
+  --card-inset-top: 13%;
+  --card-inset-side: 13%;
+  --card-inset-bottom: 12.5%;
 }
 
 .imageLink {
@@ -124,7 +185,7 @@
 
 .title {
   margin: 0;
-  font-family: var(--td-font-display);
+  font-family: var(--td-font-game);
   font-size: 1.02rem;
   font-weight: 800;
   line-height: 1.25;
@@ -166,7 +227,7 @@
 }
 
 /* Grade name in words next to the category (the frame itself carries
-   the grade visually; grades 4–5 also get the frame ribbon). */
+   the tier visually on its painted sign). */
 .gradeName {
   font-size: 0.7rem;
   font-weight: 800;
@@ -208,6 +269,21 @@
   background: var(--td-wood-gradient);
   color: #fff6e0;
   text-shadow: 0 1px 0 rgba(32, 15, 4, 0.45);
+}
+
+.badgeIcon {
+  width: 15px;
+  height: 15px;
+  object-fit: cover;
+  border-radius: 4px;
+  vertical-align: -2px;
+}
+
+.plaqueIcon {
+  width: 19px;
+  height: 19px;
+  object-fit: cover;
+  border-radius: 5px;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -257,33 +333,4 @@
   .title {
     font-size: 0.92rem;
   }
-}
-
-/* Game-shell polish (Gói Game-Shell): painted badge/plaque icons, game
-   font for the dish name, gentle card lift on hover. */
-.badgeIcon {
-  width: 15px;
-  height: 15px;
-  object-fit: cover;
-  border-radius: 4px;
-  vertical-align: -2px;
-}
-
-.plaqueIcon {
-  width: 19px;
-  height: 19px;
-  object-fit: cover;
-  border-radius: 5px;
-}
-
-.title {
-  font-family: var(--td-font-game);
-}
-
-.frameWrap {
-  transition: transform 0.18s ease;
-}
-
-.frameWrap:hover {
-  transform: translateY(-4px);
 }
