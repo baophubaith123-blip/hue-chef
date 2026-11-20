@@ -144,3 +144,18 @@
   box-shadow: 0 4px 0 var(--td-ink-soft, rgba(74, 44, 20, 0.45));
   font-weight: 900;
 }
+
+/* ===== Đợt lan R1 — gold plaque title (dich-3 action panel) ===== */
+.title {
+  display: inline-block;
+  font-family: var(--td-font-game);
+  background: var(--gradient-gold, linear-gradient(135deg, #f6c453, #e9a23b));
+  border: 2.5px solid var(--td-ink, #4a2c14);
+  border-radius: 999px;
+  padding: 6px 20px;
+  box-shadow: 0 3px 0 var(--td-ink-soft, rgba(74, 44, 20, 0.45));
+}
+
+.stopBtn {
+  font-family: var(--td-font-game);
+}

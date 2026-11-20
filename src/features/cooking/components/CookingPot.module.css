@@ -381,3 +381,26 @@
   border-radius: 14px;
   box-shadow: none;
 }
+
+/* ===== Đợt lan R1 — flat pot portrait standing on the kitchen scene =====
+   The column goes transparent so the pot arena sits directly on the
+   bep scene between the two paper panels (dich-3). The flat cook art
+   is portrait (398×488) with cream baked in (#f9f4ea ≈ the plaque's
+   #f9f4ec), so it is shown whole with contain — never cropped. */
+.column,
+[data-theme='dark'] .column {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+}
+
+.title {
+  font-family: var(--td-font-game);
+}
+
+.potImg {
+  width: auto;
+  height: min(215px, 52vw);
+  aspect-ratio: auto;
+  object-fit: contain;
+}

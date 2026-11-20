@@ -396,3 +396,18 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+
+/* ===== Đợt lan R1 — wooden tray frame ===== */
+.tray {
+  box-shadow:
+    0 0 0 5px var(--td-wood-dark, #8a5a2b),
+    var(--shadow-game-card, 0 12px 28px rgba(59, 42, 32, 0.12));
+}
+
+.title {
+  font-family: var(--td-font-game);
+}
+
+.pagerSign {
+  font-family: var(--td-font-game);
+}

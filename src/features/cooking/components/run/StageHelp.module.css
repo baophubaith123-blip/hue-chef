@@ -122,3 +122,18 @@
   box-shadow: 0 3px 0 var(--td-ink-soft, rgba(74, 44, 20, 0.45));
   font-weight: 800;
 }
+
+/* ===== Đợt lan R1 — gold medallion help button ===== */
+.helpBtn {
+  font-family: var(--td-font-game-display);
+  background: var(--gradient-gold, linear-gradient(135deg, #f6c453, #e9a23b));
+  color: #43301b;
+}
+
+.cardHeader {
+  font-family: var(--td-font-game);
+}
+
+.closeBtn {
+  font-family: var(--td-font-game);
+}

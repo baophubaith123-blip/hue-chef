@@ -221,3 +221,23 @@
 [data-theme='dark'] .done .stepDesc {
   color: #a9cbb6;
 }
+
+/* ===== Đợt lan R1 — scroll-paper steps panel ===== */
+.steps {
+  border: 3px solid var(--td-ink, #4a2c14);
+  border-radius: 20px;
+  box-shadow: 0 6px 0 rgba(74, 44, 20, 0.16);
+}
+
+.title {
+  font-family: var(--td-font-game);
+  letter-spacing: 0.01em;
+}
+
+.stepTitle {
+  font-family: var(--td-font-game);
+}
+
+.order {
+  font-family: var(--td-font-game);
+}

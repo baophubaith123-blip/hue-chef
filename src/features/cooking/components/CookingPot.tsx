@@ -1,3 +1,4 @@
+import { NOI_NOI_FLAT } from '@/components/theme-d/game-assets';
 import { getIngredientById } from '@/data/ingredients';
 import { useDragDrop } from '@/features/cooking/hooks/useDragDrop';
 import { useTranslation } from '@/i18n/useTranslation';
@@ -76,7 +77,7 @@ export function CookingPot({
             <span className={`${styles.steamPuff} ${styles.steamPuff1}`} />
             <span className={`${styles.steamPuff} ${styles.steamPuff2}`} />
             <span className={`${styles.steamPuff} ${styles.steamPuff3}`} />
-            <img src="/images/noi-noi-2d.webp" alt="" className={styles.potImg} />
+            <img src={NOI_NOI_FLAT.cook} alt="" className={styles.potImg} />
           </div>
           <p className={styles.potHint}>
             {disabled ? t('cooking.sessionEnded') : t('cooking.dropIngredientsHere')}
