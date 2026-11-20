@@ -600,6 +600,9 @@
   background:
     repeating-linear-gradient(90deg, rgba(138, 90, 36, 0.10) 0 3px, transparent 3px 46px),
     linear-gradient(180deg, #f8ecd0, #ecd9ac);
+  /* Cream base under the gradient layers: the paper tone the form text
+     actually sits on (also the effective bg for contrast checks). */
+  background-color: #f8ecd0;
   border: 3px solid #6d4520;
   border-radius: 18px;
   box-shadow: 0 6px 0 rgba(74, 44, 20, 0.35);
@@ -626,7 +629,9 @@
 .frameAvatar .avatarFallback {
   width: 100%; height: 100%;
   display: flex; align-items: center; justify-content: center;
-  font-size: 2.4rem; font-weight: 800; color: #5b2410;
+  /* White initial on the brick gradient (same pin as .avatarFallback):
+     dark brown on brick red fails contrast in both themes. */
+  font-size: 2.4rem; font-weight: 800; color: #ffffff;
 }
 .frameAvatar .equippedOverlay { position: absolute; right: 2px; bottom: 2px; }
 .shelfImg {
