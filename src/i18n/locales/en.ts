@@ -1369,6 +1369,8 @@ export const en: I18nDictionary = {
     pagerNext: 'Next page',
     stepNeedsNames: 'This step needs: {names} — drop them in!',
     hudStepOf: 'Step {current}/{total}',
+    stepPrev: 'Previous step',
+    stepNext: 'Next step',
     steps: 'Steps',
     preparingKitchen: 'Preparing kitchen…',
     cannotCook: 'Cannot cook this dish',

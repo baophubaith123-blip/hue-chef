@@ -1370,6 +1370,8 @@ export const vi: I18nDictionary = {
     pagerNext: 'Trang sau',
     stepNeedsNames: 'Bước này cần: {names} — thả vào nồi nhé!',
     hudStepOf: 'Bước {current}/{total}',
+    stepPrev: 'Bước trước',
+    stepNext: 'Bước sau',
     steps: 'Các bước nấu',
     preparingKitchen: 'Đang chuẩn bị gian bếp…',
     cannotCook: 'Không thể nấu món này',

@@ -1171,6 +1171,8 @@ export interface I18nDictionary {
     pagerNext: string;
     stepNeedsNames: string;
     hudStepOf: string;
+    stepPrev: string;
+    stepNext: string;
     steps: string;
     preparingKitchen: string;
     cannotCook: string;

@@ -209,9 +209,12 @@
 
 .boardGrid {
   display: grid;
-  grid-template-columns: minmax(270px, 330px) minmax(230px, 1fr) minmax(290px, 1.3fr);
+  /* Hai bảng án A có cùng tỉ lệ khung (~0,82) nên hai cột bảng để bằng
+     nhau 1.15fr — ba cột kết thúc gần như cùng một đường ngang, không
+     còn cột ngắn sinh khoảng trống chết (luật khung 2026-11-20 15:41). */
+  grid-template-columns: minmax(260px, 320px) minmax(290px, 1.15fr) minmax(290px, 1.15fr);
   gap: 1.4rem;
-  align-items: start;
+  align-items: stretch;
 }
 
 @media (max-width: 1120px) {
@@ -345,85 +348,96 @@
   color: var(--td-danger, #b42318);
 }
 
-/* ----- Paper panels (ingredients / steps) ----- */
+/* ----- Bảng gỗ treo án A (asset cắt từ bản vẽ) -----
+   Panel nguyên liệu dùng nguyên bảng trái của bản vẽ (biển đã làm
+   trống, lòng bảng đã xoá hàng vẽ sẵn): chữ biển + hàng kem là dữ
+   liệu thật phủ đúng vùng đã vẽ, theo % để co giãn mọi kích thước. */
 
-.panel {
-  padding: 1rem 1.05rem 1.05rem;
-  background: linear-gradient(180deg, rgba(255, 252, 240, 0.85), rgba(247, 232, 198, 0.55));
-  border: 2px solid var(--td-paper-edge);
-  border-radius: var(--td-radius-wood);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7), 0 3px 10px rgba(74, 44, 20, 0.08);
-}
-
-.sectionTitle {
-  margin: 0 0 0.7rem;
-  padding-bottom: 0.55rem;
-  border-bottom: 2px solid rgba(74, 44, 20, 0.35);
-  font-family: var(--td-font-game);
-  font-size: 1.18rem;
-  font-weight: 800;
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
-  color: var(--td-paper-text);
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.ingredientsPanel {
+.boardPanel {
+  position: relative;
+  container-type: inline-size;
   align-self: start;
   width: 100%;
-  box-sizing: border-box;
+  aspect-ratio: 784 / 956;
+  background: url('../../assets/theme-d/game/panel-board.webp') no-repeat center / 100% 100%;
 }
 
-/* Ingredients sheet — one row per ingredient, dashed rule between rows,
-   a small framed icon cell on the left, amount right-aligned. */
-.ingredientsList {
+.boardSignText {
+  position: absolute;
+  left: 14.5%;
+  top: 2.2%;
+  width: 70%;
+  height: 13%;
   margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.ingredientRow {
-  display: flex;
-  align-items: center;
-  gap: 0.7rem;
-  padding: 0.5rem 0.15rem;
-  border-bottom: 1.5px dashed rgba(74, 44, 20, 0.28);
-}
-
-.ingredientRow:last-child {
-  border-bottom: none;
-  padding-bottom: 0.1rem;
-}
-
-.ingredientIcon {
-  flex: none;
-  width: 36px;
-  height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--td-paper);
-  border: 1.5px solid var(--td-wood);
-  border-radius: 9px;
-  box-shadow: 0 1px 0 rgba(74, 44, 20, 0.3);
-  font-size: 1.15rem;
-  line-height: 1;
+  text-align: center;
+  font-family: var(--td-font-game-display);
+  font-size: 6.8cqw;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  line-height: 1.05;
+  text-transform: uppercase;
+  color: #f7c65c;
+  text-shadow:
+    0 2px 0 #5d3410,
+    1px 0 0 #7a4416,
+    -1px 0 0 #7a4416,
+    0 -1px 0 #7a4416,
+    0 3px 5px rgba(32, 15, 4, 0.45);
 }
 
-.ingredientName {
-  flex: 1;
-  min-width: 0;
-  font-size: 0.95rem;
-  font-weight: 700;
+.boardRows {
+  position: absolute;
+  left: 11.5%;
+  right: 11.5%;
+  top: 19.8%;
+  bottom: 8.2%;
+  margin: 0;
+  padding: 0.5cqw 0.5cqw 1cqw;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 2.4cqw;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(122, 68, 22, 0.55) transparent;
+}
+
+.boardRow {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 3cqw;
+  padding: 1.9cqw 3.2cqw;
+  background: linear-gradient(180deg, #fffdf4, #f9edcb);
+  border: 2px solid rgba(122, 68, 22, 0.55);
+  border-radius: 3.2cqw;
+  box-shadow: 0 2px 0 rgba(60, 32, 8, 0.35);
   color: var(--td-paper-text);
 }
 
-.ingredientAmount {
+.boardRowIcon {
   flex: none;
-  font-size: 0.82rem;
-  font-weight: 600;
+  width: 8.6cqw;
+  text-align: center;
+  font-size: 6.2cqw;
+  line-height: 1;
+}
+
+.boardRowName {
+  flex: 1;
+  min-width: 0;
+  font-family: var(--td-font-game);
+  font-size: 4.55cqw;
+  font-weight: 700;
+}
+
+.boardRowAmount {
+  flex: none;
+  font-size: 4.1cqw;
+  font-weight: 700;
   color: var(--td-paper-text-muted);
   font-variant-numeric: tabular-nums;
 }
@@ -439,11 +453,11 @@
 
 /* Gói H3 — journey box: chapter, sell-license status, boss entry.
    Paper surface in both themes, so inks are the pinned paper values. */
-.journeyBox {
-  background: var(--td-paper-deep, #f7e8c6);
-  border: 2px solid var(--td-gold-deep, #c97a1f);
-  border-radius: var(--td-radius-wood);
-  padding: 0.9rem 1.05rem;
+.journeyPanel {
+  margin-top: 24px;
+}
+
+.journeyBody {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
@@ -502,27 +516,164 @@
   text-decoration: none;
 }
 
-/* Step cards — paper card per step, gold circled number. */
-.stepsList {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 0.7rem;
+/* Bảng bước án A: thẻ kem + mũi tên + plaque phủ đúng vị trí đã vẽ
+   trên panel-board-steps (tọa độ % suy từ chính bản vẽ). */
+.stepsBoard {
+  position: relative;
+  container-type: inline-size;
+  width: 100%;
+  max-width: 430px;
+  margin-inline: auto;
+  aspect-ratio: 810 / 956;
+  background: url('../../assets/theme-d/game/panel-board-steps.webp') no-repeat center / 100% 100%;
 }
 
-.stepItem {
+.stepsSignText {
+  position: absolute;
+  left: 16%;
+  top: 6.6%;
+  width: 72%;
+  height: 12.4%;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-family: var(--td-font-game-display);
+  font-size: 7.4cqw;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  line-height: 1.05;
+  text-transform: uppercase;
+  color: #f7c65c;
+  text-shadow:
+    0 2px 0 #5d3410,
+    1px 0 0 #7a4416,
+    -1px 0 0 #7a4416,
+    0 -1px 0 #7a4416,
+    0 3px 5px rgba(32, 15, 4, 0.45);
+}
+
+.stepCard {
+  position: absolute;
+  left: 10.4%;
+  top: 23.1%;
+  width: 77.2%;
+  height: 50.7%;
+  padding: 3.6cqw 4.2cqw;
+  box-sizing: border-box;
+  background: linear-gradient(180deg, #fffdf4, #f9edcb);
+  border: 2px solid rgba(122, 68, 22, 0.45);
+  border-radius: 3.6cqw;
+  box-shadow:
+    inset 0 0 0 3px rgba(255, 253, 244, 0.65),
+    0 3px 8px rgba(60, 32, 8, 0.28);
+  color: var(--td-paper-text);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(122, 68, 22, 0.55) transparent;
+  touch-action: pan-y;
+}
+
+.stepCardInner {
   display: flex;
   align-items: flex-start;
-  gap: 0.8rem;
-  padding: 0.8rem 0.9rem;
-  background: var(--td-paper);
-  border: 2px solid var(--td-paper-edge);
-  border-radius: var(--td-radius-paper);
-  box-shadow: 0 2px 6px rgba(74, 44, 20, 0.07);
-  color: var(--td-paper-text);
+  gap: 3.4cqw;
+  animation: stepIn 0.28s ease-out;
 }
+
+@keyframes stepIn {
+  from {
+    opacity: 0;
+    transform: translateX(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.arrowBtn {
+  position: absolute;
+  top: 78%;
+  width: 18.6%;
+  padding: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition:
+    transform 0.18s cubic-bezier(0.34, 1.8, 0.64, 1),
+    opacity 0.16s ease,
+    filter 0.16s ease;
+}
+
+.arrowBtn img {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 3px 3px rgba(60, 32, 8, 0.35));
+}
+
+.arrowBtn:hover:not(:disabled) {
+  transform: translateY(-2px);
+}
+
+.arrowBtn:active:not(:disabled) {
+  transform: scale(0.9);
+}
+
+.arrowBtn:disabled {
+  opacity: 0.45;
+  filter: grayscale(0.45);
+  cursor: default;
+}
+
+.arrowL {
+  left: 12.8%;
+}
+
+.arrowR {
+  right: 12.6%;
+  width: 18%;
+}
+
+.plaque {
+  position: absolute;
+  left: 31.4%;
+  top: 79.3%;
+  width: 36.3%;
+}
+
+.plaque img {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 3px 3px rgba(60, 32, 8, 0.3));
+}
+
+.plaqueText {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--td-font-game);
+  font-size: 4.7cqw;
+  font-weight: 800;
+  color: #43301b;
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stepCardInner {
+    animation: none;
+  }
+
+  .arrowBtn {
+    transition: none;
+  }
+}
+
 
 .stepNum {
   flex: none;
@@ -591,11 +742,21 @@
   border-radius: var(--td-radius-full);
 }
 
-/* Nồi Nồi waves from the bottom-right of the steps column, as drawn. */
-.noiNoi {
-  align-self: flex-end;
-  margin-top: auto;
-  margin-bottom: -0.4rem;
+/* Nồi Nồi trang trí góc dưới-phải của bảng lớn (ngoài luồng cột để
+   không kéo cao hàng lưới — ba cột tự kết thúc cùng nhau). Ẩn ở mobile
+   để không đè lên nút mũi tên của bảng bước. */
+.noiNoiCorner {
+  position: absolute;
+  right: 22px;
+  bottom: 6px;
+  z-index: 3;
+  pointer-events: none;
+}
+
+@media (max-width: 700px) {
+  .noiNoiCorner {
+    display: none;
+  }
 }
 
 /* ---------- Comments on their own paper sheet ---------- */

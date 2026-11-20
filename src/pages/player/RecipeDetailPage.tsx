@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Link, Navigate, useParams } from 'react-router-dom';
 import { motion, useReducedMotion } from 'framer-motion';
 
@@ -6,6 +6,8 @@ import { EmptyState } from '@/components/EmptyState';
 import { Loading } from '@/components/Loading';
 import { Modal } from '@/components/Modal';
 import { CoinPill } from '@/components/theme-d/CoinPill';
+import { GAME_ART } from '@/components/theme-d/game-assets';
+import { WoodPanel } from '@/components/theme-d/WoodPanel';
 import { DishGradeFrame } from '@/components/theme-d/DishGradeFrame';
 import { GoldButton } from '@/components/theme-d/GoldButton';
 import { NoiNoi } from '@/components/theme-d/NoiNoi';
@@ -37,6 +39,8 @@ export default function RecipeDetailPage() {
   const { recipeCategoryLabel } = useTaxonomy();
   const [buyConfirmOpen, setBuyConfirmOpen] = useState(false);
   const [justBought, setJustBought] = useState(false);
+  const [stepIndex, setStepIndex] = useState(0);
+  const touchStartX = useRef<number | null>(null);
   const reduceMotion = useReducedMotion();
 
   if (!id) {
@@ -88,6 +92,16 @@ export default function RecipeDetailPage() {
     : '';
   const sellable = isDishSellable(user, recipe);
   const bossChapter = bossChapterForRecipe(recipe.id);
+
+  // Khung bước gọn (luật khung bổ sung 2026-11-20): panel bước chỉ hiện
+  // đúng một bước tại một thời điểm + nút chuyển riêng, để cột bước không
+  // kéo dài lệch cột tranh/nguyên liệu sinh khoảng trống chết.
+  const steps = recipe.steps ?? [];
+  const safeStepIndex = Math.min(stepIndex, Math.max(0, steps.length - 1));
+  const currentStep = steps[safeStepIndex];
+  const goToStep = (next: number) => {
+    setStepIndex(Math.min(Math.max(0, next), Math.max(0, steps.length - 1)));
+  };
 
   const handleConfirmBuy = () => {
     if (purchaseRecipe(recipe.id, recipe.priceCoins)) {
@@ -147,6 +161,42 @@ export default function RecipeDetailPage() {
             </div>
           </header>
 
+          {/* Gói H3 — journey chapter, sell license status, boss entry:
+              dải bảng treo toàn bề ngang ngay dưới đầu trang (trước đây
+              nằm trong cột phải làm cột lệch cao — luật khung 15:41) */}
+          {journeyChapter ? (
+            <WoodPanel className={styles.journeyPanel} bodyClassName={styles.journeyBody}>
+              <div className={styles.journeyRow}>
+                <span className={styles.journeyLabel}>
+                  🗺️ {dict.journey.detailChapterLabel}:{' '}
+                  <strong>
+                    {dict.journey.chapterLabel(journeyChapter.order)} · {journeyChapterName}
+                  </strong>
+                </span>
+                <Link className={styles.journeyMapLink} to="/map">
+                  {dict.journey.detailViewMap}
+                </Link>
+              </div>
+              <p className={sellable ? styles.journeySellable : styles.journeyNotSellable}>
+                {sellable
+                  ? `📜 ${dict.journey.detailSellable}`
+                  : `🔒 ${dict.journey.detailNotSellable(journeyChapterName)}`}
+              </p>
+              {bossChapter ? (
+                <div className={styles.journeyBossRow}>
+                  <span className={styles.journeyBossNote}>
+                    👑 {dict.journey.detailBossDish}
+                  </span>
+                  {owned ? (
+                    <Link to={`/cooking/${recipe.id}?boss=${bossChapter.id}`} className={styles.bossLink}>
+                      <GoldButton>{dict.journey.bossEnter}</GoldButton>
+                    </Link>
+                  ) : null}
+                </div>
+              ) : null}
+            </WoodPanel>
+          ) : null}
+
           <div className={styles.boardGrid}>
             <div className={styles.mediaColumn}>
               <DishGradeFrame grade={grade} gradeLabel={gradeLabel}>
@@ -205,23 +255,24 @@ export default function RecipeDetailPage() {
               </div>
             </div>
 
-            {/* Nguyên liệu cần dùng */}
-            <section className={`${styles.panel} ${styles.ingredientsPanel}`}>
-              <h2 className={styles.sectionTitle}>
-                <span>🧺</span> {t('cooking.ingredients')} ({recipe.ingredients.length})
+            {/* Nguyên liệu — bảng gỗ treo cắt từ bản vẽ án A, hàng kem
+                là dữ liệu thật đặt lên mặt gỗ (chuẩn án A đã duyệt) */}
+            <section className={styles.boardPanel} aria-label={t('cooking.ingredients')}>
+              <h2 className={styles.boardSignText}>
+                {t('cooking.ingredients')} ({recipe.ingredients.length})
               </h2>
-              <ul className={styles.ingredientsList}>
+              <ul className={styles.boardRows}>
                 {recipe.ingredients.map((item) => {
                   const ingredient = getIngredientById(item.ingredientId);
                   return (
-                    <li key={item.ingredientId} className={styles.ingredientRow}>
-                      <span className={styles.ingredientIcon}>
+                    <li key={item.ingredientId} className={styles.boardRow}>
+                      <span className={styles.boardRowIcon}>
                         {ingredient?.fallbackEmoji || '🍲'}
                       </span>
-                      <span className={styles.ingredientName}>
+                      <span className={styles.boardRowName}>
                         {ingredient?.name ?? item.ingredientId}
                       </span>
-                      <span className={styles.ingredientAmount}>{item.amount}</span>
+                      <span className={styles.boardRowAmount}>{item.amount}</span>
                     </li>
                   );
                 })}
@@ -229,78 +280,85 @@ export default function RecipeDetailPage() {
             </section>
 
             <div className={styles.rightColumn}>
-              {/* Gói H3 — journey chapter, sell license status, boss entry */}
-              {journeyChapter ? (
-                <section className={styles.journeyBox}>
-                  <div className={styles.journeyRow}>
-                    <span className={styles.journeyLabel}>
-                      🗺️ {dict.journey.detailChapterLabel}:{' '}
-                      <strong>
-                        {dict.journey.chapterLabel(journeyChapter.order)} · {journeyChapterName}
-                      </strong>
-                    </span>
-                    <Link className={styles.journeyMapLink} to="/map">
-                      {dict.journey.detailViewMap}
-                    </Link>
-                  </div>
-                  <p className={sellable ? styles.journeySellable : styles.journeyNotSellable}>
-                    {sellable
-                      ? `📜 ${dict.journey.detailSellable}`
-                      : `🔒 ${dict.journey.detailNotSellable(journeyChapterName)}`}
-                  </p>
-                  {bossChapter ? (
-                    <div className={styles.journeyBossRow}>
-                      <span className={styles.journeyBossNote}>
-                        👑 {dict.journey.detailBossDish}
-                      </span>
-                      {owned ? (
-                        <Link to={`/cooking/${recipe.id}?boss=${bossChapter.id}`} className={styles.bossLink}>
-                          <GoldButton>{dict.journey.bossEnter}</GoldButton>
-                        </Link>
-                      ) : null}
-                    </div>
-                  ) : null}
-                </section>
-              ) : null}
-
-              {/* Các bước nấu */}
-              <section className={styles.panel}>
-                <h2 className={styles.sectionTitle}>
-                  <span>📋</span> {t('cooking.steps')} ({(recipe.steps ?? []).length})
-                </h2>
-                <ol className={styles.stepsList}>
-                  {(recipe.steps ?? []).map((step, idx) => (
-                    <li key={step.id} className={styles.stepItem}>
-                      <span className={styles.stepNum}>{idx + 1}</span>
-                      <div className={styles.stepContent}>
-                        <strong className={styles.stepTitle}>{step.title}</strong>
-                        <span className={styles.stepGesture}>
-                          <span aria-hidden>{GESTURE_ICONS[gestureForStep(step)]}</span>
-                          {dict.cooking.gestures.names[gestureForStep(step)]}
-                        </span>
-                        <p className={styles.stepDesc}>{step.description}</p>
-                        {step.requiredIngredients.length > 0 ? (
-                          <div className={styles.stepIngredients}>
-                            {step.requiredIngredients.map((ingId) => {
-                              const ing = getIngredientById(ingId);
-                              return (
-                                <span key={ingId} className={styles.stepIngredientChip}>
-                                  {ing?.fallbackEmoji ? `${ing.fallbackEmoji} ` : ''}
-                                  {ing?.name ?? ingId}
-                                </span>
-                              );
-                            })}
-                          </div>
-                        ) : null}
+              {/* Các bước nấu — bảng gỗ treo của bản vẽ án A: thẻ bước
+                  kem + nút mũi tên gỗ + plaque số bước đều là asset cắt
+                  từ bản vẽ, phủ đúng vị trí đã vẽ; nội dung bước và số
+                  "Bước x/N" là dữ liệu thật của món. Khung 1 bước theo
+                  luật khung 2026-11-20 (không kéo dài lệch cột). */}
+              <section className={styles.stepsBoard} aria-label={t('cooking.steps')}>
+                <h2 className={styles.stepsSignText}>{t('cooking.steps')}</h2>
+                {currentStep ? (
+                  <>
+                    <div
+                      className={styles.stepCard}
+                      onTouchStart={(e) => {
+                        touchStartX.current = e.touches[0]?.clientX ?? null;
+                      }}
+                      onTouchEnd={(e) => {
+                        const startX = touchStartX.current;
+                        touchStartX.current = null;
+                        if (startX === null) return;
+                        const endX = e.changedTouches[0]?.clientX ?? startX;
+                        if (startX - endX > 48) goToStep(safeStepIndex + 1);
+                        else if (endX - startX > 48) goToStep(safeStepIndex - 1);
+                      }}
+                    >
+                      <div key={currentStep.id} className={styles.stepCardInner}>
+                        <span className={styles.stepNum}>{safeStepIndex + 1}</span>
+                        <div className={styles.stepContent}>
+                          <strong className={styles.stepTitle}>{currentStep.title}</strong>
+                          <span className={styles.stepGesture}>
+                            <span aria-hidden>{GESTURE_ICONS[gestureForStep(currentStep)]}</span>
+                            {dict.cooking.gestures.names[gestureForStep(currentStep)]}
+                          </span>
+                          <p className={styles.stepDesc}>{currentStep.description}</p>
+                          {currentStep.requiredIngredients.length > 0 ? (
+                            <div className={styles.stepIngredients}>
+                              {currentStep.requiredIngredients.map((ingId) => {
+                                const ing = getIngredientById(ingId);
+                                return (
+                                  <span key={ingId} className={styles.stepIngredientChip}>
+                                    {ing?.fallbackEmoji ? `${ing.fallbackEmoji} ` : ''}
+                                    {ing?.name ?? ingId}
+                                  </span>
+                                );
+                              })}
+                            </div>
+                          ) : null}
+                        </div>
                       </div>
-                    </li>
-                  ))}
-                </ol>
+                    </div>
+                    <button
+                      type="button"
+                      className={`${styles.arrowBtn} ${styles.arrowL}`}
+                      aria-label={t('cooking.stepPrev')}
+                      disabled={safeStepIndex <= 0}
+                      onClick={() => goToStep(safeStepIndex - 1)}
+                    >
+                      <img src={GAME_ART.btnArrowLeft} alt="" aria-hidden="true" />
+                    </button>
+                    <div className={styles.plaque}>
+                      <img src={GAME_ART.plaqueStep} alt="" aria-hidden="true" />
+                      <span className={styles.plaqueText}>
+                        {t('cooking.hudStepOf', { current: safeStepIndex + 1, total: steps.length })}
+                      </span>
+                    </div>
+                    <button
+                      type="button"
+                      className={`${styles.arrowBtn} ${styles.arrowR}`}
+                      aria-label={t('cooking.stepNext')}
+                      disabled={safeStepIndex >= steps.length - 1}
+                      onClick={() => goToStep(safeStepIndex + 1)}
+                    >
+                      <img src={GAME_ART.btnArrowRight} alt="" aria-hidden="true" />
+                    </button>
+                  </>
+                ) : null}
               </section>
-
-              <NoiNoi pose="gioi-thieu" size={104} alt="" className={styles.noiNoi} />
             </div>
           </div>
+
+          <NoiNoi pose="gioi-thieu" size={104} alt="" className={styles.noiNoiCorner} />
         </motion.article>
 
         <motion.section
