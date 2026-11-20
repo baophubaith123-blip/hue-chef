@@ -313,6 +313,34 @@
   filter: drop-shadow(0 6px 8px rgba(32, 15, 4, 0.3));
 }
 
+/* Mobile: dải hành trình xếp dọc, cuộn giữ chiều cao tối thiểu để
+   chữ chặng + trạng thái bán vừa trong mặt cuộn (không tràn đè chip). */
+@media (max-width: 700px) {
+  .journeyStrip {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .journeyScroll {
+    flex: none;
+    width: 100%;
+    min-width: 0;
+    aspect-ratio: auto;
+    height: 104px;
+  }
+
+  .journeyScrollText {
+    top: 8%;
+    bottom: 16%;
+    font-size: 0.85rem;
+    line-height: 1.35;
+  }
+
+  .journeySide {
+    align-items: center;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .dishSign {
     animation: none;
