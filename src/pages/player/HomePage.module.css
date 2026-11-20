@@ -295,14 +295,17 @@
 /* Featured row — the shared SceneDishCard at its natural proportions.
    The row no longer stretches the cards to fill the board (that flex
    stretch was what made the cards long and narrow and cropped the
-   dish art on both sides); cards stay top-aligned and the board's
-   action row pins to the bottom via its own margin-top: auto. */
+   dish art on both sides): the grid track hugs the tallest card
+   (align-content: start), cards in the row share that height evenly
+   with the plaque pinned to the foot, and the board's action row
+   pins to the bottom via its own margin-top: auto. */
 .dishRow {
   flex: 1;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(168px, 1fr));
   gap: 16px;
-  align-items: start;
+  align-items: stretch;
+  align-content: start;
 }
 
 .dishCell {
