@@ -745,6 +745,167 @@
   color: var(--mkt-maxed, var(--td-success));
 }
 
+/* ---------------- Đợt 4: phố chợ — sạp đứng cạnh nhau ----------------
+   Màn mở đầu /market là PHỐ CHỢ: mỗi sạp là một MẶT TIỀN bấm được
+   (mái + biển chất liệu riêng như trong view hàng), quầy gỗ bên
+   dưới bày emoji hàng mẫu + huy hiệu số mặt hàng. Bấm sạp → view
+   hàng riêng của sạp đó; nút gỗ quay lại phố ở đầu view hàng. */
+.backRow {
+  display: flex;
+}
+
+.streetBackBtn {
+  padding: 10px 22px;
+  font-family: var(--td-font-game-display);
+  font-size: 17px;
+  letter-spacing: 0.02em;
+  color: var(--td-ink);
+  background: var(--td-wood-gradient-soft);
+  border: 3px solid var(--td-wood-dark);
+  border-radius: 12px;
+  box-shadow:
+    0 5px 12px rgba(40, 20, 4, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+}
+
+.street {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(248px, 1fr));
+  gap: 26px 16px;
+  margin-top: 26px;
+}
+
+.shopFront {
+  display: block;
+  width: 100%;
+  padding: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: center;
+  font: inherit;
+  color: inherit;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.shopFront:focus-visible {
+  outline: 3px solid var(--td-gold-bright);
+  outline-offset: 4px;
+  border-radius: 14px;
+}
+
+/* Mái sạp ở phố: cùng tỉ lệ/margin như mái trong view hàng nhưng
+   rộng hết ô phố; plaque biển hiệu bắc cầu xuống quầy như cũ. */
+.shopRoofWrap {
+  position: relative;
+  z-index: 3;
+  display: block;
+  width: min(330px, 94%);
+  min-height: 54px;
+  margin: 0 auto -16px;
+}
+
+.shopBasket {
+  position: absolute;
+  right: -6px;
+  top: -24px;
+  width: 74px;
+  height: auto;
+  filter: drop-shadow(0 4px 6px rgba(40, 20, 4, 0.35));
+  pointer-events: none;
+}
+
+/* Quầy phố: mặt gỗ sẫm bày hàng mẫu; huy hiệu vàng = số mặt hàng,
+   chevron = dấu hiệu bấm vào được. */
+.shopBody {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 26px 12px 10px;
+  border: 3px solid var(--td-wood-dark);
+  border-radius: 14px;
+  background:
+    linear-gradient(180deg, rgba(46, 26, 8, 0.25), rgba(46, 26, 8, 0.5)),
+    url('../../assets/theme-d/game/wood-texture.webp') center / 360px 270px;
+  box-shadow:
+    0 7px 16px rgba(40, 20, 4, 0.4),
+    inset 0 1px 0 rgba(255, 220, 150, 0.3);
+}
+
+.shopEmojis {
+  display: flex;
+  gap: 2px;
+  font-size: 24px;
+  line-height: 1;
+  filter: drop-shadow(0 2px 2px rgba(40, 20, 4, 0.5));
+}
+
+.shopMeta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.shopCount {
+  min-width: 30px;
+  height: 30px;
+  padding: 0 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: linear-gradient(180deg, var(--td-gold-bright), var(--td-gold-deep));
+  border: 2px solid #6e4d0e;
+  color: #38230a;
+  font-weight: 800;
+  font-size: 14px;
+  box-shadow: 0 2px 5px rgba(40, 20, 4, 0.4);
+}
+
+.shopGo {
+  font-size: 26px;
+  font-weight: 800;
+  line-height: 1;
+  color: #ffd873;
+  text-shadow: 0 2px 0 rgba(40, 20, 4, 0.55);
+}
+
+/* 390px: phố xếp 2 cột — 4 sạp chính đầu tiên thành khối 2×2 gọn
+   trong khung, các sạp còn lại nối tiếp bên dưới, không dư không
+   thiếu (mỗi ô đúng một mặt tiền, quầy không tràn). */
+@media (max-width: 560px) {
+  .street {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 22px 10px;
+  }
+
+  .shopRoofWrap {
+    width: 100%;
+  }
+
+  .shopRoofWrap .signPlaque {
+    padding: 7px 8px;
+    font-size: 13.5px;
+  }
+
+  .shopBody {
+    padding: 22px 8px 8px;
+  }
+
+  .shopEmojis {
+    font-size: 18px;
+  }
+
+  .shopBasket {
+    width: 54px;
+    top: -16px;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .stallFront,
   .bannerWrap {

@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 
 import { SEED_INGREDIENTS } from '@/data/ingredients';
 import type { Ingredient } from '@/data/types';
@@ -121,6 +122,9 @@ export default function MarketPage() {
   const { theme } = useTheme();
   const stall = useStall(user?.id ?? null);
   const [qtyById, setQtyById] = useState<Record<string, number>>({});
+  // Đợt 4 (Bảo chốt 22:14): phố chợ là 4+ sạp đứng cạnh nhau — bấm
+  // sạp nào mở hàng của sạp đó; null = đang đứng ở phố chợ.
+  const [openStall, setOpenStall] = useState<string | null>(null);
   const today = todayKey();
 
   // The market sells the seed catalogue plus any ingredient an approved
@@ -156,6 +160,26 @@ export default function MarketPage() {
       items: groups.get(key) ?? [],
     }));
   }, [catalogue]);
+
+  // Mặt tiền phố chợ: mọi nhóm sạp + sạp đồ bếp + sạp hỗ trợ.
+  const streetEntries = useMemo(
+    () => [
+      ...stalls.map((g) => ({
+        key: g.key,
+        title: s.marketStallNames[g.key] ?? g.key,
+        emojis: g.items.slice(0, 5).map((i) => i.fallbackEmoji),
+        count: g.items.length,
+      })),
+      { key: 'upgrade', title: s.upgradeStallTitle, emojis: ['🔪', '🔥', '🍲'], count: 3 },
+      {
+        key: 'support',
+        title: s.support.supportStallTitle,
+        emojis: ['🧊', '⏳', '🏮', '📣'],
+        count: GEAR_KINDS.length + CARD_KINDS.length + DECOR_KINDS.length + 1,
+      },
+    ],
+    [stalls, s],
+  );
 
   const inventory = useMemo(
     () => (stall ? inventoryByIngredient(stall) : new Map<string, number>()),
@@ -258,18 +282,106 @@ export default function MarketPage() {
           <span className={styles.headerSpacer} aria-hidden />
         </header>
 
+        {openStall !== null && (
+          <motion.div
+            className={styles.backRow}
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            <button
+              type="button"
+              className={styles.streetBackBtn}
+              onClick={() => {
+                setOpenStall(null);
+                playSound('click');
+              }}
+            >
+              ← {s.marketTitle}
+            </button>
+          </motion.div>
+        )}
+
+        {openStall === null && (
         <figure className={styles.bannerWrap}>
           <img className={styles.bannerImg} src={bannerImg} alt="" draggable={false} />
           <figcaption className={styles.notePlaque}>
             <p className={styles.noteText}>{s.marketPricesNote}</p>
           </figcaption>
         </figure>
+        )}
+
+        {/* Đợt 4 — PHỐ CHỢ: các sạp đứng cạnh nhau như ảnh duyệt
+            (rau / cá-thịt / gia vị / …), bấm sạp nào mở hàng sạp đó. */}
+        {openStall === null && (
+          <nav className={styles.street} aria-label={s.marketTitle}>
+            {streetEntries.map((entry, idx) => {
+              const art =
+                entry.key === 'upgrade'
+                  ? { roof: roofTile, plaque: styles.signUpgrade }
+                  : entry.key === 'support'
+                    ? { roof: awningImg, plaque: styles.signSupport }
+                    : (STALL_ART[entry.key] ?? STALL_ART.other);
+              return (
+                <motion.button
+                  key={entry.key}
+                  type="button"
+                  className={styles.shopFront}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: idx * 0.05, duration: 0.3 }}
+                  whileHover={{ y: -5 }}
+                  whileTap={{ scale: 0.97 }}
+                  onClick={() => {
+                    setOpenStall(entry.key);
+                    playSound('click');
+                  }}
+                >
+                  {entry.key === 'dau-hat' ? (
+                    <span className={styles.shopRoofWrap}>
+                      <span className={`${styles.signPlaque} ${styles.signPlaqueStatic} ${styles.signDauHat}`}>
+                        {entry.title}
+                      </span>
+                      <img className={styles.shopBasket} src={basketImg} alt="" draggable={false} />
+                    </span>
+                  ) : (
+                    <span className={styles.shopRoofWrap}>
+                      <img className={styles.roofImg} src={art.roof} alt="" draggable={false} />
+                      <span className={`${styles.signPlaque} ${art.plaque}`}>{entry.title}</span>
+                    </span>
+                  )}
+                  <span className={styles.shopBody}>
+                    <span className={styles.shopEmojis} aria-hidden>
+                      {entry.emojis.map((e, i) => (
+                        <span key={i}>{e}</span>
+                      ))}
+                    </span>
+                    <span className={styles.shopMeta}>
+                      <span className={styles.shopCount}>{entry.count}</span>
+                      <span className={styles.shopGo} aria-hidden>
+                        ›
+                      </span>
+                    </span>
+                  </span>
+                </motion.button>
+              );
+            })}
+          </nav>
+        )}
 
         {stalls.map((stallGroup) => {
+          if (openStall !== stallGroup.key) return null;
           const title = s.marketStallNames[stallGroup.key] ?? stallGroup.key;
           const art = STALL_ART[stallGroup.key] ?? STALL_ART.other;
           return (
-          <section key={stallGroup.key} className={styles.stallSection} aria-label={title}>
+          <motion.section
+            key={stallGroup.key}
+            className={styles.stallSection}
+            aria-label={title}
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.25 }}
+          >
             <div className={styles.stallFront}>
               {stallGroup.key === 'dau-hat' ? (
                 <div className={styles.basketHead}>
@@ -355,13 +467,20 @@ export default function MarketPage() {
               </div>
               </div>
             </div>
-          </section>
+          </motion.section>
           );
         })}
 
         {/* Kitchenware stall (Gói H5): one-time equipment purchases —
             the stall loop's long-term xu sink (Phần 11). */}
-        <section className={styles.stallSection} aria-label={s.upgradeStallTitle}>
+        {openStall === 'upgrade' && (
+        <motion.section
+          className={styles.stallSection}
+          aria-label={s.upgradeStallTitle}
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.25 }}
+        >
           <div className={styles.stallFront}>
             <div className={styles.roofWrap}>
               <img className={styles.roofImg} src={roofTile} alt="" draggable={false} />
@@ -406,11 +525,19 @@ export default function MarketPage() {
             </div>
             </div>
           </div>
-        </section>
+        </motion.section>
+        )}
 
         {/* Support stall (Gói H6): gear, rescue cards, decoration and
             advertising for the sell loop (Phần 8.2). */}
-        <section className={styles.stallSection} aria-label={s.support.supportStallTitle}>
+        {openStall === 'support' && (
+        <motion.section
+          className={styles.stallSection}
+          aria-label={s.support.supportStallTitle}
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.25 }}
+        >
           <div className={styles.stallFront}>
             <div className={styles.roofWrap}>
               <img className={styles.roofImg} src={awningImg} alt="" draggable={false} />
@@ -523,7 +650,8 @@ export default function MarketPage() {
             </div>
             </div>
           </div>
-        </section>
+        </motion.section>
+        )}
       </div>
     </div>
   );
