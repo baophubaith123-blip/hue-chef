@@ -4,11 +4,8 @@ import { motion, useReducedMotion } from 'framer-motion';
 
 import { EmptyState } from '@/components/EmptyState';
 import { Loading } from '@/components/Loading';
-import { Modal } from '@/components/Modal';
-import { CoinPill } from '@/components/theme-d/CoinPill';
+import { Modal } from '@/components/theme-d/Modal';
 import { GAME_ART } from '@/components/theme-d/game-assets';
-import { WoodPanel } from '@/components/theme-d/WoodPanel';
-import { DishGradeFrame } from '@/components/theme-d/DishGradeFrame';
 import { GoldButton } from '@/components/theme-d/GoldButton';
 import { NoiNoi } from '@/components/theme-d/NoiNoi';
 import { WoodButton } from '@/components/theme-d/WoodButton';
@@ -28,6 +25,19 @@ import { formatDuration } from '@/lib/format';
 import { SceneShell } from '@/pages/player/SceneShell';
 import { useTranslation } from '@/i18n/useTranslation';
 import { ImageWithFallback } from '@/components/ImageWithFallback';
+
+import dishSignArt from '@/assets/theme-d/game/r4-dish-sign.webp';
+import dishFrameArt from '@/assets/theme-d/game/r4-dish-frame.webp';
+import btnPlayPinArt from '@/assets/theme-d/game/r4-btn-play-pin.webp';
+import chipTimeArt from '@/assets/theme-d/game/r4-chip-time.webp';
+import chipStarArt from '@/assets/theme-d/game/r4-chip-star.webp';
+import chipScrollArt from '@/assets/theme-d/game/r4-chip-scroll.webp';
+import chipCoinArt from '@/assets/theme-d/game/r4-chip-coin.webp';
+import journeyScrollArt from '@/assets/theme-d/game/r4-journey-scroll-mini.webp';
+import btnMapArt from '@/assets/theme-d/game/r4-btn-map.webp';
+import buyCardArt from '@/assets/theme-d/game/r4-buy-card.webp';
+import commentBookArt from '@/assets/theme-d/game/r4-comment-book.webp';
+import confirmBoardArt from '@/assets/theme-d/game/r4-confirm-board.webp';
 
 import styles from '@/pages/player/RecipeDetailPage.module.css';
 
@@ -129,19 +139,31 @@ export default function RecipeDetailPage() {
           <span className={`${styles.rivet} ${styles.rivetBr}`} aria-hidden="true" />
 
           <header className={styles.header}>
-            <h1 className={styles.title}>{recipe.name}</h1>
-            <div className={styles.gradeRow}>
-              <span className={styles.gradeChip}>{gradeLabel}</span>
-              {bestStars > 0 ? <span className={styles.yourStars}>{dict.recipe.yourStars(bestStars)}</span> : null}
+            {/* Đợt 4: tên món khắc trên biển cổng treo dây (r4-dish-sign,
+                mặt biển đã làm trống — chữ thật đè lên vùng ván). */}
+            <div className={styles.dishSign}>
+              <img className={styles.dishSignImg} src={dishSignArt} alt="" aria-hidden="true" />
+              <div className={styles.dishSignText}>
+                <h1 className={styles.title}>{recipe.name}</h1>
+                <div className={styles.gradeRow}>
+                  <span className={styles.gradeChip}>{gradeLabel}</span>
+                  {bestStars > 0 ? (
+                    <span className={styles.yourStars}>{dict.recipe.yourStars(bestStars)}</span>
+                  ) : null}
+                </div>
+              </div>
             </div>
             <p className={styles.description}>{recipe.description}</p>
 
+            {/* Đợt 4: 4 chip thông số mang 4 hình dạng riêng của bộ duyệt. */}
             <div className={styles.chipsRow}>
               <div className={styles.chip}>
-                <span className={styles.chipValue}>⏱ {formatDuration(recipe.duration)}</span>
+                <img className={styles.chipArt} src={chipTimeArt} alt="" aria-hidden="true" />
+                <span className={styles.chipValue}>{formatDuration(recipe.duration)}</span>
                 <span className={styles.chipLabel}>{t('dashboard.time')}</span>
               </div>
               <div className={styles.chip}>
+                <img className={styles.chipArt} src={chipStarArt} alt="" aria-hidden="true" />
                 <span className={styles.metricStars}>
                   {'★'.repeat(recipe.difficulty)}
                   {'☆'.repeat(5 - recipe.difficulty)}
@@ -151,11 +173,13 @@ export default function RecipeDetailPage() {
                 </span>
               </div>
               <div className={styles.chip}>
-                <span className={styles.chipValue}>📋 {(recipe.steps ?? []).length}</span>
+                <img className={styles.chipArt} src={chipScrollArt} alt="" aria-hidden="true" />
+                <span className={styles.chipValue}>{(recipe.steps ?? []).length}</span>
                 <span className={styles.chipLabel}>{t('cooking.steps')}</span>
               </div>
               <div className={styles.chip}>
-                <span className={styles.chipValue}>⭐ {recipe.baseScore}</span>
+                <img className={styles.chipArt} src={chipCoinArt} alt="" aria-hidden="true" />
+                <span className={styles.chipValue}>{recipe.baseScore}</span>
                 <span className={styles.chipLabel}>{t('recipe.baseScore')}</span>
               </div>
             </div>
@@ -165,42 +189,50 @@ export default function RecipeDetailPage() {
               dải bảng treo toàn bề ngang ngay dưới đầu trang (trước đây
               nằm trong cột phải làm cột lệch cao — luật khung 15:41) */}
           {journeyChapter ? (
-            <WoodPanel className={styles.journeyPanel} bodyClassName={styles.journeyBody}>
-              <div className={styles.journeyRow}>
-                <span className={styles.journeyLabel}>
-                  🗺️ {dict.journey.detailChapterLabel}:{' '}
-                  <strong>
-                    {dict.journey.chapterLabel(journeyChapter.order)} · {journeyChapterName}
-                  </strong>
-                </span>
-                <Link className={styles.journeyMapLink} to="/map">
-                  {dict.journey.detailViewMap}
-                </Link>
-              </div>
-              <p className={sellable ? styles.journeySellable : styles.journeyNotSellable}>
-                {sellable
-                  ? `📜 ${dict.journey.detailSellable}`
-                  : `🔒 ${dict.journey.detailNotSellable(journeyChapterName)}`}
-              </p>
-              {bossChapter ? (
-                <div className={styles.journeyBossRow}>
-                  <span className={styles.journeyBossNote}>
-                    👑 {dict.journey.detailBossDish}
+            <div className={styles.journeyStrip}>
+              {/* Đợt 4: dải hành trình = cuộn giấy mini ghim chặng
+                  (r4-journey-scroll-mini) + nút thẻ gỗ xem bản đồ. */}
+              <div className={styles.journeyScroll}>
+                <img className={styles.journeyScrollImg} src={journeyScrollArt} alt="" aria-hidden="true" />
+                <div className={styles.journeyScrollText}>
+                  <span className={styles.journeyLabel}>
+                    {dict.journey.detailChapterLabel}:{' '}
+                    <strong>
+                      {dict.journey.chapterLabel(journeyChapter.order)} · {journeyChapterName}
+                    </strong>
                   </span>
-                  {owned ? (
-                    <Link to={`/cooking/${recipe.id}?boss=${bossChapter.id}`} className={styles.bossLink}>
-                      <GoldButton>{dict.journey.bossEnter}</GoldButton>
-                    </Link>
-                  ) : null}
+                  <span className={sellable ? styles.journeySellable : styles.journeyNotSellable}>
+                    {sellable
+                      ? `📜 ${dict.journey.detailSellable}`
+                      : `🔒 ${dict.journey.detailNotSellable(journeyChapterName)}`}
+                  </span>
                 </div>
-              ) : null}
-            </WoodPanel>
+              </div>
+              <div className={styles.journeySide}>
+                <Link className={styles.mapBtn} to="/map">
+                  <img className={styles.mapBtnImg} src={btnMapArt} alt="" aria-hidden="true" />
+                  <span className={styles.mapBtnText}>🗺️ {dict.journey.detailViewMap}</span>
+                </Link>
+                {bossChapter ? (
+                  <div className={styles.journeyBossRow}>
+                    <span className={styles.journeyBossNote}>👑 {dict.journey.detailBossDish}</span>
+                    {owned ? (
+                      <Link to={`/cooking/${recipe.id}?boss=${bossChapter.id}`} className={styles.bossLink}>
+                        <GoldButton>{dict.journey.bossEnter}</GoldButton>
+                      </Link>
+                    ) : null}
+                  </div>
+                ) : null}
+              </div>
+            </div>
           ) : null}
 
           <div className={styles.boardGrid}>
             <div className={styles.mediaColumn}>
-              <DishGradeFrame grade={grade} gradeLabel={gradeLabel}>
-                <div className={styles.imageWrap}>
+              {/* Đợt 4: ảnh món lồng trong khung tranh treo dây
+                  (r4-dish-frame, ruột trong suốt) + nhãn cấp phủ góc. */}
+              <div className={styles.dishFrame}>
+                <div className={styles.dishFrameInner}>
                   <ImageWithFallback
                     className={styles.image}
                     src={dishArtFor(recipe)}
@@ -209,15 +241,18 @@ export default function RecipeDetailPage() {
                   />
                   <span className={styles.categoryBadge}>{categoryLabel}</span>
                 </div>
-              </DishGradeFrame>
+                <img className={styles.dishFrameImg} src={dishFrameArt} alt="" aria-hidden="true" />
+                <span className={styles.frameGrade}>{gradeLabel}</span>
+              </div>
 
               <div className={styles.ctaBox}>
                 {owned ? (
                   <>
                     <Link to={`/cooking/${recipe.id}`} className={styles.cookNowLink}>
-                      <GoldButton className={styles.cookNowBtn}>
-                        🔥 {dict.dashboard.heroPlayNow}
-                      </GoldButton>
+                      <span className={styles.playPin}>
+                        <img className={styles.playPinImg} src={btnPlayPinArt} alt="" aria-hidden="true" />
+                        <span className={styles.playPinText}>{dict.dashboard.heroPlayNow}</span>
+                      </span>
                     </Link>
                     {recipe.priceCoins > 0 ? (
                       <p className={styles.ownedNote}>
@@ -228,28 +263,30 @@ export default function RecipeDetailPage() {
                     )}
                   </>
                 ) : (
-                  <div className={styles.buyPanel}>
-                    <div className={styles.pricePlaque}>
-                      <span className={styles.buyLockIcon} aria-hidden="true">
-                        🔒
+                  /* Đợt 4: thẻ mua công thức = khung tre + khoá gỗ
+                     (r4-buy-card, giấy đã làm trống). */
+                  <div className={styles.buyCard}>
+                    <img className={styles.buyCardImg} src={buyCardArt} alt="" aria-hidden="true" />
+                    <div className={styles.buyCardBody}>
+                      <span className={styles.buyPrice}>
+                        🪙 {recipe.priceCoins.toLocaleString()} xu
                       </span>
-                      <CoinPill amount={recipe.priceCoins} currency="xu" />
+                      <span className={styles.buyBalance}>
+                        {dict.shop.yourBalance(balance.toLocaleString())}
+                      </span>
+                      <GoldButton
+                        className={styles.buyBtn}
+                        disabled={!canAfford}
+                        onClick={() => setBuyConfirmOpen(true)}
+                      >
+                        🔒 {dict.shop.buyButton}
+                      </GoldButton>
+                      {!canAfford ? (
+                        <span className={styles.buyHint}>
+                          {dict.shop.needMore((recipe.priceCoins - balance).toLocaleString())}
+                        </span>
+                      ) : null}
                     </div>
-                    <p className={styles.buyBalance}>
-                      {dict.shop.yourBalance(balance.toLocaleString())}
-                    </p>
-                    <GoldButton
-                      className={styles.cookNowBtn}
-                      disabled={!canAfford}
-                      onClick={() => setBuyConfirmOpen(true)}
-                    >
-                      🪙 {dict.shop.buyButton}
-                    </GoldButton>
-                    {!canAfford ? (
-                      <p className={styles.buyHint}>
-                        {dict.shop.needMore((recipe.priceCoins - balance).toLocaleString())}
-                      </p>
-                    ) : null}
                   </div>
                 )}
               </div>
@@ -361,31 +398,35 @@ export default function RecipeDetailPage() {
           <NoiNoi pose="gioi-thieu" size={104} alt="" className={styles.noiNoiCorner} />
         </motion.article>
 
+        {/* Đợt 4: bình luận nằm trên trang giấy của sổ khách gáy tre
+            (r4-comment-book) — tiêu đề BÌNH LUẬN là chữ thiết kế trên
+            bìa, nội dung thật cuộn trong vùng trang trống. */}
         <motion.section
           className={styles.commentsPanel}
           initial={reduceMotion ? false : { opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.35, delay: reduceMotion ? 0 : 0.12 }}
         >
-          <RecipeComments recipeId={recipe.id} />
+          <img className={styles.commentBookImg} src={commentBookArt} alt="" aria-hidden="true" />
+          <div className={styles.commentBookPage}>
+            <RecipeComments recipeId={recipe.id} />
+          </div>
         </motion.section>
       </div>
 
+      {/* Đợt 4: hộp xác nhận mua = bảng treo (r4-confirm-board) làm
+          đầu vỏ modal theme-d; hai nút thật nằm ngay dưới bảng. */}
       <Modal
-        isOpen={buyConfirmOpen}
+        open={buyConfirmOpen}
         title={dict.shop.confirmTitle}
         onClose={() => setBuyConfirmOpen(false)}
-        footer={
-          <div className={styles.buyModalFooter}>
-            <WoodButton onClick={() => setBuyConfirmOpen(false)}>
-              {dict.shop.cancel}
-            </WoodButton>
-            <GoldButton onClick={handleConfirmBuy}>
-              🪙 {dict.shop.confirmBuy}
-            </GoldButton>
-          </div>
-        }
+        closeLabel={dict.shop.cancel}
+        shellClass={styles.confirmShell}
+        headerClass={styles.confirmHeader}
+        bodyClass={styles.confirmBody}
+        titleClass={styles.confirmTitle}
       >
+        <img className={styles.confirmBoardImg} src={confirmBoardArt} alt="" aria-hidden="true" />
         <p className={styles.buyModalBody}>
           {dict.shop.confirmBody(
             recipe.name,
@@ -393,6 +434,14 @@ export default function RecipeDetailPage() {
             (balance - recipe.priceCoins).toLocaleString(),
           )}
         </p>
+        <div className={styles.buyModalFooter}>
+          <WoodButton onClick={() => setBuyConfirmOpen(false)}>
+            {dict.shop.cancel}
+          </WoodButton>
+          <GoldButton onClick={handleConfirmBuy}>
+            🪙 {dict.shop.confirmBuy}
+          </GoldButton>
+        </div>
       </Modal>
     </SceneShell>
   );

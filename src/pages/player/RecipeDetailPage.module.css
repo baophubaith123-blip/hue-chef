@@ -11,6 +11,316 @@
   flex-direction: column;
   gap: 1.1rem;
   font-family: var(--td-font-game-body);
+  /* Đợt 4: nền trang là sân lễ hội (scene-courtyard) theo theme. */
+  padding: clamp(10px, 2vw, 22px);
+  border-radius: 22px;
+  border: 3px solid rgba(233, 162, 59, 0.55);
+  background: url('../../assets/theme-d/scenes/scene-courtyard-light.webp') center 18% / cover
+    no-repeat;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+}
+
+:global([data-theme='dark']) .container {
+  background-image: url('../../assets/theme-d/scenes/scene-courtyard-dark.webp');
+}
+
+/* ---------- Đợt 4: biển cổng tên món (r4-dish-sign) ---------- */
+
+.dishSign {
+  position: relative;
+  width: min(560px, 100%);
+  margin: 0 auto;
+  aspect-ratio: 594 / 375;
+  transform-origin: 50% 0;
+  animation: signSway 5s ease-in-out infinite;
+}
+
+@keyframes signSway {
+  0%,
+  100% {
+    transform: rotate(0.6deg);
+  }
+  50% {
+    transform: rotate(-0.6deg);
+  }
+}
+
+.dishSignImg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 10px 14px rgba(32, 15, 4, 0.4));
+}
+
+.dishSignText {
+  position: absolute;
+  left: 9%;
+  right: 9%;
+  top: 40%;
+  bottom: 7%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  text-align: center;
+}
+
+/* ---------- Đợt 4: chip thông số 4 hình dạng riêng ---------- */
+
+.chipArt {
+  width: 54px;
+  height: 54px;
+  object-fit: contain;
+  filter: drop-shadow(0 3px 3px rgba(60, 32, 8, 0.35));
+}
+
+/* ---------- Đợt 4: dải hành trình cuộn mini + nút bản đồ ---------- */
+
+.journeyStrip {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.2rem;
+}
+
+.journeyScroll {
+  position: relative;
+  flex: 1 1 340px;
+  min-width: min(340px, 100%);
+  aspect-ratio: 719 / 158;
+}
+
+.journeyScrollImg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 6px 8px rgba(32, 15, 4, 0.35));
+}
+
+.journeyScrollText {
+  position: absolute;
+  left: 13%;
+  right: 13%;
+  top: 16%;
+  bottom: 26%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.15rem;
+  text-align: center;
+}
+
+.journeySide {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.5rem;
+}
+
+.mapBtn {
+  position: relative;
+  display: block;
+  width: 230px;
+  max-width: 100%;
+  aspect-ratio: 419 / 117;
+  text-decoration: none;
+  transition: transform 0.18s cubic-bezier(0.34, 1.8, 0.64, 1);
+}
+
+.mapBtn:hover {
+  transform: translateY(-2px) scale(1.02);
+}
+
+.mapBtn:active {
+  transform: scale(0.96);
+}
+
+.mapBtnImg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 5px 6px rgba(32, 15, 4, 0.4));
+}
+
+.mapBtnText {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--td-font-game);
+  font-size: 1rem;
+  font-weight: 800;
+  color: #43301b;
+  text-shadow: 0 1px 0 rgba(255, 246, 224, 0.7);
+}
+
+/* ---------- Đợt 4: khung tranh món + nút cán bột + thẻ mua tre ---------- */
+
+.dishFrame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 416 / 293;
+}
+
+.dishFrameInner {
+  position: absolute;
+  left: 11.5%;
+  right: 11.5%;
+  top: 29%;
+  bottom: 9%;
+  overflow: hidden;
+  border-radius: 4px;
+  background: var(--td-paper);
+}
+
+.dishFrameImg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  filter: drop-shadow(0 8px 10px rgba(32, 15, 4, 0.35));
+}
+
+.frameGrade {
+  position: absolute;
+  right: 4%;
+  bottom: 1%;
+  padding: 2px 10px;
+  background: var(--td-wood-gradient);
+  border: 2px solid var(--td-ink);
+  border-radius: var(--td-radius-full);
+  color: #fff6e0;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-shadow: 0 1px 0 rgba(32, 15, 4, 0.45);
+}
+
+.playPin {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 587 / 154;
+  transition: transform 0.18s cubic-bezier(0.34, 1.8, 0.64, 1);
+}
+
+.cookNowLink:hover .playPin {
+  transform: translateY(-2px) scale(1.02);
+}
+
+.cookNowLink:active .playPin {
+  transform: scale(0.96);
+}
+
+.playPinImg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 6px 8px rgba(32, 15, 4, 0.4));
+}
+
+.playPinText {
+  position: absolute;
+  left: 16%;
+  right: 12%;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--td-font-game-display);
+  font-size: clamp(1.3rem, 2.4vw, 1.7rem);
+  color: #5d3410;
+  text-shadow: 0 1px 0 rgba(255, 246, 224, 0.65);
+  white-space: nowrap;
+}
+
+.buyCard {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 569 / 332;
+}
+
+.buyCardImg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 8px 10px rgba(32, 15, 4, 0.35));
+}
+
+.buyCardBody {
+  position: absolute;
+  left: 10%;
+  right: 16%;
+  top: 13%;
+  bottom: 12%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  text-align: center;
+}
+
+.buyPrice {
+  font-family: var(--td-font-game);
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: #8a5a00;
+  font-variant-numeric: tabular-nums;
+}
+
+.buyBtn {
+  min-height: 44px;
+  padding: 0.5rem 1.1rem;
+  font-family: var(--td-font-game);
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+/* ---------- Đợt 4: vỏ modal xác nhận = bảng treo ---------- */
+
+.confirmShell {
+  max-width: 560px;
+}
+
+.confirmHeader {
+  padding-bottom: 0;
+}
+
+.confirmBody {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.confirmBoardImg {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 6px 8px rgba(32, 15, 4, 0.3));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dishSign {
+    animation: none;
+  }
+
+  .mapBtn,
+  .playPin {
+    transition: none;
+  }
 }
 
 /* Back link — a small wooden chip floating on the scene above the board. */
@@ -175,11 +485,29 @@
   align-items: center;
   gap: 1px;
   min-width: 128px;
-  padding: 0.45rem 1rem 0.55rem;
-  background: rgba(255, 252, 240, 0.65);
-  border: 2px solid var(--td-ink);
-  border-radius: var(--td-radius-paper);
-  box-shadow: 0 2px 0 rgba(74, 44, 20, 0.35);
+  padding: 0.2rem 0.6rem 0.3rem;
+  background: transparent;
+  border: none;
+}
+
+/* Chữ trên mặt biển cổng: vàng kem khắc trên ván nâu. */
+.dishSign .title {
+  color: #f7c65c;
+  text-shadow:
+    0 2px 0 #5d3410,
+    1px 0 0 #7a4416,
+    -1px 0 0 #7a4416,
+    0 -1px 0 #7a4416,
+    0 3px 5px rgba(32, 15, 4, 0.45);
+  font-size: clamp(1.6rem, 4vw, 2.6rem);
+}
+
+.dishSign .yourStars {
+  color: #ffe9be;
+}
+
+.dishSign .gradeChip {
+  background: rgba(255, 246, 224, 0.92);
 }
 
 .chipValue {
@@ -759,11 +1087,13 @@
   }
 }
 
-/* ---------- Comments on their own paper sheet ---------- */
+/* ---------- Comments: sổ khách gáy tre (r4-comment-book) ---------- */
 
 .commentsPanel {
-  padding: 1.2rem 1.3rem 1.3rem;
-  background: linear-gradient(180deg, var(--td-paper) 0%, var(--td-paper-deep) 100%);
+  position: relative;
+  align-self: center;
+  width: min(680px, 100%);
+  aspect-ratio: 461 / 467;
   color: var(--td-paper-text);
   /* The sheet is fixed paper in both themes, but RecipeComments reads
      the legacy --color-* palette, whose text/surface values flip light
@@ -783,10 +1113,43 @@
   --color-danger: #b42318;
   --color-warning: #9a5b00;
   --color-warning-soft: #fff4e5;
-  border: 30px solid transparent;
-  border-image: url('../../assets/theme-d/game/frame-scroll.webp') 30% / 1 / 0 stretch;
-  border-radius: 18px;
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+}
+
+.commentBookImg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 16px 24px rgba(0, 0, 0, 0.4));
+}
+
+/* Trang giấy trống của sổ: nội dung bình luận thật cuộn trong vùng này
+   (dưới tiêu đề BÌNH LUẬN đã vẽ sẵn trên bìa). */
+.commentBookPage {
+  position: absolute;
+  left: 19.5%;
+  right: 11%;
+  top: 29%;
+  bottom: 7.5%;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(122, 68, 22, 0.55) transparent;
+  padding-right: 0.3rem;
+}
+
+/* Tiêu đề riêng của RecipeComments trùng với chữ BÌNH LUẬN trên bìa. */
+.commentBookPage > section > h2 {
+  display: none;
+}
+
+@media (max-width: 700px) {
+  .commentBookPage {
+    left: 18%;
+    right: 9%;
+    top: 27%;
+    bottom: 6%;
+    font-size: 0.92rem;
+  }
 }
 
 /* RecipeComments paints its own web card; on this sheet it sits flat on
