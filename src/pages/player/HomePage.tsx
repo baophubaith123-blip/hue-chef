@@ -4,7 +4,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import { AchievementIcon } from '@/components/AchievementIcon';
 import { Button } from '@/components/Button';
 import { EmptyState } from '@/components/EmptyState';
-import { DishGradeFrame } from '@/components/theme-d/DishGradeFrame';
 import { NOI_NOI_FLAT, gameIcon } from '@/components/theme-d/game-assets';
 import { dishArtFor } from '@/components/theme-d/dish-art';
 import { useAchievements } from '@/contexts/AchievementContext';
@@ -17,8 +16,8 @@ import { loadUsers } from '@/features/auth/store';
 import { CheckinPanel } from '@/features/events/components/CheckinPanel';
 import { questDefById } from '@/features/events/lib/quests';
 import { useEvents } from '@/features/events/store';
-import { dishGradeFor } from '@/features/recipes/lib/grade';
 import { isRecipeOwned } from '@/features/recipes/lib/ownership';
+import { SceneDishCard } from '@/features/recipes/components/SceneDishCard';
 import { useNextRecipe } from '@/features/recipes/hooks/useNextRecipe';
 import { formatDate, formatDuration } from '@/lib/format';
 import { useTranslation } from '@/i18n/useTranslation';
@@ -136,11 +135,6 @@ export default function HomePage() {
     return list;
   }, [nextRecipe, themeRecipes]);
 
-  const bestStarsFor = (recipeId: string): number => {
-    const entries = cookedRecipes.filter((entry) => entry.recipeId === recipeId);
-    return entries.reduce((max, entry) => Math.max(max, entry.stars), 0);
-  };
-
   // Near achievements (top 2-3 closest to 100%)
   const nearAchievements = useMemo(() => {
     if (!user) return [];
@@ -249,47 +243,14 @@ export default function HomePage() {
 
             {featuredRecipes.length > 0 ? (
               <div className={styles.dishRow}>
-                {featuredRecipes.map((recipe) => {
-                  const grade = dishGradeFor(recipe);
-                  const gradeLabel = dict.recipe.gradeNames[grade - 1] ?? '';
-                  const owned = isRecipeOwned(user, recipe);
-                  const bestStars = bestStarsFor(recipe.id);
-                  return (
-                    <Link
-                      key={recipe.id}
-                      to={`/recipes/${recipe.id}`}
-                      className={styles.dishCardLink}
-                    >
-                      <DishGradeFrame grade={grade} gradeLabel={gradeLabel}>
-                        <div className={styles.dishCard}>
-                          <img
-                            src={dishArtFor(recipe)}
-                            alt={recipe.name}
-                            className={styles.dishArt}
-                            loading="lazy"
-                          />
-                          <h3 className={styles.dishName}>{recipe.name}</h3>
-                          <div className={styles.dishDifficulty} aria-hidden="true">
-                            {'★'.repeat(recipe.difficulty)}
-                            {'☆'.repeat(5 - recipe.difficulty)}
-                          </div>
-                          {bestStars > 0 ? (
-                            <p className={styles.dishYourStars}>
-                              {dict.recipe.yourStars(bestStars)}
-                            </p>
-                          ) : null}
-                          <div className={styles.pricePlaque}>
-                            {owned ? (
-                              <span>⭐ {recipe.baseScore.toLocaleString()}</span>
-                            ) : (
-                              <span>🔒 {recipe.priceCoins.toLocaleString()} xu</span>
-                            )}
-                          </div>
-                        </div>
-                      </DishGradeFrame>
-                    </Link>
-                  );
-                })}
+                {featuredRecipes.map((recipe) => (
+                  <div key={recipe.id} className={styles.dishCell}>
+                    <SceneDishCard
+                      recipe={recipe}
+                      lockedPrice={isRecipeOwned(user, recipe) ? undefined : recipe.priceCoins}
+                    />
+                  </div>
+                ))}
               </div>
             ) : null}
 

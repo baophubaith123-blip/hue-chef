@@ -292,84 +292,21 @@
   transform: rotate(-1.5deg);
 }
 
+/* Featured row — the shared SceneDishCard at its natural proportions.
+   The row no longer stretches the cards to fill the board (that flex
+   stretch was what made the cards long and narrow and cropped the
+   dish art on both sides); cards stay top-aligned and the board's
+   action row pins to the bottom via its own margin-top: auto. */
 .dishRow {
   flex: 1;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 14px;
-  align-items: stretch;
+  grid-template-columns: repeat(auto-fit, minmax(168px, 1fr));
+  gap: 16px;
+  align-items: start;
 }
 
-.dishCardLink {
-  text-decoration: none;
-  color: inherit;
-  display: block;
-  height: 100%;
-  transition: transform 0.15s ease;
-}
-
-.dishCardLink:hover {
-  transform: translateY(-4px);
-}
-
-.dishCardLink > * {
-  height: 100%;
-}
-
-.dishCard {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  height: 100%;
-  box-sizing: border-box;
-  padding: 12px 10px 14px;
-  text-align: center;
-  color: var(--td-paper-text);
-}
-
-.dishArt {
-  width: 100%;
-  flex: 1 1 auto;
-  min-height: 110px;
-  object-fit: cover;
-  border-radius: 10px;
-  border: 2px solid var(--td-paper-edge);
-  background: var(--td-paper-deep);
-}
-
-.dishName {
-  margin: 4px 0 0;
-  font-size: 1.02rem;
-  font-weight: 800;
-  line-height: 1.25;
-  color: var(--td-paper-text);
-}
-
-.dishDifficulty {
-  color: var(--td-gold-deep);
-  font-size: 0.95rem;
-  letter-spacing: 0.12em;
-}
-
-.dishYourStars {
-  margin: 0;
-  font-size: 0.82rem;
-  font-weight: 700;
-  color: var(--td-brick);
-}
-
-.pricePlaque {
-  margin-top: 4px;
-  padding: 6px 16px;
-  border-radius: 999px;
-  background: var(--td-wood-gradient-soft);
-  border: 2px solid var(--td-wood-dark);
-  color: var(--td-ink);
-  font-weight: 800;
-  font-size: 0.95rem;
-  box-shadow: inset 0 1px 0 rgba(255, 246, 224, 0.55);
-  white-space: nowrap;
+.dishCell {
+  min-width: 0;
 }
 
 .boardActions {
@@ -1024,7 +961,8 @@
   }
 
   .dishRow {
-    grid-template-columns: repeat(auto-fit, minmax(132px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(148px, 1fr));
+    gap: 12px;
   }
 
   .journeyImageWrap {
