@@ -167,19 +167,69 @@
   display: flex;
 }
 
-/* ---------- Dish of the day — nested Án A WoodPanel body ---------- */
+/* ---------- Dish of the day — golden awning pedestal (Đợt 4) ---------- */
 
-/* The WoodPanel frame replaces the old dashed separator rule; this
-   class is only the body's row layout (art frame + text column). */
+/* The pedestal asset (r4-home-daily) is the block's frame: the real
+   dish art sits on the pedestal where the painted bowl was drawn,
+   the dish name rides the pedestal's front face, and the ×2 tag is
+   part of the asset (the data badge in the text column repeats the
+   rule as real text). Layout wraps: wide panels get stage + text
+   side by side, the narrow home column stacks them. */
 .dotd {
   display: flex;
+  flex-wrap: wrap;
   gap: 1rem;
   align-items: flex-start;
 }
 
+.dotdStage {
+  position: relative;
+  flex: 0 1 300px;
+  width: min(300px, 100%);
+  margin-inline: auto;
+  transform-origin: 50% -24px;
+  animation: dotdSway 0.9s ease-out 1;
+  filter: drop-shadow(0 12px 20px rgba(0, 0, 0, 0.3));
+}
+
+@keyframes dotdSway {
+  0% {
+    transform: rotate(0.7deg);
+  }
+  55% {
+    transform: rotate(-0.3deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+.dotdPedestal {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 14px;
+}
+
 .dotdFrame {
-  flex: none;
-  width: 148px;
+  position: absolute;
+  left: 29.5%;
+  top: 37%;
+  width: 41%;
+}
+
+.dotdTitle {
+  margin: 0;
+  font-family: var(--td-font-game);
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--td-paper-text);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dotdStage {
+    animation: none;
+  }
 }
 
 /* The dish art is square (720×720): the frame hugs the full painting
@@ -193,6 +243,7 @@
 }
 
 .dotdBody {
+  flex: 1 1 200px;
   display: flex;
   flex-direction: column;
   gap: 0.3rem;
@@ -206,11 +257,21 @@
   gap: 0.5rem;
 }
 
+/* The dish name written on the pedestal's golden front face
+   (face zone measured on the asset: x 20%–80%, y 71%–87%). */
 .dotdName {
+  position: absolute;
+  left: 19%;
+  right: 19%;
+  bottom: 12%;
   margin: 0;
-  font-size: 1.05rem;
+  text-align: center;
+  font-family: var(--td-font-game);
+  font-size: 0.98rem;
   font-weight: 800;
-  color: var(--td-paper-text);
+  line-height: 1.25;
+  color: #5a3410;
+  text-shadow: 0 1px 0 rgba(255, 246, 224, 0.55);
 }
 
 .dotdNote {
@@ -263,11 +324,6 @@
 
   .dotd {
     flex-direction: column;
-  }
-
-  .dotdFrame {
-    width: min(100%, 280px);
-    margin-inline: auto;
   }
 
   .claimRow > button {

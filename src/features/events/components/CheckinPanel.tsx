@@ -25,6 +25,8 @@ import { playSound } from '@/lib/sound';
 
 import styles from '@/features/events/components/CheckinPanel.module.css';
 
+import dailyPedestal from '@/assets/theme-d/game/r4-home-daily.webp';
+
 /**
  * Check-in panel (Gói H7, ý tưởng 20): the 7-day claim cycle, the live
  * cooking streak and the dish of the day, in one Án A hanging wood
@@ -166,27 +168,36 @@ export function CheckinPanel() {
       </div>
 
       {dotdRecipe && dotdGrade ? (
-        <WoodPanel title={c.dotdTitle} titleLevel="h3" bodyClassName={styles.dotd}>
-          <DishGradeFrame grade={dotdGrade} gradeLabel={dotdGradeLabel} className={styles.dotdFrame}>
-            <ImageWithFallback
-              src={dishArtFor(dotdRecipe)}
-              alt={dotdRecipe.name}
-              fallbackTitle={dotdRecipe.name}
-              className={styles.dotdImage}
-            />
-          </DishGradeFrame>
+        <section className={styles.dotd}>
+          {/* Đợt lan 4: dish of the day stands on the golden awning
+              pedestal (r4-home-daily) — the real dish art replaces the
+              pedestal's painted bowl, the dish name is written on the
+              pedestal's front face, and the ×2 tag hangs at its side
+              (the data badge beside it carries the same ×2 rule). */}
+          <div className={styles.dotdStage}>
+            <img className={styles.dotdPedestal} src={dailyPedestal} alt="" aria-hidden="true" />
+            <DishGradeFrame grade={dotdGrade} gradeLabel={dotdGradeLabel} className={styles.dotdFrame}>
+              <ImageWithFallback
+                src={dishArtFor(dotdRecipe)}
+                alt={dotdRecipe.name}
+                fallbackTitle={dotdRecipe.name}
+                className={styles.dotdImage}
+              />
+            </DishGradeFrame>
+            <p className={styles.dotdName}>{dotdRecipe.name}</p>
+          </div>
           <div className={styles.dotdBody}>
+            <h3 className={styles.dotdTitle}>{c.dotdTitle}</h3>
             <div className={styles.dotdHead}>
               <Badge tone="brick">{c.dotdBadge}</Badge>
             </div>
-            <p className={styles.dotdName}>{dotdRecipe.name}</p>
             <p className={styles.dotdNote}>{c.dotdLearnNote}</p>
             <p className={styles.dotdNote}>{c.dotdSellNote}</p>
             <Link to={`/recipes/${dotdId}`} className={styles.dotdLink}>
               {c.dotdCookNow} →
             </Link>
           </div>
-        </WoodPanel>
+        </section>
       ) : null}
 
       {toast ? (
