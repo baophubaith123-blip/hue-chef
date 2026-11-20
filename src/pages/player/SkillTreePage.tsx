@@ -13,6 +13,9 @@ import type { SkillBranchId } from '@/features/skills/types';
 import { useTranslation } from '@/i18n/useTranslation';
 import { SceneShell } from '@/pages/player/SceneShell';
 
+import badgeBlank from '@/assets/theme-d/game/r4-badge-blank.webp';
+import skillLadder from '@/assets/theme-d/game/r4-skill-ladder.webp';
+
 import styles from '@/pages/player/SkillTreePage.module.css';
 
 const BRANCH_ICONS: Record<SkillBranchId, string> = {
@@ -59,7 +62,8 @@ export default function SkillTreePage() {
 
         <div className={styles.pointsPlaque}>
           <span className={styles.pointsMedallion} aria-hidden="true">
-            {available}
+            <img className={styles.badgeImg} src={badgeBlank} alt="" />
+            <span className={styles.badgeNum}>{available}</span>
           </span>
           <div className={styles.pointsBody}>
             <p className={styles.pointsLabel}>{s.pointsLabel(available, totalPoints)}</p>
@@ -82,6 +86,8 @@ export default function SkillTreePage() {
                 className={styles.branchPanel}
                 bodyClassName={styles.branchBody}
               >
+                <img className={styles.ladderSpine} src={skillLadder} alt="" aria-hidden="true" />
+                <div className={styles.branchCol}>
                 <div className={styles.branchHead}>
                   <span className={styles.branchMedallion} aria-hidden="true">
                     {BRANCH_ICONS[branch]}
@@ -112,7 +118,10 @@ export default function SkillTreePage() {
                     return (
                       <li key={tier} className={styles.tierRow}>
                         <span className={styles.medallionCell}>
-                          <span className={`${styles.medallion} ${medallionClass}`}>{tier}</span>
+                          <span className={`${styles.medallion} ${medallionClass}`}>
+                            <img className={styles.badgeImg} src={badgeBlank} alt="" aria-hidden="true" />
+                            <span className={styles.badgeNum}>{tier}</span>
+                          </span>
                         </span>
                         <span className={captionClass}>{s.tierLabel(tier, SKILL_MAX_TIER)}</span>
                         {state === 'unlocked' ? (
@@ -134,6 +143,7 @@ export default function SkillTreePage() {
                 >
                   {buttonLabel}
                 </GoldButton>
+                </div>
               </WoodPanel>
             );
           })}

@@ -9,18 +9,24 @@
    surfaces are fixed in both themes, so their inks stay pinned to the
    light values that read on them. */
 
+/* Đợt lan 4: the skill tree stands in the festival courtyard scene
+   (light/dark per theme); branches climb the rope ladder asset. */
 .board {
   position: relative;
   display: flex;
   flex-direction: column;
   gap: 1.1rem;
   padding: 1.4rem 1.5rem 1.1rem;
-  background: linear-gradient(180deg, var(--td-paper) 0%, var(--td-paper-deep) 100%);
+  background: url('../../assets/theme-d/scenes/scene-courtyard-light.webp') center 18% / cover
+    no-repeat;
   color: var(--td-paper-text);
-  border: 30px solid transparent;
-  border-image: url('../../assets/theme-d/game/frame-scroll.webp') 30% / 1 / 0 stretch;
-  border-radius: 18px;
+  border: 3px solid rgba(233, 162, 59, 0.55);
+  border-radius: 22px;
   box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+}
+
+:global([data-theme='dark']) .board {
+  background-image: url('../../assets/theme-d/scenes/scene-courtyard-dark.webp');
 }
 
 /* Gold rivets pinning the board's four corners, as drawn on the mẫu. */
@@ -126,26 +132,40 @@
   color: #fff6e0;
 }
 
-/* Gold coin medallion carrying the spendable-points count. */
+/* Đợt 4: the spendable-points count rides the blank wooden badge
+   (r4-badge-blank) — the badge face carries the number. */
 .pointsMedallion {
+  position: relative;
   flex: none;
-  width: 58px;
-  height: 58px;
+  width: 62px;
+  height: 68px;
+  background: #54341a;
+  border-radius: 46% 46% 50% 50%;
+}
+
+.badgeImg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.badgeNum {
+  position: absolute;
+  inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: var(--td-radius-full);
-  background: radial-gradient(circle at 35% 30%, var(--td-gold-bright), var(--td-gold) 55%, var(--td-gold-deep));
-  border: 3px solid var(--td-ink);
-  box-shadow:
-    inset 0 2px 0 rgba(255, 246, 224, 0.65),
-    0 3px 0 rgba(59, 32, 8, 0.45);
-  color: #43301b;
+  padding-top: 14%;
+  color: #ffe9b8;
   font-family: var(--td-font-game);
-  font-size: 1.55rem;
   font-weight: 800;
   font-variant-numeric: tabular-nums;
-  text-shadow: 0 1px 0 rgba(255, 246, 224, 0.5);
+  text-shadow: 0 2px 2px rgba(32, 15, 4, 0.65);
+}
+
+.pointsMedallion .badgeNum {
+  font-size: 1.5rem;
 }
 
 .pointsBody {
@@ -220,10 +240,36 @@
 .branchBody {
   flex: 1;
   display: flex;
+  flex-direction: row;
+  gap: 0.7rem;
+  min-width: 0;
+  color: var(--td-paper-text);
+}
+
+/* Đợt 4: the approved rope ladder (r4-skill-ladder) runs as a spine
+   down the left of every branch panel; the tier badges hang beside it. */
+.ladderSpine {
+  flex: none;
+  width: 74px;
+  align-self: stretch;
+  object-fit: cover;
+  object-position: top center;
+  border-radius: 12px;
+  filter: drop-shadow(0 3px 5px rgba(74, 44, 20, 0.3));
+}
+
+.branchCol {
+  flex: 1;
+  display: flex;
   flex-direction: column;
   gap: 0.5rem;
   min-width: 0;
-  color: var(--td-paper-text);
+}
+
+@media (max-width: 700px) {
+  .ladderSpine {
+    width: 62px;
+  }
 }
 
 .branchHead {
@@ -334,55 +380,48 @@
   justify-content: center;
 }
 
+/* Đợt 4: every tier is the blank wooden badge (r4-badge-blank)
+   hanging on the rope; the tier number is stamped on its face.
+   State stays distinct: unlocked = warm lit badge, next = glowing
+   pulse, locked = greyed and dimmed. */
 .medallion {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: var(--td-radius-full);
+  position: relative;
+  width: 48px;
+  height: 52px;
+  background: #54341a;
+  border-radius: 46% 46% 50% 50%;
   font-family: var(--td-font-game);
   font-weight: 800;
   font-variant-numeric: tabular-nums;
 }
 
-/* Unlocked tier — solid gold medallion. */
-.medallionUnlocked {
-  width: 44px;
-  height: 44px;
-  background: linear-gradient(180deg, var(--td-gold-bright), var(--td-gold) 55%, var(--td-gold-deep));
-  border: 2.5px solid var(--td-ink);
-  box-shadow:
-    inset 0 2px 0 rgba(255, 246, 224, 0.65),
-    0 2px 0 rgba(74, 44, 20, 0.4);
-  color: #43301b;
+.medallion .badgeNum {
   font-size: 1.05rem;
-  text-shadow: 0 1px 0 rgba(255, 246, 224, 0.5);
 }
 
-/* Next tier — the one the button below will open: pale face, gold
-   rim and a soft breathing glow so the eye lands on it first. */
+.medallionUnlocked .badgeImg {
+  filter: brightness(1.12) saturate(1.15) drop-shadow(0 0 6px rgba(233, 162, 59, 0.55));
+}
+
 .medallionNext {
-  width: 48px;
-  height: 48px;
-  background: var(--td-paper);
-  border: 3px solid var(--td-gold-deep);
-  box-shadow:
-    0 0 0 4px rgba(233, 162, 59, 0.35),
-    0 0 18px rgba(233, 162, 59, 0.55),
-    inset 0 2px 0 rgba(255, 255, 255, 0.8);
-  color: #8a5a00; /* pinned: paper stays light in dark theme */
-  font-size: 1.12rem;
   animation: tier-glow 1.8s ease-in-out infinite;
+  border-radius: 50%;
 }
 
-/* Tier not yet reached — smaller, dimmed, dashed rim. */
+.medallionNext .badgeImg {
+  filter: brightness(1.18);
+}
+
 .medallionLocked {
-  width: 36px;
-  height: 36px;
-  background: var(--td-paper-deep);
-  border: 2px dashed var(--td-paper-text-muted);
-  color: var(--td-paper-text-muted);
-  font-size: 0.92rem;
-  opacity: 0.65;
+  opacity: 0.62;
+}
+
+.medallionLocked .badgeImg {
+  filter: grayscale(0.75) brightness(0.72);
+}
+
+.medallionLocked .badgeNum {
+  color: #d8cbb2;
 }
 
 @keyframes tier-glow {
@@ -477,7 +516,7 @@
 
 @media (max-width: 640px) {
   .board {
-    border-width: 20px;
+
     padding: 1rem 0.9rem 0.9rem;
     gap: 0.9rem;
   }
