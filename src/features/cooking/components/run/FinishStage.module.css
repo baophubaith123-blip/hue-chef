@@ -313,3 +313,209 @@
   color: #6b5b66;
   text-shadow: 0 2px 0 rgba(255, 246, 224, 0.9);
 }
+/* ===== Lát B — dựng theo sheet Theme D stage 4 / đích-4 (Hoàn thiện) =====
+   Plaque top bar, pot (flat 'pot' asset) standing on a wood stove,
+   glowing gold target rings, burst feedback text and a wooden
+   floor + brocade strip along the bottom. The backdrop stays the
+   SCENES['ban-hoan-thien'] artwork loaded by the Phase 17 block
+   above; the Phase 20.1 light-theme ring/floater overrides keep
+   winning in light theme (higher specificity). */
+.stage {
+  font-family: var(--td-font-game);
+}
+
+@keyframes stage-b-pop {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Top plaque — plum bar, brick stage plaque, gold-rimmed chips */
+.topBar {
+  background: linear-gradient(180deg, var(--td-plum-soft, #5e1d31), var(--td-plum, #4a1525));
+  border: 3px solid var(--td-ink, #4a2c14);
+  border-radius: 18px;
+  padding: 9px 12px;
+  box-shadow:
+    0 5px 0 rgba(59, 32, 8, 0.35),
+    inset 0 2px 0 rgba(255, 233, 190, 0.25);
+  animation: stage-b-pop 0.35s var(--td-ease-out, ease-out) backwards;
+}
+
+.stageChip {
+  font-family: var(--td-font-game-display);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  background: linear-gradient(180deg, #c8502e, var(--td-brick, #b03e26));
+}
+
+.chip {
+  border: 2px solid rgba(233, 162, 59, 0.75);
+  font-family: var(--td-font-game);
+}
+
+.comboChip {
+  font-family: var(--td-font-game);
+}
+
+/* Wood stove under the pot — grounded on the field, so it stays
+   put while the pot itself jumps/nods on a resolved ring */
+.field::before {
+  content: '';
+  position: absolute;
+  z-index: 3;
+  left: 50%;
+  top: calc(44% + 58px);
+  transform: translateX(-50%);
+  width: 156px;
+  height: 40px;
+  border: 3px solid var(--td-ink, #4a2c14);
+  border-radius: 10px;
+  background:
+    radial-gradient(ellipse 46% 62% at 50% 78%, #ffc53d 0%, #f07f2e 42%, rgba(224, 84, 62, 0) 72%),
+    var(--td-wood-gradient);
+  box-shadow:
+    0 6px 0 rgba(59, 32, 8, 0.4),
+    inset 0 2px 0 rgba(255, 226, 160, 0.3);
+  animation: finish-fire 1.6s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+@keyframes finish-fire {
+  from {
+    filter: brightness(1);
+  }
+  to {
+    filter: brightness(1.18);
+  }
+}
+
+/* Wooden floor + brocade strip along the bottom of the field */
+.field::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  height: 24px;
+  border-top: 3px solid var(--td-gold, #e9a23b);
+  background:
+    repeating-linear-gradient(45deg, rgba(233, 162, 59, 0.5) 0 8px, transparent 8px 16px),
+    repeating-linear-gradient(90deg, #8a5a2b 0 46px, #7c5222 46px 48px),
+    linear-gradient(180deg, var(--td-wood-light, #d9a05b), var(--td-wood-dark, #8a5a2b));
+  pointer-events: none;
+}
+
+.potImg {
+  object-position: 50% 40%;
+}
+
+.steam {
+  background: rgba(255, 255, 255, 0.65);
+}
+
+/* Target rings — glowing gold, as in the đích-4 sheet */
+.ring {
+  border: 4px solid var(--td-gold-bright, #f6c453);
+  background: radial-gradient(circle, rgba(246, 196, 83, 0.1) 0%, rgba(246, 196, 83, 0.02) 70%);
+  box-shadow:
+    0 0 16px 3px rgba(246, 196, 83, 0.45),
+    inset 0 0 14px rgba(246, 196, 83, 0.35);
+}
+
+.ringInner {
+  border: 3.5px solid var(--td-gold, #e9a23b);
+  background: rgba(233, 162, 59, 0.16);
+  box-shadow: 0 0 10px rgba(233, 162, 59, 0.55);
+}
+
+/* Feedback text — "Tuyệt vời!" bursts in outlined gold */
+.floaterPerfect {
+  font-family: var(--td-font-game-display);
+  font-weight: 400;
+  font-size: 25px;
+  color: #ffd23e;
+  text-shadow:
+    2px 0 0 #4a2c14,
+    -2px 0 0 #4a2c14,
+    0 2px 0 #4a2c14,
+    0 -2px 0 #4a2c14,
+    0 6px 18px rgba(255, 190, 40, 0.8);
+  animation: finish-burst-text 0.95s ease forwards;
+}
+
+@keyframes finish-burst-text {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.5);
+  }
+  35% {
+    opacity: 1;
+    transform: translate(-50%, -62%) scale(1.18);
+  }
+  60% {
+    transform: translate(-50%, -70%) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -96%) scale(1.02);
+  }
+}
+
+.floaterGood {
+  font-family: var(--td-font-game);
+  font-weight: 800;
+  text-shadow:
+    0 2px 0 rgba(74, 44, 20, 0.8),
+    0 0 10px rgba(255, 233, 190, 0.35);
+}
+
+.floaterMiss {
+  text-shadow: 0 2px 0 rgba(32, 15, 4, 0.7);
+}
+
+/* Completion overlay — game card */
+.doneOverlay {
+  background: rgba(24, 8, 20, 0.35);
+}
+
+.doneBadge {
+  background: var(--td-paper, #fff6e0);
+  border: 3px solid var(--td-ink, #4a2c14);
+  border-radius: 22px;
+  padding: 14px 22px;
+  box-shadow: var(--td-shadow-paper);
+  animation: stage-b-pop 0.4s var(--td-ease-out, ease-out) backwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .topBar,
+  .doneBadge {
+    animation: none;
+  }
+
+  .field::before,
+  .steam,
+  .floater,
+  .floaterPerfect,
+  .potJump,
+  .potNod,
+  .potDizzy,
+  .ringPerfect,
+  .ringGood,
+  .ringMiss {
+    animation: none;
+  }
+}
+
+/* R1 coordinator fix — stage chip deepened: cream on the lighter
+   brick measured 3.8:1; the deeper brick keeps the sheet look. */
+.stageChip {
+  background: linear-gradient(180deg, #a8401f, #93351d);
+}

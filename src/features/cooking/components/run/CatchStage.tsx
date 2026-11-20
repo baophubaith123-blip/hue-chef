@@ -14,6 +14,7 @@ import { catchRawMax, clampRatio } from '@/features/cooking/lib/score-rescale';
 import type { ResolvedStageConfig } from '@/features/cooking/lib/stage-config';
 import { CATCH_MISS_PENALTY, CATCH_POINTS } from '@/features/cooking/lib/stage-bonus';
 import { StageHelp } from '@/features/cooking/components/run/StageHelp';
+import { NOI_NOI_FLAT } from '@/components/theme-d/game-assets';
 import { useTranslation } from '@/i18n/useTranslation';
 import { playSound } from '@/lib/sound';
 
@@ -376,7 +377,7 @@ export function CatchStage({ recipe, config, maxPoints, onProgress, onComplete }
           className={[styles.pot, potShake ? styles.potShake : ''].filter(Boolean).join(' ')}
           style={{ left: `${potX * 100}%`, width: `${config.catchRadiusPx * 2}px` }}
         >
-          <img src="/images/noi-noi-2d.webp" alt="" className={styles.potImg} />
+          <img src={NOI_NOI_FLAT.cook} alt="" className={styles.potImg} />
         </div>
         <div className={styles.floorLine} aria-hidden />
 

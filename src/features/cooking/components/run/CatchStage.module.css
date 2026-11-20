@@ -319,3 +319,208 @@
   height: auto;
   min-height: 0;
 }
+/* ===== Lát B — dựng theo sheet Theme D stage 2 (Hứng nguyên liệu) =====
+   Plaque top bar, motion trails on falling tokens, wooden floor
+   strip and Nồi Nồi (flat 'cook' asset) riding a wheeled cart. The
+   field backdrop stays the SCENES['san-le-hoi'] artwork loaded by
+   the Phase 17 block above. */
+.stage {
+  font-family: var(--td-font-game);
+}
+
+@keyframes stage-b-pop {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Top plaque — plum bar, brick stage plaque, gold-rimmed chips */
+.topBar {
+  background: linear-gradient(180deg, var(--td-plum-soft, #5e1d31), var(--td-plum, #4a1525));
+  border: 3px solid var(--td-ink, #4a2c14);
+  border-radius: 18px;
+  padding: 9px 12px;
+  box-shadow:
+    0 5px 0 rgba(59, 32, 8, 0.35),
+    inset 0 2px 0 rgba(255, 233, 190, 0.25);
+  animation: stage-b-pop 0.35s var(--td-ease-out, ease-out) backwards;
+}
+
+.stageChip {
+  font-family: var(--td-font-game-display);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  background: linear-gradient(180deg, #c8502e, var(--td-brick, #b03e26));
+}
+
+.chip {
+  border: 2px solid rgba(233, 162, 59, 0.75);
+  font-family: var(--td-font-game);
+}
+
+.comboChip {
+  font-family: var(--td-font-game);
+}
+
+.field {
+  border-color: var(--td-ink, #4a2c14);
+  box-shadow:
+    inset 0 0 0 2px rgba(255, 233, 190, 0.22),
+    0 12px 28px rgba(59, 42, 32, 0.25);
+}
+
+/* Falling tokens — cream motion-trail streaks above each ball */
+.token::before {
+  content: '';
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: -1;
+  width: 30px;
+  height: 34px;
+  border-radius: 50%;
+  background: repeating-linear-gradient(
+    90deg,
+    transparent 0 6px,
+    rgba(255, 246, 224, 0.55) 6px 8px,
+    transparent 8px 15px
+  );
+  filter: blur(1px);
+  opacity: 0.8;
+  pointer-events: none;
+}
+
+.tokenBall {
+  border-color: var(--td-ink, #4a2c14);
+  box-shadow:
+    0 6px 0 rgba(59, 32, 8, 0.3),
+    0 12px 20px rgba(24, 8, 20, 0.35);
+}
+
+.tokenName {
+  font-family: var(--td-font-game);
+  border: 2px solid rgba(233, 162, 59, 0.6);
+}
+
+.floater {
+  font-family: var(--td-font-game-display);
+  font-weight: 400;
+  color: var(--td-gold-bright, #f6c453);
+  text-shadow:
+    0 2px 0 rgba(74, 44, 20, 0.85),
+    0 0 14px rgba(233, 162, 59, 0.5);
+}
+
+.floaterBad {
+  color: #ff9d8a;
+}
+
+/* Wooden floor strip along the bottom of the field */
+.floorLine {
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 26px;
+  border-top: 3px solid var(--td-ink, #4a2c14);
+  background:
+    repeating-linear-gradient(90deg, rgba(74, 44, 20, 0.35) 0 2px, transparent 2px 52px),
+    linear-gradient(180deg, var(--td-wood-light, #d9a05b), var(--td-wood, #b57e40));
+  box-shadow: inset 0 3px 0 rgba(255, 233, 190, 0.35);
+}
+
+/* Cart wheels under the catching pot (sheet: pot rides a cart) */
+.pot::before,
+.pot::after {
+  content: '';
+  position: absolute;
+  bottom: -7px;
+  z-index: 0;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 50%, #d9a05b 0 32%, #8a5a2b 36% 100%);
+  border: 3px solid var(--td-ink, #4a2c14);
+}
+
+.pot::before {
+  left: 10px;
+}
+
+.pot::after {
+  right: 10px;
+}
+
+.potImg {
+  position: relative;
+  z-index: 1;
+  object-position: 50% 62%;
+  border-color: var(--td-ink, #4a2c14);
+}
+
+/* Ready / countdown / done — game cards */
+.readyCard {
+  animation: stage-b-pop 0.38s var(--td-ease-out, ease-out) backwards;
+}
+
+.readyTitle {
+  font-family: var(--td-font-game-display);
+  font-weight: 400;
+  font-size: 24px;
+  color: var(--td-brick, #b03e26);
+}
+
+.startBtn {
+  font-family: var(--td-font-game-display);
+  font-weight: 400;
+  font-size: 19px;
+  letter-spacing: 0.02em;
+}
+
+.countNumber {
+  font-family: var(--td-font-game-display);
+  font-weight: 400;
+  color: var(--td-gold-bright, #f6c453);
+  text-shadow:
+    0 4px 0 rgba(74, 44, 20, 0.9),
+    0 0 34px rgba(233, 162, 59, 0.65);
+}
+
+.doneBadge {
+  font-family: var(--td-font-game-display);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  background: linear-gradient(
+    180deg,
+    var(--td-gold-bright, #f6c453),
+    var(--td-gold, #e9a23b) 55%,
+    var(--td-gold-deep, #c97a1f)
+  );
+  color: #43301b;
+  animation: stage-b-pop 0.4s var(--td-ease-out, ease-out) backwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .topBar,
+  .readyCard,
+  .doneBadge {
+    animation: none;
+  }
+
+  .countNumber,
+  .floater,
+  .potShake {
+    animation: none;
+  }
+}
+
+/* R1 coordinator fix — stage chip deepened: cream on the lighter
+   brick measured 3.8:1; the deeper brick keeps the sheet look. */
+.stageChip {
+  background: linear-gradient(180deg, #a8401f, #93351d);
+}

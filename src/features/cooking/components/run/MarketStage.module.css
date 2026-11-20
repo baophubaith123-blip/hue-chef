@@ -488,3 +488,341 @@
   font-weight: 600;
   color: var(--td-paper-text-muted, #7a5c38);
 }
+/* ===== Lát B — dựng theo sheet Theme D stage 1 (Đi chợ) =====
+   Plaque bar on top, paper shopping list on the LEFT, stall grid on
+   the RIGHT (stacked on narrow screens). The backdrop stays the
+   SCENES.cho artwork (src/assets/theme-d/scenes/cho.webp) loaded by
+   the Phase 17 block above, with its light/dark overlays. */
+.stage {
+  font-family: var(--td-font-game);
+  display: grid;
+  grid-template-columns: minmax(228px, 288px) minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  grid-template-areas:
+    'top top'
+    'list stall'
+    'list pager';
+  column-gap: 14px;
+}
+
+@keyframes stage-b-pop {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Top plaque — plum bar, brick stage plaque, gold-rimmed chips */
+.topBar {
+  grid-area: top;
+  background: linear-gradient(180deg, var(--td-plum-soft, #5e1d31), var(--td-plum, #4a1525));
+  border: 3px solid var(--td-ink, #4a2c14);
+  border-radius: 18px;
+  padding: 9px 12px;
+  margin-bottom: 14px;
+  box-shadow:
+    0 5px 0 rgba(59, 32, 8, 0.35),
+    inset 0 2px 0 rgba(255, 233, 190, 0.25);
+  animation: stage-b-pop 0.35s var(--td-ease-out, ease-out) backwards;
+}
+
+.stageChip {
+  font-family: var(--td-font-game-display);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  background: linear-gradient(180deg, #c8502e, var(--td-brick, #b03e26));
+}
+
+.chip {
+  border: 2px solid rgba(233, 162, 59, 0.75);
+  font-family: var(--td-font-game);
+}
+
+.chipWarn {
+  border-color: var(--color-danger, #b42318);
+}
+
+/* Shopping list — paper panel with checkbox rows (sheet style) */
+.listPanel {
+  grid-area: list;
+  margin-bottom: 0;
+  border: 3px solid var(--td-wood-dark, #8a5a2b);
+  background: linear-gradient(180deg, #fffaf0, var(--td-paper, #fff6e0));
+  box-shadow: var(--td-shadow-paper);
+  overflow-y: auto;
+  min-height: 0;
+  animation: stage-b-pop 0.35s var(--td-ease-out, ease-out) backwards;
+}
+
+.listHiddenPanel {
+  grid-area: list;
+  align-self: start;
+  margin-bottom: 0;
+}
+
+.memorizeWrap {
+  grid-column: 1 / -1;
+  grid-row: 2 / 4;
+}
+
+.listTitle {
+  font-family: var(--td-font-game-display);
+  font-weight: 400;
+  font-size: 16px;
+  color: var(--td-brick, #b03e26);
+}
+
+.listItems {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 6px;
+}
+
+.memorizeWrap .listItems {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+}
+
+.listItem,
+.listItemGot {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 10px;
+  padding: 6px 10px;
+}
+
+.listItem::before,
+.listItemGot::before {
+  content: '';
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 17px;
+  height: 17px;
+  border: 2.5px solid var(--td-wood-dark, #8a5a2b);
+  border-radius: 5px;
+  background: #fffdf4;
+}
+
+.listItemGot::before {
+  content: '✓';
+  background: var(--color-success, #15803d);
+  border-color: var(--td-success-strong, #14532d);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.listItem small,
+.listItemGot small {
+  margin-left: auto;
+}
+
+/* Stalls — wooden name tag on top, ingredient in a woven basket,
+   green check badge once picked (sheet style) */
+.stall {
+  grid-area: stall;
+}
+
+.item {
+  padding: 24px 6px 9px;
+  animation: stage-b-pop 0.38s var(--td-ease-out, ease-out) backwards;
+}
+
+.item:nth-child(2) {
+  animation-delay: 0.04s;
+}
+
+.item:nth-child(3) {
+  animation-delay: 0.08s;
+}
+
+.item:nth-child(4) {
+  animation-delay: 0.12s;
+}
+
+.item:nth-child(5) {
+  animation-delay: 0.16s;
+}
+
+.item:nth-child(6) {
+  animation-delay: 0.2s;
+}
+
+.item:nth-child(7) {
+  animation-delay: 0.24s;
+}
+
+.item:nth-child(8) {
+  animation-delay: 0.28s;
+}
+
+.itemWrong {
+  animation: market-shake 0.4s ease;
+}
+
+.itemName {
+  order: -1;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  background: var(--td-wood-gradient-soft);
+  border: 2px solid var(--td-ink, #4a2c14);
+  border-radius: 999px;
+  padding: 2px 12px;
+  color: #43301b;
+  font-weight: 800;
+  box-shadow: 0 2px 0 rgba(74, 44, 20, 0.35);
+}
+
+.itemEmoji {
+  margin-top: 7px;
+  padding: 5px 12px 7px;
+  border: 2.5px solid var(--td-wood-dark, #8a5a2b);
+  border-radius: 14px;
+  background:
+    repeating-linear-gradient(0deg, transparent 0 6px, rgba(138, 90, 43, 0.12) 6px 7px),
+    radial-gradient(circle at 50% 35%, #ffe9b8, #f0bd6a);
+  box-shadow: inset 0 -6px 0 rgba(138, 90, 43, 0.25);
+}
+
+.itemPicked::after {
+  content: '✓';
+  position: absolute;
+  top: 5px;
+  right: 6px;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--color-success, #15803d);
+  border: 2.5px solid #fff6e0;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 900;
+  line-height: 1;
+  box-shadow: 0 3px 8px rgba(20, 83, 45, 0.45);
+  animation: stage-b-pop 0.3s ease backwards;
+}
+
+/* Pager + bottom plaque */
+.pager {
+  grid-area: pager;
+}
+
+.pagerSign {
+  font-family: var(--td-font-game-display);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+}
+
+.pagerBtn {
+  font-family: var(--td-font-game);
+}
+
+.footer {
+  background: linear-gradient(180deg, var(--td-plum-soft, #5e1d31), var(--td-plum, #4a1525));
+  border: 3px solid var(--td-ink, #4a2c14);
+  border-radius: 999px;
+  padding: 6px;
+  box-shadow: 0 6px 0 rgba(59, 32, 8, 0.35);
+}
+
+.peekBtn {
+  background: var(--td-wood-gradient);
+  color: #fff6e0;
+  font-family: var(--td-font-game);
+  text-shadow: 0 1px 0 rgba(32, 15, 4, 0.4);
+}
+
+.goBtn {
+  font-family: var(--td-font-game-display);
+  font-weight: 400;
+  font-size: 19px;
+  letter-spacing: 0.02em;
+  padding: 12px 32px;
+  background: linear-gradient(
+    180deg,
+    var(--td-gold-bright, #f6c453),
+    var(--td-gold, #e9a23b) 55%,
+    var(--td-gold-deep, #c97a1f)
+  );
+  box-shadow:
+    0 5px 0 rgba(122, 74, 10, 0.55),
+    inset 0 2px 0 rgba(255, 246, 224, 0.65);
+}
+
+.goBtn:hover {
+  box-shadow:
+    0 5px 0 rgba(122, 74, 10, 0.55),
+    inset 0 2px 0 rgba(255, 246, 224, 0.65),
+    var(--td-glow-gold);
+}
+
+.toast {
+  font-family: var(--td-font-game);
+}
+
+.failCard {
+  animation: stage-b-pop 0.35s var(--td-ease-out, ease-out) backwards;
+}
+
+.failTitle {
+  font-family: var(--td-font-game-display);
+  font-weight: 400;
+}
+
+/* Narrow screens — stack list above stalls, as before */
+@media (max-width: 900px) {
+  .stage {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto auto minmax(0, 1fr) auto;
+    grid-template-areas:
+      'top'
+      'list'
+      'stall'
+      'pager';
+  }
+
+  .memorizeWrap {
+    grid-column: 1;
+    grid-row: 2 / 4;
+  }
+
+  .listPanel,
+  .listHiddenPanel {
+    margin-bottom: 10px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .topBar,
+  .listPanel,
+  .item,
+  .itemPicked::after,
+  .failCard {
+    animation: none;
+  }
+
+  .item,
+  .pagerBtn,
+  .goBtn,
+  .peekBtn {
+    transition: none;
+  }
+}
+
+/* R1 coordinator fix — stage chip deepened: cream on the lighter
+   brick measured 3.8:1; the deeper brick keeps the sheet look. */
+.stageChip {
+  background: linear-gradient(180deg, #a8401f, #93351d);
+}

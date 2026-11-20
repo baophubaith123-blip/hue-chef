@@ -12,6 +12,7 @@ import {
   finishGoodPoints,
 } from '@/features/cooking/lib/stage-bonus';
 import { StageHelp } from '@/features/cooking/components/run/StageHelp';
+import { NOI_NOI_FLAT } from '@/components/theme-d/game-assets';
 import { useTranslation } from '@/i18n/useTranslation';
 import { playSound } from '@/lib/sound';
 
@@ -304,7 +305,7 @@ export function FinishStage({ config, maxPoints, onProgress, onComplete }: Finis
         <div className={[styles.pot, moodClass].filter(Boolean).join(' ')}>
           <span className={`${styles.steam} ${styles.steam1}`} />
           <span className={`${styles.steam} ${styles.steam2}`} />
-          <img src="/images/noi-noi-2d.webp" alt="" className={styles.potImg} />
+          <img src={NOI_NOI_FLAT.pot} alt="" className={styles.potImg} />
           {potMood === 'dizzy' ? <span className={styles.dizzyEyes}>😵</span> : null}
         </div>
 
