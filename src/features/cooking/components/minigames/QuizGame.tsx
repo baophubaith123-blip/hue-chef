@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 
 import { Button } from '@/components/Button';
+import { NOI_NOI_FLAT } from '@/components/theme-d/game-assets';
 import { speedBonusForQuiz } from '@/features/cooking/lib/combo';
 import type { QuizMinigame } from '@/features/recipes/types';
 import { useTranslation } from '@/i18n/useTranslation';
@@ -122,7 +123,7 @@ export function QuizGame({
       aria-label={minigame.question}
     >
       <div className={styles.hostRow}>
-        <img src="/images/noi-noi-2d.webp" alt="" className={styles.hostAvatar} aria-hidden />
+        <img src={NOI_NOI_FLAT.pot} alt="" className={styles.hostAvatar} aria-hidden />
         <div className={styles.speechBubble}>
           <h2 className={styles.question}>{minigame.question}</h2>
           <p className={styles.instruction}>{dict.cooking.minigames.quizInstruction}</p>

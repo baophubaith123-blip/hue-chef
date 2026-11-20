@@ -463,3 +463,59 @@
   line-height: 1.55;
   color: #faf5ef;
 }
+
+/* ===== Đợt lan R1 — game-frame finish (wood modal shell) =====
+   The verdict now sits inside the Theme D wood-framed modal: the hero
+   shows the flat Nồi Nồi portrait, the score rides a gold plaque and
+   display type switches to the game families. All paper ink pins above
+   stay in force; the gold plaque keeps dark ink for contrast. */
+.trophyBadge {
+  width: 6rem;
+  height: 6rem;
+  border-radius: 20px;
+  object-fit: cover;
+}
+
+.recipeName {
+  font-family: var(--td-font-game-display);
+  letter-spacing: 0.01em;
+}
+
+.starsDisplay {
+  font-size: 2.1rem;
+}
+
+.starEmpty {
+  color: #d9c491;
+}
+
+.scoreHero {
+  background: linear-gradient(180deg, var(--td-gold-bright, #f6c453), var(--td-gold, #e9a23b));
+  border: 3px solid var(--td-ink, #4a2c14);
+  box-shadow: 0 4px 0 var(--td-ink-soft, rgba(74, 44, 20, 0.45));
+}
+
+.scoreHeroLabel {
+  color: #4a2c14;
+}
+
+.scoreHeroValue {
+  font-family: var(--td-font-game-display);
+  color: #43301b;
+}
+
+.minigamesTitle,
+.achievementTitle,
+.levelUpTitle,
+.failTitle {
+  font-family: var(--td-font-game);
+}
+
+.modalFooter {
+  border-top: 2px dashed rgba(122, 92, 56, 0.4);
+  padding-top: 1rem;
+}
+
+.modalFooter a {
+  text-decoration: none;
+}

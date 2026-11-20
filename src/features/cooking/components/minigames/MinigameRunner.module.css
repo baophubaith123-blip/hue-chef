@@ -138,3 +138,26 @@
 .gameWrapper {
   padding: 0.5rem;
 }
+
+/* ===== Đợt lan R1 — brick runner bar, paper step plaque ===== */
+.runnerHeader {
+  background: linear-gradient(180deg, #ad4225 0%, #93351d 100%);
+  border: 3px solid var(--td-ink, #4a2c14);
+  border-radius: 20px;
+}
+
+.challengeTitle {
+  font-family: var(--td-font-game-display);
+  color: #fff6e0;
+}
+
+.stepBadge {
+  background: var(--td-paper, #fff6e0);
+  color: var(--td-paper-text, #43301b);
+  font-family: var(--td-font-game);
+}
+
+.scoreBonusBadge {
+  color: #43301b;
+  font-family: var(--td-font-game);
+}

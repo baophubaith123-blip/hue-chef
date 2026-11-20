@@ -140,3 +140,20 @@
 .metaChip {
   border: 2px solid var(--td-ink, #4a2c14);
 }
+
+/* ===== Đợt lan R1 — game type, pinned paper chips ===== */
+.question {
+  font-family: var(--td-font-game);
+  font-weight: 800;
+  color: var(--td-paper-text, #43301b);
+}
+
+.metaChip {
+  font-family: var(--td-font-game);
+  background: var(--td-paper-deep, #f7e8c6);
+  color: var(--td-paper-text, #43301b);
+}
+
+.charPending {
+  color: #7a5c38;
+}

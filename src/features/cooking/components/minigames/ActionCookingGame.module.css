@@ -311,3 +311,17 @@
   border: 2.5px solid var(--td-ink, #4a2c14);
   background: var(--td-paper-deep, #f7e8c6);
 }
+
+/* ===== Đợt lan R1 — game type for the action minigame ===== */
+.question {
+  font-family: var(--td-font-game);
+  font-weight: 800;
+}
+
+.actionButton {
+  font-family: var(--td-font-game);
+}
+
+.ingredientName {
+  font-family: var(--td-font-game);
+}

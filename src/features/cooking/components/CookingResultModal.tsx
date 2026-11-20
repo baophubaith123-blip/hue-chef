@@ -2,14 +2,21 @@ import { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 
 import type { Achievement } from '@/data/types';
-import { Button } from '@/components/Button';
-import { Modal } from '@/components/Modal';
+import { GoldButton } from '@/components/theme-d/GoldButton';
+import { Modal } from '@/components/theme-d/Modal';
+import { NOI_NOI_FLAT } from '@/components/theme-d/game-assets';
+import { WoodButton } from '@/components/theme-d/WoodButton';
 import type { CookingSession } from '@/features/cooking/types';
 import { useTranslation } from '@/i18n/useTranslation';
 import { formatDuration } from '@/lib/format';
 import { winThreshold } from '@/lib/pricing';
 
 import styles from './CookingResultModal.module.css';
+
+/** Fail verdicts stay on screen until the player picks a footer action,
+    so the wood modal's close affordances are inert in that state —
+    matching the previous modal's behaviour exactly. */
+const BLOCKED_CLOSE = () => {};
 
 export interface BossNote {
   passed: boolean;
@@ -55,22 +62,10 @@ export function CookingResultModal({
 
   return (
     <Modal
-      isOpen
+      open
       title={title}
-      onClose={isSuccess ? onClose : undefined}
-      footer={
-        <div className={styles.modalFooter}>
-          <Button variant="secondary" onClick={onRetry}>
-            🔄 {t('cooking.result.retry')}
-          </Button>
-          <Link to={`/recipes/${session.recipe.id}`} onClick={onClose}>
-            <Button variant="secondary">📖 {t('cooking.result.backToRecipe')}</Button>
-          </Link>
-          <Link to="/home" onClick={onClose}>
-            <Button variant="primary">🏠 {dict.cooking.result.backToHome}</Button>
-          </Link>
-        </div>
-      }
+      onClose={isSuccess ? onClose : BLOCKED_CLOSE}
+      closeLabel={t('common.close')}
     >
       <div className={styles.content}>
         {isSuccess ? (
@@ -83,9 +78,12 @@ export function CookingResultModal({
 
             {/* Top Celebration Banner */}
             <div className={styles.celebrationHero}>
-              <div className={styles.trophyBadge} aria-hidden="true">
-                🏆
-              </div>
+              <img
+                className={styles.trophyBadge}
+                src={NOI_NOI_FLAT.happy}
+                alt=""
+                aria-hidden="true"
+              />
               <h3 className={styles.recipeName}>{session.recipe.name}</h3>
               <div className={styles.starsDisplay} aria-label={`${session.stars} sao`}>
                 {Array.from({ length: 5 }).map((_, idx) => (
@@ -289,6 +287,16 @@ export function CookingResultModal({
             <p className={styles.bossNoteBody}>{bossNote.body}</p>
           </div>
         ) : null}
+
+        <div className={styles.modalFooter}>
+          <WoodButton onClick={onRetry}>🔄 {t('cooking.result.retry')}</WoodButton>
+          <Link to={`/recipes/${session.recipe.id}`} onClick={onClose}>
+            <WoodButton>📖 {t('cooking.result.backToRecipe')}</WoodButton>
+          </Link>
+          <Link to="/home" onClick={onClose}>
+            <GoldButton>🏠 {dict.cooking.result.backToHome}</GoldButton>
+          </Link>
+        </div>
       </div>
     </Modal>
   );

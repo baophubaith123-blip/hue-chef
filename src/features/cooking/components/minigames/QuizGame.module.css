@@ -540,3 +540,18 @@
 [data-theme='light'] .optionCorrect {
   color: #166534 !important;
 }
+
+/* ===== Đợt lan R1 — gameshow type, flat MC portrait ===== */
+.question {
+  font-family: var(--td-font-game);
+  font-weight: 800;
+}
+
+.chip,
+.ringValue {
+  font-family: var(--td-font-game);
+}
+
+.hostAvatar {
+  border-radius: 22px;
+}
