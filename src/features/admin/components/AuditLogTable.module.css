@@ -1,9 +1,9 @@
 .wrap {
   width: 100%;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
+  background: var(--td-paper);
+  border: 1.5px solid var(--td-paper-edge);
+  border-radius: var(--td-radius-paper);
+  box-shadow: var(--td-shadow-paper);
   overflow: hidden;
 }
 
@@ -25,16 +25,16 @@
   font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  color: var(--color-text-muted);
-  background: var(--color-surface-muted);
-  border-bottom: 1px solid var(--color-border);
+  color: var(--td-cream);
+  background: var(--td-plum);
+  border-bottom: 1px solid var(--td-paper-edge);
   white-space: nowrap;
 }
 
 .table tbody td {
   padding: 0.75rem 1rem;
   vertical-align: middle;
-  border-bottom: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--td-paper-edge);
 }
 
 .table tbody tr:last-child td {
@@ -42,7 +42,11 @@
 }
 
 .row:nth-child(even) {
-  background: var(--color-surface-muted);
+  background: var(--td-paper-deep);
+}
+
+.row:hover {
+  background: var(--td-brick-soft);
 }
 
 .actorCell {
@@ -57,7 +61,7 @@
   height: 30px;
   border-radius: 50%;
   object-fit: cover;
-  background: var(--color-surface-muted);
+  background: var(--td-paper-deep);
   flex-shrink: 0;
 }
 
@@ -70,20 +74,20 @@
 
 .actorName {
   font-weight: 600;
-  color: var(--color-text);
+  color: var(--td-paper-text);
   font-size: 0.85rem;
 }
 
 .actorRole {
   font-size: 0.7rem;
-  color: var(--color-text-muted);
+  color: var(--td-paper-text-muted);
   text-transform: lowercase;
 }
 
 .actionChip {
   display: inline-block;
   padding: 0.18rem 0.6rem;
-  border-radius: 999px;
+  border-radius: var(--td-radius-full);
   font-size: 0.72rem;
   font-weight: 600;
   white-space: nowrap;
@@ -91,53 +95,53 @@
 }
 
 .group-user {
-  background: var(--color-danger-soft);
-  color: var(--color-danger);
+  background: rgba(180, 35, 24, 0.08);
+  color: var(--td-danger);
 }
 
 .group-recipe {
-  background: var(--color-success-soft);
-  color: var(--color-success);
+  background: rgba(21, 128, 61, 0.10);
+  color: var(--td-success-strong);
 }
 
 .group-achievement {
-  background: var(--color-warning-soft);
-  color: var(--color-warning);
+  background: rgba(154, 91, 0, 0.12);
+  color: var(--td-warning-strong);
 }
 
 .group-comment {
-  background: var(--color-primary-soft);
-  color: var(--color-primary);
+  background: var(--td-brick-soft);
+  color: var(--td-brick);
 }
 
 .group-report {
-  background: var(--color-danger-soft);
-  color: var(--color-danger);
+  background: rgba(180, 35, 24, 0.08);
+  color: var(--td-danger);
 }
 
 .group-appeal {
-  background: var(--color-warning-soft);
-  color: var(--color-warning);
+  background: rgba(154, 91, 0, 0.12);
+  color: var(--td-warning-strong);
 }
 
 .group-setting {
-  background: var(--color-primary-soft);
-  color: var(--color-primary);
+  background: var(--td-brick-soft);
+  color: var(--td-brick);
 }
 
 .group-backup {
-  background: var(--color-success-soft);
-  color: var(--color-success);
+  background: rgba(21, 128, 61, 0.10);
+  color: var(--td-success-strong);
 }
 
 .group-broadcast {
-  background: var(--color-accent-soft);
-  color: var(--color-accent);
+  background: rgba(233, 162, 59, 0.15);
+  color: var(--td-gold-text);
 }
 
 .group-other {
-  background: var(--color-surface-muted);
-  color: var(--color-text-muted);
+  background: var(--td-paper-deep);
+  color: var(--td-paper-text-muted);
 }
 
 .targetCell {
@@ -147,7 +151,7 @@
 .targetId {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   font-size: 0.75rem;
-  color: var(--color-text);
+  color: var(--td-paper-text);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -155,7 +159,7 @@
 
 .targetType {
   font-size: 0.7rem;
-  color: var(--color-text-muted);
+  color: var(--td-paper-text-muted);
   text-transform: lowercase;
 }
 
@@ -168,20 +172,20 @@
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   font-size: 0.72rem;
   padding: 0.3rem 0.5rem;
-  background: var(--color-surface-muted);
-  border-radius: var(--radius-md);
-  color: var(--color-text);
+  background: var(--td-paper-deep);
+  border-radius: var(--td-radius-paper);
+  color: var(--td-paper-text);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .dateCell {
-  color: var(--color-text-muted);
+  color: var(--td-paper-text-muted);
   white-space: nowrap;
   font-size: 0.8rem;
 }
 
 .muted {
-  color: var(--color-text-muted);
+  color: var(--td-paper-text-muted);
 }

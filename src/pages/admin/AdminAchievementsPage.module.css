@@ -35,6 +35,10 @@
 
 .tableOverflow {
   overflow-x: auto;
+  background: var(--td-paper);
+  border: 1.5px solid var(--td-paper-edge);
+  border-radius: var(--td-radius-paper);
+  box-shadow: var(--td-shadow-paper);
 }
 
 .table {
@@ -48,12 +52,12 @@
   text-align: left;
   padding: 0.65rem 0.85rem;
   border-bottom: 1px solid var(--td-paper-edge);
-  color: var(--td-paper-text-muted);
+  color: var(--td-cream);
   font-size: 0.78rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.03em;
-  background: var(--td-paper-deep);
+  background: var(--td-plum);
 }
 
 .table tbody td {
@@ -63,8 +67,12 @@
   vertical-align: middle;
 }
 
-.row:hover td {
+.table tbody tr:nth-child(even) td {
   background: var(--td-paper-deep);
+}
+
+.row:hover td {
+  background: var(--td-brick-soft);
 }
 
 .iconCell {
@@ -135,8 +143,8 @@
 .textarea {
   width: 100%;
   padding: 0.55rem 0.75rem;
-  border: 1px solid var(--td-paper-edge);
-  border-radius: 4px;
+  border: 1.5px solid var(--td-paper-edge);
+  border-radius: var(--td-radius-button);
   background: var(--td-paper);
   color: var(--td-paper-text);
   font-size: 0.95rem;
@@ -145,8 +153,9 @@
 
 .input:focus,
 .textarea:focus {
-  outline: 2px solid var(--td-plum);
-  outline-offset: 1px;
+  outline: none;
+  border-color: var(--td-gold-deep);
+  box-shadow: 0 0 0 2px rgba(233, 162, 59, 0.35);
 }
 
 .textarea {
@@ -158,6 +167,7 @@
   margin-bottom: 1.25rem;
   padding: 1rem;
   border: 1px dashed var(--td-gold);
+  border-top: 4px solid var(--td-plum);
   border-radius: var(--td-radius-paper);
   background: var(--td-paper-deep);
   /* The section sits on paper in BOTH themes, so its text must use the
@@ -170,12 +180,13 @@
   color: var(--td-paper-text-muted);
 }
 .editorPendingSection .sectionTitle {
-  color: var(--td-paper-text);
+  color: var(--td-plum);
 }
 
 .sectionTitle {
   margin: 0 0 0.5rem;
   font-size: 1.05rem;
+  color: var(--td-plum);
 }
 
 .editorPendingList {

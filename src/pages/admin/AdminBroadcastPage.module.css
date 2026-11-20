@@ -59,7 +59,7 @@
   width: 100%;
   padding: 0.6rem 0.75rem;
   border-radius: var(--td-radius-button);
-  border: 1px solid var(--td-paper-edge);
+  border: 1.5px solid var(--td-paper-edge);
   background: var(--td-paper);
   color: var(--td-paper-text);
   font-family: inherit;
@@ -71,8 +71,8 @@
 .select:focus,
 .textarea:focus {
   outline: none;
-  border-color: var(--td-plum);
-  box-shadow: 0 0 0 3px rgba(74, 21, 37, 0.15);
+  border-color: var(--td-gold-deep);
+  box-shadow: 0 0 0 2px rgba(233, 162, 59, 0.35);
 }
 
 .textarea {
@@ -117,7 +117,7 @@
   margin: 0 0 0.5rem 0;
   font-size: 1.02rem;
   font-weight: 700;
-  color: var(--td-paper-text);
+  color: var(--td-plum);
 }
 
 .previewMeta {
@@ -142,7 +142,7 @@
   gap: 0.65rem;
   padding: 0.8rem 0.9rem;
   border-radius: var(--td-radius-button);
-  background: rgba(21, 128, 61, 0.12);
+  background: rgba(21, 128, 61, 0.10);
   border: 1px solid rgba(21, 128, 61, 0.35);
   color: var(--td-success);
   font-size: 0.86rem;

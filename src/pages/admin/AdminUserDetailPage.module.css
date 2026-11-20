@@ -88,11 +88,17 @@
 .roleSelect {
   width: 100%;
   padding: 0.45rem 0.65rem;
-  border: 1px solid var(--td-paper-edge);
-  border-radius: 4px;
+  border: 1.5px solid var(--td-paper-edge);
+  border-radius: var(--td-radius-button);
   background: var(--td-paper);
   color: var(--td-paper-text);
   font-weight: 600;
+}
+
+.roleSelect:focus {
+  outline: none;
+  border-color: var(--td-gold-deep);
+  box-shadow: 0 0 0 2px rgba(233, 162, 59, 0.35);
 }
 
 .actions {

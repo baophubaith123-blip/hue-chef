@@ -47,6 +47,10 @@
 
 .tableOverflow {
   overflow-x: auto;
+  background: var(--td-paper);
+  border: 1.5px solid var(--td-paper-edge);
+  border-radius: var(--td-radius-paper);
+  box-shadow: var(--td-shadow-paper);
 }
 
 .table {
@@ -60,12 +64,12 @@
   text-align: left;
   padding: 0.65rem 0.85rem;
   border-bottom: 1px solid var(--td-paper-edge);
-  color: var(--td-paper-text-muted);
+  color: var(--td-cream);
   font-size: 0.78rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.03em;
-  background: var(--td-paper-deep);
+  background: var(--td-plum);
 }
 
 .table tbody td {
@@ -75,8 +79,12 @@
   vertical-align: middle;
 }
 
-.row:hover td {
+.table tbody tr:nth-child(even) td {
   background: var(--td-paper-deep);
+}
+
+.row:hover td {
+  background: var(--td-brick-soft);
 }
 
 .link {
@@ -148,8 +156,8 @@
 }
 
 .badgeOk {
-  background: rgba(21, 128, 61, 0.12);
-  color: var(--td-success);
+  background: rgba(21, 128, 61, 0.10);
+  color: var(--td-success-strong);
 }
 
 .actionsCol {

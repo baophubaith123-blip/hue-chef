@@ -7,7 +7,7 @@ import { useAdmin } from '@/contexts/AdminContext';
 import { useRecipes } from '@/contexts/RecipeContext';
 import { useTranslation } from '@/i18n/useTranslation';
 
-import styles from '@/pages/common/RoleShell.module.css';
+import styles from '@/pages/admin/AdminShell.module.css';
 
 interface AdminShellProps {
   children: ReactNode;

@@ -1,9 +1,9 @@
 .wrap {
   width: 100%;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
+  background: var(--td-paper);
+  border: 1.5px solid var(--td-paper-edge);
+  border-radius: var(--td-radius-paper);
+  box-shadow: var(--td-shadow-paper);
   overflow: hidden;
 }
 
@@ -25,16 +25,16 @@
   font-size: 0.8rem;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  color: var(--color-text-muted);
-  background: var(--color-surface-muted);
-  border-bottom: 1px solid var(--color-border);
+  color: var(--td-cream);
+  background: var(--td-plum);
+  border-bottom: 1px solid var(--td-paper-edge);
   white-space: nowrap;
 }
 
 .table tbody td {
   padding: 0.85rem 1rem;
   vertical-align: middle;
-  border-bottom: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--td-paper-edge);
 }
 
 .table tbody tr:last-child td {
@@ -42,11 +42,11 @@
 }
 
 .row:nth-child(even) {
-  background: var(--color-surface-muted);
+  background: var(--td-paper-deep);
 }
 
 .row:hover {
-  background: var(--color-primary-soft);
+  background: var(--td-brick-soft);
 }
 
 .userCell {
@@ -61,7 +61,7 @@
   height: 36px;
   border-radius: 50%;
   object-fit: cover;
-  background: var(--color-surface-muted);
+  background: var(--td-paper-deep);
   flex-shrink: 0;
 }
 
@@ -74,33 +74,34 @@
 
 .userName {
   font-weight: 600;
-  color: var(--color-text);
+  color: var(--td-paper-text);
 }
 
 .userEmail {
   font-size: 0.8rem;
-  color: var(--color-text-muted);
+  color: var(--td-paper-text-muted);
 }
 
 .roleSelect {
   padding: 0.35rem 0.6rem;
-  border-radius: var(--radius-md);
-  border: 1px solid var(--color-border);
-  background: var(--color-surface);
-  color: var(--color-text);
+  border-radius: var(--td-radius-button);
+  border: 1.5px solid var(--td-paper-edge);
+  background: var(--td-paper);
+  color: var(--td-paper-text);
   font-size: 0.85rem;
   cursor: pointer;
 }
 
 .roleSelect:focus {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 1px;
+  outline: none;
+  border-color: var(--td-gold-deep);
+  box-shadow: 0 0 0 2px rgba(233, 162, 59, 0.35);
 }
 
 .statusBadge {
   display: inline-block;
   padding: 0.2rem 0.6rem;
-  border-radius: 999px;
+  border-radius: var(--td-radius-full);
   font-size: 0.72rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -109,26 +110,26 @@
 }
 
 .statusActive {
-  background: var(--color-success-soft);
-  color: var(--color-success);
+  background: rgba(21, 128, 61, 0.10);
+  color: var(--td-success-strong);
 }
 
 .statusBanned {
-  background: var(--color-danger-soft);
-  color: var(--color-danger);
+  background: rgba(180, 35, 24, 0.08);
+  color: var(--td-danger);
 }
 
 .warningCount {
   font-weight: 700;
-  color: var(--color-text-muted);
+  color: var(--td-paper-text-muted);
 }
 
 .warningHigh {
-  color: var(--color-danger);
+  color: var(--td-danger);
 }
 
 .dateCell {
-  color: var(--color-text-muted);
+  color: var(--td-paper-text-muted);
   white-space: nowrap;
 }
 
@@ -153,24 +154,12 @@
 
 .deleteBtn {
   /* The shared ghost Button paints its own paper background in both
-     themes, while --color-danger flips to bright #ef4444 in dark mode
-     (3.28:1 on paper). --td-danger is the same red family at a depth
-     that passes on paper in both themes (H10 contrast pass). */
+     themes; --td-danger is the same red family at a depth that passes
+     on paper in both themes (H10 contrast pass). */
   color: var(--td-danger);
 }
 
 .deleteBtn:hover:not(:disabled) {
   color: var(--td-danger);
   background: var(--td-brick-soft);
-}
-
-/* The table surface flips dark, where the base red is too dark for
-   text — lift the banned/warning reds in dark theme. */
-[data-theme='dark'] .statusBanned {
-  background: rgba(239, 68, 68, 0.22);
-  color: #fca5a5;
-}
-
-[data-theme='dark'] .warningHigh {
-  color: #fca5a5;
 }

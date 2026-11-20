@@ -2,6 +2,11 @@
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  background: var(--td-paper);
+  border: 2px solid var(--td-ink);
+  border-top: 4px solid var(--td-plum);
+  border-radius: var(--td-radius-paper);
+  padding: 1rem;
 }
 
 .field {
@@ -13,17 +18,17 @@
 .label {
   font-size: 0.85rem;
   font-weight: 600;
-  color: var(--color-text);
+  color: var(--td-paper-text);
 }
 
 .textarea {
   width: 100%;
   box-sizing: border-box;
   padding: 0.6rem 0.75rem;
-  border-radius: var(--radius-md);
-  border: 1px solid var(--color-border);
-  background: var(--color-surface);
-  color: var(--color-text);
+  border-radius: var(--td-radius-button);
+  border: 1.5px solid var(--td-paper-edge);
+  background: var(--td-paper);
+  color: var(--td-paper-text);
   font-family: inherit;
   font-size: 0.9rem;
   resize: vertical;
@@ -32,33 +37,33 @@
 }
 
 .textarea:focus {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 1px;
-  border-color: var(--color-primary);
+  outline: none;
+  border-color: var(--td-gold-deep);
+  box-shadow: 0 0 0 2px rgba(233, 162, 59, 0.35);
 }
 
 .input {
   width: 100%;
   box-sizing: border-box;
   padding: 0.6rem 0.75rem;
-  border-radius: var(--radius-md);
-  border: 1px solid var(--color-border);
-  background: var(--color-surface);
-  color: var(--color-text);
+  border-radius: var(--td-radius-button);
+  border: 1.5px solid var(--td-paper-edge);
+  background: var(--td-paper);
+  color: var(--td-paper-text);
   font-size: 0.9rem;
   font-family: inherit;
 }
 
 .input:disabled {
-  background: var(--color-surface-muted);
-  color: var(--color-text-muted);
+  background: var(--td-paper-deep);
+  color: var(--td-paper-text-muted);
   cursor: not-allowed;
 }
 
 .input:focus {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 1px;
-  border-color: var(--color-primary);
+  outline: none;
+  border-color: var(--td-gold-deep);
+  box-shadow: 0 0 0 2px rgba(233, 162, 59, 0.35);
 }
 
 .checkboxField {
@@ -71,12 +76,12 @@
 .checkbox {
   width: 1.05rem;
   height: 1.05rem;
-  accent-color: var(--color-accent);
+  accent-color: var(--td-gold);
   cursor: pointer;
 }
 
 .checkboxLabel {
   font-size: 0.9rem;
-  color: var(--color-text);
+  color: var(--td-paper-text);
   cursor: pointer;
 }
