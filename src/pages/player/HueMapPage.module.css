@@ -450,7 +450,7 @@
    dish medallion hangs at the stele's base corner. */
 .steleStage {
   position: relative;
-  width: min(470px, 100%);
+  width: min(530px, 100%);
   transform-origin: 50% -24px;
   animation: steleSway 0.9s ease-out 1;
   filter: drop-shadow(0 14px 22px rgba(0, 0, 0, 0.4));
@@ -476,10 +476,10 @@
 
 .steleFace {
   position: absolute;
-  top: 5%;
-  right: 19%;
-  bottom: 35%;
-  left: 19%;
+  top: 7%;
+  right: 19.5%;
+  bottom: 36%;
+  left: 19.5%;
   display: flex;
   flex-direction: column;
   align-items: center;
