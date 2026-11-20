@@ -9,18 +9,23 @@
    both themes, so paper text colours use the pinned --td-paper-*
    tokens (never the page text tokens). */
 
+/* Đợt lan 4: the whole map page stands on the painted Huế map scene
+   (light/dark per theme); chapter boards and the stone stele sit on it. */
 .board {
   position: relative;
   display: flex;
   flex-direction: column;
   gap: 1.35rem;
   padding: 1.4rem 1.5rem 1.3rem;
-  background: linear-gradient(180deg, var(--td-paper) 0%, var(--td-paper-deep) 100%);
+  background: url('../../assets/theme-d/scenes/scene-map-light.webp') center / cover no-repeat;
   color: var(--td-paper-text);
-  border: 30px solid transparent;
-  border-image: url('../../assets/theme-d/game/frame-scroll.webp') 30% / 1 / 0 stretch;
-  border-radius: 18px;
+  border: 3px solid rgba(233, 162, 59, 0.55);
+  border-radius: 22px;
   box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+}
+
+:global([data-theme='dark']) .board {
+  background-image: url('../../assets/theme-d/scenes/scene-map-dark.webp');
 }
 
 /* Gold rivets pinning the board's (and the map frame's) four corners,
@@ -425,8 +430,10 @@
 }
 
 .bossPanel {
+  position: relative;
   display: flex;
-  gap: 1.2rem;
+  flex-direction: column;
+  gap: 0.6rem;
   align-items: center;
   background: linear-gradient(160deg, var(--td-plum-soft, #5e1d31), var(--td-plum, #4a1525));
   border: 3px solid var(--td-ink);
@@ -437,20 +444,107 @@
   padding: 1.25rem 1.3rem 1.15rem;
 }
 
+/* Đợt lan 4 — the boss block is the carved stone stele (r4-stage-stele):
+   boss name, pass rule, state line and the challenge button are carved
+   onto the stele's face (a shadowed inset over the stone); the boss
+   dish medallion hangs at the stele's base corner. */
+.steleStage {
+  position: relative;
+  width: min(470px, 100%);
+  transform-origin: 50% -24px;
+  animation: steleSway 0.9s ease-out 1;
+  filter: drop-shadow(0 14px 22px rgba(0, 0, 0, 0.4));
+}
+
+@keyframes steleSway {
+  0% {
+    transform: rotate(0.7deg);
+  }
+  55% {
+    transform: rotate(-0.3deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+.steleArt {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.steleFace {
+  position: absolute;
+  top: 5%;
+  right: 19%;
+  bottom: 35%;
+  left: 19%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.38rem;
+  padding: 0.55rem 0.6rem;
+  text-align: center;
+  background: rgba(24, 32, 27, 0.58);
+  border-radius: 96px 96px 14px 14px;
+  box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.45);
+}
+
+.steleFace .bossName {
+  font-size: 1.02rem;
+}
+
+.steleFace .bossRule {
+  font-size: 0.79rem;
+  line-height: 1.4;
+}
+
+.steleFace .bossStateOk,
+.steleFace .bossStateReady,
+.steleFace .bossStateLocked {
+  font-size: 0.82rem;
+  line-height: 1.4;
+}
+
+.steleBtn {
+  font-size: 0.85rem;
+  padding: 0.42rem 0.95rem;
+  transition: transform 0.15s ease;
+}
+
+.steleBtn:hover {
+  transform: translateY(-2px) scale(1.03);
+}
+
+.steleBtn:active {
+  transform: scale(0.97);
+}
+
+.steleFoot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.45rem;
+  text-align: center;
+}
+
 /* The boss medallion — clearly larger than every path node, crowned,
    holding the boss dish's own illustration. */
 .bossMedallionWrap {
-  position: relative;
-  flex-shrink: 0;
-  width: 132px;
-  height: 132px;
-  margin-top: 10px;
+  position: absolute;
+  right: -6px;
+  bottom: 23%;
+  z-index: 2;
+  width: 104px;
+  height: 104px;
 }
 
 .bossMedallion {
   display: block;
-  width: 132px;
-  height: 132px;
+  width: 104px;
+  height: 104px;
   box-sizing: border-box;
   padding: 7px;
   border: 3px solid var(--td-ink);
@@ -632,10 +726,13 @@
 }
 
 .judgeArt {
-  width: 88px;
+  position: absolute;
+  right: 14px;
+  bottom: 12px;
+  width: 76px;
   height: auto;
-  flex-shrink: 0;
   filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.4));
+  pointer-events: none;
 }
 
 /* ---------- Responsive ---------- */
@@ -657,13 +754,7 @@
 
 @media (max-width: 760px) {
   .bossPanel {
-    flex-direction: column;
-    text-align: center;
     padding-top: 1.5rem;
-  }
-
-  .bossText {
-    align-items: center;
   }
 
   .sellableChips {
@@ -671,13 +762,17 @@
   }
 
   .judgeArt {
-    width: 72px;
+    display: none;
+  }
+
+  .steleFace {
+    right: 15%;
+    left: 15%;
   }
 }
 
 @media (max-width: 640px) {
   .board {
-    border-width: 20px;
     padding: 1.15rem 0.85rem 1rem;
     gap: 1.05rem;
   }
@@ -736,8 +831,16 @@
 
   .bossMedallionWrap,
   .bossMedallion {
-    width: 118px;
-    height: 118px;
+    width: 84px;
+    height: 84px;
+  }
+
+  .steleFace .bossName {
+    font-size: 0.9rem;
+  }
+
+  .steleFace .bossRule {
+    font-size: 0.72rem;
   }
 }
 

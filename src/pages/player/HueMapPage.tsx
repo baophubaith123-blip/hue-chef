@@ -23,6 +23,8 @@ import {
 import { useTranslation } from '@/i18n/useTranslation';
 import { SceneShell } from '@/pages/player/SceneShell';
 
+import steleArt from '@/assets/theme-d/game/r4-stage-stele.webp';
+
 import styles from '@/pages/player/HueMapPage.module.css';
 
 const GRADE_RING: Record<DishGrade, string> = {
@@ -129,7 +131,33 @@ function ChapterSection({ progress }: { progress: ChapterProgress }) {
       <div className={styles.bossConnector} aria-hidden="true" />
 
       <div className={styles.bossPanel}>
-        <div className={styles.bossMedallionWrap}>
+        <div className={styles.steleStage}>
+          <img className={styles.steleArt} src={steleArt} alt="" aria-hidden="true" />
+          <div className={styles.steleFace}>
+            <h3 className={styles.bossName}>
+              {j.bossTitle}
+              {bossRecipe ? `: ${bossRecipe.name}` : ''}
+            </h3>
+            <p className={styles.bossRule}>{j.bossRule(BOSS_PASS_STARS)}</p>
+            {state.kind === 'passed' ? (
+              <p className={styles.bossStateOk}>🏆 {j.bossPassed}</p>
+            ) : state.kind === 'ready' ? (
+              <>
+                <p className={styles.bossStateReady}>✨ {j.bossReady}</p>
+                <Link to={`/cooking/${chapter.bossRecipeId}?boss=${chapter.id}`}>
+                  <GoldButton className={styles.steleBtn}>{j.bossEnter}</GoldButton>
+                </Link>
+              </>
+            ) : (
+              <p className={styles.bossStateLocked}>
+                🔒{' '}
+                {state.reason === 'need-prev-license'
+                  ? j.bossLockedPrev(prevName)
+                  : j.bossLockedDishes(progress.cookedCount, progress.total)}
+              </p>
+            )}
+          </div>
+          <div className={styles.bossMedallionWrap}>
           <span
             className={`${styles.bossMedallion} ${
               state.kind === 'passed'
@@ -164,48 +192,25 @@ function ChapterSection({ progress }: { progress: ChapterProgress }) {
             </span>
           ) : null}
         </div>
-        <div className={styles.bossText}>
-          <h3 className={styles.bossName}>
-            {j.bossTitle}
-            {bossRecipe ? `: ${bossRecipe.name}` : ''}
-          </h3>
-          <p className={styles.bossRule}>{j.bossRule(BOSS_PASS_STARS)}</p>
-          {state.kind === 'passed' ? (
-            <>
-              <p className={styles.bossStateOk}>🏆 {j.bossPassed}</p>
-              <p className={styles.sellableLabel}>{j.licenseSellableList}:</p>
-              <div className={styles.sellableChips}>
-                {progress.dishes.map((dish) => (
-                  <span key={dish.id} className={styles.sellableChip}>
-                    {dish.name}
-                  </span>
-                ))}
-              </div>
-            </>
-          ) : state.kind === 'ready' ? (
-            <>
-              <p className={styles.bossStateReady}>✨ {j.bossReady}</p>
-              <Link to={`/cooking/${chapter.bossRecipeId}?boss=${chapter.id}`}>
-                <GoldButton>{j.bossEnter}</GoldButton>
-              </Link>
-            </>
-          ) : (
-            <p className={styles.bossStateLocked}>
-              🔒{' '}
-              {state.reason === 'need-prev-license'
-                ? j.bossLockedPrev(prevName)
-                : j.bossLockedDishes(progress.cookedCount, progress.total)}
-            </p>
-          )}
-          {state.kind === 'passed' ? (
+        </div>
+        {state.kind === 'passed' ? (
+          <div className={styles.steleFoot}>
+            <p className={styles.sellableLabel}>{j.licenseSellableList}:</p>
+            <div className={styles.sellableChips}>
+              {progress.dishes.map((dish) => (
+                <span key={dish.id} className={styles.sellableChip}>
+                  {dish.name}
+                </span>
+              ))}
+            </div>
             <Link
               className={styles.bossReplayLink}
               to={`/cooking/${chapter.bossRecipeId}?boss=${chapter.id}`}
             >
               {j.bossReplay}
             </Link>
-          ) : null}
-        </div>
+          </div>
+        ) : null}
         <img className={styles.judgeArt} src={BOSS_JUDGE_IMAGE} alt={j.judgeAlt} />
       </div>
     </WoodPanel>
