@@ -1,75 +1,193 @@
-.container {
+/* Theme D journey map scene — one big paper board pinned on the plum
+   scene (the SceneShell carries the festival frame, exactly like the
+   approved recipe catalogue): riveted paper board, hanging map tag,
+   a wooden title sign, the painted Hue map in a thick wooden frame,
+   then one Án A WoodPanel per chapter (its carved sign carries the
+   chapter name). Inside each chapter the dishes
+   line a rope path of round medallions that ends at a large crowned
+   boss medallion inside the plum boss arena. Paper stays light in
+   both themes, so paper text colours use the pinned --td-paper-*
+   tokens (never the page text tokens). */
+
+.board {
+  position: relative;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
-  padding-bottom: 3rem;
+  gap: 1.35rem;
+  padding: 1.4rem 1.5rem 1.3rem;
+  background: linear-gradient(180deg, var(--td-paper) 0%, var(--td-paper-deep) 100%);
+  color: var(--td-paper-text);
+  border: 30px solid transparent;
+  border-image: url('../../assets/theme-d/game/frame-scroll.webp') 30% / 1 / 0 stretch;
+  border-radius: 18px;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
 }
 
-/* Page head — big hanging wooden sign (same pattern as the recipe list) */
+/* Gold rivets pinning the board's (and the map frame's) four corners,
+   as drawn on the mẫu. */
+.rivet {
+  position: absolute;
+  width: 13px;
+  height: 13px;
+  border-radius: var(--td-radius-full);
+  background: radial-gradient(circle at 35% 30%, var(--td-gold-bright), var(--td-gold-deep));
+  border: 1.5px solid rgba(74, 44, 20, 0.55);
+  box-shadow: inset 0 -2px 3px rgba(59, 32, 8, 0.5);
+  z-index: 3;
+  pointer-events: none;
+}
+
+.rivetTl {
+  top: 10px;
+  left: 10px;
+}
+
+.rivetTr {
+  top: 10px;
+  right: 10px;
+}
+
+.rivetBl {
+  bottom: 10px;
+  left: 10px;
+}
+
+.rivetBr {
+  bottom: 10px;
+  right: 10px;
+}
+
+/* ---------- Page head — hanging tag + wooden title sign ---------- */
+
 .head {
+  position: relative;
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
-  background: var(--td-wood-gradient, linear-gradient(180deg, #ce9550, #b57e40));
+  align-items: center;
+  gap: 0.85rem;
+  padding-top: 0.4rem;
+}
+
+/* Small wooden tag hanging off the board's top-left edge, like the
+   catalogue sheet's pinned tab in the mẫu. */
+.hangTag {
+  position: absolute;
+  top: -2.35rem;
+  left: 0.9rem;
+  z-index: 4;
+  padding: 0.32rem 1rem;
+  background: var(--td-wood-gradient);
   border: 3px solid var(--td-ink);
-  border-radius: var(--radius-2xl);
-  box-shadow: var(--shadow-chunky, 0 4px 0 rgba(74, 44, 20, 0.45));
-  padding: 1.4rem 1.75rem;
+  border-radius: var(--td-radius-full);
+  box-shadow: 0 3px 0 rgba(74, 44, 20, 0.45);
+  color: #fff6e0;
+  font-family: var(--td-font-body);
+  font-size: 0.85rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  text-shadow: 0 1px 0 rgba(32, 15, 4, 0.45);
+  transform: rotate(-2deg);
+}
+
+.titlePlaque {
+  width: 100%;
+  max-width: 780px;
+  box-sizing: border-box;
+  padding: 1.05rem 1.5rem 1.15rem;
+  text-align: center;
+  background: var(--td-wood-gradient);
+  border: 3px solid var(--td-ink);
+  border-radius: var(--td-radius-wood);
+  box-shadow:
+    inset 0 2px 0 rgba(255, 226, 160, 0.3),
+    inset 0 -3px 0 rgba(59, 32, 8, 0.35),
+    0 5px 0 rgba(74, 44, 20, 0.4);
 }
 
 .titleRow {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 0.65rem;
 }
 
 .titleIcon {
-  font-size: 1.75rem;
+  font-size: 1.9rem;
+  filter: drop-shadow(0 2px 2px rgba(32, 15, 4, 0.45));
 }
 
-.title {
+.pageTitle {
   margin: 0;
-  font-family: var(--td-font-display);
-  font-size: 1.85rem;
-  font-weight: 800;
+  font-family: var(--td-font-game-display);
+  font-size: clamp(1.6rem, 4vw, 2.4rem);
+  font-weight: 400;
+  letter-spacing: 0.02em;
   color: #fff6e0;
   text-shadow: 0 2px 0 rgba(32, 15, 4, 0.45);
 }
 
-.subtitle {
-  margin: 0;
-  font-size: 0.95rem;
+.pageSub {
+  margin: 0.45rem 0 0;
+  font-size: 0.93rem;
   font-weight: 600;
-  color: #fff6e0;
   line-height: 1.55;
+  color: #fff6e0;
 }
 
+/* Sell-license tally on a gold pill under the sign. */
 .licenseSummary {
-  margin: 0.35rem 0 0;
-  font-size: 0.95rem;
+  margin: 0;
+  max-width: 780px;
+  padding: 0.45rem 1.15rem;
+  text-align: center;
+  font-size: 0.92rem;
   font-weight: 800;
-  color: #fff6e0;
+  line-height: 1.45;
+  color: #43301b;
+  background: linear-gradient(180deg, var(--td-gold-bright), var(--td-gold) 55%, var(--td-gold-deep));
+  border: 2.5px solid var(--td-ink);
+  border-radius: var(--td-radius-full);
+  box-shadow: 0 3px 0 rgba(74, 44, 20, 0.4);
 }
+
+/* ---------- Painted map hero in a thick wooden frame ---------- */
 
 .mapHero {
+  position: relative;
+  padding: 12px;
+  background: var(--td-wood-gradient);
   border: 3px solid var(--td-ink);
-  border-radius: var(--radius-2xl);
-  overflow: hidden;
-  box-shadow: var(--shadow-chunky, 0 4px 0 rgba(74, 44, 20, 0.45));
+  border-radius: 20px;
+  box-shadow: var(--td-shadow-wood);
 }
 
 .mapImage {
   display: block;
   width: 100%;
   height: auto;
+  border: 2px solid rgba(67, 48, 27, 0.55);
+  border-radius: 10px;
 }
 
-/* ---------- Chapter section (on a KraftCard paper body) ---------- */
+/* ---------- Chapters ---------- */
 
-.chapter {
+/* The WoodPanel shell brings its own 32px top margin (rope + sign
+   clearance), so the stack gap shrinks to keep the total rhythm
+   close to the old paper-panel spacing. */
+.chapters {
   display: flex;
   flex-direction: column;
-  gap: 1.1rem;
+  gap: 0.5rem;
+}
+
+/* Chapter content inside the WoodPanel body: the old paper panel's
+   flex column, now laid out on the panel's cream body (the shell —
+   wood frame, ropes, carved sign — lives in WoodPanel). */
+.chapterBody {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  color: var(--td-paper-text);
 }
 
 .chapterHead {
@@ -78,13 +196,21 @@
   align-items: flex-start;
 }
 
-.chapterScene {
-  width: 210px;
-  height: 132px;
-  object-fit: cover;
-  border-radius: var(--td-radius-lg, 14px);
-  border: 2px solid var(--td-ink);
+.chapterSceneFrame {
   flex-shrink: 0;
+  padding: 6px;
+  background: var(--td-wood-gradient-soft);
+  border: 2.5px solid var(--td-ink);
+  border-radius: 14px;
+  box-shadow: 0 3px 0 rgba(74, 44, 20, 0.35);
+}
+
+.chapterScene {
+  display: block;
+  width: 196px;
+  height: 124px;
+  object-fit: cover;
+  border-radius: 9px;
 }
 
 .chapterHeadText {
@@ -99,14 +225,6 @@
   display: flex;
   flex-wrap: wrap;
   gap: 0.45rem;
-}
-
-.chapterName {
-  margin: 0;
-  font-family: var(--td-font-display);
-  font-size: 1.5rem;
-  font-weight: 800;
-  color: var(--td-paper-text);
 }
 
 .chapterTagline {
@@ -138,79 +256,295 @@
   flex-shrink: 0;
 }
 
-/* ---------- Dish nodes ---------- */
+/* ---------- Journey path — rope-linked dish medallions ---------- */
 
-.dishGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(132px, 1fr));
-  gap: 0.8rem;
+.path {
+  list-style: none;
+  margin: 0;
+  padding: 0.45rem 0.6rem 0.15rem;
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 30px;
+  row-gap: 1.05rem;
+}
+
+.pathNode {
+  position: relative;
+  width: 106px;
+}
+
+/* Rope segment across the gap to the previous medallion, centred on
+   the medallion's mid-line. On a wrapped row the segment reads as the
+   path arriving from the row above; only the very first node of the
+   chapter has no incoming rope. */
+.pathNode::before {
+  content: '';
+  position: absolute;
+  top: 40px;
+  left: -30px;
+  width: 30px;
+  border-top: 4px dotted rgba(138, 90, 43, 0.75);
+}
+
+.pathNode:first-child::before {
+  display: none;
 }
 
 .dishLink {
-  text-decoration: none;
-  display: block;
-  transition: transform var(--td-duration, 250ms) var(--td-ease-out, ease-out);
-}
-
-.dishLink:hover {
-  transform: translateY(-3px);
-}
-
-.dishCard {
   display: flex;
   flex-direction: column;
-  gap: 0.3rem;
-  background: var(--td-paper);
-  border-radius: 10px;
-  padding: 0.45rem;
-  height: 100%;
+  align-items: center;
+  gap: 0.32rem;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 14px;
 }
 
-.dishImage {
+.dishLink:focus-visible {
+  outline: 3px solid var(--td-gold-deep);
+  outline-offset: 3px;
+}
+
+/* Round medallion: the dish's flat illustration (square art, shown
+   whole inside the circle) in a wooden ring painted with the dish's
+   grade colours — the circular equivalent of DishGradeFrame, whose
+   five grade gradients these rings reuse token for token. */
+.medallion {
+  position: relative;
+  display: block;
+  width: 84px;
+  height: 84px;
+  box-sizing: border-box;
+  padding: 5px;
+  border: 2.5px solid var(--td-ink);
+  border-radius: var(--td-radius-full);
+  box-shadow:
+    0 4px 0 rgba(74, 44, 20, 0.35),
+    0 8px 16px rgba(74, 21, 37, 0.18);
+  transition: transform var(--td-duration-fast, 150ms) var(--td-ease-out, ease-out);
+}
+
+.dishLink:hover .medallion {
+  transform: translateY(-3px) scale(1.04);
+}
+
+.grade1 {
+  background: linear-gradient(180deg, var(--td-grade-1), var(--td-grade-1-deep));
+}
+
+.grade2 {
+  background: linear-gradient(160deg, var(--td-grade-2-bright), var(--td-grade-2) 45%, var(--td-grade-2-deep));
+}
+
+.grade3 {
+  background: linear-gradient(160deg, var(--td-grade-3-bright), var(--td-grade-3) 50%, var(--td-grade-3-deep));
+}
+
+.grade4 {
+  background: linear-gradient(160deg, var(--td-grade-4-bright), var(--td-grade-4) 50%, var(--td-grade-4-deep));
+}
+
+.grade5 {
+  background: linear-gradient(160deg, var(--td-grade-5-bright), var(--td-grade-5) 50%, var(--td-grade-5-deep));
+}
+
+.dishArt {
+  display: block;
   width: 100%;
-  height: 74px;
+  height: 100%;
+  border-radius: var(--td-radius-full);
   object-fit: cover;
-  border-radius: 8px;
+  object-position: center;
+  background: var(--td-paper-deep);
+}
+
+/* Cooked at least once: gold halo, art at full strength.
+   Not cooked yet: the art rests dimmed and desaturated. */
+.medallionCooked {
+  border-color: var(--td-gold-deep);
+  box-shadow:
+    0 0 0 3px var(--td-gold-bright),
+    0 0 18px rgba(233, 162, 59, 0.55),
+    0 4px 0 rgba(74, 44, 20, 0.35);
+}
+
+.medallionFresh .dishArt {
+  opacity: 0.72;
+  filter: saturate(0.55);
 }
 
 .dishName {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 2.5em;
+  font-family: var(--td-font-game);
   font-size: 0.82rem;
   font-weight: 700;
-  line-height: 1.3;
+  line-height: 1.25;
   color: var(--td-paper-text);
 }
 
 .dishStars {
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   font-weight: 800;
   letter-spacing: 0.04em;
   color: #8a5a00; /* pinned: paper stays light in dark theme */
 }
 
 .dishStarsEmpty {
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   font-weight: 800;
   letter-spacing: 0.04em;
   color: var(--td-paper-text-muted);
 }
 
-/* ---------- Boss panel (plum arena inside the paper card) ---------- */
+/* ---------- Boss — rope drop into the plum arena ---------- */
+
+.bossConnector {
+  position: relative;
+  align-self: center;
+  width: 0;
+  height: 28px;
+  margin-top: -0.25rem;
+  border-left: 4px dotted rgba(138, 90, 43, 0.8);
+}
+
+.bossConnector::after {
+  content: '';
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+  width: 10px;
+  height: 10px;
+  border-radius: var(--td-radius-full);
+  background: var(--td-gold);
+  border: 2px solid var(--td-ink);
+  transform: translateX(calc(-50% + 2px));
+}
 
 .bossPanel {
   display: flex;
-  gap: 1.1rem;
-  align-items: flex-start;
+  gap: 1.2rem;
+  align-items: center;
   background: linear-gradient(160deg, var(--td-plum-soft, #5e1d31), var(--td-plum, #4a1525));
   border: 3px solid var(--td-ink);
-  border-radius: var(--td-radius-lg, 14px);
-  padding: 1.1rem 1.25rem;
+  border-radius: 18px;
+  box-shadow:
+    inset 0 2px 0 rgba(255, 246, 224, 0.15),
+    0 6px 0 rgba(74, 44, 20, 0.3);
+  padding: 1.25rem 1.3rem 1.15rem;
 }
 
-.judgeArt {
-  width: 92px;
-  height: auto;
+/* The boss medallion — clearly larger than every path node, crowned,
+   holding the boss dish's own illustration. */
+.bossMedallionWrap {
+  position: relative;
   flex-shrink: 0;
-  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.4));
+  width: 132px;
+  height: 132px;
+  margin-top: 10px;
+}
+
+.bossMedallion {
+  display: block;
+  width: 132px;
+  height: 132px;
+  box-sizing: border-box;
+  padding: 7px;
+  border: 3px solid var(--td-ink);
+  border-radius: var(--td-radius-full);
+  background: linear-gradient(160deg, var(--td-grade-4-bright), var(--td-grade-4) 50%, var(--td-grade-4-deep));
+  box-shadow:
+    0 6px 0 rgba(0, 0, 0, 0.35),
+    0 12px 24px rgba(0, 0, 0, 0.35);
+}
+
+.bossArt {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: var(--td-radius-full);
+  object-fit: cover;
+  object-position: center;
+  background: var(--td-paper-deep);
+}
+
+.bossCrown {
+  position: absolute;
+  top: -24px;
+  left: 50%;
+  z-index: 2;
+  font-size: 1.9rem;
+  line-height: 1;
+  transform: translateX(-50%) rotate(-6deg);
+  filter: drop-shadow(0 3px 4px rgba(0, 0, 0, 0.4));
+  pointer-events: none;
+}
+
+.bossMedalBadge,
+.bossLockBadge {
+  position: absolute;
+  right: -4px;
+  bottom: 2px;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--td-radius-full);
+  font-size: 1.15rem;
+  line-height: 1;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4);
+}
+
+.bossMedalBadge {
+  background: linear-gradient(180deg, var(--td-gold-bright), var(--td-gold-deep));
+  border: 2.5px solid var(--td-ink);
+}
+
+.bossLockBadge {
+  background: var(--td-plum-deep, #370e1b);
+  border: 2.5px solid var(--td-gold);
+}
+
+/* Boss states: passed wears a steady gold halo, ready pulses to call
+   the player in, locked rests in dull stone with a greyed portrait. */
+.bossPassedRing {
+  box-shadow:
+    0 0 0 4px var(--td-gold-bright),
+    0 0 26px rgba(246, 196, 83, 0.75),
+    0 6px 0 rgba(0, 0, 0, 0.35);
+}
+
+.bossReadyRing {
+  animation: bossPulse 1.8s ease-in-out infinite;
+}
+
+@keyframes bossPulse {
+  0%,
+  100% {
+    box-shadow:
+      0 0 0 3px rgba(246, 196, 83, 0.55),
+      0 0 14px rgba(233, 162, 59, 0.45),
+      0 6px 0 rgba(0, 0, 0, 0.35);
+  }
+  50% {
+    box-shadow:
+      0 0 0 5px rgba(246, 196, 83, 0.95),
+      0 0 30px rgba(233, 162, 59, 0.8),
+      0 6px 0 rgba(0, 0, 0, 0.35);
+  }
+}
+
+.bossLockedRing {
+  background: linear-gradient(160deg, #9b8d7d, #6f6152 50%, #57493c);
+}
+
+.bossLockedRing .bossArt {
+  filter: grayscale(0.55) brightness(0.75);
 }
 
 .bossText {
@@ -222,14 +556,12 @@
   align-items: flex-start;
 }
 
-/* KraftCard pins child headings to the paper ink (.card h3) — the boss
-   panel is a plum arena inside the paper card, so its title needs the
-   higher-specificity rule to keep its gold. */
 .bossPanel .bossName {
   margin: 0;
-  font-family: var(--td-font-display);
+  font-family: var(--td-font-game);
   font-size: 1.25rem;
   font-weight: 800;
+  line-height: 1.25;
   color: var(--td-gold-bright, #f6c453);
 }
 
@@ -293,29 +625,149 @@
   text-underline-offset: 3px;
 }
 
-@media (max-width: 760px) {
+.bossReplayLink:focus-visible {
+  outline: 3px solid var(--td-gold-bright);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+.judgeArt {
+  width: 88px;
+  height: auto;
+  flex-shrink: 0;
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.4));
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 900px) {
   .chapterHead {
     flex-wrap: wrap;
   }
 
+  .chapterSceneFrame {
+    flex: 1 1 100%;
+  }
+
   .chapterScene {
     width: 100%;
-    height: 150px;
+    height: 160px;
+  }
+}
+
+@media (max-width: 760px) {
+  .bossPanel {
+    flex-direction: column;
+    text-align: center;
+    padding-top: 1.5rem;
+  }
+
+  .bossText {
+    align-items: center;
+  }
+
+  .sellableChips {
+    justify-content: center;
+  }
+
+  .judgeArt {
+    width: 72px;
+  }
+}
+
+@media (max-width: 640px) {
+  .board {
+    border-width: 20px;
+    padding: 1.15rem 0.85rem 1rem;
+    gap: 1.05rem;
+  }
+
+  .hangTag {
+    top: -2.05rem;
+    left: 0.4rem;
+  }
+
+  .titlePlaque {
+    padding: 0.9rem 1rem 1rem;
+  }
+
+  .pageTitle {
+    font-size: 1.45rem;
+  }
+
+  .titleIcon {
+    font-size: 1.5rem;
+  }
+
+  .mapHero {
+    padding: 8px;
+    border-radius: 16px;
   }
 
   .teacherArt {
     display: none;
   }
 
-  .bossPanel {
-    flex-direction: column;
+  /* Mobile: the path folds into a tidy grid — the rope segments go
+     away and the medallions simply line up in reading order. */
+  .path {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.95rem 0.5rem;
+    padding: 0.35rem 0.1rem 0.1rem;
   }
 
-  .judgeArt {
-    width: 72px;
+  .pathNode {
+    width: auto;
   }
 
-  .title {
-    font-size: 1.5rem;
+  .pathNode::before {
+    display: none;
+  }
+
+  .medallion {
+    width: 74px;
+    height: 74px;
+  }
+
+  .dishName {
+    font-size: 0.78rem;
+  }
+
+  .bossMedallionWrap,
+  .bossMedallion {
+    width: 118px;
+    height: 118px;
+  }
+}
+
+@media (max-width: 380px) {
+  .medallion {
+    width: 66px;
+    height: 66px;
+  }
+
+  .dishStars,
+  .dishStarsEmpty {
+    font-size: 0.7rem;
+    letter-spacing: 0.02em;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bossReadyRing {
+    animation: none;
+    box-shadow:
+      0 0 0 4px rgba(246, 196, 83, 0.8),
+      0 0 22px rgba(233, 162, 59, 0.6),
+      0 6px 0 rgba(0, 0, 0, 0.35);
+  }
+
+  .medallion {
+    transition: none;
+  }
+
+  .dishLink:hover .medallion {
+    transform: none;
   }
 }

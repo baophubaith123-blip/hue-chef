@@ -4,10 +4,11 @@ import { Link } from 'react-router-dom';
 import { ImageWithFallback } from '@/components/ImageWithFallback';
 import { Badge } from '@/components/theme-d/Badge';
 import { BOSS_JUDGE_IMAGE, SCENES } from '@/components/theme-d/assets';
-import { DishGradeFrame } from '@/components/theme-d/DishGradeFrame';
+import { dishArtFor } from '@/components/theme-d/dish-art';
+import type { DishGrade } from '@/components/theme-d/DishGradeFrame';
 import { GoldButton } from '@/components/theme-d/GoldButton';
-import { KraftCard } from '@/components/theme-d/KraftCard';
 import { NoiNoi } from '@/components/theme-d/NoiNoi';
+import { WoodPanel } from '@/components/theme-d/WoodPanel';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRecipes } from '@/contexts/RecipeContext';
 import type { Recipe } from '@/data/types';
@@ -20,9 +21,17 @@ import {
   type ChapterProgress,
 } from '@/features/journey/lib/journey';
 import { useTranslation } from '@/i18n/useTranslation';
-import { PlayerShell } from '@/pages/player/PlayerShell';
+import { SceneShell } from '@/pages/player/SceneShell';
 
 import styles from '@/pages/player/HueMapPage.module.css';
+
+const GRADE_RING: Record<DishGrade, string> = {
+  1: styles.grade1,
+  2: styles.grade2,
+  3: styles.grade3,
+  4: styles.grade4,
+  5: styles.grade5,
+};
 
 function DishNode({
   recipe,
@@ -33,25 +42,32 @@ function DishNode({
   bestStars: number;
   gradeLabel: string;
 }) {
+  const grade = dishGradeFor(recipe);
+  const cooked = bestStars > 0;
   return (
-    <Link to={`/recipes/${recipe.id}`} className={styles.dishLink}>
-      <DishGradeFrame grade={dishGradeFor(recipe)} gradeLabel={gradeLabel}>
-        <div className={styles.dishCard}>
+    <li className={styles.pathNode}>
+      <Link to={`/recipes/${recipe.id}`} className={styles.dishLink}>
+        <span
+          className={`${styles.medallion} ${GRADE_RING[grade]} ${
+            cooked ? styles.medallionCooked : styles.medallionFresh
+          }`}
+          title={gradeLabel}
+        >
           <ImageWithFallback
-            className={styles.dishImage}
-            src={recipe.image}
+            className={styles.dishArt}
+            src={dishArtFor(recipe)}
             alt={recipe.name}
             fallbackTitle={recipe.name}
           />
-          <span className={styles.dishName}>{recipe.name}</span>
-          <span className={bestStars > 0 ? styles.dishStars : styles.dishStarsEmpty}>
-            {bestStars > 0
-              ? `${'★'.repeat(bestStars)}${'☆'.repeat(5 - bestStars)}`
-              : '☆☆☆☆☆'}
-          </span>
-        </div>
-      </DishGradeFrame>
-    </Link>
+        </span>
+        <span className={styles.dishName}>{recipe.name}</span>
+        <span className={bestStars > 0 ? styles.dishStars : styles.dishStarsEmpty}>
+          {bestStars > 0
+            ? `${'★'.repeat(bestStars)}${'☆'.repeat(5 - bestStars)}`
+            : '☆☆☆☆☆'}
+        </span>
+      </Link>
+    </li>
   );
 }
 
@@ -69,16 +85,17 @@ function ChapterSection({ progress }: { progress: ChapterProgress }) {
   const state = progress.bossState;
 
   return (
-    <KraftCard as="section" className={styles.chapter}>
+    <WoodPanel title={text?.name} titleLevel="h2" bodyClassName={styles.chapterBody}>
       <div className={styles.chapterHead}>
-        <img className={styles.chapterScene} src={SCENES[chapter.scene]} alt="" />
+        <span className={styles.chapterSceneFrame}>
+          <img className={styles.chapterScene} src={SCENES[chapter.scene]} alt="" />
+        </span>
         <div className={styles.chapterHeadText}>
           <div className={styles.chapterTitleRow}>
             <Badge tone="brick">{j.chapterLabel(chapter.order)}</Badge>
             <Badge tone="paper">{j.dishCount(progress.total)}</Badge>
             {progress.licensed ? <Badge tone="gold">📜 {j.licenseTitle}</Badge> : null}
           </div>
-          <h2 className={styles.chapterName}>{text?.name}</h2>
           <p className={styles.chapterTagline}>{text?.tagline}</p>
           <p className={styles.chapterProgress}>
             {j.cookedProgress(progress.cookedCount, progress.total)}
@@ -98,7 +115,7 @@ function ChapterSection({ progress }: { progress: ChapterProgress }) {
         />
       </div>
 
-      <div className={styles.dishGrid}>
+      <ol className={styles.path}>
         {progress.dishes.map((dish) => (
           <DishNode
             key={dish.id}
@@ -107,10 +124,46 @@ function ChapterSection({ progress }: { progress: ChapterProgress }) {
             gradeLabel={dict.recipe.gradeNames[dishGradeFor(dish) - 1] ?? ''}
           />
         ))}
-      </div>
+      </ol>
+
+      <div className={styles.bossConnector} aria-hidden="true" />
 
       <div className={styles.bossPanel}>
-        <img className={styles.judgeArt} src={BOSS_JUDGE_IMAGE} alt={j.judgeAlt} />
+        <div className={styles.bossMedallionWrap}>
+          <span
+            className={`${styles.bossMedallion} ${
+              state.kind === 'passed'
+                ? styles.bossPassedRing
+                : state.kind === 'ready'
+                  ? styles.bossReadyRing
+                  : styles.bossLockedRing
+            }`}
+          >
+            {bossRecipe ? (
+              <ImageWithFallback
+                className={styles.bossArt}
+                src={dishArtFor(bossRecipe)}
+                alt={bossRecipe.name}
+                fallbackTitle={bossRecipe.name}
+              />
+            ) : (
+              <img className={styles.bossArt} src={BOSS_JUDGE_IMAGE} alt="" />
+            )}
+          </span>
+          <span className={styles.bossCrown} aria-hidden="true">
+            👑
+          </span>
+          {state.kind === 'passed' ? (
+            <span className={styles.bossMedalBadge} aria-hidden="true">
+              🏆
+            </span>
+          ) : null}
+          {state.kind === 'locked' ? (
+            <span className={styles.bossLockBadge} aria-hidden="true">
+              🔒
+            </span>
+          ) : null}
+        </div>
         <div className={styles.bossText}>
           <h3 className={styles.bossName}>
             {j.bossTitle}
@@ -153,8 +206,9 @@ function ChapterSection({ progress }: { progress: ChapterProgress }) {
             </Link>
           ) : null}
         </div>
+        <img className={styles.judgeArt} src={BOSS_JUDGE_IMAGE} alt={j.judgeAlt} />
       </div>
-    </KraftCard>
+    </WoodPanel>
   );
 }
 
@@ -172,30 +226,44 @@ export default function HueMapPage() {
   const licenseCount = progresses.filter((progress) => progress.licensed).length;
 
   return (
-    <PlayerShell>
-      <div className={styles.container}>
-        <div className={styles.head}>
-          <div className={styles.titleRow}>
-            <span className={styles.titleIcon} aria-hidden="true">
-              🗺️
-            </span>
-            <h1 className={styles.title}>{j.mapTitle}</h1>
+    <SceneShell>
+      <section className={styles.board}>
+        <span className={`${styles.rivet} ${styles.rivetTl}`} aria-hidden="true" />
+        <span className={`${styles.rivet} ${styles.rivetTr}`} aria-hidden="true" />
+        <span className={`${styles.rivet} ${styles.rivetBl}`} aria-hidden="true" />
+        <span className={`${styles.rivet} ${styles.rivetBr}`} aria-hidden="true" />
+
+        <header className={styles.head}>
+          <span className={styles.hangTag}>{dict.nav.map}</span>
+          <div className={styles.titlePlaque}>
+            <div className={styles.titleRow}>
+              <span className={styles.titleIcon} aria-hidden="true">
+                🗺️
+              </span>
+              <h1 className={styles.pageTitle}>{j.mapTitle}</h1>
+            </div>
+            <p className={styles.pageSub}>{j.mapSubtitle}</p>
           </div>
-          <p className={styles.subtitle}>{j.mapSubtitle}</p>
           <p className={styles.licenseSummary}>
             📜 {j.licenseTitle}: {licenseCount}/{CHAPTERS.length}
             {licenseCount === 0 ? ` — ${j.licenseNone}` : ''}
           </p>
-        </div>
+        </header>
 
         <div className={styles.mapHero}>
+          <span className={`${styles.rivet} ${styles.rivetTl}`} aria-hidden="true" />
+          <span className={`${styles.rivet} ${styles.rivetTr}`} aria-hidden="true" />
+          <span className={`${styles.rivet} ${styles.rivetBl}`} aria-hidden="true" />
+          <span className={`${styles.rivet} ${styles.rivetBr}`} aria-hidden="true" />
           <img className={styles.mapImage} src={SCENES['ban-do-hue']} alt={j.mapTitle} />
         </div>
 
-        {progresses.map((progress) => (
-          <ChapterSection key={progress.chapter.id} progress={progress} />
-        ))}
-      </div>
-    </PlayerShell>
+        <div className={styles.chapters}>
+          {progresses.map((progress) => (
+            <ChapterSection key={progress.chapter.id} progress={progress} />
+          ))}
+        </div>
+      </section>
+    </SceneShell>
   );
 }
