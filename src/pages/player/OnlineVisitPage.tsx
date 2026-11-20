@@ -9,7 +9,7 @@ import { useOnlineSession } from '@/features/online/components/useOnlineSession'
 import { fetchDirectory } from '@/features/online/lib/api';
 import type { OnlineLink, OnlineProfile } from '@/features/online/types';
 import { useTranslation } from '@/i18n/useTranslation';
-import { PlayerShell } from '@/pages/player/PlayerShell';
+import { SceneShell } from '@/pages/player/SceneShell';
 
 import styles from '@/pages/player/OnlineVisitPage.module.css';
 
@@ -75,7 +75,7 @@ export default function OnlineVisitPage() {
   const session = useOnlineSession(user);
 
   return (
-    <PlayerShell>
+    <SceneShell>
       <div className={styles.container}>
         <div className={styles.head}>
           <h1 className={styles.title}>{o.visitTitle}</h1>
@@ -90,6 +90,6 @@ export default function OnlineVisitPage() {
           {session.link ? <VisitListContent link={session.link} /> : null}
         </OnlineGate>
       </div>
-    </PlayerShell>
+    </SceneShell>
   );
 }

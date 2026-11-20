@@ -11,7 +11,11 @@ import { useOnlineSession } from '@/features/online/components/useOnlineSession'
 import { fetchDirectory } from '@/features/online/lib/api';
 import type { OnlineLink, OnlineProfile } from '@/features/online/types';
 import { useTranslation } from '@/i18n/useTranslation';
-import { PlayerShell } from '@/pages/player/PlayerShell';
+import { SceneShell } from '@/pages/player/SceneShell';
+
+import podiumArt from '@/assets/theme-d/game/r4-podium.webp';
+import postcardArt from '@/assets/theme-d/game/r4-visit-postcard.webp';
+import versusArt from '@/assets/theme-d/game/r4-versus-emblem.webp';
 
 import styles from '@/pages/player/OnlinePage.module.css';
 
@@ -39,9 +43,9 @@ function HubContent({ link }: { link: OnlineLink }) {
   }, []);
 
   const cards = [
-    { title: o.duelsCardTitle, body: o.duelsCardBody, to: '/online/duels' },
-    { title: o.tournamentCardTitle, body: o.tournamentCardBody, to: '/online/tournament' },
-    { title: o.visitCardTitle, body: o.visitCardBody, to: '/online/visit' },
+    { title: o.duelsCardTitle, body: o.duelsCardBody, to: '/online/duels', art: versusArt },
+    { title: o.tournamentCardTitle, body: o.tournamentCardBody, to: '/online/tournament', art: podiumArt },
+    { title: o.visitCardTitle, body: o.visitCardBody, to: '/online/visit', art: postcardArt },
   ];
 
   return (
@@ -49,6 +53,7 @@ function HubContent({ link }: { link: OnlineLink }) {
       <div className={styles.cardGrid}>
         {cards.map((card) => (
           <KraftCard key={card.to} as="section" className={styles.hubCard}>
+            <img className={styles.cardArt} src={card.art} alt="" aria-hidden="true" />
             <h2 className={styles.cardTitle}>{card.title}</h2>
             <p className={styles.cardBody}>{card.body}</p>
             <div className={styles.cardAction}>
@@ -109,7 +114,7 @@ export default function OnlinePage() {
   const session = useOnlineSession(user);
 
   return (
-    <PlayerShell>
+    <SceneShell>
       <div className={styles.container}>
         <div className={styles.head}>
           <h1 className={styles.title}>{o.title}</h1>
@@ -120,6 +125,6 @@ export default function OnlinePage() {
           {session.link ? <HubContent link={session.link} /> : null}
         </OnlineGate>
       </div>
-    </PlayerShell>
+    </SceneShell>
   );
 }

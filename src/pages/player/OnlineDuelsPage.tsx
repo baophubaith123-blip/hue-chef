@@ -13,7 +13,9 @@ import { fetchChallenges, fetchDirectory } from '@/features/online/lib/api';
 import { patchOnlineUserState } from '@/features/online/store';
 import type { Challenge, OnlineLink, OnlineProfile } from '@/features/online/types';
 import { useTranslation } from '@/i18n/useTranslation';
-import { PlayerShell } from '@/pages/player/PlayerShell';
+import { SceneShell } from '@/pages/player/SceneShell';
+
+import versusArt from '@/assets/theme-d/game/r4-versus-emblem.webp';
 
 import styles from '@/pages/player/OnlineDuelsPage.module.css';
 
@@ -130,6 +132,7 @@ function DuelsContent({ user, link }: DuelsContentProps) {
   return (
     <>
       <KraftCard as="section" className={styles.board}>
+        <img className={styles.versusHero} src={versusArt} alt="" aria-hidden="true" />
         <h2 className={styles.boardTitle}>{o.createTitle}</h2>
         <div className={styles.formGrid}>
           <label className={styles.field}>
@@ -285,7 +288,7 @@ export default function OnlineDuelsPage() {
   const session = useOnlineSession(user);
 
   return (
-    <PlayerShell>
+    <SceneShell>
       <div className={styles.container}>
         <div className={styles.head}>
           <h1 className={styles.title}>{o.duelsTitle}</h1>
@@ -300,6 +303,6 @@ export default function OnlineDuelsPage() {
           {user && session.link ? <DuelsContent user={user} link={session.link} /> : null}
         </OnlineGate>
       </div>
-    </PlayerShell>
+    </SceneShell>
   );
 }

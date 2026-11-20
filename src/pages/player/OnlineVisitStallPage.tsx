@@ -15,7 +15,7 @@ import { fetchStallVisit } from '@/features/online/lib/api';
 import type { StallVisit } from '@/features/online/types';
 import { dishGradeFor } from '@/features/recipes/lib/grade';
 import { useTranslation } from '@/i18n/useTranslation';
-import { PlayerShell } from '@/pages/player/PlayerShell';
+import { SceneShell } from '@/pages/player/SceneShell';
 
 import styles from '@/pages/player/OnlineVisitStallPage.module.css';
 
@@ -167,7 +167,7 @@ export default function OnlineVisitStallPage() {
   const { userId } = useParams<{ userId: string }>();
 
   return (
-    <PlayerShell>
+    <SceneShell>
       <div className={styles.container}>
         <div className={styles.head}>
           <h1 className={styles.title}>{o.visitTitle}</h1>
@@ -182,6 +182,6 @@ export default function OnlineVisitStallPage() {
           {session.link && userId ? <StallContent userId={userId} /> : null}
         </OnlineGate>
       </div>
-    </PlayerShell>
+    </SceneShell>
   );
 }

@@ -4,7 +4,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Badge } from '@/components/theme-d/Badge';
 import { GoldButton } from '@/components/theme-d/GoldButton';
 import { KraftCard } from '@/components/theme-d/KraftCard';
-import { Podium, type PodiumEntry } from '@/components/theme-d/Podium';
 import { SCENES } from '@/components/theme-d/assets';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRecipes } from '@/contexts/RecipeContext';
@@ -21,7 +20,9 @@ import {
 import type { OnlineLink, TournamentEntry } from '@/features/online/types';
 import { useTranslation } from '@/i18n/useTranslation';
 import { formatDate } from '@/lib/format';
-import { PlayerShell } from '@/pages/player/PlayerShell';
+import { SceneShell } from '@/pages/player/SceneShell';
+
+import podiumArt from '@/assets/theme-d/game/r4-podium.webp';
 
 import styles from '@/pages/player/OnlineTournamentPage.module.css';
 
@@ -78,12 +79,7 @@ function TournamentContent({ link }: TournamentContentProps) {
     () => [...(entries ?? [])].sort((a, b) => b.score - a.score),
     [entries],
   );
-  const podiumEntries: PodiumEntry[] = sorted.slice(0, 3).map((entry, index) => ({
-    id: entry.userId,
-    name: entry.displayName,
-    score: entry.score,
-    rank: (index + 1) as 1 | 2 | 3,
-  }));
+  const podiumTop = sorted.slice(0, 3);
   const myRank = sorted.findIndex((entry) => entry.userId === link.onlineId) + 1;
 
   return (
@@ -128,8 +124,24 @@ function TournamentContent({ link }: TournamentContentProps) {
           <p className={styles.stateText}>{o.boardEmpty}</p>
         ) : (
           <>
-            {podiumEntries.length > 0 ? (
-              <Podium entries={podiumEntries} scoreLabel={dict.recipe.pts} />
+            {podiumTop.length > 0 ? (
+              <div className={styles.podiumWrap}>
+                <img className={styles.podiumArt} src={podiumArt} alt="" aria-hidden="true" />
+                <div className={styles.podiumCols}>
+                  {[podiumTop[1], podiumTop[0], podiumTop[2]].map((entry, i) =>
+                    entry ? (
+                      <div key={entry.userId} className={styles.podiumColInfo}>
+                        <span className={styles.podiumName}>{entry.displayName}</span>
+                        <span className={styles.podiumScore}>
+                          {o.scoreLabel(entry.score)}
+                        </span>
+                      </div>
+                    ) : (
+                      <div key={i} />
+                    ),
+                  )}
+                </div>
+              </div>
             ) : null}
             <ul className={styles.rankList}>
               {sorted.map((entry, index) => {
@@ -167,7 +179,7 @@ export default function OnlineTournamentPage() {
   const session = useOnlineSession(user);
 
   return (
-    <PlayerShell>
+    <SceneShell>
       <div className={styles.container}>
         <div className={styles.head}>
           <h1 className={styles.title}>{o.tournamentTitle}</h1>
@@ -182,6 +194,6 @@ export default function OnlineTournamentPage() {
           {session.link ? <TournamentContent link={session.link} /> : null}
         </OnlineGate>
       </div>
-    </PlayerShell>
+    </SceneShell>
   );
 }

@@ -112,3 +112,35 @@
     font-size: 1.5rem;
   }
 }
+
+/* ===== Đợt 4 — nền sân lễ hội dùng chung lát online ===== */
+.container {
+  padding: 1.4rem 1.5rem 1.5rem;
+  background: url('../../assets/theme-d/scenes/scene-courtyard-light.webp') center 18% / cover no-repeat;
+  border: 3px solid rgba(233, 162, 59, 0.55);
+  border-radius: 22px;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+}
+:global([data-theme='dark']) .container {
+  background-image: url('../../assets/theme-d/scenes/scene-courtyard-dark.webp');
+}
+/* Thăm quầy: mỗi người chơi là một bưu thiếp gỗ có tem + dấu ĐÃ GHÉ */
+.container .listCard {
+  background: linear-gradient(180deg, #fdf3d3, #f0d9a4);
+  border: 3px solid var(--td-ink, #4a2c14);
+  border-radius: 18px;
+  box-shadow: 0 6px 0 rgba(74, 44, 20, 0.35);
+}
+.playerRow {
+  background: url('../../assets/theme-d/game/r4-visit-postcard.webp') center / 100% 100% no-repeat;
+  border: none;
+  border-radius: 10px;
+  min-height: 118px;
+  padding: 1rem 21% 1rem 7%;
+  box-shadow: 0 5px 10px rgba(74, 44, 20, 0.3);
+  animation: onIn 0.6s ease-out 1;
+}
+@keyframes onIn {
+  from { transform: rotate(0.5deg) translateY(-4px); opacity: 0; }
+  to { transform: none; opacity: 1; }
+}
