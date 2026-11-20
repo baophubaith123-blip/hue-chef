@@ -262,18 +262,53 @@
   }
 }
 
+/* Đợt 4 (Bảo chỉ đích danh): the order bubble is NOT a white web chip —
+   it is a small hanging paper ticket, same family as the dock order
+   tickets (.ordersPanel .orderCard) and the approved stall drawing's
+   tickets on a string (996715a4): cream paper, brown edge, perforated
+   top, a wooden clip and a short rope above it. */
 .bubble {
+  position: relative;
   display: flex;
   align-items: center;
   flex-wrap: wrap;
   gap: 6px;
-  background: var(--td-paper);
+  background: linear-gradient(180deg, #fffef8 0%, #fdf3cf 100%);
   color: var(--td-paper-text);
-  border: 2px solid var(--td-paper-edge);
-  border-radius: 14px;
-  padding: 4px 8px;
+  border: 1.5px solid rgba(122, 72, 32, 0.55);
+  border-top: 6px dotted rgba(122, 72, 32, 0.5);
+  border-radius: 8px;
+  padding: 5px 9px;
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.35);
   max-width: 210px;
+  transform: rotate(-1deg);
+}
+
+/* The wooden clip pinching the ticket's top edge. */
+.bubble::before {
+  content: '';
+  position: absolute;
+  top: -13px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 10px;
+  height: 16px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #8c5a1f, #e0a050 45%, #b87333);
+  box-shadow: 0 1px 3px rgba(40, 20, 4, 0.4);
+  z-index: 1;
+}
+
+/* The short rope the ticket hangs from. */
+.bubble::after {
+  content: '';
+  position: absolute;
+  top: -26px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2px;
+  height: 14px;
+  background: linear-gradient(180deg, rgba(122, 74, 34, 0), #7a4a22);
 }
 
 .bubbleImg {
@@ -292,10 +327,16 @@
 
 .bubbleState {
   font-size: 11px;
-  font-weight: 700;
-  /* Fixed dark gold: the bubble is a paper surface in BOTH themes, so the
-     theme-flipping --td-gold-text (light gold in dark theme) fails on it. */
-  color: #8a5a00;
+  font-weight: 800;
+  /* The accept/cook action reads as a small gold-wood button pinned on
+     the ticket, not bare text (đợt 4, ảnh duyệt 996715a4). Fixed dark
+     ink on the gold gradient passes on the paper ticket in both themes. */
+  color: #43301b;
+  background: linear-gradient(180deg, var(--td-gold-bright), var(--td-gold));
+  border: 1.5px solid #8a5a1f;
+  border-radius: 999px;
+  padding: 1px 9px;
+  box-shadow: 0 2px 4px rgba(40, 20, 4, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.55);
   white-space: nowrap;
 }
 
@@ -1691,10 +1732,14 @@
   border: 3px solid var(--td-wood-dark);
   border-top: none;
   border-radius: 0 0 16px 16px;
+  /* The board's own face: light planks of the menu board in the
+     approved sheet — visible grain lines and nail heads, not flat cream. */
   background:
-    repeating-linear-gradient(0deg, rgba(122, 72, 32, 0.16) 0 2px, transparent 2px 36px),
-    linear-gradient(180deg, #f0d49c 0%, #e6bd76 100%);
-  box-shadow: inset 0 0 18px rgba(122, 72, 32, 0.25);
+    radial-gradient(circle 4px at 18px 18px, rgba(93, 52, 16, 0.55) 3px, transparent 4px),
+    radial-gradient(circle 4px at calc(100% - 18px) 18px, rgba(93, 52, 16, 0.55) 3px, transparent 4px),
+    repeating-linear-gradient(0deg, rgba(122, 72, 32, 0.22) 0 2px, transparent 2px 36px),
+    linear-gradient(180deg, #eecf9a 0%, #e2b26e 100%);
+  box-shadow: inset 0 0 18px rgba(122, 72, 32, 0.3);
 }
 .menuBody .menuCapNote { color: #6d4a12; }
 /* The menu title sits on its own wooden plaque under the awning —
@@ -1736,13 +1781,38 @@
     inset 0 0 0 2px rgba(233, 192, 122, 0.25);
   color: #f9edcb;
 }
-/* Cream compartment contents keep their dark ink inside the chest. */
+/* Inside the chest there are NO cream cards (Bảo, 22:09 close-up):
+   every inner box becomes a wooden compartment of the chest itself —
+   dark plank faces, brass-toned divider edges, cream ink. */
 .chestBody .kitchenBox,
 .chestBody .remoteBox,
 .chestBody .spoiledBox,
-.chestBody .starterBox,
+.chestBody .starterBox {
+  background:
+    repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.16) 0 2px, transparent 2px 26px),
+    linear-gradient(180deg, #6f421e 0%, #5d3410 100%);
+  border: 2px solid rgba(233, 192, 122, 0.45);
+  box-shadow:
+    inset 0 0 0 1px rgba(40, 20, 4, 0.6),
+    inset 0 0 14px rgba(0, 0, 0, 0.35),
+    0 3px 8px rgba(0, 0, 0, 0.35);
+  color: #f9edcb;
+}
 .chestBody .pantryRow {
-  color: var(--td-paper-text);
+  background: rgba(0, 0, 0, 0.24);
+  border: 1.5px solid rgba(233, 192, 122, 0.4);
+  border-bottom: 1.5px solid rgba(233, 192, 122, 0.4);
+  color: #f9edcb;
+}
+.chestBody .pantryList > li:nth-child(even).pantryRow {
+  background: rgba(233, 192, 122, 0.13);
+}
+.chestBody .expiringSoon {
+  /* Warm light coral reads on the dark compartment in both themes. */
+  color: #ffb59d;
+}
+.chestBody .menuCapNote {
+  color: #f3d9a4;
 }
 
 /* --- Staff: the clipboard --- */
@@ -1859,9 +1929,20 @@
   }
 
   .signBox {
-    width: 68%;
+    /* The wooden sign is tall and narrow at 390px — its full cluster
+       (sign + shift buttons + hint) would reach the button rows.
+       Shrink the whole cluster to 82% around its top centre and drop
+       the festival hint line (the festival button keeps its tooltip);
+       the rows below then sit fully clear of the sign. */
+    width: 84%;
     top: 2px;
     gap: 4px;
+    transform: translateX(-50%) scale(0.82);
+    transform-origin: top center;
+  }
+
+  .signBox .festivalHint {
+    display: none;
   }
 
   .backBtn,
