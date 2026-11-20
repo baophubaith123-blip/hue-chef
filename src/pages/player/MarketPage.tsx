@@ -4,10 +4,18 @@ import { Link } from 'react-router-dom';
 import { SEED_INGREDIENTS } from '@/data/ingredients';
 import type { Ingredient } from '@/data/types';
 import { AudioControls, CoinPill, GoldButton, WoodSign } from '@/components/theme-d';
-import { SCENES } from '@/components/theme-d/assets';
-import { WoodPanel } from '@/components/theme-d/WoodPanel';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRecipes } from '@/contexts/RecipeContext';
+import { useTheme } from '@/contexts/ThemeContext';
+import awningImg from '@/assets/theme-d/game/r3-awning.webp';
+import bannerImg from '@/assets/theme-d/game/r3-banner.webp';
+import basketImg from '@/assets/theme-d/game/r3-basket.webp';
+import roofRed from '@/assets/theme-d/game/r3-roof-red.webp';
+import roofTarp from '@/assets/theme-d/game/r3-roof-tarp.webp';
+import roofThatch from '@/assets/theme-d/game/r3-roof-thatch.webp';
+import roofTile from '@/assets/theme-d/game/r3-roof-tile.webp';
+import streetDark from '@/assets/theme-d/game/r3-street-dark.webp';
+import streetLight from '@/assets/theme-d/game/r3-street-light.webp';
 import { todayKey } from '@/features/stall/lib/day';
 import {
   basePriceFor,
@@ -73,11 +81,27 @@ const DECOR_EMOJI: Record<DecorKind, string> = {
   plant: '🪴',
 };
 
+/**
+ * Đợt 3 — mỗi sạp một mặt tiền riêng theo bộ thiết kế chợ đã duyệt:
+ * mái + biển hiệu chất liệu riêng theo nhóm nguyên liệu. Nhóm
+ * 'dau-hat' không có mái — rổ tre (r3-basket) làm ornament góc sạp,
+ * xử lý riêng trong JSX. Sạp đồ bếp / hỗ trợ (không thuộc nhóm
+ * nguyên liệu) dùng mái ngói / mái hiên với biển riêng ở JSX.
+ */
+const STALL_ART: Record<string, { roof: string; plaque: string }> = {
+  protein: { roof: roofRed, plaque: styles.signProtein },
+  vegetable: { roof: roofThatch, plaque: styles.signVegetable },
+  spice: { roof: roofTile, plaque: styles.signSpice },
+  grain: { roof: roofTarp, plaque: styles.signGrain },
+  other: { roof: awningImg, plaque: styles.signOther },
+};
+
 export default function MarketPage() {
   const { dict } = useTranslation();
   const s = dict.stall;
   const { user, addCoins } = useAuth();
   const { getApprovedRecipes } = useRecipes();
+  const { theme } = useTheme();
   const stall = useStall(user?.id ?? null);
   const [qtyById, setQtyById] = useState<Record<string, number>>({});
   const today = todayKey();
@@ -188,7 +212,12 @@ export default function MarketPage() {
 
   return (
     <div className={styles.page}>
-      <img className={styles.sceneBg} src={SCENES.cho} alt="" draggable={false} />
+      <img
+        className={styles.sceneBg}
+        src={theme === 'dark' ? streetDark : streetLight}
+        alt=""
+        draggable={false}
+      />
       <div className={styles.shade} aria-hidden />
 
       <div className={styles.content}>
@@ -212,17 +241,35 @@ export default function MarketPage() {
           <span className={styles.headerSpacer} aria-hidden />
         </header>
 
-        <WoodPanel className={styles.notePanel} bodyClassName={styles.noteBody}>
-          <p className={styles.noteText}>{s.marketPricesNote}</p>
-        </WoodPanel>
+        <figure className={styles.bannerWrap}>
+          <img className={styles.bannerImg} src={bannerImg} alt="" draggable={false} />
+          <figcaption className={styles.notePlaque}>
+            <p className={styles.noteText}>{s.marketPricesNote}</p>
+          </figcaption>
+        </figure>
 
-        {stalls.map((stallGroup) => (
-          <section key={stallGroup.key} className={styles.stallSection} aria-label={s.marketStallNames[stallGroup.key]}>
-            <WoodPanel
-              title={s.marketStallNames[stallGroup.key] ?? stallGroup.key}
-              titleLevel="h2"
-              className={styles.panelFlush}
-            >
+        {stalls.map((stallGroup) => {
+          const title = s.marketStallNames[stallGroup.key] ?? stallGroup.key;
+          const art = STALL_ART[stallGroup.key] ?? STALL_ART.other;
+          return (
+          <section key={stallGroup.key} className={styles.stallSection} aria-label={title}>
+            <div className={styles.stallFront}>
+              {stallGroup.key === 'dau-hat' ? (
+                <div className={styles.basketHead}>
+                  <h2 className={`${styles.signPlaque} ${styles.signPlaqueStatic} ${styles.signDauHat}`}>
+                    {title}
+                  </h2>
+                  <img className={styles.basketImg} src={basketImg} alt="" draggable={false} />
+                </div>
+              ) : (
+                <div
+                  className={`${styles.roofWrap} ${stallGroup.key === 'protein' ? styles.roofWrapProtein : ''}`}
+                >
+                  <img className={styles.roofImg} src={art.roof} alt="" draggable={false} />
+                  <h2 className={`${styles.signPlaque} ${art.plaque}`}>{title}</h2>
+                </div>
+              )}
+              <div className={styles.stallBody}>
               <div className={styles.grid}>
                 {stallGroup.items.map((ingredient) => {
                   const price = dailyPriceFor(ingredient.id, today);
@@ -286,14 +333,21 @@ export default function MarketPage() {
                   );
                 })}
               </div>
-            </WoodPanel>
+              </div>
+            </div>
           </section>
-        ))}
+          );
+        })}
 
         {/* Kitchenware stall (Gói H5): one-time equipment purchases —
             the stall loop's long-term xu sink (Phần 11). */}
         <section className={styles.stallSection} aria-label={s.upgradeStallTitle}>
-          <WoodPanel title={s.upgradeStallTitle} titleLevel="h2" className={styles.panelFlush}>
+          <div className={styles.stallFront}>
+            <div className={styles.roofWrap}>
+              <img className={styles.roofImg} src={roofTile} alt="" draggable={false} />
+              <h2 className={`${styles.signPlaque} ${styles.signUpgrade}`}>{s.upgradeStallTitle}</h2>
+            </div>
+            <div className={styles.stallBody}>
             <p className={styles.upgradeNote}>{s.upgradeStallNote}</p>
             <div className={styles.grid}>
               {(['knife', 'stove', 'pot'] as UpgradeKind[]).map((kind) => {
@@ -330,13 +384,19 @@ export default function MarketPage() {
                 );
               })}
             </div>
-          </WoodPanel>
+            </div>
+          </div>
         </section>
 
         {/* Support stall (Gói H6): gear, rescue cards, decoration and
             advertising for the sell loop (Phần 8.2). */}
         <section className={styles.stallSection} aria-label={s.support.supportStallTitle}>
-          <WoodPanel title={s.support.supportStallTitle} titleLevel="h2" className={styles.panelFlush}>
+          <div className={styles.stallFront}>
+            <div className={styles.roofWrap}>
+              <img className={styles.roofImg} src={awningImg} alt="" draggable={false} />
+              <h2 className={`${styles.signPlaque} ${styles.signSupport}`}>{s.support.supportStallTitle}</h2>
+            </div>
+            <div className={styles.stallBody}>
             <p className={styles.upgradeNote}>{s.support.supportStallNote}</p>
             <div className={styles.grid}>
               {GEAR_KINDS.map((kind) => {
@@ -441,7 +501,8 @@ export default function MarketPage() {
                 </div>
               </article>
             </div>
-          </WoodPanel>
+            </div>
+          </div>
         </section>
       </div>
     </div>

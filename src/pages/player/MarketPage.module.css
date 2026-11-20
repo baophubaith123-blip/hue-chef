@@ -1,7 +1,11 @@
 /* Gói H4 — Đông Ba market scene (mục 6.1): full-screen market backdrop,
-   stalls grouped by ingredient family. Đợt lan R3: every stall is an
-   Án A hanging WoodPanel (carved sign = the stall name) and the price
-   note is a signless WoodPanel, in the Quests/Mystery board language. */
+   stalls grouped by ingredient family. Đợt 3: mỗi sạp là một MẶT TIỀN
+   riêng theo bộ thiết kế chợ đã duyệt — nền phố chợ theo theme
+   (r3-street-light/dark), băng rôn lụa đỏ "GIÁ HÔM NAY" (r3-banner)
+   cho ghi chú giá, và từng sạp có mái + biển hiệu chất liệu riêng
+   (mái vải đỏ / mái rạ / mái ngói / bạt xanh / rổ tre / mái hiên),
+   thân sạp khung gỗ mặt giấy vân, thẻ giá treo và khay tre đan ở
+   hàng mua. Không còn WoodPanel ở trang này. */
 .page {
   position: relative;
   min-height: 100dvh;
@@ -81,41 +85,249 @@
   margin-top: 6px;
 }
 
-/* Price note — Án A hanging board without a sign (WoodPanel): the
-   panel's own top margin keeps its ropes clear of the header sign,
-   and the body carries the one-line note on the panel's cream paper.
-   The ink colour is pinned here because the page's inherited colour
-   is the scene cream, which would vanish on the panel body. */
-.notePanel {
-  color: var(--td-paper-text);
+/* ---------------- Đợt 3: băng rôn giá hôm nay ---------------- */
+
+/* Băng rôn lụa đỏ (r3-banner, chữ "GIÁ HÔM NAY" nướng trong ảnh) +
+   plaque nâu sẫm ngay dưới chứa dòng ghi chú giá thật. Khối banner
+   đu nhẹ một lần khi mount như các mặt tiền sạp. */
+.bannerWrap {
+  margin: 4px 0 0;
+  text-align: center;
+  transform-origin: 50% -12px;
+  animation: stallSway 1s ease-out 1;
 }
 
-.noteBody {
-  padding: 0.7rem 1rem;
+.bannerImg {
+  display: block;
+  width: min(680px, 94%);
+  height: auto;
+  margin: 0 auto;
+  filter: drop-shadow(0 6px 10px rgba(40, 20, 4, 0.45));
+}
+
+.notePlaque {
+  position: relative;
+  z-index: 2;
+  max-width: 620px;
+  margin: -12px auto 0;
+  padding: 10px 18px;
+  background: linear-gradient(180deg, #5d3410 0%, #472708 100%);
+  border: 2px solid var(--td-gold-deep);
+  border-radius: 12px;
+  box-shadow:
+    0 5px 12px rgba(40, 20, 4, 0.4),
+    inset 0 1px 0 rgba(255, 220, 150, 0.35);
 }
 
 .noteText {
   margin: 0;
   font-size: 14.5px;
   line-height: 1.55;
+  color: var(--td-cream);
 }
 
-/* Stall wrapper: the <section> keeps the stall's aria-label landmark
-   and supplies the hanging clearance for the WoodPanel inside — the
-   panel itself is flushed (panelFlush), so the rope/sign spacing is
-   counted once, here: the content gap (14px) + this margin (28px)
-   leave the carved sign (≈33px above the frame) ≈9px of air, so the
-   stack reads neither dư nor thiếu. */
+/* ---------------- Đợt 3: mặt tiền sạp ---------------- */
+
+/* <section> giữ landmark aria-label của sạp; khoảng trên chừa chỗ
+   cho rổ tre của sạp đậu hạt nhô lên (-30px) và nhịp thở cho mái. */
 .stallSection {
-  margin-top: 28px;
+  margin-top: 30px;
 }
 
-/* WoodPanel root for a stall: flush the shared 32px top margin (the
-   wrapper above owns the clearance) and pin the paper ink colour the
-   stall's texts inherit on the panel's cream body. */
-.panelFlush {
-  margin-top: 0;
+/* Mặt tiền sạp: mái (hoặc đầu rổ tre) chồng lên mép trên thân sạp;
+   cả khối đu nhẹ 0.6deg một lần khi xuất hiện. */
+.stallFront {
+  position: relative;
+  transform-origin: 50% -20px;
+  animation: stallSway 0.9s ease-out 1;
+}
+
+@keyframes stallSway {
+  0% {
+    transform: rotate(0.6deg);
+  }
+  55% {
+    transform: rotate(-0.3deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+/* Mái sạp: rộng min(430px, 88%), căn giữa, margin-bottom âm để mép
+   dưới mái (viền tua rua) phủ lên mép trên thân sạp. */
+.roofWrap {
+  position: relative;
+  z-index: 3;
+  width: min(430px, 88%);
+  margin: 0 auto -22px;
+}
+
+.roofImg {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 4px 6px rgba(40, 20, 4, 0.35));
+}
+
+/* Biển hiệu sạp: plaque absolute chồng mép dưới mái (mặc định thò
+   10px xuống dưới mép mái, bắc cầu qua mối nối mái–thân). */
+.signPlaque {
+  position: absolute;
+  left: 50%;
+  bottom: -10px;
+  transform: translateX(-50%);
+  z-index: 4;
+  margin: 0;
+  max-width: 94%;
+  padding: 9px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-family: var(--td-font-game-display);
+  font-size: clamp(15px, 1.4vw + 10px, 20px);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  line-height: 1.12;
+  border: 2.5px solid var(--td-wood-dark);
+  border-radius: 10px;
+  box-shadow:
+    0 4px 10px rgba(40, 20, 4, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  text-shadow: 0 1px 0 rgba(40, 20, 4, 0.25);
+}
+
+/* Sạp thịt (protein): mái vải đỏ có chữ nướng "SẠP THỊT" ở dải
+   x 28.8–71.3% / y 66.7–89% của ảnh (475×267, đo pixel). Plaque
+   THẬT phải che kín dải đó: kéo plaque thành dải từ 60% đến 95%
+   chiều cao mái, rộng tối thiểu 62% (phủ x 19–81%), chữ căn giữa
+   theo chiều dọc. */
+.roofWrapProtein .signPlaque {
+  top: 60%;
+  bottom: 5%;
+  min-width: 62%;
+}
+
+/* Chất liệu biển theo nhóm — mỗi sạp một chất riêng. */
+.signProtein {
+  background: linear-gradient(180deg, #b3242f 0%, #7e1220 100%);
+  border-color: #5d0a14;
+  color: #ffd873;
+  text-shadow: 0 2px 0 rgba(60, 4, 10, 0.55);
+  box-shadow:
+    0 4px 10px rgba(40, 20, 4, 0.4),
+    inset 0 0 0 2px rgba(255, 216, 115, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.signVegetable {
+  background:
+    url('../../assets/theme-d/game/wood-texture.webp') center / 360px 270px,
+    #e8c07a;
+  border-color: var(--td-wood-dark);
+  color: #4a2c14;
+}
+
+.signSpice {
+  background: linear-gradient(180deg, #6b4423 0%, #4a2c14 100%);
+  border-color: #2e1c0a;
+  color: var(--td-gold-bright);
+  text-shadow: 0 2px 0 rgba(20, 10, 2, 0.6);
+}
+
+.signGrain {
+  background: linear-gradient(180deg, #27618f 0%, #17456b 100%);
+  border-color: #0f2f4a;
+  color: #fdf3d8;
+  text-shadow: 0 2px 0 rgba(6, 24, 40, 0.55);
+}
+
+.signDauHat {
+  background:
+    repeating-linear-gradient(45deg, rgba(160, 118, 52, 0.35) 0 6px, transparent 6px 12px),
+    repeating-linear-gradient(-45deg, rgba(160, 118, 52, 0.35) 0 6px, transparent 6px 12px),
+    linear-gradient(180deg, #e6c98c 0%, #d9b877 100%);
+  border-color: #a07634;
+  color: #5a3d16;
+}
+
+.signOther {
+  background: var(--td-wood-gradient-soft);
+  border-color: var(--td-wood-dark);
+  color: var(--td-ink);
+}
+
+.signUpgrade {
+  background: linear-gradient(180deg, #c9973f 0%, #9a6d1d 100%);
+  border-color: #6e4d0e;
+  color: #fff6dd;
+  text-shadow: 0 1px 0 rgba(60, 40, 4, 0.55);
+}
+
+.signSupport {
+  background: linear-gradient(180deg, #c4502f 0%, #99331e 100%);
+  border-color: #6e2113;
+  color: #ffe9c9;
+  text-shadow: 0 2px 0 rgba(50, 12, 4, 0.5);
+}
+
+/* Sạp đậu hạt: không mái — plaque đứng yên giữa đầu sạp, rổ tre
+   (r3-basket) nổi ở góc phải đầu sạp. */
+.basketHead {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  justify-content: center;
+  margin-bottom: -22px;
+  padding: 0 100px;
+}
+
+.signPlaqueStatic {
+  position: static;
+  transform: none;
+}
+
+.basketImg {
+  position: absolute;
+  right: 1%;
+  top: -30px;
+  width: 92px;
+  height: auto;
+  filter: drop-shadow(0 4px 6px rgba(40, 20, 4, 0.35));
+  pointer-events: none;
+}
+
+/* Thân sạp: khung gỗ 3px, mặt giấy kem vân ngang như mặt trong của
+   sạp theo ảnh duyệt, quầy gỗ (dải wood-texture) ở mép dưới.
+   padding-top 46px chừa chỗ cho mái phủ (-22px) + plaque bắc cầu
+   (thò ~32px vào thân) để nội dung không bị che. */
+.stallBody {
+  position: relative;
+  z-index: 1;
+  border: 3px solid var(--td-wood-dark);
+  border-radius: 16px;
+  background:
+    repeating-linear-gradient(0deg, rgba(146, 96, 46, 0.05) 0 2px, transparent 2px 26px),
+    linear-gradient(180deg, #f7ead2 0%, #efdcbc 100%);
+  box-shadow:
+    0 8px 20px rgba(40, 20, 4, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  padding: 46px 1.05rem 1.3rem;
   color: var(--td-paper-text);
+  overflow: hidden;
+}
+
+.stallBody::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 10px;
+  background: url('../../assets/theme-d/game/wood-texture.webp') center / 360px 270px;
+  border-top: 2px solid var(--td-wood-dark);
+  pointer-events: none;
 }
 
 .grid {
@@ -125,7 +337,7 @@
 }
 
 /* Item card — a cream paper slip with a wood-brown edge and a soft
-   lift, sitting on the WoodPanel body's cream paper; the price /
+   lift, sitting on the stall body's cream paper; the price /
    trend / stepper rows keep their layout from the H4 original. */
 .item {
   background: var(--td-cream);
@@ -162,15 +374,23 @@
 
 .priceRow {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   gap: 8px;
   flex-wrap: wrap;
 }
 
+/* Giá tiền = thẻ treo: plaque nâu sẫm chữ vàng, xoay nhẹ -2deg. */
 .price {
-  font-size: 18px;
+  display: inline-block;
+  transform: rotate(-2deg);
+  background: linear-gradient(180deg, #5d3410 0%, #472708 100%);
+  border: 1.5px solid var(--td-gold-deep);
+  border-radius: 8px;
+  padding: 3px 10px;
+  box-shadow: 0 2px 5px rgba(60, 32, 8, 0.35);
+  font-size: 16px;
   font-weight: 800;
-  color: var(--td-paper-text);
+  color: #ffd873;
 }
 
 .trendUp {
@@ -198,11 +418,21 @@
   font-weight: 400;
 }
 
+/* Hàng mua nằm trên khay tre đan (hai lớp gradient chéo tông tre),
+   ghim xuống đáy thẻ để các thẻ trong hàng cao đều nhau. */
 .buyRow {
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 8px;
+  margin-top: auto;
+  padding: 6px 8px;
+  border: 1.5px solid rgba(138, 90, 43, 0.55);
+  border-radius: 10px;
+  background:
+    repeating-linear-gradient(45deg, rgba(201, 163, 95, 0.28) 0 6px, rgba(185, 141, 69, 0.28) 6px 12px),
+    repeating-linear-gradient(-45deg, rgba(201, 163, 95, 0.22) 0 6px, rgba(160, 118, 52, 0.22) 6px 12px),
+    #efe0bd;
 }
 
 .stepper {
@@ -263,9 +493,18 @@
   opacity: 0.55;
 }
 
+/* Trạng thái đã sở hữu / đạt tối đa = con dấu đóng lên thẻ: viền
+   xanh, xoay -3deg, nền wash nhẹ. */
 .maxedNote {
+  display: inline-block;
   font-weight: 800;
   color: var(--td-success);
+  border: 2px solid var(--td-success);
+  border-radius: 6px;
+  padding: 2px 9px;
+  transform: rotate(-3deg);
+  background: rgba(21, 128, 61, 0.07);
+  letter-spacing: 0.01em;
 }
 
 /* ---------------- Gói H6: support stall ---------------- */
@@ -276,4 +515,11 @@
   font-weight: 700;
   line-height: 1.45;
   color: var(--td-success);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stallFront,
+  .bannerWrap {
+    animation: none;
+  }
 }
