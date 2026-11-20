@@ -4,12 +4,22 @@ import { useTranslation } from '@/i18n/useTranslation';
 
 import styles from '@/features/achievements/components/AchievementBadge.module.css';
 
+import silkBamboo from '@/assets/theme-d/game/r4-silk-banner-bamboo.webp';
+import silkCreamWave from '@/assets/theme-d/game/r4-silk-banner-cream-wave.webp';
+import silkGoldLotus from '@/assets/theme-d/game/r4-silk-banner-gold-lotus.webp';
+import silkPhoenix from '@/assets/theme-d/game/r4-silk-banner-phoenix.webp';
+import silkRedFloral from '@/assets/theme-d/game/r4-silk-banner-red-floral.webp';
+
+const SILK_BANNERS = [silkRedFloral, silkGoldLotus, silkPhoenix, silkCreamWave, silkBamboo];
+
 interface AchievementBadgeProps {
   achievement: Achievement;
   unlocked?: boolean;
   progressPct?: number;
   unlockedAt?: string;
   onClick?: () => void;
+  /** Đợt 4: which embroidered silk banner dresses this badge (cycles 0–4). */
+  silkIndex?: number;
 }
 
 export function AchievementBadge({
@@ -18,6 +28,7 @@ export function AchievementBadge({
   progressPct = 0,
   unlockedAt,
   onClick,
+  silkIndex = 0,
 }: AchievementBadgeProps) {
   const { t } = useTranslation();
   const safeProgress = Math.max(0, Math.min(100, progressPct));
@@ -46,6 +57,12 @@ export function AchievementBadge({
       onClick={onClick}
       style={{ cursor: onClick ? 'pointer' : 'default' }}
     >
+      <img
+        className={`${styles.silkBanner} ${unlocked ? '' : styles.silkLocked}`}
+        src={SILK_BANNERS[silkIndex % SILK_BANNERS.length]}
+        alt=""
+        aria-hidden="true"
+      />
       <div className={styles.iconWrap}>
         <AchievementIcon
           badgeId={achievement.id}

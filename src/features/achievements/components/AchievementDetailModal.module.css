@@ -260,3 +260,24 @@
   color: var(--td-paper-text, #43301b);
   box-shadow: 0 2px 0 var(--td-ink-soft, rgba(74, 44, 20, 0.45));
 }
+
+/* ===== Đợt 4 — vỏ modal plaque gỗ + nguyệt quế ===== */
+.modal {
+  background: linear-gradient(180deg, #fdf3d3, #f3dfae);
+  border: 3.5px solid #6d4520;
+  border-radius: 20px;
+  box-shadow: 0 10px 0 rgba(74, 44, 20, 0.45), 0 24px 44px rgba(0, 0, 0, 0.4);
+  color: #43301b;
+  margin-top: 34px;
+}
+.modal::before {
+  content: '';
+  position: absolute;
+  top: -52px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 96px;
+  height: 92px;
+  background: url('../../../assets/theme-d/game/r4-laurel-wreath.webp') center / contain no-repeat;
+  pointer-events: none;
+}

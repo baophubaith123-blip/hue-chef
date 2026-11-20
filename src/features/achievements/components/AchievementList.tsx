@@ -85,13 +85,14 @@ export function AchievementList({
         ))}
       </div>
       <div className={styles.grid} role="list">
-        {filtered.map((item) => (
+        {filtered.map((item, index) => (
           <div key={item.achievement.id} role="listitem">
             <AchievementBadge
               achievement={item.achievement}
               unlocked={item.unlocked}
               progressPct={item.progressPct}
               unlockedAt={item.unlockedAt}
+              silkIndex={index}
               onClick={() => onSelectAchievement?.(item)}
             />
           </div>

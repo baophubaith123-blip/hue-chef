@@ -8,7 +8,10 @@ import { AchievementList } from '@/features/achievements/components/AchievementL
 import type { AchievementListItem } from '@/features/achievements/components/AchievementList';
 import { AchievementDetailModal } from '@/features/achievements/components/AchievementDetailModal';
 import { useTranslation } from '@/i18n/useTranslation';
-import { PlayerShell } from '@/pages/player/PlayerShell';
+import { SceneShell } from '@/pages/player/SceneShell';
+
+import laurelArt from '@/assets/theme-d/game/r4-laurel-wreath.webp';
+import plaqueArt from '@/assets/theme-d/game/r4-achieve-plaque.webp';
 
 import styles from '@/pages/player/AchievementsPage.module.css';
 
@@ -65,8 +68,26 @@ export default function AchievementsPage() {
   const unlockedBadges = items.filter((i) => i.unlocked);
 
   return (
-    <PlayerShell>
+    <SceneShell>
       <div className={styles.container}>
+        {/* Đợt 4 hero: đại huy chương nguyệt quế + plaque tiến độ lụa */}
+        <div className={styles.hero}>
+          <div className={styles.laurelWrap}>
+            <img className={styles.laurelImg} src={laurelArt} alt="" aria-hidden="true" />
+            <span className={styles.laurelCount}>
+              {unlockedBadges.length}/{items.length}
+            </span>
+          </div>
+          <div className={styles.plaqueWrap}>
+            <img className={styles.plaqueImg} src={plaqueArt} alt="" aria-hidden="true" />
+            <span className={styles.plaqueText}>
+              {t('profile.unlockedCount', {
+                unlocked: unlockedBadges.length,
+                total: items.length,
+              })}
+            </span>
+          </div>
+        </div>
         {/* Profile Card Header (Image 1 Style) */}
         <section className={styles.profileHeaderCard}>
           <div className={styles.userMainRow}>
@@ -167,6 +188,6 @@ export default function AchievementsPage() {
           />
         ) : null}
       </div>
-    </PlayerShell>
+    </SceneShell>
   );
 }

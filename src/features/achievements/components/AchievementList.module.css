@@ -28,3 +28,9 @@
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
+
+/* Đợt 4: banners hang in rows of five silk designs */
+.grid { grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); }
+@media (min-width: 1024px) {
+  .grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+}
