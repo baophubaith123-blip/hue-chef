@@ -2,9 +2,9 @@ import { useRef, useState, type ReactNode } from 'react';
 
 import { Badge } from '@/components/theme-d/Badge';
 import { GoldButton } from '@/components/theme-d/GoldButton';
-import { KraftCard } from '@/components/theme-d/KraftCard';
 import { Toast, type ToastTone } from '@/components/theme-d/Toast';
 import { WoodButton } from '@/components/theme-d/WoodButton';
+import { WoodPanel } from '@/components/theme-d/WoodPanel';
 import { useAuth } from '@/contexts/AuthContext';
 import { CheckinPanel } from '@/features/events/components/CheckinPanel';
 import { CHAIN_CHEST_XU, CHAIN_STEPS, questDefById } from '@/features/events/lib/quests';
@@ -14,7 +14,7 @@ import { grantCard } from '@/features/stall/store';
 import { useTranslation } from '@/i18n/useTranslation';
 import { buzz, celebrate } from '@/lib/juice';
 import { playSound } from '@/lib/sound';
-import { PlayerShell } from '@/pages/player/PlayerShell';
+import { SceneShell } from '@/pages/player/SceneShell';
 
 import styles from '@/pages/player/QuestsPage.module.css';
 
@@ -24,6 +24,14 @@ import styles from '@/pages/player/QuestsPage.module.css';
  * chest pays xu plus two rescue cards. Rewards come back from the
  * events store and are booked through AuthContext / the stall store,
  * keeping every wallet's single-writer law intact.
+ *
+ * R2 scene pass: the page paints its own paper board on the festival
+ * scene (SceneShell, same board language as the recipe catalogue) —
+ * hanging tag + title plaque, the check-in panel first, then the quest
+ * boards and the chain as a medallion path. Án A pass: every board —
+ * daily, weekly, chain and the chain chest inside it — is a hanging
+ * WoodPanel whose carved sign carries the board's existing title.
+ * All claim logic below is unchanged from the H7 original.
  */
 export default function QuestsPage() {
   const { dict } = useTranslation();
@@ -41,9 +49,11 @@ export default function QuestsPage() {
 
   if (!user || !events) {
     return (
-      <PlayerShell>
-        <div className={styles.container} />
-      </PlayerShell>
+      <SceneShell>
+        <section className={styles.board}>
+          <div className={styles.empty} />
+        </section>
+      </SceneShell>
     );
   }
 
@@ -120,35 +130,35 @@ export default function QuestsPage() {
     : 0;
 
   return (
-    <PlayerShell>
-      <div className={styles.container}>
-        <div className={styles.head}>
-          <h1 className={styles.title}>{q.title}</h1>
-          <p className={styles.subtitle}>{q.subtitle}</p>
-        </div>
+    <SceneShell>
+      <section className={styles.board}>
+        <header className={styles.head}>
+          <span className={styles.hangTag}>{dict.nav.quests}</span>
+          <div className={styles.titlePlaque}>
+            <h1 className={styles.pageTitle}>{q.title}</h1>
+            <p className={styles.pageSub}>{q.subtitle}</p>
+          </div>
+        </header>
 
         <CheckinPanel />
 
-        <KraftCard as="section" className={styles.board}>
-          <h2 className={styles.boardTitle}>{q.dailyTitle}</h2>
+        <WoodPanel title={q.dailyTitle} titleLevel="h2" bodyClassName={styles.panelBody}>
           {events.daily ? (
             <ul className={styles.questList}>
               {events.daily.quests.map((instance) => renderQuestRow('daily', instance))}
             </ul>
           ) : null}
-        </KraftCard>
+        </WoodPanel>
 
-        <KraftCard as="section" className={styles.board}>
-          <h2 className={styles.boardTitle}>{q.weeklyTitle}</h2>
+        <WoodPanel title={q.weeklyTitle} titleLevel="h2" bodyClassName={styles.panelBody}>
           {events.weekly ? (
             <ul className={styles.questList}>
               {events.weekly.quests.map((instance) => renderQuestRow('weekly', instance))}
             </ul>
           ) : null}
-        </KraftCard>
+        </WoodPanel>
 
-        <KraftCard as="section" className={styles.board}>
-          <h2 className={styles.boardTitle}>{q.chainTitle}</h2>
+        <WoodPanel title={q.chainTitle} titleLevel="h2" bodyClassName={styles.panelBody}>
           <p className={styles.chainIntro}>{q.chainIntro}</p>
 
           <ol className={styles.chainList}>
@@ -198,11 +208,8 @@ export default function QuestsPage() {
             })}
           </ol>
 
-          <div className={styles.chest}>
+          <WoodPanel title={q.chestTitle} titleLevel="h3" bodyClassName={styles.chest}>
             <div className={styles.chestText}>
-              <h3 className={styles.chestTitle}>
-                <span aria-hidden="true">🎁</span> {q.chestTitle}
-              </h3>
               <p className={styles.chestBody}>{q.chestBody(CHAIN_CHEST_XU)}</p>
             </div>
             <div className={styles.chestAction}>
@@ -217,15 +224,15 @@ export default function QuestsPage() {
                 </>
               )}
             </div>
-          </div>
-        </KraftCard>
+          </WoodPanel>
+        </WoodPanel>
 
         {toast ? (
           <div className={styles.toastBox}>
             <Toast message={toast.message} tone={toast.tone} />
           </div>
         ) : null}
-      </div>
-    </PlayerShell>
+      </section>
+    </SceneShell>
   );
 }

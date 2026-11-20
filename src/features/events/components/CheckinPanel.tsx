@@ -6,8 +6,8 @@ import { Badge } from '@/components/theme-d/Badge';
 import { dishArtFor } from '@/components/theme-d/dish-art';
 import { DishGradeFrame } from '@/components/theme-d/DishGradeFrame';
 import { GoldButton } from '@/components/theme-d/GoldButton';
-import { KraftCard } from '@/components/theme-d/KraftCard';
 import { Toast, type ToastTone } from '@/components/theme-d/Toast';
+import { WoodPanel } from '@/components/theme-d/WoodPanel';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRecipes } from '@/contexts/RecipeContext';
 import {
@@ -27,10 +27,12 @@ import styles from '@/features/events/components/CheckinPanel.module.css';
 
 /**
  * Check-in panel (Gói H7, ý tưởng 20): the 7-day claim cycle, the live
- * cooking streak and the dish of the day, in one kraft card. Rendered
- * on the quests page and on the player home page. Rewards come back
- * from the events store and are booked through AuthContext, keeping
- * the wallet's single-writer law intact.
+ * cooking streak and the dish of the day, in one Án A hanging wood
+ * panel (sign = the check-in title); the dish of the day is a nested
+ * WoodPanel of its own. Rendered on the quests page and on the player
+ * home page (narrow column — the sign shrinks with the panel width).
+ * Rewards come back from the events store and are booked through
+ * AuthContext, keeping the wallet's single-writer law intact.
  */
 export function CheckinPanel() {
   const { dict } = useTranslation();
@@ -90,10 +92,9 @@ export function CheckinPanel() {
   };
 
   return (
-    <KraftCard as="section" className={styles.panel}>
+    <WoodPanel title={c.title} titleLevel="h2" className={styles.panel} bodyClassName={styles.panelBody}>
       <div className={styles.head}>
         <div className={styles.headText}>
-          <h2 className={styles.title}>{c.title}</h2>
           <p className={styles.subtitle}>{c.subtitle}</p>
         </div>
         <div className={styles.streakBox}>
@@ -116,6 +117,7 @@ export function CheckinPanel() {
           const reward = CHECKIN_REWARDS[day - 1];
           const cellClass = [
             styles.dayCell,
+            day === 7 ? styles.dayFinal : '',
             claimed ? styles.dayClaimed : '',
             isToday ? styles.dayToday : '',
           ]
@@ -125,7 +127,22 @@ export function CheckinPanel() {
             <div key={day} className={cellClass} role="listitem">
               <span className={styles.dayLabel}>{c.dayLabel(day)}</span>
               <span className={styles.dayReward}>
-                {day < 7 ? `${reward?.xu ?? 0} ${dict.events.xuUnit}` : c.day7Note}
+                {day < 7 ? (
+                  `${reward?.xu ?? 0} ${dict.events.xuUnit}`
+                ) : (
+                  <>
+                    {/* Day 7 pays xu AND cok: the old single-string note
+                        (c.day7Note) repeated the day label and overflowed
+                        the narrow cell, so the reward renders as two
+                        stacked lines built from the same reward data. */}
+                    <span className={styles.dayRewardLine}>
+                      {`${reward?.xu ?? 0} ${dict.events.xuUnit}`}
+                    </span>
+                    <span className={styles.dayRewardLine}>
+                      {`+ ${reward?.cok ?? 0} ${dict.events.cokUnit}`}
+                    </span>
+                  </>
+                )}
               </span>
               {isToday ? <Badge tone="gold">{c.todayBadge}</Badge> : null}
               {claimed ? (
@@ -149,7 +166,7 @@ export function CheckinPanel() {
       </div>
 
       {dotdRecipe && dotdGrade ? (
-        <div className={styles.dotd}>
+        <WoodPanel title={c.dotdTitle} titleLevel="h3" bodyClassName={styles.dotd}>
           <DishGradeFrame grade={dotdGrade} gradeLabel={dotdGradeLabel} className={styles.dotdFrame}>
             <ImageWithFallback
               src={dishArtFor(dotdRecipe)}
@@ -160,7 +177,6 @@ export function CheckinPanel() {
           </DishGradeFrame>
           <div className={styles.dotdBody}>
             <div className={styles.dotdHead}>
-              <h3 className={styles.dotdTitle}>{c.dotdTitle}</h3>
               <Badge tone="brick">{c.dotdBadge}</Badge>
             </div>
             <p className={styles.dotdName}>{dotdRecipe.name}</p>
@@ -170,7 +186,7 @@ export function CheckinPanel() {
               {c.dotdCookNow} →
             </Link>
           </div>
-        </div>
+        </WoodPanel>
       ) : null}
 
       {toast ? (
@@ -178,6 +194,6 @@ export function CheckinPanel() {
           <Toast message={toast.message} tone={toast.tone} />
         </div>
       ) : null}
-    </KraftCard>
+    </WoodPanel>
   );
 }

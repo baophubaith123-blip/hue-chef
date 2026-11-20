@@ -1,8 +1,21 @@
-/* Check-in panel (Gói H7) — lives on a KraftCard paper body, so every
+/* Check-in panel (Gói H7) — lives on an Án A WoodPanel body, so every
    text colour below is pinned to the paper ink tokens that stay fixed
-   in both themes (same convention as SkillTreePage / H4 / H6 modules). */
+   in both themes (same convention as SkillTreePage / H4 / H6 modules).
+   The panel renders on the quests board AND on the player home page
+   (narrow column — the WoodPanel sign is min(80%, 330px) and shrinks
+   with the panel), so the overall structure stays untouched — the R2
+   pass only reworks the 7-day cell system (equal heights, day label
+   on its own line, reward lines stacked underneath, day 7 never
+   squeezed) and the Án A pass only swaps the shell to WoodPanel,
+   with the dish of the day as a nested WoodPanel of its own. */
 
+/* WoodPanel root: keep the shared 32px top margin (the hanging sign's
+   clearance) and just let the panel shrink freely in narrow columns. */
 .panel {
+  min-width: 0;
+}
+
+.panelBody {
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -21,14 +34,6 @@
   flex-direction: column;
   gap: 0.25rem;
   min-width: 0;
-}
-
-.title {
-  margin: 0;
-  font-family: var(--td-font-display);
-  font-size: 1.35rem;
-  font-weight: 800;
-  color: var(--td-paper-text);
 }
 
 .subtitle {
@@ -75,17 +80,31 @@
   gap: 0.55rem;
 }
 
+/* Every cell in a row shares the row's height (grid stretch) and the
+   min-height keeps the two mobile rows visually identical: the day
+   label sits on its own line at the top, the reward lines stack below
+   it in a smaller face — nothing is squeezed sideways any more. */
 .dayCell {
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: flex-start;
   gap: 0.3rem;
-  padding: 0.65rem 0.35rem;
+  min-height: 6.3rem;
+  padding: 0.65rem 0.3rem;
   background: var(--td-paper-deep);
   border: 2px dashed var(--td-paper-text-muted);
   border-radius: var(--td-radius-paper);
   text-align: center;
+}
+
+/* Day 7 is the cycle's prize cell: solid gold edge even before its
+   claimed / today state paints over it. */
+.dayFinal {
+  border-style: solid;
+  border-color: var(--td-gold-deep);
+  background: linear-gradient(180deg, #fdf0cd 0%, var(--td-paper-deep) 100%);
 }
 
 .dayClaimed {
@@ -104,14 +123,24 @@
 .dayLabel {
   font-size: 0.8rem;
   font-weight: 800;
+  line-height: 1.25;
+  white-space: nowrap;
   color: var(--td-paper-text);
 }
 
 .dayReward {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.1rem;
   font-size: 0.78rem;
   font-weight: 700;
   line-height: 1.35;
   color: var(--td-paper-text);
+}
+
+.dayRewardLine {
+  white-space: nowrap;
 }
 
 .dayClaimed .dayReward,
@@ -138,14 +167,14 @@
   display: flex;
 }
 
-/* ---------- Dish of the day ---------- */
+/* ---------- Dish of the day — nested Án A WoodPanel body ---------- */
 
+/* The WoodPanel frame replaces the old dashed separator rule; this
+   class is only the body's row layout (art frame + text column). */
 .dotd {
   display: flex;
   gap: 1rem;
   align-items: flex-start;
-  padding-top: 1rem;
-  border-top: 2px dashed rgba(122, 92, 56, 0.4);
 }
 
 .dotdFrame {
@@ -175,14 +204,6 @@
   flex-wrap: wrap;
   align-items: center;
   gap: 0.5rem;
-}
-
-.dotdTitle {
-  margin: 0;
-  font-family: var(--td-font-display);
-  font-size: 1.1rem;
-  font-weight: 800;
-  color: var(--td-paper-text);
 }
 
 .dotdName {
@@ -231,6 +252,10 @@
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 
+  .dayCell {
+    min-height: 6.1rem;
+  }
+
   .streakBox {
     align-items: flex-start;
     text-align: left;
@@ -241,14 +266,37 @@
   }
 
   .dotdFrame {
-    width: 100%;
-  }
-
-  .dotdImage {
-    min-height: 160px;
+    width: min(100%, 280px);
+    margin-inline: auto;
   }
 
   .claimRow > button {
     width: 100%;
+  }
+}
+
+/* Phone (390px class): three columns keep every cell wide enough for
+   the one-line day label, and day 7 becomes a full-width prize strip —
+   label, both reward lines and its badge/check sit on one row, so the
+   richest cell is the least squeezed of all. */
+@media (max-width: 560px) {
+  .days {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .dayCell:last-child {
+    grid-column: 1 / -1;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 0.45rem;
+    min-height: 0;
+    padding: 0.6rem 0.5rem;
+  }
+
+  .dayCell:last-child .dayReward {
+    flex-direction: row;
+    gap: 0.35rem;
   }
 }

@@ -1,56 +1,92 @@
-.container {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  padding-bottom: 3rem;
-}
-
-/* Page head — big hanging wooden sign (same pattern as SkillTreePage).
-   The wood surface is fixed in both themes, so its text stays pinned
-   to the light cream that reads on wood. */
-.head {
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-  background: var(--td-wood-gradient, linear-gradient(180deg, #ce9550, #b57e40));
-  border: 3px solid var(--td-ink);
-  border-radius: var(--radius-2xl);
-  box-shadow: var(--shadow-chunky, 0 4px 0 rgba(74, 44, 20, 0.45));
-  padding: 1.4rem 1.75rem;
-}
-
-.title {
-  margin: 0;
-  font-family: var(--td-font-display);
-  font-size: 1.85rem;
-  font-weight: 800;
-  color: #fff6e0;
-  text-shadow: 0 2px 0 rgba(32, 15, 4, 0.45);
-}
-
-.subtitle {
-  margin: 0;
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: #fff6e0;
-  line-height: 1.55;
-}
-
-/* ---------- Quest boards (on KraftCard paper bodies) ---------- */
+/* Theme D quests scene (R2) — one big paper board pinned on the plum
+   scene, exactly the board language of the approved recipe catalogue:
+   scroll-frame border, hanging tag, Coiny title plaque. Inside the
+   board: the check-in panel first, then the daily / weekly boards,
+   the quest chain and its chest — every one an Án A hanging WoodPanel
+   whose carved sign carries the board's title. The chain steps sit
+   on a dashed "path" — gold medallions joined by a rope line, running
+   horizontally on desktop and vertically on mobile. */
 
 .board {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 1.35rem;
+  padding: 1.4rem 1.5rem 1.1rem;
+  background: linear-gradient(180deg, var(--td-paper) 0%, var(--td-paper-deep) 100%);
+  color: var(--td-paper-text);
+  border: 30px solid transparent;
+  border-image: url('../../assets/theme-d/game/frame-scroll.webp') 30% / 1 / 0 stretch;
+  border-radius: 18px;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+}
+
+.empty {
+  min-height: 240px;
+}
+
+/* Page head — hanging tag + title plaque (same as RecipeListPage). */
+.head {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  padding-top: 0.4rem;
+}
+
+.hangTag {
+  position: absolute;
+  top: -2.35rem;
+  left: 0.9rem;
+  z-index: 4;
+  padding: 0.32rem 1rem;
+  background: var(--td-wood-gradient);
+  border: 3px solid var(--td-ink);
+  border-radius: var(--td-radius-full);
+  box-shadow: 0 3px 0 rgba(74, 44, 20, 0.45);
+  color: #fff6e0;
+  font-family: var(--td-font-body);
+  font-size: 0.85rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  text-shadow: 0 1px 0 rgba(32, 15, 4, 0.45);
+  transform: rotate(-2deg);
+}
+
+.titlePlaque {
+  text-align: center;
+  padding: 0.4rem 1rem 0.2rem;
+}
+
+.pageTitle {
+  margin: 0;
+  font-family: var(--td-font-game-display);
+  font-size: clamp(1.7rem, 4vw, 2.5rem);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  color: var(--td-brick);
+  text-shadow: 0 2px 0 rgba(255, 246, 224, 0.9);
+}
+
+.pageSub {
+  margin: 0.35rem 0 0;
+  font-family: var(--td-font-game);
+  font-weight: 700;
+  color: var(--td-paper-text-muted);
+}
+
+/* ---------- Board sections — Án A WoodPanel bodies ---------- */
+
+/* The WoodPanel frame/sign is shared; only the body's column layout
+   lives here. The board's 1.35rem gap plus the panel's own 32px top
+   margin leave the hanging sign (≈33px above the frame) a clear
+   ≈20px of air, so the stack reads neither dư nor thiếu. */
+.panelBody {
   display: flex;
   flex-direction: column;
   gap: 0.9rem;
 }
 
-.boardTitle {
-  margin: 0;
-  font-family: var(--td-font-display);
-  font-size: 1.3rem;
-  font-weight: 800;
-  color: var(--td-paper-text);
-}
+/* ---------- Quest rows ---------- */
 
 .questList {
   list-style: none;
@@ -129,7 +165,7 @@
   white-space: nowrap;
 }
 
-/* ---------- Chain ---------- */
+/* ---------- Chain — medallions on a dashed path ---------- */
 
 .chainIntro {
   margin: 0;
@@ -145,22 +181,38 @@
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.6rem;
+  gap: 0.85rem;
 }
 
 .chainStep {
+  position: relative;
   display: flex;
-  gap: 0.75rem;
+  gap: 0.8rem;
   align-items: flex-start;
-  padding: 0.75rem 0.9rem;
+  padding: 0.8rem 0.9rem;
   border-radius: var(--td-radius-paper);
-  border: 2px solid var(--td-paper-text-muted);
+  border: 2px solid var(--td-paper-edge);
   background: var(--td-paper);
 }
 
+/* Rope segment joining this step to the next one (vertical run). */
+.chainStep::after {
+  content: '';
+  position: absolute;
+  left: calc(0.9rem + 26px);
+  top: 100%;
+  height: 0.85rem;
+  border-left: 3px dashed rgba(122, 92, 56, 0.55);
+  z-index: 1;
+}
+
+.chainStep:last-child::after {
+  display: none;
+}
+
 .chainStepDone {
-  border-color: var(--td-ink);
-  background: linear-gradient(180deg, var(--td-gold-bright), var(--td-gold) 60%, var(--td-gold-deep));
+  border-color: var(--td-gold-deep);
+  background: linear-gradient(180deg, #fdf0cd 0%, var(--td-paper-deep) 100%);
 }
 
 .chainStepCurrent {
@@ -170,13 +222,61 @@
 }
 
 .chainStepLocked {
-  opacity: 0.55;
+  opacity: 0.6;
 }
 
+/* The step medallion: gold coin for finished steps, a glowing coin for
+   the step in play, a dull dashed coin for locked ones. */
 .chainStepMark {
-  font-size: 1.05rem;
-  line-height: 1.4;
+  position: relative;
+  z-index: 2;
   flex: none;
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: var(--td-radius-full);
+  border: 3px solid var(--td-ink);
+  background: var(--td-paper-deep);
+  color: var(--td-paper-text);
+  font-size: 1.1rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.chainStepDone .chainStepMark {
+  background: radial-gradient(circle at 35% 30%, var(--td-gold-bright), var(--td-gold) 55%, var(--td-gold-deep));
+  color: #43301b; /* pinned: gold face keeps dark ink in both themes */
+  box-shadow: inset 0 -3px 5px rgba(59, 32, 8, 0.35);
+}
+
+.chainStepCurrent .chainStepMark {
+  background: radial-gradient(circle at 35% 30%, #fff3d6, var(--td-gold-bright) 60%, var(--td-gold));
+  color: #43301b; /* pinned: gold face keeps dark ink in both themes */
+  box-shadow: var(--td-glow-gold);
+  animation: chainPulse 1.8s ease-in-out infinite;
+}
+
+.chainStepLocked .chainStepMark {
+  border-style: dashed;
+  background: var(--td-paper);
+  font-size: 0.95rem;
+}
+
+@keyframes chainPulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.07);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chainStepCurrent .chainStepMark {
+    animation: none;
+  }
 }
 
 .chainStepMain {
@@ -185,6 +285,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
+  padding-top: 0.2rem;
 }
 
 .chainStepLabel {
@@ -195,11 +296,6 @@
   color: var(--td-paper-text-muted);
 }
 
-.chainStepDone .chainStepLabel,
-.chainStepDone .chainStepText {
-  color: #43301b; /* pinned: gold face keeps dark ink in both themes */
-}
-
 .chainStepText {
   font-size: 0.95rem;
   font-weight: 700;
@@ -207,18 +303,50 @@
   color: var(--td-paper-text);
 }
 
-/* ---------- Chest ---------- */
+/* Desktop: the path runs horizontally, medallions in a row. */
+@media (min-width: 900px) {
+  .chainList {
+    flex-direction: row;
+    gap: 0.9rem;
+  }
 
+  .chainStep {
+    flex: 1 1 0;
+    min-width: 0;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 0.95rem 0.6rem 0.85rem;
+  }
+
+  /* Rope segment joining this step to the next one (horizontal run). */
+  .chainStep::after {
+    left: 100%;
+    top: calc(0.95rem + 26px);
+    width: 0.9rem;
+    height: auto;
+    border-left: none;
+    border-top: 3px dashed rgba(122, 92, 56, 0.55);
+  }
+
+  .chainStepMain {
+    align-items: center;
+    width: 100%;
+  }
+}
+
+/* ---------- Chest — Án A WoodPanel body inside the chain panel ---------- */
+
+/* The chest is its own hanging WoodPanel now (sign = chest title), so
+   the old wooden-box shell is gone; this class is only the body's
+   row layout, and the WoodPanel body padding frames it. The pinned
+   dark-brown ink reads the same on the panel's cream paper. */
 .chest {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  padding: 1rem;
-  border: 3px solid var(--td-ink);
-  border-radius: var(--td-radius-wood);
-  background: var(--td-wood-gradient-soft, linear-gradient(180deg, #e3b06a, #cd9a52));
 }
 
 .chestText {
@@ -229,20 +357,12 @@
   flex: 1;
 }
 
-.chestTitle {
-  margin: 0;
-  font-family: var(--td-font-display);
-  font-size: 1.15rem;
-  font-weight: 800;
-  color: #43301b; /* pinned: wood surface keeps dark ink in both themes */
-}
-
 .chestBody {
   margin: 0;
   font-size: 0.9rem;
   font-weight: 600;
   line-height: 1.5;
-  color: #43301b; /* pinned: wood surface keeps dark ink in both themes */
+  color: #43301b; /* pinned: paper surface keeps dark ink in both themes */
 }
 
 .chestAction {
@@ -272,10 +392,6 @@
 }
 
 @media (max-width: 760px) {
-  .title {
-    font-size: 1.5rem;
-  }
-
   .questRow {
     flex-direction: column;
     align-items: stretch;
@@ -288,5 +404,18 @@
   .chestAction {
     align-items: stretch;
     width: 100%;
+  }
+}
+
+@media (max-width: 640px) {
+  .board {
+    border-width: 20px;
+    padding: 1rem 0.9rem 0.9rem;
+    gap: 1.15rem;
+  }
+
+  .hangTag {
+    top: -2.05rem;
+    left: 0.4rem;
   }
 }
