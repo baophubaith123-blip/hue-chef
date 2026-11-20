@@ -53,3 +53,8 @@
   color: #b03e26;
   font-weight: 800;
 }
+
+/* ===== Đợt lan R1 — game type ===== */
+.title {
+  font-family: var(--td-font-game);
+}

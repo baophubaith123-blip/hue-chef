@@ -64,3 +64,16 @@
   color: var(--td-success);
   font-weight: 800;
 }
+
+/* ===== Đợt lan R1 — wood-ring game card ===== */
+.card {
+  border: 3px solid var(--td-ink, #4a2c14);
+  border-radius: 20px;
+  box-shadow:
+    0 0 0 5px var(--td-wood-dark, #8a5a2b),
+    0 24px 60px rgba(0, 0, 0, 0.5);
+}
+
+.title {
+  font-family: var(--td-font-game);
+}

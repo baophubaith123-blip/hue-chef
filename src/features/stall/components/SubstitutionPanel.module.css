@@ -106,3 +106,8 @@
 .chosenIcon {
   font-size: 16px;
 }
+
+/* ===== Đợt lan R1 — game type ===== */
+.title {
+  font-family: var(--td-font-game);
+}
