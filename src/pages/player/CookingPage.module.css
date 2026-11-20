@@ -291,7 +291,7 @@
 .gridWrap {
   background-image:
     linear-gradient(180deg, rgba(250, 245, 239, 0.6), rgba(250, 245, 239, 0.72)),
-    url('../../assets/theme-d/scenes/bep.webp');
+    url('../../assets/theme-d/game/r3-kitchen-light.webp');
   background-size: cover;
   background-position: center;
   border: 3px solid var(--td-ink);
@@ -302,7 +302,7 @@
 [data-theme='dark'] .gridWrap {
   background-image:
     linear-gradient(180deg, rgba(24, 8, 20, 0.42), rgba(24, 8, 20, 0.55)),
-    url('../../assets/theme-d/scenes/bep.webp');
+    url('../../assets/theme-d/game/r3-kitchen-dark.webp');
 }
 
 
@@ -689,5 +689,296 @@
     -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;
     overflow: hidden;
+  }
+}
+
+/* ===== Đợt lan 4 — khung ván nấu: dây tiến trình, biển mây trợ lý,
+   plaque điểm + mặt đồng hồ, nền cảnh riêng từng stage ===== */
+
+/* --- Thanh tiến trình: dây thừng + huy hiệu gỗ --- */
+.ropeRow {
+  position: relative;
+  width: min(620px, 100%);
+  margin: 0 auto;
+  aspect-ratio: 795 / 238;
+  background: url('../../assets/theme-d/game/r4-progress-rope.webp') center top / 100% 100%
+    no-repeat;
+}
+
+.ropeBadgeWrap {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 20%;
+  padding-top: 21%;
+}
+
+.ropeBadgeWrap:nth-child(1) { left: 0%; }
+.ropeBadgeWrap:nth-child(2) { left: 20%; }
+.ropeBadgeWrap:nth-child(3) { left: 40%; }
+.ropeBadgeWrap:nth-child(4) { left: 60%; }
+.ropeBadgeWrap:nth-child(5) { left: 80%; }
+
+.ropeBadge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: clamp(34px, 5.2vw, 48px);
+  aspect-ratio: 143 / 156;
+  background: url('../../assets/theme-d/game/r4-badge-blank.webp') center / 100% 100% no-repeat;
+  font-family: var(--td-font-game);
+  font-size: clamp(0.95rem, 1.6vw, 1.2rem);
+  font-weight: 800;
+  color: #43301b;
+  text-shadow: 0 1px 0 rgba(255, 246, 224, 0.55);
+}
+
+.ropeBadgeDone {
+  color: #14532d;
+}
+
+.ropeBadgeActive {
+  filter: brightness(1.35) saturate(1.5) drop-shadow(0 0 10px rgba(246, 196, 83, 0.95));
+  animation: badgePulse 1.6s ease-in-out infinite;
+}
+
+@keyframes badgePulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.14);
+  }
+}
+
+.ropeBadgeLabel {
+  margin-top: 2px;
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: rgba(59, 32, 8, 0.72);
+  color: #ffe9be;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* --- Biển mây trợ lý (r4-assistant-sign): chỉ lấy phần mây + đầu cọc
+   để dải trợ lý giữ đúng một hàng trong khung ván. --- */
+.assistantBar {
+  background: transparent;
+  border: none;
+  padding: 0 4px;
+  align-items: flex-end;
+}
+
+.assistantSign {
+  position: relative;
+  flex: none;
+  width: min(430px, 78vw);
+  height: 96px;
+  background: url('../../assets/theme-d/game/r4-assistant-sign.webp') center -14px / 250px auto
+    no-repeat;
+  transform-origin: 50% 0;
+  animation: signSwaySoft 5.5s ease-in-out infinite;
+}
+
+@keyframes signSwaySoft {
+  0%,
+  100% {
+    transform: rotate(0.5deg);
+  }
+  50% {
+    transform: rotate(-0.5deg);
+  }
+}
+
+.assistantSign .assistantText {
+  position: absolute;
+  left: 24%;
+  right: 6%;
+  top: 16px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-align: center;
+  font-size: 12.5px;
+}
+
+/* --- Cụm điểm/thời gian: mặt đồng hồ + plaque xu --- */
+.scoreCluster {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.clockFace {
+  width: 46px;
+  height: 46px;
+  object-fit: contain;
+  flex: none;
+  filter: drop-shadow(0 3px 4px rgba(32, 15, 4, 0.4));
+}
+
+.hudTimer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.runFrame .scorePanel {
+  background: url('../../assets/theme-d/game/r4-score-plaque.webp') center / 100% 100% no-repeat;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+  min-height: 54px;
+  padding: 0.45rem 0.9rem 0.45rem 31%;
+  justify-content: center;
+}
+
+.runFrame .scoreLabel {
+  color: #7a4d12;
+}
+
+.runFrame .scoreLabel::before {
+  content: none;
+}
+
+.runFrame .scoreValue {
+  color: #43301b;
+  text-shadow: 0 1px 0 rgba(255, 246, 224, 0.6);
+}
+
+.runFrame .scoreHint {
+  background: rgba(59, 32, 8, 0.16);
+  color: #14532d;
+}
+
+/* --- Nền cảnh riêng từng stage --- */
+.runFrameMarket,
+.runFrameCatch,
+.runFrameFinish,
+.runFrameQuiz,
+.runFrameCook {
+  border: 3px solid rgba(233, 162, 59, 0.55);
+  border-radius: 24px;
+  padding: 12px 14px;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.runFrameMarket {
+  background-image: url('../../assets/theme-d/game/r3-street-light.webp');
+}
+
+:global([data-theme='dark']) .runFrameMarket {
+  background-image: url('../../assets/theme-d/game/r3-street-dark.webp');
+}
+
+.runFrameCatch {
+  background-image: url('../../assets/theme-d/scenes/scene-river-light.webp');
+  overflow: hidden;
+}
+
+:global([data-theme='dark']) .runFrameCatch {
+  background-image: url('../../assets/theme-d/scenes/scene-river-dark.webp');
+}
+
+.runFrameFinish {
+  background-image: url('../../assets/theme-d/scenes/scene-stage-light.webp');
+}
+
+:global([data-theme='dark']) .runFrameFinish {
+  background-image: url('../../assets/theme-d/scenes/scene-stage-dark.webp');
+}
+
+.runFrameQuiz {
+  background-image: url('../../assets/theme-d/scenes/scene-study-light.webp');
+}
+
+:global([data-theme='dark']) .runFrameQuiz {
+  background-image: url('../../assets/theme-d/scenes/scene-study-dark.webp');
+}
+
+.runFrameCook {
+  background-image: url('../../assets/theme-d/game/r3-kitchen-light.webp');
+}
+
+:global([data-theme='dark']) .runFrameCook {
+  background-image: url('../../assets/theme-d/game/r3-kitchen-dark.webp');
+}
+
+/* Gợn nước chuyển động ở vùng nước của stage hứng. */
+.runFrameCatch::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 36%;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.55;
+  background-image:
+    radial-gradient(ellipse 90px 16px at 50% 50%, transparent 55%, rgba(255, 251, 235, 0.5) 62%, transparent 72%),
+    radial-gradient(ellipse 130px 22px at 50% 50%, transparent 55%, rgba(255, 214, 140, 0.45) 63%, transparent 74%);
+  background-size:
+    190px 64px,
+    260px 88px;
+  background-position:
+    0 0,
+    60px 22px;
+  animation: riverRipple 3.2s ease-in-out infinite alternate;
+}
+
+@keyframes riverRipple {
+  from {
+    background-position:
+      0 0,
+      60px 22px;
+  }
+  to {
+    background-position:
+      34px 6px,
+      18px 30px;
+  }
+}
+
+.runFrameCatch > * {
+  position: relative;
+  z-index: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ropeBadgeActive,
+  .assistantSign {
+    animation: none;
+  }
+
+  .runFrameCatch::after {
+    animation: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .ropeBadgeLabel {
+    font-size: 9.5px;
+    padding: 1px 5px;
+  }
+
+  .assistantSign {
+    height: 84px;
+    background-size: 210px auto;
+  }
+
+  .clockFace {
+    width: 36px;
+    height: 36px;
   }
 }

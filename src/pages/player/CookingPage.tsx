@@ -27,6 +27,7 @@ import { GestureStep } from '@/features/gestures/GestureStep';
 import { gestureForStep } from '@/data/gesture-map';
 import { NoiNoi } from '@/components/theme-d';
 import { dishArtFor } from '@/components/theme-d/dish-art';
+import clockFaceArt from '@/assets/theme-d/game/r4-clock-face.webp';
 import { BOSS_JUDGE_IMAGE } from '@/components/theme-d/assets';
 import { chapterById, dishesOfChapter } from '@/features/journey/lib/chapters';
 import {
@@ -1631,7 +1632,11 @@ export default function CookingPage() {
         alt={dict.stall.noiNoiAlt}
         className={styles.assistantMascot}
       />
-      <p className={styles.assistantText}>{assistantText}</p>
+      {/* Đợt 4: bong bóng trợ lý = biển mây gỗ trên cọc (r4-assistant-sign),
+          chữ thật nằm trên mặt mây đã làm trống. */}
+      <div className={styles.assistantSign}>
+        <p className={styles.assistantText}>{assistantText}</p>
+      </div>
     </div>
   ) : null;
   const bossNote =
@@ -1763,24 +1768,34 @@ export default function CookingPage() {
             : ''}
         </span>
       ) : null}
-      {flowSteps.map((step) => {
-        const stepIdx = phaseOrder.indexOf(step.phase);
-        const stateClass =
-          stepIdx === currentPhaseIdx
-            ? styles.stageFlowChipActive
-            : stepIdx < currentPhaseIdx
-              ? styles.stageFlowChipDone
+      {/* Đợt 4: thanh tiến trình = dây thừng treo huy hiệu gỗ
+          (r4-progress-rope nền + huy hiệu trống r4-badge-blank đè số
+          thật; huy hiệu stage hiện tại phát sáng + pulse). */}
+      <div className={styles.ropeRow} role="list" aria-label={stageDict.marketName}>
+        {flowSteps.map((step, i) => {
+          const stepIdx = phaseOrder.indexOf(step.phase);
+          const isActive = stepIdx === currentPhaseIdx;
+          const isDone = stepIdx < currentPhaseIdx;
+          const stateClass = isActive
+            ? styles.ropeBadgeActive
+            : isDone
+              ? styles.ropeBadgeDone
               : '';
-        return (
-          <span
-            key={step.key}
-            className={[styles.stageFlowChip, stateClass].filter(Boolean).join(' ')}
-          >
-            {stepIdx < currentPhaseIdx ? '✓ ' : ''}
-            {step.label}
-          </span>
-        );
-      })}
+          return (
+            <span key={step.key} className={styles.ropeBadgeWrap} role="listitem">
+              <span
+                className={[styles.ropeBadge, stateClass].filter(Boolean).join(' ')}
+                aria-label={step.label}
+              >
+                {isDone ? '✓' : i + 1}
+              </span>
+              <span className={styles.ropeBadgeLabel}>
+                {step.label.replace(/^[①②③④⑤]\s*/, '')}
+              </span>
+            </span>
+          );
+        })}
+      </div>
     </div>
   );
 
@@ -1797,9 +1812,13 @@ export default function CookingPage() {
             {'☆'.repeat(5 - recipe.difficulty)}
           </p>
         </div>
-        <div className={styles.scorePanel}>
-          <span className={styles.scoreLabel}>{t('cooking.score')}</span>
-          <span className={styles.scoreValue}>{displayScore}</span>
+        {/* Đợt 4: cụm điểm/thời gian = mặt đồng hồ gỗ + plaque xu. */}
+        <div className={styles.scoreCluster}>
+          <img className={styles.clockFace} src={clockFaceArt} alt="" aria-hidden="true" />
+          <div className={styles.scorePanel}>
+            <span className={styles.scoreLabel}>{t('cooking.score')}</span>
+            <span className={styles.scoreValue}>{displayScore}</span>
+          </div>
         </div>
       </div>
       {isPreview ? <span className={styles.previewBadge}>{stageDict.previewBadge}</span> : null}
@@ -1820,7 +1839,7 @@ export default function CookingPage() {
   if (session.phase === 'market' && stageConfig) {
     return (
       <SceneShell>
-        <div className={styles.runFrame}>
+        <div className={`${styles.runFrame} ${styles.runFrameMarket}`}>
         {stageHeader}
         <MarketStage
           recipe={effectiveRecipe ?? recipe}
@@ -1838,7 +1857,7 @@ export default function CookingPage() {
   if (session.phase === 'catch' && stageConfig) {
     return (
       <SceneShell>
-        <div className={styles.runFrame}>
+        <div className={`${styles.runFrame} ${styles.runFrameCatch}`}>
         {stageHeader}
         <CatchStage
           recipe={effectiveRecipe ?? recipe}
@@ -1855,7 +1874,7 @@ export default function CookingPage() {
   if (session.phase === 'finish' && stageConfig) {
     return (
       <SceneShell>
-        <div className={styles.runFrame}>
+        <div className={`${styles.runFrame} ${styles.runFrameFinish}`}>
         {stageHeader}
         <FinishStage
           recipe={recipe}
@@ -1872,7 +1891,7 @@ export default function CookingPage() {
   if (session.phase === 'minigames') {
     return (
       <SceneShell>
-        <div className={styles.runFrame}>
+        <div className={`${styles.runFrame} ${styles.runFrameQuiz}`}>
         <Link className={styles.back} to={backHref}>
           ← {backLabel}
         </Link>
@@ -1881,9 +1900,12 @@ export default function CookingPage() {
             <h1 className={styles.title}>{recipe.name}</h1>
             <p className={styles.subtitle}>{dict.cooking.minigames.headerTitle}</p>
           </div>
-          <div className={styles.scorePanel}>
-            <span className={styles.scoreLabel}>{t('cooking.score')}</span>
-            <span className={styles.scoreValue}>{displayScore}</span>
+          <div className={styles.scoreCluster}>
+            <img className={styles.clockFace} src={clockFaceArt} alt="" aria-hidden="true" />
+            <div className={styles.scorePanel}>
+              <span className={styles.scoreLabel}>{t('cooking.score')}</span>
+              <span className={styles.scoreValue}>{displayScore}</span>
+            </div>
           </div>
         </div>
         {flowChips}
@@ -1912,7 +1934,7 @@ export default function CookingPage() {
 
   return (
     <SceneShell>
-      <div className={styles.runFrame}>
+      <div className={`${styles.runFrame} ${styles.runFrameCook}`}>
       <Link className={styles.back} to={backHref}>
         ← {backLabel}
       </Link>
@@ -1932,6 +1954,7 @@ export default function CookingPage() {
           </div>
         </div>
         <div className={styles.hudTimer}>
+          <img className={styles.clockFace} src={clockFaceArt} alt="" aria-hidden="true" />
           <CookingTimer
             timeRemainingSeconds={session.timeRemainingSeconds}
             totalDurationSeconds={session.totalDurationSeconds}
