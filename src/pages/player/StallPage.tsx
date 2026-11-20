@@ -17,13 +17,17 @@ import {
   WoodSign,
   type ToastTone,
 } from '@/components/theme-d';
+import r3Abacus from '@/assets/theme-d/game/r3-abacus.webp';
+import r3Awning from '@/assets/theme-d/game/r3-awning.webp';
+import r3Chest from '@/assets/theme-d/game/r3-chest.webp';
+import r3Clip from '@/assets/theme-d/game/r3-clip.webp';
 import { SCENES } from '@/components/theme-d/assets';
-import { WoodPanel } from '@/components/theme-d/WoodPanel';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRecipes } from '@/contexts/RecipeContext';
 import { bestStarsByRecipe, sellableRecipes } from '@/features/journey/lib/journey';
 import { dishGradeFor } from '@/features/recipes/lib/grade';
 import { StallSceneLayers } from '@/features/stall/components/StallSceneLayers';
+import { StoveFlame } from '@/features/stall/components/StoveFlame';
 import { todayKey } from '@/features/stall/lib/day';
 import {
   FEAST_QTY,
@@ -527,6 +531,9 @@ export default function StallPage() {
           </div>
 
           {/* In-scene objects: stove, menu board, pantry door. */}
+          <div className={styles.sceneFlame} aria-hidden="true">
+            <StoveFlame size={54} />
+          </div>
           <button
             type="button"
             className={styles.stoveBtn}
@@ -660,7 +667,12 @@ export default function StallPage() {
       {/* Dock: order board + counter — the stall's working surface. */}
       <div className={styles.dock}>
         <section className={styles.dockSection} id="stall-orders" aria-label={s.orderBoardTitle}>
-          <WoodPanel className={styles.dockPanel} title={s.orderBoardTitle} titleLevel="h2">
+          <div className={`${styles.dockPanel} ${styles.ordersPanel}`}>
+            <div className={styles.ordersSign}>
+              <h2 className={styles.ordersSignText}>{s.orderBoardTitle}</h2>
+            </div>
+            <div className={styles.ordersBody}>
+              <div className={styles.ordersRope} aria-hidden="true" />
           {sellable.length === 0 ? (
             <div className={styles.noLicense}>
               <p className={styles.noLicenseTitle}>{s.noLicenseTitle}</p>
@@ -734,7 +746,8 @@ export default function StallPage() {
                 })}
             </ul>
           )}
-          </WoodPanel>
+            </div>
+          </div>
         </section>
 
         {/* Delivery board (Gói H6, mục 8.2): a separate order stream
@@ -742,11 +755,10 @@ export default function StallPage() {
             the hired server, paid with a delivery fee on top. */}
         {stallLevel >= 4 ? (
           <section className={styles.dockSection} aria-label={sup.deliveryTitle}>
-            <WoodPanel
-              className={styles.dockPanel}
-              title={sup.deliveryTitle.replace(/^[^\p{L}]+/u, '')}
-              titleLevel="h2"
-            >
+            <div className={`${styles.dockPanel} ${styles.deliveryPanel}`}>
+              <span className={styles.postcardStamp} aria-hidden="true">✉</span>
+              <h2 className={styles.postcardTitle}>{sup.deliveryTitle.replace(/^[^\p{L}]+/u, '')}</h2>
+              <div className={styles.deliveryBody}>
             {!staffOf(stall, 'server') ? (
               <p className={styles.dockEmpty}>{sup.deliveryNeedServer}</p>
             ) : deliveryCustomers.filter((c) => c.state === 'waiting' || c.state === 'accepted').length === 0 ? (
@@ -800,12 +812,15 @@ export default function StallPage() {
                   })}
               </ul>
             )}
-            </WoodPanel>
+              </div>
+            </div>
           </section>
         ) : null}
 
         <section className={styles.dockSection} aria-label={s.counterTitle}>
-          <WoodPanel className={styles.dockPanel} title={s.counterTitle} titleLevel="h2">
+          <div className={`${styles.dockPanel} ${styles.counterPanel}`}>
+            <h2 className={styles.brassTitle}>{s.counterTitle}</h2>
+            <div className={styles.counterBody}>
           {stall.batches.length === 0 ? (
             <p className={styles.dockEmpty}>{s.counterEmpty}</p>
           ) : (
@@ -861,18 +876,20 @@ export default function StallPage() {
               })}
             </ul>
           )}
-          </WoodPanel>
+            </div>
+          </div>
         </section>
 
         {/* Background pots (Gói H5): orders simmering in parallel with
             whatever the player cooks by hand on the main stove. */}
         {stall.pots.length > 0 ? (
           <section className={styles.dockSection} aria-label={s.potsTitle}>
-            <WoodPanel
-              className={styles.dockPanel}
-              title={`${s.potsTitle.replace(/^[^\p{L}]+/u, '')} · ${stall.pots.length}/${potCapacity}`}
-              titleLevel="h2"
-            >
+            <div className={`${styles.dockPanel} ${styles.potsPanel}`}>
+              <div className={styles.brickHeader}>
+                <h2 className={styles.brickTitle}>{`${s.potsTitle.replace(/^[^\p{L}]+/u, '')} · ${stall.pots.length}/${potCapacity}`}</h2>
+                <StoveFlame size={30} />
+              </div>
+              <div className={styles.potsBody}>
             <ul className={styles.potList}>
               {stall.pots.map((pot) => {
                 const recipe = recipeById.get(pot.recipeId);
@@ -883,6 +900,7 @@ export default function StallPage() {
                   <li key={pot.id} className={styles.potCard}>
                     <span className={styles.potDish}>
                       🫕 {recipe?.name ?? pot.recipeId} ×{pot.qty}
+                      <StoveFlame size={16} className={styles.potFlame} />
                     </span>
                     <span
                       className={styles.potBar}
@@ -899,7 +917,8 @@ export default function StallPage() {
                 );
               })}
             </ul>
-            </WoodPanel>
+              </div>
+            </div>
           </section>
         ) : null}
       </div>
@@ -931,6 +950,17 @@ export default function StallPage() {
                   ⏳ {formatClock(patienceLeftMs(selected, now))}
                   {selected.freezeUntil && now < selected.freezeUntil ? ` · ❄️ ${sup.frozenNote}` : ''}
                 </p>
+                <div className={styles.patienceLanterns} aria-hidden="true">
+                  {Array.from({ length: 8 }, (_, i) => {
+                    const lit = i < Math.ceil(patienceLeftRatio(selected, now) * 8);
+                    return (
+                      <span
+                        key={i}
+                        className={lit ? styles.lanternOn : styles.lanternOff}
+                      />
+                    );
+                  })}
+                </div>
                 {selected.requestKind ? (
                   <p className={styles.requestLine}>
                     {REQUEST_ICONS[selected.requestKind]} {s.requestOnOrder(s.requestNames[selected.requestKind] ?? selected.requestKind)}
@@ -1001,7 +1031,7 @@ export default function StallPage() {
                         </strong>
                         <span>{batch.diagnosis.map((key) => s.diagnosisNames[key] ?? key).join(' · ')}</span>
                         {band.sellable ? (
-                          <span>
+                          <span className={styles.serveTotalLine}>
                             {s.servePrice} {preview.price} xu · {s.serveTip} {preview.tip} xu
                             {preview.fee > 0 ? ` · ${sup.deliveryFee(preview.fee)}` : ''} ·{' '}
                             {s.serveTotal} {preview.total} xu
@@ -1052,12 +1082,13 @@ export default function StallPage() {
       {/* Menu board panel: licensed dishes + the on-sale curation of
           the stall level (Gói H6, mục 8.3). */}
       <Modal open={panel === 'menu'} title={s.menuTitle} onClose={() => setPanel(null)} closeLabel={s.summaryClose}>
+        <img className={styles.menuAwning} src={r3Awning} alt="" aria-hidden="true" />
         {sellable.length === 0 ? (
           <p>{s.menuEmpty}</p>
         ) : (
           <>
             <p className={styles.menuCapNote}>{sup.menuCapNote(menuCapForLevel(stallLevel))}</p>
-            <div className={styles.menuGrid}>
+            <div className={`${styles.menuGrid} ${styles.menuPlank}`}>
               {sellable.map((recipe) => {
                 const grade = dishGradeFor(recipe);
                 const onSale = menuRecipes.some((menuRecipe) => menuRecipe.id === recipe.id);
@@ -1087,6 +1118,7 @@ export default function StallPage() {
 
       {/* Pantry panel. */}
       <Modal open={panel === 'pantry'} title={s.pantryTitle} onClose={() => setPanel(null)} closeLabel={s.summaryClose}>
+        <img className={styles.pantryChest} src={r3Chest} alt="" aria-hidden="true" />
         <div className={styles.kitchenBox}>
           <strong>🍳 {s.kitchenTitle}</strong>
           {(['knife', 'stove', 'pot'] as const).map((kind) => (
@@ -1210,6 +1242,8 @@ export default function StallPage() {
 
       {/* Staff panel (Gói H6, mục 8.1): five roles, ranks, wages, training. */}
       <Modal open={panel === 'staff'} title={sup.staffTitle} onClose={() => setPanel(null)} closeLabel={s.summaryClose}>
+        <div className={styles.clipboard}>
+          <img className={styles.clipboardClip} src={r3Clip} alt="" aria-hidden="true" />
         {stallLevel < 2 ? (
           <p>{sup.staffLocked(2)}</p>
         ) : (
@@ -1280,6 +1314,7 @@ export default function StallPage() {
             ) : null}
           </div>
         )}
+        </div>
       </Modal>
 
       {/* Support panel (Gói H6, mục 8.3 + ý 16): stall upgrade + Nồi Nồi skins.
@@ -1441,7 +1476,7 @@ export default function StallPage() {
         closeLabel={s.summaryClose}
       >
         {stall.afkReport ? (
-          <div className={styles.summary}>
+          <div className={`${styles.summary} ${styles.ledger}`}>
             <p>
               {stall.afkReport.closedReason === 'staff'
                 ? sup.afkClosedStaff
@@ -1483,7 +1518,8 @@ export default function StallPage() {
         closeLabel={s.summaryClose}
       >
         {stall.lastSummary ? (
-          <div className={styles.summary}>
+          <div className={`${styles.summary} ${styles.ledger}`}>
+            <img className={styles.ledgerAbacus} src={r3Abacus} alt="" aria-hidden="true" />
             <p>💰 {s.summaryRevenue}: <strong>{stall.lastSummary.revenueXu} xu</strong></p>
             <p>♦ {s.summaryCok}: <strong>{stall.lastSummary.revenueCok} cok</strong></p>
             {stall.lastSummary.festivalCokBonus ? (

@@ -280,6 +280,18 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 14px;
+  background-image:
+    linear-gradient(rgba(43, 18, 28, 0.25), rgba(43, 18, 28, 0.25)),
+    url('../../assets/theme-d/game/r3-kitchen-light.webp');
+  background-size: cover;
+  background-position: center;
+  border-radius: 18px;
+}
+
+:global([data-theme='dark']) .dock {
+  background-image:
+    linear-gradient(rgba(43, 18, 28, 0.25), rgba(43, 18, 28, 0.25)),
+    url('../../assets/theme-d/game/r3-kitchen-dark.webp');
 }
 
 /* Án A pass (Đợt lan 3): the four dock boards are hanging WoodPanels
@@ -1247,4 +1259,362 @@
     overflow: hidden;
     text-overflow: ellipsis;
   }
+}
+
+/* ================= Đợt 3 — thiết kế riêng từng bảng quầy ================= */
+
+/* --- F. Scene flame overlay: same anchor as .stoveBtn (left 27.5%,
+   bottom 38%), lifted ~46px above it, below the button (z 4). --- */
+.sceneFlame {
+  position: absolute;
+  left: 27.5%;
+  bottom: 38%;
+  transform: translateY(-46px);
+  z-index: 3;
+  pointer-events: none;
+}
+
+/* Shared sign (copied parameters from WoodPanel sign) */
+.ordersSign {
+  position: absolute;
+  top: -33px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-1.1deg);
+  width: min(80%, 330px);
+  aspect-ratio: 552 / 160;
+  background: url('../../assets/theme-d/game/sign-blank.webp') no-repeat center / 100% 100%;
+  filter: drop-shadow(0 3px 4px rgba(40, 20, 4, 0.35));
+  z-index: 2;
+  pointer-events: none;
+}
+.ordersSignText {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  padding: 0 17%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-family: var(--td-font-game-display);
+  font-size: clamp(0.92rem, 1.35vw + 0.55rem, 1.22rem);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  line-height: 1.08;
+  text-transform: uppercase;
+  color: #f7c65c;
+  text-shadow: 0 2px 0 #5d3410, 1px 0 0 #7a4416, -1px 0 0 #7a4416, 0 -1px 0 #7a4416, 0 3px 5px rgba(32, 15, 4, 0.45);
+}
+
+/* --- B1. Orders = phiếu treo dây --- */
+.ordersPanel {
+  position: relative;
+  border: 11px solid transparent;
+  border-radius: 18px;
+  background:
+    linear-gradient(180deg, #fffdf4 0%, #f9edcb 100%) padding-box,
+    url('../../assets/theme-d/game/wood-texture.webp') border-box;
+  background-size: auto, 360px 270px;
+  box-shadow: inset 0 0 0 2px rgba(60, 32, 8, 0.45), inset 0 0 16px rgba(60, 32, 8, 0.12), 0 6px 16px rgba(40, 20, 4, 0.3);
+  color: var(--td-paper-text);
+}
+.ordersBody {
+  padding: 2.1rem 1.05rem 1.05rem;
+}
+.ordersRope {
+  position: relative;
+  height: 3px;
+  background: linear-gradient(90deg, #7a4a22, #c39a6b, #7a4a22);
+  border-radius: 999px;
+  margin: 2px 4px 14px;
+}
+.ordersRope::before,
+.ordersRope::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #e8c07a, #8a5a1f);
+  border: 1.5px solid #5d3410;
+  transform: translateY(-50%);
+}
+.ordersRope::before { left: -2px; }
+.ordersRope::after { right: -2px; }
+.ordersPanel .orderCard {
+  position: relative;
+  background: linear-gradient(180deg, #fffef8 0%, #fdf3cf 100%);
+  border: 1px solid rgba(122, 72, 32, 0.3);
+  border-top: 6px dotted rgba(122, 72, 32, 0.5);
+  border-radius: 8px;
+  box-shadow: 0 3px 8px rgba(40, 20, 4, 0.16);
+  margin-top: 8px;
+  animation: ticketPop 0.35s ease-out 1;
+}
+.ordersPanel .orderCard::before {
+  content: '';
+  position: absolute;
+  top: -11px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 10px;
+  height: 16px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #8c5a1f, #e0a050 45%, #b87333);
+  box-shadow: 0 1px 3px rgba(40, 20, 4, 0.4);
+  z-index: 1;
+}
+.ordersPanel .orderList > li:nth-child(odd) { transform: rotate(-0.5deg); }
+.ordersPanel .orderList > li:nth-child(even) { transform: rotate(0.5deg); }
+@keyframes ticketPop {
+  from { opacity: 0; transform: translateY(6px) scale(0.98); }
+  to { opacity: 1; }
+}
+
+/* --- B2. Counter = quầy gỗ sẫm + biển đồng --- */
+.counterPanel {
+  margin-top: 6px;
+  position: relative;
+  border: 3px solid #4a2c14;
+  border-radius: 16px;
+  background-image: linear-gradient(rgba(59, 32, 16, 0.55), rgba(59, 32, 16, 0.55)), url('../../assets/theme-d/game/wood-texture.webp');
+  background-size: 360px 270px;
+  box-shadow: inset 0 0 18px rgba(0, 0, 0, 0.35), 0 6px 16px rgba(40, 20, 4, 0.3);
+  color: #fdf6d8;
+  overflow: hidden;
+}
+.brassTitle {
+  margin: 12px 12px 0;
+  padding: 8px 14px;
+  text-align: center;
+  font-family: var(--td-font-game-display);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #4a2c14;
+  background: linear-gradient(180deg, #f3d492, #e3b959 55%, #b98d45);
+  border: 2px solid #8a5a1f;
+  border-radius: 10px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6), 0 3px 8px rgba(0, 0, 0, 0.3);
+}
+.counterBody { padding: 12px; }
+.counterPanel .dockEmpty { color: #f9edcb; }
+.counterPanel .batchCard { color: var(--td-paper-text); }
+
+/* --- B3. Pots = bếp gạch --- */
+.potsPanel {
+  margin-top: 6px;
+  position: relative;
+  border: 3px solid #7a3b22;
+  border-radius: 16px;
+  background: linear-gradient(180deg, #fffdf4 0%, #f9edcb 100%);
+  box-shadow: 0 6px 16px rgba(40, 20, 4, 0.3);
+  color: var(--td-paper-text);
+  overflow: hidden;
+}
+.brickHeader {
+  min-height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 4px 12px;
+  background-color: #a44a32;
+  background-image:
+    linear-gradient(rgba(59, 32, 16, 0.28), rgba(59, 32, 16, 0.28)),
+    repeating-linear-gradient(0deg, transparent 0 20px, #e8c9a8 20px 23px),
+    repeating-linear-gradient(90deg, transparent 0 44px, #e8c9a8 44px 47px);
+}
+.brickTitle {
+  margin: 0;
+  font-family: var(--td-font-game-display);
+  font-weight: 400;
+  font-size: 1.05rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #fff6e0;
+  text-shadow: 0 2px 3px rgba(40, 20, 4, 0.6);
+}
+.potsBody { padding: 12px; }
+.potDish { display: inline-flex; align-items: center; gap: 6px; }
+.potFlame { display: inline-flex; }
+
+/* --- B4. Delivery = bưu thiếp --- */
+.deliveryPanel {
+  margin-top: 6px;
+  position: relative;
+  border: 2px solid #c9a86a;
+  border-radius: 14px;
+  background: linear-gradient(180deg, #fffdf4 0%, #f9edcb 100%);
+  box-shadow: inset 0 0 0 6px #fffdf4, inset 0 0 0 8px rgba(122, 72, 32, 0.35), 0 6px 16px rgba(40, 20, 4, 0.25);
+  outline: 2px dashed rgba(122, 72, 32, 0.55);
+  outline-offset: -9px;
+  color: var(--td-paper-text);
+}
+.postcardStamp {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 34px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #e9a23b, #b03e26);
+  border: 2px dotted #fff;
+  outline: 1.5px solid #7a4820;
+  color: #fff6e0;
+  font-size: 16px;
+  z-index: 1;
+}
+.postcardTitle {
+  margin: 0;
+  padding: 14px 52px 0 16px;
+  font-family: var(--td-font-game);
+  font-size: 1.15rem;
+  color: var(--td-paper-text);
+}
+.deliveryBody { padding: 10px 16px 16px; }
+
+/* --- C1. Menu modal: awning + plank --- */
+.menuAwning {
+  display: block;
+  width: 100%;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 12px 12px 0 0;
+  margin-bottom: 12px;
+}
+.menuPlank {
+  background-image: repeating-linear-gradient(0deg, rgba(122, 72, 32, 0.07) 0 2px, transparent 2px 28px), linear-gradient(180deg, rgba(233, 200, 150, 0.18), rgba(233, 200, 150, 0.05));
+  border-radius: 12px;
+  padding: 10px;
+}
+
+/* --- C2. Pantry modal: chest + compartments --- */
+.pantryChest {
+  display: block;
+  height: 120px;
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+  margin: 0 auto 12px;
+}
+.pantryRow {
+  border: 1.5px solid rgba(122, 72, 32, 0.35);
+  border-bottom: 1.5px solid rgba(122, 72, 32, 0.35);
+  border-radius: 8px;
+  padding: 8px 10px;
+  margin-bottom: 6px;
+  background: rgba(255, 253, 244, 0.65);
+}
+.pantryList > li:nth-child(even).pantryRow { background: rgba(233, 200, 150, 0.22); }
+
+/* --- C3. Staff modal: clipboard + badge --- */
+.clipboard {
+  position: relative;
+  border: 10px solid #7a4a22;
+  border-radius: 16px;
+  background: linear-gradient(180deg, #fffdf4 0%, #f9edcb 100%);
+  padding: 34px 14px 14px;
+  margin-top: 26px;
+  color: var(--td-paper-text);
+}
+.clipboardClip {
+  position: absolute;
+  top: -26px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 84px;
+  height: auto;
+  z-index: 2;
+  pointer-events: none;
+  filter: drop-shadow(0 3px 5px rgba(40, 20, 4, 0.35));
+}
+.staffCard { position: relative; padding-left: 64px; }
+.staffCard::before {
+  content: '';
+  position: absolute;
+  left: 12px;
+  top: 12px;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 3px solid var(--td-gold);
+  background: radial-gradient(circle at 35% 30%, #fff3c4, #e9a23b);
+  box-shadow: 0 2px 6px rgba(40, 20, 4, 0.3);
+}
+.staffCard::after {
+  content: '';
+  position: absolute;
+  left: 19px;
+  top: 48px;
+  width: 24px;
+  height: 8px;
+  border-radius: 0 0 4px 4px;
+  background: #b03e26;
+}
+
+/* --- C4. Support modal: brass plaque cards --- */
+.skinCard {
+  border: 2px solid #b98d45;
+  background-image:
+    radial-gradient(circle 5px at 10px 10px, #8a5a1f 4px, rgba(138, 90, 31, 0) 5px),
+    radial-gradient(circle 5px at calc(100% - 10px) 10px, #8a5a1f 4px, rgba(138, 90, 31, 0) 5px),
+    radial-gradient(circle 5px at 10px calc(100% - 10px), #8a5a1f 4px, rgba(138, 90, 31, 0) 5px),
+    radial-gradient(circle 5px at calc(100% - 10px) calc(100% - 10px), #8a5a1f 4px, rgba(138, 90, 31, 0) 5px),
+    linear-gradient(180deg, #f3d492 0%, #e9c96e 100%);
+  box-shadow: inset 0 0 0 2px rgba(138, 90, 31, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.55), 0 3px 8px rgba(40, 20, 4, 0.2);
+  color: #4a2c14;
+}
+
+/* --- C5. Ledger (summary + AFK) --- */
+.ledger {
+  position: relative;
+  padding-left: 38px;
+}
+.ledger::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 22px;
+  border-radius: 10px 0 0 10px;
+  background:
+    repeating-linear-gradient(0deg, transparent 0 9px, rgba(255, 246, 224, 0.55) 9px 11px, transparent 11px 20px),
+    linear-gradient(180deg, #6b3a1e, #4a2612);
+  box-shadow: inset -2px 0 4px rgba(0, 0, 0, 0.35);
+}
+.ledger p { border-bottom: 1px solid rgba(122, 72, 32, 0.25); padding-bottom: 3px; }
+.ledgerAbacus {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  width: 64px;
+  height: auto;
+  pointer-events: none;
+}
+
+/* --- C6. Customer patience lanterns --- */
+.patienceLanterns { display: flex; gap: 5px; margin-top: 6px; }
+.lanternOn, .lanternOff { width: 13px; height: 13px; border-radius: 50%; display: block; }
+.lanternOn { background: radial-gradient(circle at 35% 30%, #ffd98a, #f39c2c); box-shadow: 0 0 8px 2px rgba(243, 156, 44, 0.65); }
+.lanternOff { background: #7a5a3a; opacity: 0.35; }
+
+/* --- C7. Serve total on bamboo tray --- */
+.serveTotalLine {
+  display: block;
+  padding: 6px 8px;
+  border-radius: 8px;
+  background:
+    repeating-linear-gradient(45deg, rgba(195, 159, 82, 0.28) 0 6px, rgba(217, 184, 120, 0.28) 6px 12px),
+    repeating-linear-gradient(-45deg, rgba(195, 159, 82, 0.2) 0 6px, rgba(217, 184, 120, 0.2) 6px 12px),
+    #fdf6d8;
+  font-weight: 700;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ordersPanel .orderCard { animation: none; }
 }
