@@ -97,6 +97,13 @@
   color: var(--td-cream);
 }
 
+/* Dark theme: --td-brick flips to a light orange (#E8884D), so cream
+   text drops to 2.4:1 — switch the CTA label to plum-deep (5.9:1). */
+[data-theme='dark'] .navLinkCta,
+[data-theme='dark'] .navLinkCta:hover {
+  color: var(--td-plum-deep);
+}
+
 .badgeAccent {
   display: inline-flex;
   align-items: center;

@@ -28,3 +28,19 @@
   background: rgba(180, 35, 24, 0.08);
   color: var(--td-danger);
 }
+
+/* Dark theme: the badge can sit directly on the dark page background
+   (recipe detail header), where a 8-12% tint composites to near-black
+   and the strong text fails. Layer the same tint over solid paper —
+   visually identical on light surfaces, readable on dark ones. */
+[data-theme='dark'] .pending {
+  background: linear-gradient(rgba(154, 91, 0, 0.12), rgba(154, 91, 0, 0.12)), var(--td-paper);
+}
+
+[data-theme='dark'] .approved {
+  background: linear-gradient(rgba(21, 128, 61, 0.1), rgba(21, 128, 61, 0.1)), var(--td-paper);
+}
+
+[data-theme='dark'] .rejected {
+  background: linear-gradient(rgba(180, 35, 24, 0.08), rgba(180, 35, 24, 0.08)), var(--td-paper);
+}

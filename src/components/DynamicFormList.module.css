@@ -9,9 +9,12 @@
 
 .item {
   padding: 0.75rem;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  background: var(--color-surface-muted);
+  border: 1px solid var(--td-paper-edge);
+  border-radius: var(--td-radius-paper);
+  /* Paper-deep in both themes: the legacy surface-muted flipped to a
+     dark brown in dark theme, breaking the editor form's paper labels
+     (this list is only used by RecipeEditorForm). */
+  background: var(--td-paper-deep);
 }
 
 .itemHeader {
@@ -25,7 +28,7 @@
   margin: 0;
   font-size: 0.85rem;
   font-weight: 600;
-  color: var(--color-text-muted);
+  color: var(--td-paper-text-muted);
 }
 
 .addRow {

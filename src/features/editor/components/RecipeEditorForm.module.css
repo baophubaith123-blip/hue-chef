@@ -276,3 +276,11 @@
 .toggleRow {
   color: var(--td-paper-text);
 }
+
+/* Dark theme: --td-brick flips to light orange (#E8884D) but the form
+   surfaces stay paper-light — pin section titles and suggestion
+   buttons to the light-theme brick (4.6:1 on paper-deep). */
+[data-theme='dark'] .sectionTitle,
+[data-theme='dark'] .suggestBtn {
+  color: #b03e26;
+}

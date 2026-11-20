@@ -45,6 +45,9 @@
 .title {
   margin: 0;
   font-size: 1.05rem;
+  /* Pin to paper text: the global heading rule uses page text, which
+     flips to near-white in dark theme while the card stays paper. */
+  color: var(--td-paper-text);
 }
 
 .titleLink {
@@ -81,6 +84,12 @@
 
 .link:hover {
   color: var(--td-gold);
+}
+
+/* Dark theme: --td-brick flips to light orange on paper (2.4:1);
+   the card surface stays light, so keep the light-theme brick. */
+[data-theme='dark'] .link {
+  color: #b03e26;
 }
 
 .reason {

@@ -40,7 +40,9 @@
 .navLink {
   font-size: 0.9rem;
   text-decoration: none;
-  color: var(--td-cream-muted);
+  /* Cream at full value: cream-muted measures 3.2/2.1:1 on the wood
+     gradient (light/dark) — full cream reaches ~4.9:1 in both themes. */
+  color: var(--td-cream);
   padding: 0.35rem 0.55rem;
   border-radius: var(--td-radius-button);
 }

@@ -156,3 +156,8 @@
   color: var(--td-paper-text);
   line-height: 1.5;
 }
+
+/* Dark theme: brick token flips light; the hero stays paper. */
+[data-theme='dark'] .title {
+  color: #b03e26;
+}

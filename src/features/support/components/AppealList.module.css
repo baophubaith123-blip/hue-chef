@@ -90,12 +90,16 @@
 
 .type_account {
   background: var(--td-brick-soft);
-  color: var(--td-brick);
+  /* Fixed brick: the token flips to light orange in dark theme while
+     the chip sits on a paper-light row. Same value as light theme. */
+  color: #b03e26;
 }
 
 .type_recipe {
   background: rgba(233, 162, 59, 0.15);
-  color: var(--td-gold-text);
+  /* Fixed gold-text value: the token flips to bright gold in dark
+     theme (1.5:1 on this tint) while the row stays paper-light. */
+  color: #8a5a00;
 }
 
 .type_other {
@@ -183,7 +187,7 @@
 
 .status_recommended {
   background: rgba(233, 162, 59, 0.15);
-  color: var(--td-gold-text);
+  color: #8a5a00;
 }
 
 .status_rejected {
@@ -204,7 +208,7 @@
 .viewButton {
   border: none;
   background: rgba(233, 162, 59, 0.15);
-  color: var(--td-gold-text);
+  color: #8a5a00;
   padding: 0.3rem 0.65rem;
   border-radius: var(--td-radius-paper);
   font-size: 0.75rem;
