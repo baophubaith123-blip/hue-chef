@@ -22,6 +22,8 @@ import {
 import { useTranslation } from '@/i18n/useTranslation';
 import { SceneShell } from '@/pages/player/SceneShell';
 
+import albumScroll from '@/assets/theme-d/game/r4-album-scroll.webp';
+
 import styles from '@/pages/player/AlbumPage.module.css';
 
 export default function AlbumPage() {
@@ -74,16 +76,23 @@ export default function AlbumPage() {
           <div className={styles.titlePlaque}>
             <h1 className={styles.pageTitle}>{j.albumTitle}</h1>
             <p className={styles.pageSub}>{j.albumSubtitle}</p>
-            <p className={styles.progressPlaque}>
-              {gameIcon('album') ? (
-                <img src={gameIcon('album')} alt="" className={styles.progressIcon} />
-              ) : (
-                <span aria-hidden="true">🃏</span>
-              )}
-              <span>{j.albumProgress(totalUnlocked, totalDishes)}</span>
-            </p>
           </div>
         </header>
+
+        {/* Đợt lan 4: the album's master frame is the hanging silk
+            scroll with red tassels (r4-album-scroll); the collection
+            progress line sits on the scroll's lower face. */}
+        <div className={styles.scrollHero}>
+          <img className={styles.scrollHeroImg} src={albumScroll} alt="" aria-hidden="true" />
+          <p className={styles.scrollHeroProgress}>
+            {gameIcon('album') ? (
+              <img src={gameIcon('album')} alt="" className={styles.progressIcon} />
+            ) : (
+              <span aria-hidden="true">🃏</span>
+            )}
+            <span>{j.albumProgress(totalUnlocked, totalDishes)}</span>
+          </p>
+        </div>
 
         {sections.map(({ chapter, dishes, unlocked, complete }) => (
           <WoodPanel
@@ -94,6 +103,7 @@ export default function AlbumPage() {
             bodyClassName={styles.albumBody}
           >
             <div className={styles.sectionMeta}>
+              <img className={styles.sectionScroll} src={albumScroll} alt="" aria-hidden="true" />
               <Badge tone="brick">{j.chapterLabel(chapter.order)}</Badge>
               <div className={styles.sectionBadges}>
                 <Badge tone="paper">{j.albumSetProgress(unlocked, dishes.length)}</Badge>
@@ -170,9 +180,14 @@ export default function AlbumPage() {
         title={selected?.name ?? ''}
         onClose={() => setSelectedId(null)}
         closeLabel={dict.common.close}
+        shellClass={styles.modalShell}
+        headerClass={styles.modalHeader}
+        bodyClass={styles.modalBodyWrap}
+        titleClass={styles.modalTitle}
       >
         {selected && selectedText ? (
           <div className={styles.modalBody}>
+            <img className={styles.modalScrollBanner} src={albumScroll} alt="" aria-hidden="true" />
             <ImageWithFallback
               className={styles.modalImage}
               src={dishArtFor(selected)}
