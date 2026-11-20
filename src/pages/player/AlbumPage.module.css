@@ -1,65 +1,160 @@
-.container {
+/* Theme D dish album scene — the same paper board as the approved
+   recipe catalogue: riveted paper panel pinned on the plum scene
+   (SceneShell carries the scene + HUD), a hanging tag, a title plaque
+   with a gold progress plaque, one Án A WoodPanel per leg of the
+   journey (its carved sign carries the chapter name), and culture
+   cards in the SceneDishCard language —
+   grade frame, square illustrated art shown whole, name + star row.
+   Paper stays light in both themes, so paper text colours come from
+   the --td-paper-* tokens. */
+
+.board {
+  position: relative;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
-  padding-bottom: 3rem;
+  gap: 1.4rem;
+  padding: 1.4rem 1.5rem 1.25rem;
+  background: linear-gradient(180deg, var(--td-paper) 0%, var(--td-paper-deep) 100%);
+  color: var(--td-paper-text);
+  border: 30px solid transparent;
+  border-image: url('../../assets/theme-d/game/frame-scroll.webp') 30% / 1 / 0 stretch;
+  border-radius: 18px;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
 }
 
-/* Page head — big hanging wooden sign (same pattern as the recipe list) */
+/* Gold rivets pinning the board's four corners (same as the mẫu board). */
+.rivet {
+  position: absolute;
+  width: 13px;
+  height: 13px;
+  border-radius: var(--td-radius-full);
+  background: radial-gradient(circle at 35% 30%, var(--td-gold-bright), var(--td-gold-deep));
+  border: 1.5px solid rgba(74, 44, 20, 0.55);
+  box-shadow: inset 0 -2px 3px rgba(59, 32, 8, 0.5);
+  z-index: 3;
+  pointer-events: none;
+}
+
+.rivetTl {
+  top: 10px;
+  left: 10px;
+}
+
+.rivetTr {
+  top: 10px;
+  right: 10px;
+}
+
+.rivetBl {
+  bottom: 10px;
+  left: 10px;
+}
+
+.rivetBr {
+  bottom: 10px;
+  right: 10px;
+}
+
+/* ---------- Page head — hanging tag + title plaque ---------- */
+
 .head {
+  position: relative;
   display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-  background: var(--td-wood-gradient, linear-gradient(180deg, #ce9550, #b57e40));
+  justify-content: center;
+  padding-top: 0.4rem;
+}
+
+.hangTag {
+  position: absolute;
+  top: -2.35rem;
+  left: 0.9rem;
+  z-index: 4;
+  padding: 0.32rem 1rem;
+  background: var(--td-wood-gradient);
   border: 3px solid var(--td-ink);
-  border-radius: var(--radius-2xl);
-  box-shadow: var(--shadow-chunky, 0 4px 0 rgba(74, 44, 20, 0.45));
-  padding: 1.4rem 1.75rem;
-}
-
-.titleRow {
-  display: flex;
-  align-items: center;
-  gap: 0.65rem;
-}
-
-.titleIcon {
-  font-size: 1.75rem;
-}
-
-.title {
-  margin: 0;
-  font-family: var(--td-font-display);
-  font-size: 1.85rem;
+  border-radius: var(--td-radius-full);
+  box-shadow: 0 3px 0 rgba(74, 44, 20, 0.45);
+  color: #fff6e0;
+  font-family: var(--td-font-body);
+  font-size: 0.85rem;
   font-weight: 800;
-  color: #fff6e0;
-  text-shadow: 0 2px 0 rgba(32, 15, 4, 0.45);
+  letter-spacing: 0.02em;
+  text-shadow: 0 1px 0 rgba(32, 15, 4, 0.45);
+  transform: rotate(-2deg);
 }
 
-.subtitle {
-  margin: 0;
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: #fff6e0;
-  line-height: 1.55;
-}
-
-.progressLine {
-  margin: 0.35rem 0 0;
-  font-size: 0.95rem;
-  font-weight: 800;
-  color: #fff6e0;
-}
-
-/* ---------- Chapter set section (on a KraftCard paper body) ---------- */
-
-.section {
+.titlePlaque {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  align-items: center;
+  text-align: center;
+  padding: 0.4rem 1rem 0.2rem;
+  min-width: 0;
 }
 
-.sectionHead {
+.pageTitle {
+  margin: 0;
+  font-family: var(--td-font-game-display);
+  font-size: clamp(1.7rem, 4vw, 2.5rem);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  color: var(--td-brick);
+  text-shadow: 0 2px 0 rgba(255, 246, 224, 0.9);
+}
+
+.pageSub {
+  margin: 0.35rem 0 0;
+  max-width: 44rem;
+  font-family: var(--td-font-game);
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1.55;
+  color: var(--td-paper-text-muted);
+}
+
+/* Collection progress as a gold plaque under the subtitle. */
+.progressPlaque {
+  margin: 0.75rem 0 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.42rem 1rem;
+  border-radius: var(--td-radius-paper);
+  border: 2.5px solid var(--td-ink);
+  background: linear-gradient(180deg, var(--td-gold-bright), var(--td-gold) 55%, var(--td-gold-deep));
+  box-shadow: 0 3px 0 rgba(74, 44, 20, 0.4);
+  color: #43301b;
+  font-size: 0.92rem;
+  font-weight: 800;
+}
+
+.progressIcon {
+  width: 19px;
+  height: 19px;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+/* ---------- Chapter section — Án A WoodPanel + card grid ---------- */
+
+/* The board's 1.4rem gap plus this trimmed top margin gives the
+   panel's ropes (30px) room to hang without touching the block
+   above, while keeping the stack rhythm close to the old plaques. */
+.albumPanel {
+  margin-top: 16px;
+}
+
+.albumBody {
+  display: flex;
+  flex-direction: column;
+  gap: 0.95rem;
+  min-width: 0;
+}
+
+/* Meta row inside the panel body: chapter-order badge on the left,
+   set-progress badges on the right (the chapter name itself now
+   rides the WoodPanel's carved sign). */
+.sectionMeta {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -67,77 +162,143 @@
   gap: 0.6rem;
 }
 
-.sectionTitle {
-  margin: 0;
-  font-family: var(--td-font-display);
-  font-size: 1.35rem;
-  font-weight: 800;
-  color: var(--td-paper-text);
-}
-
 .sectionBadges {
   display: flex;
+  flex-wrap: wrap;
   gap: 0.45rem;
 }
 
+/* Mobile 2 columns, tablet 3, desktop 4 — same rhythm as the catalogue. */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  gap: 0.9rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  padding: 0.35rem 0.1rem 0.1rem;
+}
+
+@media (min-width: 700px) {
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.1rem;
+  }
+}
+
+@media (min-width: 1080px) {
+  .grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1.2rem;
+  }
+}
+
+/* ---------- Culture card (SceneDishCard language) ---------- */
+
+.frameWrap {
+  height: 100%;
+  min-width: 0;
+  transition: transform 0.18s ease;
+}
+
+.frameWrap:hover {
+  transform: translateY(-4px);
 }
 
 .card {
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
-  background: var(--td-paper);
-  border-radius: 10px;
-  padding: 0.5rem;
   height: 100%;
+  background: var(--td-paper);
+  color: var(--td-paper-text);
+  position: relative;
 }
 
+/* Square illustrated art in a chunky wooden frame. The art set is
+   square (720×720), so with the cell at 1:1 object-fit: cover shows
+   the WHOLE painting — nothing is cropped on any side. */
 .imageWrap {
+  margin: 8px 8px 0;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
   position: relative;
+  background: var(--td-paper-deep);
+  border: 4px solid var(--td-wood-dark);
+  border-radius: 12px;
+  box-shadow:
+    inset 0 0 0 2px rgba(233, 162, 59, 0.75),
+    0 3px 0 rgba(74, 44, 20, 0.35);
 }
 
 .image {
   width: 100%;
-  height: 92px;
+  height: 100%;
   object-fit: cover;
-  border-radius: 8px;
+  object-position: center;
   display: block;
 }
 
+/* Locked cards: the same painting greyed + sepia under the lock. */
 .imageLocked {
   width: 100%;
-  height: 92px;
+  height: 100%;
   object-fit: cover;
-  border-radius: 8px;
+  object-position: center;
   display: block;
-  filter: grayscale(0.9) brightness(0.82);
+  filter: grayscale(0.85) sepia(0.35) brightness(0.78);
 }
 
-.lockBadge {
+/* Round lock medallion centred on the locked art — plum disc, gold rim. */
+.lockMedallion {
   position: absolute;
-  top: 6px;
-  right: 6px;
-  font-size: 1rem;
-  background: rgba(45, 11, 22, 0.85);
-  border-radius: var(--td-radius-full, 999px);
-  padding: 2px 7px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 54px;
+  height: 54px;
+  border-radius: var(--td-radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at 35% 30%, var(--td-plum-soft, #5e1d31), var(--td-plum, #4a1525) 70%);
+  border: 2px solid var(--td-gold);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.35);
+  color: #fff6e0;
+  font-size: 1.25rem;
+}
+
+.lockIcon {
+  width: 26px;
+  height: 26px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: stretch;
+  padding: 0.6rem 0.75rem 0.75rem;
+  gap: 0.35rem;
 }
 
 .dishName {
-  font-size: 0.88rem;
-  font-weight: 700;
-  line-height: 1.3;
+  margin: 0;
+  font-family: var(--td-font-game);
+  font-size: 1.02rem;
+  font-weight: 800;
+  line-height: 1.25;
   color: var(--td-paper-text);
+  text-align: center;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .dishStars {
   font-size: 0.85rem;
   font-weight: 800;
   letter-spacing: 0.04em;
+  text-align: center;
   color: #8a5a00; /* pinned: paper stays light in dark theme */
 }
 
@@ -145,6 +306,7 @@
   font-size: 0.78rem;
   font-weight: 700;
   line-height: 1.4;
+  text-align: center;
   color: var(--td-paper-text-muted);
 }
 
@@ -152,6 +314,16 @@
   margin-top: auto;
   font-size: 0.82rem;
   padding: 0.4rem 0.6rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .frameWrap {
+    transition: none;
+  }
+
+  .frameWrap:hover {
+    transform: none;
+  }
 }
 
 /* ---------- Culture card modal ---------- */
@@ -162,12 +334,15 @@
   gap: 0.55rem;
 }
 
+/* The modal now shows the same square illustration as the cards;
+   contain keeps the whole painting visible inside the frame. */
 .modalImage {
   width: 100%;
-  height: 180px;
-  object-fit: cover;
+  height: 240px;
+  object-fit: contain;
   border-radius: 10px;
   border: 2px solid var(--td-ink);
+  background: var(--td-paper-deep);
 }
 
 .modalMeta {
@@ -198,12 +373,58 @@
   color: var(--td-paper-text);
 }
 
-@media (max-width: 760px) {
-  .title {
-    font-size: 1.5rem;
+/* ---------- Small screens: 2 compact columns, nothing clipped ---------- */
+
+@media (max-width: 640px) {
+  .board {
+    border-width: 20px;
+    padding: 1rem 0.9rem 0.9rem;
+    gap: 1.05rem;
+  }
+
+  .hangTag {
+    top: -2.05rem;
+    left: 0.4rem;
+  }
+
+  .pageSub {
+    font-size: 0.88rem;
   }
 
   .grid {
-    grid-template-columns: repeat(auto-fill, minmax(128px, 1fr));
+    gap: 0.7rem;
+    padding-top: 0.25rem;
+  }
+
+  .imageWrap {
+    margin: 6px 6px 0;
+    border-width: 3px;
+  }
+
+  .lockMedallion {
+    width: 44px;
+    height: 44px;
+  }
+
+  .lockIcon {
+    width: 21px;
+    height: 21px;
+  }
+
+  .body {
+    padding: 0.5rem 0.55rem 0.6rem;
+  }
+
+  .dishName {
+    font-size: 0.92rem;
+  }
+
+  .viewButton {
+    font-size: 0.78rem;
+    padding: 0.38rem 0.45rem;
+  }
+
+  .modalImage {
+    height: 200px;
   }
 }
