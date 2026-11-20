@@ -1,5 +1,5 @@
 import { GoldButton } from '@/components/theme-d/GoldButton';
-import { KraftCard } from '@/components/theme-d/KraftCard';
+import { WoodPanel } from '@/components/theme-d/WoodPanel';
 import { useAuth } from '@/contexts/AuthContext';
 import {
   SKILL_BRANCH_IDS,
@@ -11,7 +11,7 @@ import {
 import { unlockSkillTier, useSkills } from '@/features/skills/store';
 import type { SkillBranchId } from '@/features/skills/types';
 import { useTranslation } from '@/i18n/useTranslation';
-import { PlayerShell } from '@/pages/player/PlayerShell';
+import { SceneShell } from '@/pages/player/SceneShell';
 
 import styles from '@/pages/player/SkillTreePage.module.css';
 
@@ -21,6 +21,14 @@ const BRANCH_ICONS: Record<SkillBranchId, string> = {
   seasoning: '🧂',
   speed: '⚡',
 };
+
+type TierState = 'unlocked' | 'next' | 'locked';
+
+function tierStateFor(tier: number, current: number): TierState {
+  if (tier <= current) return 'unlocked';
+  if (tier === current + 1) return 'next';
+  return 'locked';
+}
 
 export default function SkillTreePage() {
   const { dict } = useTranslation();
@@ -34,18 +42,31 @@ export default function SkillTreePage() {
   const available = skillPointsAvailable(level, tiers);
 
   return (
-    <PlayerShell>
-      <div className={styles.container}>
-        <div className={styles.head}>
-          <h1 className={styles.title}>{s.title}</h1>
-          <p className={styles.subtitle}>{s.subtitle}</p>
-        </div>
+    <SceneShell>
+      <section className={styles.board}>
+        <span className={`${styles.rivet} ${styles.rivetTl}`} aria-hidden="true" />
+        <span className={`${styles.rivet} ${styles.rivetTr}`} aria-hidden="true" />
+        <span className={`${styles.rivet} ${styles.rivetBl}`} aria-hidden="true" />
+        <span className={`${styles.rivet} ${styles.rivetBr}`} aria-hidden="true" />
 
-        <KraftCard className={styles.pointsCard}>
-          <p className={styles.pointsLabel}>{s.pointsLabel(available, totalPoints)}</p>
-          <p className={styles.levelNote}>{s.levelNote(level)}</p>
-          <p className={styles.pointsHint}>{s.pointsHint}</p>
-        </KraftCard>
+        <header className={styles.head}>
+          <span className={styles.hangTag}>{dict.nav.skills}</span>
+          <div className={styles.titlePlaque}>
+            <h1 className={styles.pageTitle}>{s.title}</h1>
+            <p className={styles.pageSub}>{s.subtitle}</p>
+          </div>
+        </header>
+
+        <div className={styles.pointsPlaque}>
+          <span className={styles.pointsMedallion} aria-hidden="true">
+            {available}
+          </span>
+          <div className={styles.pointsBody}>
+            <p className={styles.pointsLabel}>{s.pointsLabel(available, totalPoints)}</p>
+            <p className={styles.levelNote}>{s.levelNote(level)}</p>
+            <p className={styles.pointsHint}>{s.pointsHint}</p>
+          </div>
+        </div>
 
         <div className={styles.grid}>
           {SKILL_BRANCH_IDS.map((branch) => {
@@ -54,27 +75,55 @@ export default function SkillTreePage() {
             const hasPoints = available >= 1;
             const buttonLabel = isMaxed ? s.maxed : hasPoints ? s.unlock : s.needPoints;
             return (
-              <KraftCard as="section" key={branch} className={styles.branchCard}>
+              <WoodPanel
+                key={branch}
+                title={s.branchNames[branch]}
+                titleLevel="h2"
+                className={styles.branchPanel}
+                bodyClassName={styles.branchBody}
+              >
                 <div className={styles.branchHead}>
-                  <span className={styles.branchIcon} aria-hidden="true">
+                  <span className={styles.branchMedallion} aria-hidden="true">
                     {BRANCH_ICONS[branch]}
                   </span>
-                  <h2 className={styles.branchName}>{s.branchNames[branch]}</h2>
+                  <div className={styles.branchHeadText}>
+                    <span className={styles.tierLabel}>{s.tierLabel(current, SKILL_MAX_TIER)}</span>
+                  </div>
                 </div>
+
                 <p className={styles.branchDesc}>{s.branchDescs[branch]}</p>
                 <p className={styles.branchEffect}>{s.branchEffects[branch]}</p>
 
-                <div className={styles.tierRow}>
-                  <div className={styles.pips} aria-hidden="true">
-                    {Array.from({ length: SKILL_MAX_TIER }, (_, index) => (
-                      <span
-                        key={index}
-                        className={index < current ? styles.pipFilled : styles.pipEmpty}
-                      />
-                    ))}
-                  </div>
-                  <span className={styles.tierLabel}>{s.tierLabel(current, SKILL_MAX_TIER)}</span>
-                </div>
+                <ol className={styles.ladder} aria-label={s.tierLabel(current, SKILL_MAX_TIER)}>
+                  {Array.from({ length: SKILL_MAX_TIER }, (_, index) => index + 1).map((tier) => {
+                    const state = tierStateFor(tier, current);
+                    const medallionClass =
+                      state === 'unlocked'
+                        ? styles.medallionUnlocked
+                        : state === 'next'
+                          ? styles.medallionNext
+                          : styles.medallionLocked;
+                    const captionClass =
+                      state === 'unlocked'
+                        ? styles.tierCaptionUnlocked
+                        : state === 'next'
+                          ? styles.tierCaptionNext
+                          : styles.tierCaptionLocked;
+                    return (
+                      <li key={tier} className={styles.tierRow}>
+                        <span className={styles.medallionCell}>
+                          <span className={`${styles.medallion} ${medallionClass}`}>{tier}</span>
+                        </span>
+                        <span className={captionClass}>{s.tierLabel(tier, SKILL_MAX_TIER)}</span>
+                        {state === 'unlocked' ? (
+                          <span className={styles.tierCheck} aria-hidden="true">
+                            ✓
+                          </span>
+                        ) : null}
+                      </li>
+                    );
+                  })}
+                </ol>
 
                 <GoldButton
                   className={styles.unlockButton}
@@ -85,13 +134,15 @@ export default function SkillTreePage() {
                 >
                   {buttonLabel}
                 </GoldButton>
-              </KraftCard>
+              </WoodPanel>
             );
           })}
         </div>
 
-        <p className={styles.bothLoopsNote}>{s.bothLoopsNote}</p>
-      </div>
-    </PlayerShell>
+        <footer className={styles.boardFoot}>
+          <p className={styles.bothLoopsNote}>{s.bothLoopsNote}</p>
+        </footer>
+      </section>
+    </SceneShell>
   );
 }

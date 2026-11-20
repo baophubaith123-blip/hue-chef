@@ -1,186 +1,512 @@
-.container {
+/* Theme D skill tree scene — one big paper board pinned on the plum
+   scene (the SceneShell carries the plum background + festival frame),
+   mirroring the approved RecipeList board: riveted paper panel, hanging
+   tag, Coiny title plaque, a wooden skill-points plaque, four Án A
+   hanging-wood branch panels (sign = branch name) each with a
+   vertical rope ladder of five tier medallions
+   (tier 1 at the top, tier 5 at the bottom — read top to bottom), and
+   a wooden foot bar carrying the both-loops note. Paper and wood
+   surfaces are fixed in both themes, so their inks stay pinned to the
+   light values that read on them. */
+
+.board {
+  position: relative;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
-  padding-bottom: 3rem;
+  gap: 1.1rem;
+  padding: 1.4rem 1.5rem 1.1rem;
+  background: linear-gradient(180deg, var(--td-paper) 0%, var(--td-paper-deep) 100%);
+  color: var(--td-paper-text);
+  border: 30px solid transparent;
+  border-image: url('../../assets/theme-d/game/frame-scroll.webp') 30% / 1 / 0 stretch;
+  border-radius: 18px;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
 }
 
-/* Page head — big hanging wooden sign (same pattern as the album page).
-   The wood surface is fixed in both themes, so its text stays pinned
-   to the light cream that reads on wood. */
+/* Gold rivets pinning the board's four corners, as drawn on the mẫu. */
+.rivet {
+  position: absolute;
+  width: 13px;
+  height: 13px;
+  border-radius: var(--td-radius-full);
+  background: radial-gradient(circle at 35% 30%, var(--td-gold-bright), var(--td-gold-deep));
+  border: 1.5px solid rgba(74, 44, 20, 0.55);
+  box-shadow: inset 0 -2px 3px rgba(59, 32, 8, 0.5);
+  z-index: 3;
+  pointer-events: none;
+}
+
+.rivetTl {
+  top: 10px;
+  left: 10px;
+}
+
+.rivetTr {
+  top: 10px;
+  right: 10px;
+}
+
+.rivetBl {
+  bottom: 10px;
+  left: 10px;
+}
+
+.rivetBr {
+  bottom: 10px;
+  right: 10px;
+}
+
+/* ---------- Board head — hanging tag + title plaque ---------- */
+
 .head {
+  position: relative;
   display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-  background: var(--td-wood-gradient, linear-gradient(180deg, #ce9550, #b57e40));
+  justify-content: center;
+  padding-top: 0.4rem;
+}
+
+.hangTag {
+  position: absolute;
+  top: -2.35rem;
+  left: 0.9rem;
+  z-index: 4;
+  padding: 0.32rem 1rem;
+  background: var(--td-wood-gradient);
   border: 3px solid var(--td-ink);
-  border-radius: var(--radius-2xl);
-  box-shadow: var(--shadow-chunky, 0 4px 0 rgba(74, 44, 20, 0.45));
-  padding: 1.4rem 1.75rem;
-}
-
-.title {
-  margin: 0;
-  font-family: var(--td-font-display);
-  font-size: 1.85rem;
+  border-radius: var(--td-radius-full);
+  box-shadow: 0 3px 0 rgba(74, 44, 20, 0.45);
+  color: #fff6e0;
+  font-family: var(--td-font-body);
+  font-size: 0.85rem;
   font-weight: 800;
-  color: #fff6e0;
-  text-shadow: 0 2px 0 rgba(32, 15, 4, 0.45);
+  letter-spacing: 0.02em;
+  text-shadow: 0 1px 0 rgba(32, 15, 4, 0.45);
+  transform: rotate(-2deg);
 }
 
-.subtitle {
+.titlePlaque {
+  text-align: center;
+  padding: 0.4rem 1rem 0.2rem;
+}
+
+.pageTitle {
   margin: 0;
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: #fff6e0;
-  line-height: 1.55;
+  font-family: var(--td-font-game-display);
+  font-size: clamp(1.7rem, 4vw, 2.5rem);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  color: var(--td-brick);
+  text-shadow: 0 2px 0 rgba(255, 246, 224, 0.9);
 }
 
-/* ---------- Points card (on a KraftCard paper body) ---------- */
+.pageSub {
+  margin: 0.35rem auto 0;
+  max-width: 720px;
+  font-family: var(--td-font-game);
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1.55;
+  color: var(--td-paper-text-muted);
+}
 
-.pointsCard {
+/* ---------- Skill-points plaque (wood) ---------- */
+
+.pointsPlaque {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.85rem 1.15rem;
+  background: var(--td-wood-gradient);
+  border: 3px solid var(--td-ink);
+  border-radius: var(--td-radius-wood);
+  box-shadow:
+    inset 0 2px 0 rgba(255, 226, 160, 0.3),
+    inset 0 -3px 0 rgba(59, 32, 8, 0.35),
+    0 4px 0 rgba(74, 44, 20, 0.35);
+  color: #fff6e0;
+}
+
+/* Gold coin medallion carrying the spendable-points count. */
+.pointsMedallion {
+  flex: none;
+  width: 58px;
+  height: 58px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--td-radius-full);
+  background: radial-gradient(circle at 35% 30%, var(--td-gold-bright), var(--td-gold) 55%, var(--td-gold-deep));
+  border: 3px solid var(--td-ink);
+  box-shadow:
+    inset 0 2px 0 rgba(255, 246, 224, 0.65),
+    0 3px 0 rgba(59, 32, 8, 0.45);
+  color: #43301b;
+  font-family: var(--td-font-game);
+  font-size: 1.55rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  text-shadow: 0 1px 0 rgba(255, 246, 224, 0.5);
+}
+
+.pointsBody {
   display: flex;
   flex-direction: column;
-  gap: 0.3rem;
+  gap: 0.15rem;
+  min-width: 0;
 }
 
 .pointsLabel {
   margin: 0;
-  font-family: var(--td-font-display);
-  font-size: 1.3rem;
+  font-family: var(--td-font-game);
+  font-size: 1.25rem;
   font-weight: 800;
-  color: var(--td-paper-text);
+  line-height: 1.3;
+  color: #fff6e0;
+  text-shadow: 0 1px 0 rgba(32, 15, 4, 0.45);
 }
 
 .levelNote {
   margin: 0;
-  font-size: 0.95rem;
-  font-weight: 700;
-  color: #8a5a00; /* pinned: paper stays light in dark theme */
+  font-size: 0.92rem;
+  font-weight: 800;
+  color: #fff6e0;
+  text-shadow: 0 1px 0 rgba(32, 15, 4, 0.45);
 }
 
 .pointsHint {
   margin: 0;
-  font-size: 0.88rem;
+  font-size: 0.85rem;
   font-weight: 600;
   line-height: 1.5;
-  color: var(--td-paper-text-muted);
+  color: #fff6e0;
 }
 
-/* ---------- Branch grid ---------- */
+/* ---------- Branch grid: 4 across on wide desktop, 2 x 2 on tablet,
+   one stacked column on mobile — panels stay equal-height per row so
+   the board never reads dư or thiếu. ---------- */
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1.1rem;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+  align-items: stretch;
 }
 
-.branchCard {
+@media (max-width: 1180px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---------- Branch panel — Án A WoodPanel (sign = branch name) ---------- */
+
+/* The WoodPanel frame/sign is shared; the root only stretches in the
+   grid and the body carries the old column layout, stretched to the
+   row's full height so the unlock button (margin-top: auto) lands on
+   the same baseline in every panel of the row. The grid's 1rem gap
+   plus the panel's own 32px top margin leave the hanging sign
+   (≈33px above the frame) a clear ≈15px of air between rows. */
+.branchPanel {
+  display: flex;
+  min-width: 0;
+}
+
+.branchBody {
+  flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 0.55rem;
+  gap: 0.5rem;
+  min-width: 0;
+  color: var(--td-paper-text);
 }
 
 .branchHead {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
+  gap: 0.65rem;
+  padding-bottom: 0.6rem;
+  border-bottom: 2px dashed rgba(74, 44, 20, 0.3);
 }
 
-.branchIcon {
-  font-size: 1.6rem;
+/* Branch icon sits in a round gold medallion, like a wax-seal stamp. */
+.branchMedallion {
+  flex: none;
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--td-radius-full);
+  background: radial-gradient(circle at 35% 30%, var(--td-gold-bright), var(--td-gold) 55%, var(--td-gold-deep));
+  border: 2.5px solid var(--td-ink);
+  box-shadow:
+    inset 0 2px 0 rgba(255, 246, 224, 0.65),
+    0 2px 0 rgba(74, 44, 20, 0.4);
+  font-size: 1.55rem;
   line-height: 1;
 }
 
-.branchName {
-  margin: 0;
-  font-family: var(--td-font-display);
-  font-size: 1.3rem;
+.branchHeadText {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  min-width: 0;
+}
+
+.tierLabel {
+  font-size: 0.85rem;
   font-weight: 800;
-  color: var(--td-paper-text);
+  color: #8a5a00; /* pinned: paper stays light in dark theme */
+  font-variant-numeric: tabular-nums;
 }
 
 .branchDesc {
   margin: 0;
-  font-size: 0.94rem;
+  font-size: 0.9rem;
   line-height: 1.55;
   color: var(--td-paper-text);
 }
 
 .branchEffect {
   margin: 0;
-  font-size: 0.88rem;
+  font-size: 0.85rem;
   font-weight: 700;
   line-height: 1.5;
   color: #8a5a00; /* pinned: paper stays light in dark theme */
 }
 
+/* ---------- Tier ladder — five medallions on a vertical rope.
+   Reading direction: TOP to BOTTOM, tier 1 first (top) down to
+   tier 5 (bottom), matching DOM and screen-reader order. ---------- */
+
+.ladder {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  margin: 0.45rem 0 0.2rem;
+  padding: 0;
+  list-style: none;
+}
+
+/* The rope itself: a twisted-cord stripe running through the centre
+   of the medallion column, behind the medallions. */
+.ladder::before {
+  content: '';
+  position: absolute;
+  top: 26px;
+  bottom: 26px;
+  left: 24px;
+  width: 6px;
+  transform: translateX(-50%);
+  border-radius: var(--td-radius-full);
+  background: repeating-linear-gradient(
+    45deg,
+    var(--td-wood-light) 0 6px,
+    var(--td-wood-dark) 6px 12px
+  );
+  box-shadow: inset 0 0 2px rgba(59, 32, 8, 0.55);
+  opacity: 0.85;
+}
+
 .tierRow {
+  position: relative;
+  z-index: 1;
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
-  gap: 0.7rem;
-  margin-top: 0.25rem;
+  gap: 0.65rem;
+  min-height: 52px;
+  min-width: 0;
 }
 
-.pips {
+/* Fixed-width cell keeps the rope centred whatever size the
+   medallion inside it is (locked tiers wear a smaller medallion). */
+.medallionCell {
+  flex: none;
+  width: 48px;
   display: flex;
-  gap: 0.4rem;
+  align-items: center;
+  justify-content: center;
 }
 
-.pipFilled,
-.pipEmpty {
-  width: 22px;
-  height: 22px;
-  border-radius: var(--td-radius-full, 999px);
-  border: 2px solid var(--td-ink);
+.medallion {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--td-radius-full);
+  font-family: var(--td-font-game);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
 }
 
-.pipFilled {
+/* Unlocked tier — solid gold medallion. */
+.medallionUnlocked {
+  width: 44px;
+  height: 44px;
   background: linear-gradient(180deg, var(--td-gold-bright), var(--td-gold) 55%, var(--td-gold-deep));
-  box-shadow: inset 0 2px 0 rgba(255, 246, 224, 0.65);
+  border: 2.5px solid var(--td-ink);
+  box-shadow:
+    inset 0 2px 0 rgba(255, 246, 224, 0.65),
+    0 2px 0 rgba(74, 44, 20, 0.4);
+  color: #43301b;
+  font-size: 1.05rem;
+  text-shadow: 0 1px 0 rgba(255, 246, 224, 0.5);
 }
 
-.pipEmpty {
+/* Next tier — the one the button below will open: pale face, gold
+   rim and a soft breathing glow so the eye lands on it first. */
+.medallionNext {
+  width: 48px;
+  height: 48px;
+  background: var(--td-paper);
+  border: 3px solid var(--td-gold-deep);
+  box-shadow:
+    0 0 0 4px rgba(233, 162, 59, 0.35),
+    0 0 18px rgba(233, 162, 59, 0.55),
+    inset 0 2px 0 rgba(255, 255, 255, 0.8);
+  color: #8a5a00; /* pinned: paper stays light in dark theme */
+  font-size: 1.12rem;
+  animation: tier-glow 1.8s ease-in-out infinite;
+}
+
+/* Tier not yet reached — smaller, dimmed, dashed rim. */
+.medallionLocked {
+  width: 36px;
+  height: 36px;
   background: var(--td-paper-deep);
-  border-style: dashed;
-  border-color: var(--td-paper-text-muted);
+  border: 2px dashed var(--td-paper-text-muted);
+  color: var(--td-paper-text-muted);
+  font-size: 0.92rem;
+  opacity: 0.65;
 }
 
-.tierLabel {
-  font-size: 0.9rem;
+@keyframes tier-glow {
+  0%,
+  100% {
+    box-shadow:
+      0 0 0 3px rgba(233, 162, 59, 0.3),
+      0 0 12px rgba(233, 162, 59, 0.4),
+      inset 0 2px 0 rgba(255, 255, 255, 0.8);
+  }
+
+  50% {
+    box-shadow:
+      0 0 0 5px rgba(233, 162, 59, 0.45),
+      0 0 22px rgba(233, 162, 59, 0.65),
+      inset 0 2px 0 rgba(255, 255, 255, 0.8);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .medallionNext {
+    animation: none;
+  }
+}
+
+.tierCaptionUnlocked,
+.tierCaptionNext,
+.tierCaptionLocked {
+  font-size: 0.88rem;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.tierCaptionUnlocked {
   font-weight: 800;
   color: var(--td-paper-text);
 }
 
-.unlockButton {
-  margin-top: auto;
-  align-self: flex-start;
-  font-size: 0.92rem;
-  padding: 0.6rem 1.1rem;
-  min-height: 44px;
+.tierCaptionNext {
+  font-weight: 800;
+  color: #8a5a00; /* pinned: paper stays light in dark theme */
 }
 
-/* ---------- Footer note ---------- */
+.tierCaptionLocked {
+  font-weight: 700;
+  color: var(--td-paper-text-muted);
+  opacity: 0.75;
+}
+
+.tierCheck {
+  margin-left: auto;
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #8a5a00; /* pinned: paper stays light in dark theme */
+}
+
+/* ---------- Unlock button (panel foot) ---------- */
+
+.unlockButton {
+  margin-top: auto;
+  width: 100%;
+  min-height: 46px;
+  padding: 0.6rem 0.9rem;
+  font-size: 0.92rem;
+}
+
+/* ---------- Board foot — wooden bar with the both-loops note ---------- */
+
+.boardFoot {
+  margin-top: 0.15rem;
+  padding: 0.65rem 1.15rem;
+  background: var(--td-wood-gradient);
+  border: 3px solid var(--td-ink);
+  border-radius: var(--td-radius-wood);
+  box-shadow:
+    inset 0 2px 0 rgba(255, 226, 160, 0.3),
+    inset 0 -3px 0 rgba(59, 32, 8, 0.35),
+    0 4px 0 rgba(74, 44, 20, 0.35);
+}
 
 .bothLoopsNote {
   margin: 0;
-  font-size: 0.92rem;
-  font-weight: 600;
+  text-align: center;
+  font-size: 0.9rem;
+  font-weight: 700;
   line-height: 1.6;
-  color: var(--td-page-text-muted);
+  color: #fff6e0;
+  text-shadow: 0 1px 0 rgba(32, 15, 4, 0.45);
 }
 
-@media (max-width: 760px) {
-  .title {
-    font-size: 1.5rem;
+/* ---------- Small screens ---------- */
+
+@media (max-width: 640px) {
+  .board {
+    border-width: 20px;
+    padding: 1rem 0.9rem 0.9rem;
+    gap: 0.9rem;
   }
 
-  .grid {
-    grid-template-columns: 1fr;
+  .hangTag {
+    top: -2.05rem;
+    left: 0.4rem;
   }
 
-  .unlockButton {
-    align-self: stretch;
+  .pointsPlaque {
+    padding: 0.75rem 0.9rem;
+    gap: 0.8rem;
+  }
+
+  .pointsMedallion {
+    width: 50px;
+    height: 50px;
+    font-size: 1.35rem;
+  }
+
+  .pointsLabel {
+    font-size: 1.1rem;
+  }
+
+  .boardFoot {
+    padding: 0.55rem 0.85rem;
+  }
+
+  .bothLoopsNote {
+    font-size: 0.85rem;
   }
 }
