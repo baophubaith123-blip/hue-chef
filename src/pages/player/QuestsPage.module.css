@@ -145,7 +145,11 @@
 
 .titlePlaque {
   text-align: center;
-  padding: 0.4rem 1rem 0.2rem;
+  background: linear-gradient(180deg, var(--td-paper) 0%, var(--td-paper-deep) 100%);
+  border: 3px solid var(--td-ink);
+  border-radius: 18px;
+  box-shadow: 0 6px 0 rgba(74, 44, 20, 0.3);
+  padding: 0.85rem 1.4rem 0.95rem;
 }
 
 .pageTitle {
