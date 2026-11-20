@@ -865,3 +865,9 @@
 .goBtn:active {
   transform: scale(0.94);
 }
+
+/* Đợt 4 (chỉnh cuối): ở pha ghi nhớ, nút tròn vàng nổi ở góc phải-dưới
+   của stage — chừa khoảng phải cho lưới món khỏi bị nút che. */
+.memorizeWrap .listItems {
+  padding-right: 138px;
+}

@@ -820,9 +820,9 @@
 
 .assistantSign .assistantText {
   position: absolute;
-  left: 15%;
-  right: 12%;
-  top: 18px;
+  left: 19%;
+  right: 16%;
+  top: 22px;
   font-size: 12.5px;
   display: -webkit-box;
   -webkit-line-clamp: 2;
