@@ -107,3 +107,29 @@
   border: 2.5px solid var(--td-ink, #4a2c14);
   box-shadow: 0 3px 0 var(--td-ink-soft, rgba(74, 44, 20, 0.45));
 }
+
+/* ===== Đợt lan R1 — cream timer plaque on the brick stage bar ===== */
+.timerHud {
+  background: var(--td-paper, #fff6e0);
+  border-radius: 16px;
+  padding: 0.45rem 0.8rem;
+}
+
+.timerHud .label {
+  color: var(--td-paper-text-muted, #7a5c38);
+}
+
+.timerHud .value {
+  color: var(--td-paper-text, #43301b);
+  font-family: var(--td-font-game);
+}
+
+.timerHud .valuePaused,
+.timerHud .valueUrgent {
+  color: #b42318;
+}
+
+.timerHud .track {
+  background: var(--td-paper-deep, #f7e8c6);
+  border-color: var(--td-ink, #4a2c14);
+}

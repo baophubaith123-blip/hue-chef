@@ -26,6 +26,7 @@ import { StageHelp } from '@/features/cooking/components/run/StageHelp';
 import { GestureStep } from '@/features/gestures/GestureStep';
 import { gestureForStep } from '@/data/gesture-map';
 import { NoiNoi } from '@/components/theme-d';
+import { dishArtFor } from '@/components/theme-d/dish-art';
 import { BOSS_JUDGE_IMAGE } from '@/components/theme-d/assets';
 import { chapterById, dishesOfChapter } from '@/features/journey/lib/chapters';
 import {
@@ -122,7 +123,7 @@ import { useTranslation } from '@/i18n/useTranslation';
 import { buzz, celebrate } from '@/lib/juice';
 import { playSound } from '@/lib/sound';
 import { calculateXpFromStars } from '@/lib/score';
-import { PlayerShell } from '@/pages/player/PlayerShell';
+import { SceneShell } from '@/pages/player/SceneShell';
 
 import styles from '@/pages/player/CookingPage.module.css';
 
@@ -1376,15 +1377,15 @@ export default function CookingPage() {
 
   if (isLoading) {
     return (
-      <PlayerShell>
+      <SceneShell>
         <Loading label={t('cooking.preparingKitchen')} />
-      </PlayerShell>
+      </SceneShell>
     );
   }
 
   if (!canCook || !recipe) {
     return (
-      <PlayerShell>
+      <SceneShell>
         <EmptyState
           title={t('cooking.cannotCook')}
           description={t('cooking.recipeMissing')}
@@ -1392,15 +1393,15 @@ export default function CookingPage() {
         <Link className={styles.back} to="/recipes">
           {t('cooking.backToRecipes')}
         </Link>
-      </PlayerShell>
+      </SceneShell>
     );
   }
 
   if (!session || session.recipe.id !== recipe.id) {
     return (
-      <PlayerShell>
+      <SceneShell>
         <Loading label={t('cooking.startingSession')} />
-      </PlayerShell>
+      </SceneShell>
     );
   }
 
@@ -1818,7 +1819,7 @@ export default function CookingPage() {
 
   if (session.phase === 'market' && stageConfig) {
     return (
-      <PlayerShell>
+      <SceneShell>
         <div className={styles.runFrame}>
         {stageHeader}
         <MarketStage
@@ -1830,13 +1831,13 @@ export default function CookingPage() {
           onFail={() => navigate(`/recipes/${recipe.id}`, { replace: true })}
         />
         </div>
-      </PlayerShell>
+      </SceneShell>
     );
   }
 
   if (session.phase === 'catch' && stageConfig) {
     return (
-      <PlayerShell>
+      <SceneShell>
         <div className={styles.runFrame}>
         {stageHeader}
         <CatchStage
@@ -1847,13 +1848,13 @@ export default function CookingPage() {
           onComplete={(bonus) => completeStage('catch', bonus)}
         />
         </div>
-      </PlayerShell>
+      </SceneShell>
     );
   }
 
   if (session.phase === 'finish' && stageConfig) {
     return (
-      <PlayerShell>
+      <SceneShell>
         <div className={styles.runFrame}>
         {stageHeader}
         <FinishStage
@@ -1864,13 +1865,13 @@ export default function CookingPage() {
           onComplete={(bonus) => completeStage('finish', bonus)}
         />
         </div>
-      </PlayerShell>
+      </SceneShell>
     );
   }
 
   if (session.phase === 'minigames') {
     return (
-      <PlayerShell>
+      <SceneShell>
         <div className={styles.runFrame}>
         <Link className={styles.back} to={backHref}>
           ← {backLabel}
@@ -1905,19 +1906,19 @@ export default function CookingPage() {
           onQuizSecondChanceUsed={consumeQuizSecondChance}
         />
         </div>
-      </PlayerShell>
+      </SceneShell>
     );
   }
 
   return (
-    <PlayerShell>
+    <SceneShell>
       <div className={styles.runFrame}>
       <Link className={styles.back} to={backHref}>
         ← {backLabel}
       </Link>
       <div className={styles.top}>
         <div className={styles.hudDish}>
-          <img src={recipe.image} alt="" className={styles.hudThumb} />
+          <img src={dishArtFor(recipe)} alt="" className={styles.hudThumb} />
           <div className={styles.hudDishText}>
             <h1 className={styles.title}>{recipe.name}</h1>
             <p className={styles.subtitle}>
@@ -2058,7 +2059,7 @@ export default function CookingPage() {
           <SellResultPanel
             batch={sellBatch}
             recipeName={recipe.name}
-            recipeImage={recipe.image}
+            recipeImage={dishArtFor(recipe)}
             pricePreview={priceForBatch({
               cost: sellBatch.cost,
               grade: dishGradeFor(recipe),
@@ -2126,7 +2127,7 @@ export default function CookingPage() {
           <FeastResultPanel
             batch={feastBatch}
             recipeName={recipe.name}
-            recipeImage={recipe.image}
+            recipeImage={dishArtFor(recipe)}
             pricePreview={feastPricePreview}
             canRetry={Boolean(stall && canCookBatch(stall, recipe, FEAST_QTY))}
             served={feastServed}
@@ -2190,6 +2191,6 @@ export default function CookingPage() {
         />
       ) : null}
       </div>
-    </PlayerShell>
+    </SceneShell>
   );
 }
