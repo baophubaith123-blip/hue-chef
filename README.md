@@ -408,6 +408,17 @@ Toàn bộ khu người chơi bỏ khung web (sidebar/navbar/breadcrumb/landing)
 
 ---
 
+## 🃏 Vòng sửa thẻ món — tranh món trọn vẹn, thẻ rộng và gọn (2026-11-20)
+
+Phản hồi của tác giả khi duyệt bản mẫu game-shell (kèm ảnh chụp): hàng Món nổi bật ở `/home` bị làm **quá dài mà bề rộng lại nhỏ**, ô tranh không đủ chứa tranh món nên **tranh bị cắt một phần ở hai bên**. Nguyên nhân: hàng nổi bật dùng thẻ riêng viết tay ngay trong trang có ô tranh `flex: 1 1 auto` + `object-fit: cover` — thẻ bị kéo giãn theo chiều cao bảng nên ô tranh thành khung dọc và cắt hai bên tranh vuông; thẻ lưới `/recipes` cũng crop tranh vuông 720×720 vào ô 4:3. Đã sửa tận gốc bằng **một hệ thẻ dùng chung**:
+
+- **`SceneDishCard` là thẻ món duy nhất** cho cả lưới `/recipes` và hàng Món nổi bật `/home` (trang chủ bỏ hẳn thẻ nội联 cũ): ô tranh **đúng tỉ lệ 1:1 của tranh gốc** trong khung gỗ — tranh hiển thị **toàn vẹn, bát/đĩa không chạm mép, không crop ở bất kỳ cạnh nào**; bỏ hiệu ứng phóng to khi rê chuột (vốn crop tranh thêm); thân thẻ thu gọn; huy hiệu độ khó + pill thời lượng tự co nhỏ trên thẻ mobile.
+- Hàng nổi bật `/home` không còn kéo giãn thẻ theo chiều cao bảng: track lưới ôm thẻ cao nhất, các thẻ trong hàng **đều chiều cao, plaque thẳng hàng ở chân thẻ**; hàng dùng cột rộng hơn trước (tỉ lệ thẻ: `/home` 161×295 ≈ 1:1,83 — trước ≈ 1:2,5 và crop; `/recipes` 248×383 ≈ 1:1,54; ô tranh đo thực tế đúng 137×137 / 224×224 px, tỉ lệ 1:1 tuyệt đối).
+- Khung **«Món của ngày»** ở panel điểm danh cũng giữ tranh vuông 1:1 thay vì giãn theo cột chữ làm crop trên/dưới.
+- Kiểm chứng: bot chức năng `/home` + `/recipes` đạt các luật (50 thẻ, tìm kiếm, lọc, bấm thẻ vào chi tiết, điều hướng); **quét tương phản 0 lỗi** trên `/home` + `/recipes` × 2 theme; ảnh toàn khung 1920×1080, 1440×900, 390×844 cho cả hai trang + cận cảnh thẻ (đã sở hữu / chưa sở hữu / món của ngày) đặt cạnh thẻ trong ảnh đích. Luật chơi, dữ liệu, `localStorage`, `src/lib/score.ts` không đổi.
+
+---
+
 ## 📞 Liên hệ
 
 | Thông tin | Chi tiết |
