@@ -1,31 +1,40 @@
-/* GuestGate — wooden "account required" panel (Gói Game-Shell). */
+/* GuestGate — "account required" panel on the Án A hanging wooden
+   board (WoodPanel). The wrap only centres the board and leaves room
+   above it for the ropes and carved sign; the title lives on the
+   board's sign, the body text on its cream paper. */
 
-.panel {
-  position: relative;
+.wrap {
   max-width: 520px;
-  margin: clamp(18px, 6vh, 56px) auto;
-  padding: 30px 28px 28px;
+  margin: clamp(44px, 7vh, 68px) auto;
+}
+
+/* WoodPanel carries a 32px top margin of its own; the wrap's margin
+   already gives the board its breathing room. */
+.gatePanel {
+  margin-top: 0;
+}
+
+.gateBody {
   text-align: center;
-  color: var(--td-paper);
-  background: var(--td-wood-gradient);
-  border: 3px solid var(--td-wood-dark);
-  border-radius: 20px;
-  box-shadow:
-    inset 0 2px 0 rgba(255, 246, 224, 0.35),
-    0 18px 40px rgba(0, 0, 0, 0.45);
+}
+
+.inner {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .mascot {
   width: 104px;
   height: auto;
-  margin-top: -64px;
-  filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.4));
+  filter: drop-shadow(0 8px 12px rgba(40, 20, 4, 0.35));
 }
 
 .lockBadge {
   position: absolute;
-  top: 14px;
-  right: 14px;
+  top: 0;
+  right: 0;
   width: 40px;
   height: 40px;
   display: inline-flex;
@@ -41,22 +50,13 @@
   border-radius: 10px;
 }
 
-.title {
-  margin: 6px 0 0;
-  font-family: var(--td-font-game-display);
-  font-size: 1.7rem;
-  font-weight: 400;
-  letter-spacing: 0.02em;
-  color: #fff6e0;
-  text-shadow: 0 2px 0 rgba(67, 48, 27, 0.7);
-}
-
 .body {
   margin: 10px auto 0;
   max-width: 42ch;
   line-height: 1.55;
-  color: #ffe9bd;
+  color: var(--td-paper-text-muted);
   font-size: 0.95rem;
+  font-weight: 600;
 }
 
 .actions {

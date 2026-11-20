@@ -1,7 +1,7 @@
 /* HomePage — festival scene layout per the approved Theme D target
-   drawing: wooden sign, scroll board of featured dishes, taped paper
-   quest panel, and the remaining dashboard blocks as paper panels on
-   the plum scene (Gói Mẫu Căn Chỉnh). */
+   drawing: wooden sign, scroll board of featured dishes, and the
+   remaining dashboard blocks as Án A hanging wood panels (WoodPanel)
+   on the plum scene (Gói Mẫu Căn Chỉnh). */
 
 .page {
   display: flex;
@@ -373,39 +373,13 @@
   width: 100%;
 }
 
-.todayPanel {
-  position: relative;
+/* Nhiệm vụ hôm nay: toàn bộ bảng là Link tới /quests; mặt bảng là
+   WoodPanel án A — biển khắc thay băng keo và tiêu đề giấy cũ. Link
+   cấp màu mực giấy cho nội dung bên trong bảng. */
+.todayLink {
   display: block;
-  padding: 26px 18px 16px;
-  border-radius: 6px;
-  background: linear-gradient(180deg, var(--td-paper), var(--td-paper-deep));
-  border: 2px solid var(--td-paper-edge);
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.35);
   color: var(--td-paper-text);
   text-decoration: none;
-  transform: rotate(0.6deg);
-}
-
-.tape {
-  position: absolute;
-  top: -12px;
-  left: 50%;
-  transform: translateX(-50%) rotate(-2deg);
-  width: 110px;
-  height: 24px;
-  background: rgba(246, 196, 83, 0.55);
-  border-left: 2px dashed rgba(138, 90, 43, 0.35);
-  border-right: 2px dashed rgba(138, 90, 43, 0.35);
-  border-radius: 2px;
-}
-
-.todayTitle {
-  margin: 0;
-  font-size: 1.15rem;
-  font-weight: 800;
-  letter-spacing: 0.03em;
-  text-align: center;
-  color: var(--td-ink);
 }
 
 .todayHint {
@@ -491,44 +465,27 @@
   min-width: 0;
 }
 
-/* ---------- Shared paper panels ---------- */
+/* ---------- Shared wood panels (Án A) ---------- */
 
-.paperPanel {
-  padding: 20px 22px;
-  border-radius: 14px;
-  background: linear-gradient(180deg, var(--td-paper), var(--td-paper-deep));
-  border: 2px solid var(--td-paper-edge);
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+/* WoodPanel supplies the wood frame and cream body; the page supplies
+   the paper ink colour its inner texts inherit (the old .paperPanel
+   colour). Its own margin-top (32px) is kept as-is: the ropes + sign
+   fill that space, so the sign top lines up with neighbouring blocks
+   instead of stacking extra gap on top of the column gaps. */
+.woodPanel {
   color: var(--td-paper-text);
-}
-
-.panelHeading {
-  margin: 0 0 14px;
-  font-family: var(--td-font-display);
-  font-size: 1.3rem;
-  font-weight: 800;
-  color: var(--td-ink);
-}
-
-.sectionHeading {
-  margin-bottom: 14px;
-}
-
-.sectionTitle {
-  margin: 0;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-family: var(--td-font-display);
-  font-size: 1.3rem;
-  font-weight: 800;
-  color: var(--td-ink);
 }
 
 .sectionSubtitle {
   margin: 4px 0 0;
   font-size: 0.9rem;
   color: var(--td-paper-text-muted);
+}
+
+/* Subtitle standing alone at the top of a WoodPanel body, after its
+   heading moved onto the carved sign. */
+.introGap {
+  margin-bottom: 14px;
 }
 
 /* ---------- Quick modes & event cards ---------- */
@@ -608,13 +565,14 @@
   gap: 14px;
 }
 
+/* Stat cards sit inside the shared signless WoodPanel, so they use
+   the same translucent inner-card surface as the quick-mode cards
+   instead of their old standalone paper-panel surface. */
 .statCard {
-  padding: 16px 18px;
-  border-radius: 14px;
-  background: linear-gradient(180deg, var(--td-paper), var(--td-paper-deep));
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.55);
   border: 2px solid var(--td-paper-edge);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.28);
-  color: var(--td-paper-text);
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -745,22 +703,6 @@
   justify-content: space-between;
   gap: 12px;
   margin-bottom: 12px;
-}
-
-.panelHeaderLeft {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.panelTitle {
-  margin: 0;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 1.1rem;
-  font-weight: 800;
-  color: var(--td-ink);
 }
 
 .panelSubtitle {

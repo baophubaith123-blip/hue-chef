@@ -6,6 +6,7 @@ import { Button } from '@/components/Button';
 import { EmptyState } from '@/components/EmptyState';
 import { NOI_NOI_FLAT, gameIcon } from '@/components/theme-d/game-assets';
 import { dishArtFor } from '@/components/theme-d/dish-art';
+import { WoodPanel } from '@/components/theme-d/WoodPanel';
 import { useAchievements } from '@/contexts/AchievementContext';
 import { useTaxonomy } from '@/contexts/TaxonomyContext';
 import { useAuth } from '@/contexts/AuthContext';
@@ -273,14 +274,14 @@ export default function HomePage() {
 
         {/* Tiếp tục hành trình */}
         {nextRecipe ? (
-          <section className={styles.paperPanel} aria-label={t('dashboard.continueJourney')}>
-            <header className={styles.sectionHeading}>
-              <h2 className={styles.sectionTitle}>
-                <span aria-hidden>🧭</span>
-                <span>{t('dashboard.continueJourney')}</span>
-              </h2>
-              <p className={styles.sectionSubtitle}>{t('dashboard.continueJourneySubtitle')}</p>
-            </header>
+          <WoodPanel
+            title={t('dashboard.continueJourney')}
+            titleLevel="h2"
+            className={styles.woodPanel}
+          >
+            <p className={`${styles.sectionSubtitle} ${styles.introGap}`}>
+              {t('dashboard.continueJourneySubtitle')}
+            </p>
 
             <div className={styles.journeyCard}>
               <div className={styles.journeyImageWrap}>
@@ -333,7 +334,7 @@ export default function HomePage() {
                 </div>
               </div>
             </div>
-          </section>
+          </WoodPanel>
         ) : null}
 
           </div>
@@ -345,11 +346,8 @@ export default function HomePage() {
               </div>
             ) : (
               <>
-            <Link to="/quests" className={styles.todayPanel}>
-              <span className={styles.tape} aria-hidden="true" />
-              <h2 className={styles.todayTitle}>
-                <span aria-hidden="true">✅</span> {dict.scene.todayTitle}
-              </h2>
+            <Link to="/quests" className={styles.todayLink}>
+              <WoodPanel title={dict.scene.todayTitle} titleLevel="h2">
               <p className={styles.todayHint}>{dict.scene.todayHint}</p>
               <ul className={styles.todayList}>
                 {dailyQuests.map((instance) => {
@@ -388,6 +386,7 @@ export default function HomePage() {
                   );
                 })}
               </ul>
+              </WoodPanel>
             </Link>
 
             <div className={styles.paperFrame}>
@@ -399,9 +398,12 @@ export default function HomePage() {
         </div>
 
         {/* Chế độ chơi nhanh (4 link) */}
-        <section className={styles.paperPanel} aria-label={dict.dashboard.quickModesTitle}>
-          <h2 className={styles.panelHeading}>{dict.dashboard.quickModesTitle}</h2>
-          <div className={styles.quickModesGrid}>
+        <WoodPanel
+          title={dict.dashboard.quickModesTitle}
+          titleLevel="h2"
+          className={styles.woodPanel}
+          bodyClassName={styles.quickModesGrid}
+        >
             <Link to="/recipes" className={styles.quickModeCard}>
               <div className={styles.quickModeIcon} aria-hidden="true">
                 {gameIcon('recipes') ? (
@@ -479,11 +481,11 @@ export default function HomePage() {
               </div>
               <span className={styles.quickModeArrow}>›</span>
             </Link>
-          </div>
-        </section>
+        </WoodPanel>
 
         {/* Thống kê nhanh (4 chỉ số) */}
-        <section className={styles.statsGrid} aria-label={t('dashboard.statLevel')}>
+        <section aria-label={t('dashboard.statLevel')}>
+          <WoodPanel className={styles.woodPanel} bodyClassName={styles.statsGrid}>
           <div className={styles.statCard}>
             <div className={styles.statCardHeader}>
               <span className={styles.statLabel}>{t('dashboard.statLevel')}</span>
@@ -540,12 +542,16 @@ export default function HomePage() {
               </div>
             </div>
           </div>
+          </WoodPanel>
         </section>
 
         {/* Thẻ sự kiện (quests / survival / mystery) */}
-        <section className={styles.paperPanel} aria-label={dict.events.homeCards.eventsTitle}>
-          <h2 className={styles.panelHeading}>{dict.events.homeCards.eventsTitle}</h2>
-          <div className={styles.eventsGrid}>
+        <WoodPanel
+          title={dict.events.homeCards.eventsTitle}
+          titleLevel="h2"
+          className={styles.woodPanel}
+          bodyClassName={styles.eventsGrid}
+        >
             <Link to="/quests" className={styles.eventCard}>
               <div className={styles.eventIcon} aria-hidden="true">
                 {gameIcon('quest') ? (
@@ -590,20 +596,17 @@ export default function HomePage() {
               </div>
               <span className={styles.eventArrow}>›</span>
             </Link>
-          </div>
-        </section>
+        </WoodPanel>
 
         {/* Hai cột: Thành tích sắp đạt & Bảng vinh danh mini */}
         <section className={styles.twoColGrid}>
-          <div className={styles.paperPanel}>
+          <WoodPanel
+            title={t('dashboard.nearAchievementsTitle')}
+            titleLevel="h3"
+            className={styles.woodPanel}
+          >
             <div className={styles.panelHeader}>
-              <div className={styles.panelHeaderLeft}>
-                <h3 className={styles.panelTitle}>
-                  <span aria-hidden>🎯</span>
-                  <span>{t('dashboard.nearAchievementsTitle')}</span>
-                </h3>
-                <span className={styles.panelSubtitle}>{t('dashboard.nearAchievementsSubtitle')}</span>
-              </div>
+              <span className={styles.panelSubtitle}>{t('dashboard.nearAchievementsSubtitle')}</span>
               <Link to="/achievements" className={styles.viewAllLink}>
                 {t('dashboard.viewAllLeaderboard')} →
               </Link>
@@ -632,17 +635,15 @@ export default function HomePage() {
                 ))}
               </div>
             )}
-          </div>
+          </WoodPanel>
 
-          <div className={styles.paperPanel}>
+          <WoodPanel
+            title={t('dashboard.miniLeaderboardTitle')}
+            titleLevel="h3"
+            className={styles.woodPanel}
+          >
             <div className={styles.panelHeader}>
-              <div className={styles.panelHeaderLeft}>
-                <h3 className={styles.panelTitle}>
-                  <span aria-hidden>🏆</span>
-                  <span>{t('dashboard.miniLeaderboardTitle')}</span>
-                </h3>
-                <span className={styles.panelSubtitle}>{t('dashboard.miniLeaderboardSubtitle')}</span>
-              </div>
+              <span className={styles.panelSubtitle}>{t('dashboard.miniLeaderboardSubtitle')}</span>
               <Link to="/leaderboard" className={styles.viewAllLink}>
                 {t('dashboard.viewAllLeaderboard')} →
               </Link>
@@ -680,18 +681,18 @@ export default function HomePage() {
                 );
               })}
             </div>
-          </div>
+          </WoodPanel>
         </section>
 
         {/* Lịch sử bếp gần đây */}
-        <section className={styles.paperPanel} aria-label={t('dashboard.recentHistoryTitle')}>
-          <header className={styles.sectionHeading}>
-            <h2 className={styles.sectionTitle}>
-              <span aria-hidden>📜</span>
-              <span>{t('dashboard.recentHistoryTitle')}</span>
-            </h2>
-            <p className={styles.sectionSubtitle}>{t('dashboard.recentHistorySubtitle')}</p>
-          </header>
+        <WoodPanel
+          title={t('dashboard.recentHistoryTitle')}
+          titleLevel="h2"
+          className={styles.woodPanel}
+        >
+          <p className={`${styles.sectionSubtitle} ${styles.introGap}`}>
+            {t('dashboard.recentHistorySubtitle')}
+          </p>
 
           {recentCookedHistory.length === 0 ? (
             <EmptyState
@@ -732,7 +733,7 @@ export default function HomePage() {
               ))}
             </div>
           )}
-        </section>
+        </WoodPanel>
       </div>
     </SceneShell>
   );
