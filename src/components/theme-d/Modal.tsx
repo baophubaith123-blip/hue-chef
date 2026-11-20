@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import type { ReactNode } from 'react';
+import { createPortal } from 'react-dom';
 
 import styles from '@/components/theme-d/Modal.module.css';
 
@@ -23,7 +24,10 @@ export function Modal({ open, title, children, onClose, closeLabel }: ModalProps
   }, [open, onClose]);
 
   if (!open) return null;
-  return (
+  // Portal vào document.body: thoát stacking/transform context của GameShell
+  // (motion.div có transform khiến position:fixed bị neo theo hộp nội dung,
+  // và HUD sticky z-50 vẽ đè lên tiêu đề modal ở mobile).
+  return createPortal(
     <div className={styles.overlay} role="presentation" onClick={onClose}>
       <div
         className={styles.dialog}
@@ -40,6 +44,7 @@ export function Modal({ open, title, children, onClose, closeLabel }: ModalProps
         </div>
         <div className={styles.body}>{children}</div>
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }
