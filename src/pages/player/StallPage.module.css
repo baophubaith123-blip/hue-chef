@@ -1734,6 +1734,7 @@
   border-radius: 0 0 16px 16px;
   /* The board's own face: light planks of the menu board in the
      approved sheet — visible grain lines and nail heads, not flat cream. */
+  background-color: #e9c88f;
   background:
     radial-gradient(circle 4px at 18px 18px, rgba(93, 52, 16, 0.55) 3px, transparent 4px),
     radial-gradient(circle 4px at calc(100% - 18px) 18px, rgba(93, 52, 16, 0.55) 3px, transparent 4px),
@@ -1852,6 +1853,7 @@
 .clipBody.clipBody {
   margin: 0 12px 12px;
   border-radius: 0 0 10px 10px;
+  background-color: #f9edcb;
   background:
     repeating-linear-gradient(0deg, transparent 0 27px, rgba(122, 72, 32, 0.1) 27px 28px),
     linear-gradient(180deg, #fffdf4, #f9edcb);
@@ -1880,6 +1882,7 @@
 .ledgerBody.ledgerBody {
   margin: 0 12px 12px;
   border-radius: 6px 12px 12px 6px;
+  background-color: var(--td-paper);
   background:
     linear-gradient(90deg, #6b3a1e 0 22px, #4a2612 22px 26px, rgba(74, 38, 18, 0) 26px),
     linear-gradient(180deg, var(--td-paper) 0%, var(--td-paper-deep) 100%);
