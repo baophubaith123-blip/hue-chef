@@ -345,7 +345,9 @@ export default function MarketPage() {
                       <img className={styles.shopBasket} src={basketImg} alt="" draggable={false} />
                     </span>
                   ) : (
-                    <span className={styles.shopRoofWrap}>
+                    <span
+                      className={`${styles.shopRoofWrap} ${entry.key === 'protein' ? styles.roofWrapProtein : ''}`}
+                    >
                       <img className={styles.roofImg} src={art.roof} alt="" draggable={false} />
                       <span className={`${styles.signPlaque} ${art.plaque}`}>{entry.title}</span>
                     </span>
