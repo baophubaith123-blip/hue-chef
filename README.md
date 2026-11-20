@@ -459,6 +459,17 @@ Sau khi bản mẫu game-shell + thẻ món được duyệt, đợt lan đầu 
 | Repository | [github.com/baophubaith123-blip/hue-chef](https://github.com/baophubaith123-blip/hue-chef) |
 | License | MIT (nếu cần) — Dùng cho mục đích học tập |
 
+## 🎪 Đợt lan R3 — quầy + chợ theo bộ thiết kế riêng đã duyệt (2026-11-20)
+
+Đợt lan thứ ba áp **luật bảng hiển thị toàn diện** của tác giả cho hai trang quầy (`/stall`) và chợ (`/market`): **mỗi bảng một thiết kế riêng theo chất liệu** trong bộ ảnh đã duyệt (bảng quầy/chợ, màn quầy toàn cảnh, trang chợ toàn cảnh, nền phố chợ + nền bếp sáng/tối), thay cho mẫu bảng gỗ dùng chung ở các đợt trước. **14 asset cắt trực tiếp từ ảnh duyệt** (kỹ thuật flood-key theo khoảng cách màu nền): mái hiên sọc, rương kho mở nắp, kẹp clipboard vàng, bàn tính, rổ tre sạp chợ, băng rôn lụa «Giá hôm nay», 4 mái sạp (rạ / vải đỏ / bạt xanh / ngói) và 4 nền cảnh sáng–tối.
+
+- **Chợ:** nền phố chợ theo theme sáng/tối; ghi chú giá thành **băng rôn lụa đỏ** + plaque chữ thật; mỗi nhóm sạp một **mặt tiền riêng** (mái cắt từ ảnh duyệt + biển hiệu chất liệu riêng: sơn mài đỏ, gỗ sáng, gỗ sẫm chữ vàng, vải xanh, tre đan, đồng thau); riêng sạp thịt, biển hiệu thật **chồng che chữ nướng trên mái**; hàng mua nằm trên **khay tre đan**, giá thành thẻ treo; sạp đồ bếp + hỗ trợ cũng có mái và biển riêng.
+- **Quầy:** bảng đơn = **phiếu giấy kẹp treo dây**; món đã nấu = **quầy gỗ sẫm biển đồng**; nồi nền = **bếp gạch**; giao hàng = **bưu thiếp có tem**. Modal theo đúng ảnh duyệt: thực đơn có **mái hiên sọc**, kho có **rương mở nắp**, nhân viên là **clipboard kẹp vàng + huy hiệu**, nâng cấp/da là **plaque đồng**, tổng kết ca + báo cáo AFK + kết quả bán là **sổ cái gáy da + bàn tính**; panel cứu món thành **khay tre đan**; nền khu dock là **cảnh bếp sáng/tối** theo theme.
+- **Chuyển động bắt buộc:** lửa phấp phới + khói bốc (component `StoveFlame` CSS thuần, đặt ở bếp trong cảnh + bảng nồi), **dải đèn lồng kiên nhẫn** trong panel khách tự tắt dần theo thời gian chờ thật, khách nhún chờ, bảng đu nhẹ khi xuất hiện — tất cả tôn trọng `prefers-reduced-motion`.
+- **Luật giữ nguyên:** quầy vẫn chỉ 2 nút cố định; khách vãng lai vào được quầy + chợ; toàn bộ luật kinh tế/luật chơi/dữ liệu/localStorage không đổi; `src/lib/score.ts` không đổi (diff 0).
+
+**Kiểm chứng:** `tsc` 0 lỗi, build đạt; **quét tương phản 0 lỗi** trên quầy + chợ × sáng/tối; **bot H6 đạt 65/65** (nhân viên, nâng cấp, AFK, cấp quầy); các kiểm H5 thuộc quầy đạt (mua thiết bị trừ xu đúng tuyệt đối, banner giờ cao điểm đúng nhịp, nồi nền chạy song song và bị chặn điểm trần 71 ≤ 78); bộ H4: các pha xác định (giá chợ theo hạt giống ngày, ghi sổ lô FIFO, ván bán không ghi tiến độ học, ôi món, các chốt chặn) đạt — riêng các pha phụ thuộc bot *chơi trọn ván thời gian thực* (hoàn thiện + minigame) vẫn là giới hạn đã biết của bot đời H4 dưới tải máy chung, không phải thay đổi của đợt này (diff đợt này chỉ chạm lớp trình bày); khách vãng lai vào quầy/chợ không bị chặn (đã kiểm bằng bot); ảnh chụp toàn khung 1920×1080 / 1440×900 / 390×844 × 2 theme đặt cạnh ảnh duyệt để đối chiếu.
+
 ---
 
 <div align="center">
