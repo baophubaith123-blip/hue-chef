@@ -243,4 +243,10 @@
   .boardLayout { grid-template-columns: 1fr; }
   .rankPanel { padding: 21% 9% 18%; min-height: 430px; }
   .title { font-size: 1.35rem; }
+  /* Own (unranked) row: the long nowrap score text used to crush the
+     name column to one character per line at 390px. Let the row wrap:
+     name keeps a floor width, score drops to its own line. */
+  .ownRow { flex-wrap: wrap; row-gap: 0.35rem; }
+  .ownRow .playerInfo { flex: 1 1 11rem; }
+  .ownRow .playerScore { white-space: normal; }
 }
