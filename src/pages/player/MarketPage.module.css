@@ -816,6 +816,16 @@
   pointer-events: none;
 }
 
+/* Biển hiệu ở phố: chữ nhỏ hơn view hàng + plaque rộng tối thiểu
+   84% ô để tên dài ("Sạp đồ bếp — nâng cấp gian bếp") tối đa 2 dòng,
+   không quấn thành cột cao đè lên quầy. */
+.shopRoofWrap .signPlaque {
+  min-width: 84%;
+  padding: 7px 12px;
+  font-size: 15px;
+  line-height: 1.12;
+}
+
 /* Quầy phố: mặt gỗ sẫm bày hàng mẫu; huy hiệu vàng = số mặt hàng,
    chevron = dấu hiệu bấm vào được. */
 .shopBody {
