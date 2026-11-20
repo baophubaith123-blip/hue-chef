@@ -1097,6 +1097,7 @@ export default function StallPage() {
         shellClass={styles.menuShell}
         headerClass={styles.menuHead}
         bodyClass={styles.menuBody}
+        titleClass={styles.menuTitle}
       >
         {sellable.length === 0 ? (
           <p>{s.menuEmpty}</p>
