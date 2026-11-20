@@ -4,13 +4,11 @@
 
 /* This manager always renders inside the editor's paper cards, whose
    background stays light in both themes. Its colors therefore use the
-   fixed paper palette: the old --color-* tokens flip in dark mode and
-   produced light text on paper / dark-brown text on flipped-dark chips
-   (H10 contrast pass). */
+   fixed Theme D paper palette in both themes (H10 contrast pass). */
 .title {
   font-size: 0.82rem;
   font-weight: 700;
-  color: var(--paper-text-muted, #7a5c38);
+  color: var(--td-paper-text-muted);
   margin: 0 0 0.4rem;
 }
 
@@ -28,10 +26,10 @@
   align-items: center;
   gap: 0.35rem;
   padding: 0.3rem 0.6rem;
-  border: 1px solid var(--wood, #b57e40);
-  border-radius: var(--radius-full);
-  background: var(--paper-deep, #f7e8c6);
-  color: var(--paper-text, #43301b);
+  border: 1px solid var(--td-wood);
+  border-radius: var(--td-radius-full);
+  background: var(--td-paper-deep);
+  color: var(--td-paper-text);
   font-size: 0.85rem;
 }
 
@@ -40,21 +38,21 @@
 }
 
 .count {
-  color: var(--paper-text-muted, #7a5c38);
+  color: var(--td-paper-text-muted);
   font-size: 0.78rem;
 }
 
 .deleteBtn {
   border: none;
   background: transparent;
-  color: #b03e26;
+  color: var(--td-brick);
   cursor: pointer;
   font-size: 0.8rem;
   padding: 0 0.15rem;
 }
 
 .deleteBtn:disabled {
-  color: var(--paper-text-muted, #7a5c38);
+  color: var(--td-paper-text-muted);
   cursor: not-allowed;
   opacity: 0.5;
 }

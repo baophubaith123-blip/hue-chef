@@ -6,7 +6,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useRecipes } from '@/contexts/RecipeContext';
 import { useTranslation } from '@/i18n/useTranslation';
 
-import styles from '@/pages/common/RoleShell.module.css';
+import styles from '@/pages/editor/EditorShell.module.css';
 
 interface EditorShellProps {
   children: ReactNode;

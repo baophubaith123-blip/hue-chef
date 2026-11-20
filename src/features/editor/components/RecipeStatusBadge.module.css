@@ -1,7 +1,7 @@
 .badge {
   display: inline-block;
   padding: 0.2rem 0.55rem;
-  border-radius: 999px;
+  border-radius: var(--td-radius-full);
   font-size: 0.7rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -10,21 +10,21 @@
 }
 
 .draft {
-  background: var(--color-surface-muted);
-  color: var(--color-text-muted);
+  background: var(--td-paper-deep);
+  color: var(--td-paper-text-muted);
 }
 
 .pending {
-  background: var(--color-warning-soft);
-  color: var(--color-warning);
+  background: rgba(154, 91, 0, 0.12);
+  color: var(--td-warning-strong);
 }
 
 .approved {
-  background: var(--color-success-soft);
-  color: var(--color-success);
+  background: rgba(21, 128, 61, 0.10);
+  color: var(--td-success-strong);
 }
 
 .rejected {
-  background: var(--color-danger-soft);
-  color: var(--color-danger);
+  background: rgba(180, 35, 24, 0.08);
+  color: var(--td-danger);
 }

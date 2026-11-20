@@ -10,7 +10,7 @@ import { useEditorRecipes } from '@/features/editor/hooks/useEditorRecipes';
 import { useTranslation } from '@/i18n/useTranslation';
 import { EditorShell } from '@/pages/editor/EditorShell';
 
-import shellStyles from '@/pages/common/RoleShell.module.css';
+import shellStyles from '@/pages/editor/EditorShell.module.css';
 import styles from '@/pages/editor/EditorDashboardPage.module.css';
 
 export default function EditorDashboardPage() {

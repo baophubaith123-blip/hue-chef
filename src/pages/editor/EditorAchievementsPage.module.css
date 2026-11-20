@@ -25,37 +25,38 @@
 .label {
   font-size: 0.85rem;
   font-weight: 700;
+  color: var(--td-paper-text);
 }
 
 .input,
 .select {
   padding: 0.55rem 0.8rem;
-  border-radius: 10px;
-  border: 1px solid var(--td-paper-edge, #e8d5ae);
-  background: #fffdf4;
-  color: var(--td-paper-text, #43301b);
+  border-radius: var(--td-radius-button);
+  border: 1.5px solid var(--td-paper-edge);
+  background: var(--td-paper);
+  color: var(--td-paper-text);
   font-size: 0.92rem;
 }
 
 .input:focus,
 .select:focus {
   outline: none;
-  border-color: var(--td-brick, #b03e26);
-  box-shadow: 0 0 0 3px rgba(176, 62, 38, 0.15);
+  border-color: var(--td-gold-deep);
+  box-shadow: 0 0 0 2px rgba(233, 162, 59, 0.35);
 }
 
 .hint {
   font-size: 0.78rem;
-  color: var(--td-paper-text-muted, #7a5c38);
+  color: var(--td-paper-text-muted);
 }
 
 .error {
-  color: var(--td-danger, #b42318);
+  color: var(--td-danger);
   font-weight: 600;
 }
 
 .success {
-  color: var(--td-success, #15803d);
+  color: var(--td-success);
   font-weight: 600;
 }
 
@@ -75,9 +76,11 @@
   align-items: center;
   gap: 0.75rem;
   padding: 0.6rem 0.75rem;
-  border: 1px solid var(--td-paper-edge, #e8d5ae);
-  border-radius: 12px;
-  background: var(--td-paper-deep, #f7e8c6);
+  border: 1.5px solid var(--td-paper-edge);
+  border-top: 4px solid var(--td-wood-dark);
+  border-radius: var(--td-radius-paper);
+  background: var(--td-paper);
+  color: var(--td-paper-text);
 }
 
 .itemIcon {
@@ -93,13 +96,13 @@
 }
 
 .itemDesc {
-  color: var(--td-paper-text-muted, #7a5c38);
+  color: var(--td-paper-text-muted);
   font-size: 0.85rem;
 }
 
 .chip {
   padding: 0.2rem 0.6rem;
-  border-radius: var(--td-radius-full, 9999px);
+  border-radius: var(--td-radius-full);
   font-size: 0.78rem;
   font-weight: 700;
   white-space: nowrap;
@@ -107,15 +110,15 @@
 
 .chip_pending {
   background: rgba(233, 162, 59, 0.15);
-  color: var(--td-warning-strong, #7a4a00);
+  color: var(--td-warning-strong);
 }
 
 .chip_approved {
-  background: rgba(21, 128, 61, 0.12);
-  color: var(--td-success-strong, #14532d);
+  background: rgba(21, 128, 61, 0.10);
+  color: var(--td-success-strong);
 }
 
 .chip_rejected {
-  background: var(--td-brick-soft, rgba(176, 62, 38, 0.12));
-  color: var(--td-danger, #b42318);
+  background: var(--td-brick-soft);
+  color: var(--td-danger);
 }

@@ -10,17 +10,17 @@
   align-items: center;
   min-height: 8rem;
   padding: 0.75rem;
-  border: 1px dashed var(--color-border);
-  border-radius: var(--radius-md);
-  background: var(--color-surface-muted);
+  border: 1px dashed var(--td-paper-edge);
+  border-radius: var(--td-radius-paper);
+  background: var(--td-paper-deep);
 }
 
 .imagePreview {
   max-height: 14rem;
   max-width: 100%;
   object-fit: cover;
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-sm);
+  border-radius: var(--td-radius-paper);
+  box-shadow: var(--td-shadow-paper);
 }
 
 .field {
@@ -32,23 +32,32 @@
 .label {
   font-size: 0.85rem;
   font-weight: 600;
+  color: var(--td-paper-text);
 }
 
 .input,
 .select,
 .textarea {
   padding: 0.55rem 0.65rem;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  background: var(--color-surface);
-  color: var(--color-text);
+  border: 1.5px solid var(--td-paper-edge);
+  border-radius: var(--td-radius-button);
+  background: var(--td-paper);
+  color: var(--td-paper-text);
   font-family: inherit;
   font-size: 0.95rem;
 }
 
+.input:focus,
+.select:focus,
+.textarea:focus {
+  outline: none;
+  border-color: var(--td-gold-deep);
+  box-shadow: 0 0 0 2px rgba(233, 162, 59, 0.35);
+}
+
 .input::placeholder,
 .textarea::placeholder {
-  color: var(--color-text-muted);
+  color: var(--td-paper-text-muted);
   opacity: 0.8;
 }
 
@@ -66,13 +75,13 @@
 .error {
   margin: 0;
   font-size: 0.8rem;
-  color: var(--color-danger);
+  color: var(--td-danger);
 }
 
 .sectionTitle {
   margin: 0.5rem 0 0;
   font-size: 1.05rem;
-  color: var(--color-primary);
+  color: var(--td-brick);
   font-weight: 700;
 }
 
@@ -82,19 +91,19 @@
   gap: 0.75rem;
   margin-top: 1rem;
   padding-top: 0.5rem;
-  border-top: 1px solid var(--color-border);
+  border-top: 1px solid var(--td-paper-edge);
 }
 
 .submitBtn {
-  border-color: var(--color-accent);
-  color: #fff6e0;
+  border-color: var(--td-gold);
+  color: var(--td-paper);
   font-weight: 700;
 }
 
 .submitBtn:hover:not(:disabled) {
-  background: var(--color-accent);
-  color: #43301b;
-  border-color: var(--color-accent);
+  background: var(--td-gold);
+  color: var(--td-paper-text);
+  border-color: var(--td-gold);
 }
 
 .ingredientRow,
@@ -132,9 +141,9 @@
   display: flex;
   align-items: center;
   gap: 9px;
-  background: var(--color-surface-alt, #f5ebdc);
-  border: 1.5px solid var(--color-border, #e8d9c4);
-  border-radius: 12px;
+  background: var(--td-paper-deep);
+  border: 1.5px solid var(--td-paper-edge);
+  border-radius: var(--td-radius-paper);
   padding: 9px 12px;
   font-weight: 700;
   font-size: 14px;
@@ -144,7 +153,7 @@
 .toggleRow input {
   width: 18px;
   height: 18px;
-  accent-color: var(--color-plum, #4a1525);
+  accent-color: var(--td-plum);
 }
 
 .stepExtra {
@@ -164,14 +173,14 @@
 .chipLabel {
   font-size: 12.5px;
   font-weight: 700;
-  color: var(--color-text-muted, #7a6455);
+  color: var(--td-paper-text-muted);
   margin-right: 2px;
 }
 
 .chip {
-  border: 1.5px solid var(--color-border, #e8d9c4);
-  background: #fff;
-  border-radius: 999px;
+  border: 1.5px solid var(--td-paper-edge);
+  background: var(--td-paper);
+  border-radius: var(--td-radius-full);
   padding: 4px 11px;
   font-size: 13px;
   font-weight: 600;
@@ -180,13 +189,13 @@
 }
 
 .chipOn {
-  background: var(--color-plum, #4a1525);
-  color: #ffe9be;
-  border-color: var(--color-plum, #4a1525);
+  background: var(--td-plum);
+  color: var(--td-cream);
+  border-color: var(--td-plum);
 }
 
 .hint {
-  color: var(--color-warning, #9a5b00);
+  color: var(--td-warning);
   font-size: 13.5px;
   font-weight: 600;
   margin-top: 6px;
@@ -195,10 +204,10 @@
 .suggestBtn {
   margin-top: 6px;
   padding: 4px 10px;
-  border-radius: var(--radius-full, 999px);
-  border: 1px dashed var(--color-accent, #e9a23b);
+  border-radius: var(--td-radius-full);
+  border: 1px dashed var(--td-gold);
   background: transparent;
-  color: var(--color-primary, #c8553d);
+  color: var(--td-brick);
   font-size: 0.8rem;
   font-weight: 700;
   cursor: pointer;
@@ -231,49 +240,39 @@
 .stepFieldLabel {
   font-size: 0.82rem;
   font-weight: 700;
-  color: var(--color-text);
+  color: var(--td-paper-text);
 }
 
 .stepHint {
   font-size: 0.78rem;
-  color: var(--color-text-muted, #7a6455);
+  color: var(--td-paper-text-muted);
   margin: 0;
 }
 
-/* ===== H10 — paper-context text colors =====
+/* ===== Paper-context text colors =====
    The form renders inside the editor's paper cards (light in both
-   themes). Text that sits directly on the card must use the fixed
-   paper palette: the flipping --color-* tokens turned cream/bright on
-   paper in dark mode (1.9-2.3:1). Fields keep their own flipping
-   surface+text pairing (dark inputs in dark mode) — only the
-   on-card text is pinned here. */
+   themes), so on-card text uses the fixed Theme D paper palette
+   instead of any theme-flipping token (H10 contrast pass, kept). */
 .form {
-  color: var(--paper-text, #43301b);
+  color: var(--td-paper-text);
 }
 
-.label,
-/* .stepFieldLabel / .stepHint / .chipLabel intentionally NOT pinned:
-   the step-editor blocks sit on a flipping panel, so they keep their
-   original flipping --color-text / --color-text-muted declarations. */
-
 .sectionTitle {
-  color: #b03e26;
+  color: var(--td-brick);
 }
 
 .suggestBtn {
-  color: #b03e26;
+  color: var(--td-brick);
 }
 
 .hint {
-  color: var(--td-warning, #9a5b00);
+  color: var(--td-warning);
 }
 
 .error {
-  color: var(--td-danger, #b42318);
+  color: var(--td-danger);
 }
 
-/* The toggle rows paint their own flipping surface, so their text
-   keeps the flipping pairing instead of the pinned form color. */
 .toggleRow {
-  color: var(--color-text);
+  color: var(--td-paper-text);
 }

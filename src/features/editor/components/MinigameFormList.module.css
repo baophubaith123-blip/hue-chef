@@ -7,7 +7,7 @@
 
 .statusBanner {
   padding: 0.85rem 1.25rem;
-  border-radius: var(--radius-md);
+  border-radius: var(--td-radius-paper);
   font-size: 0.9rem;
   font-weight: 600;
   display: flex;
@@ -18,18 +18,17 @@
 }
 
 .statusBannerWarning {
-  background: var(--color-warning-soft);
-  /* The banner sits on the paper form card: the soft wash composites
-     to a light tone in both themes, while --color-warning flips to
-     bright amber in dark mode (1.67:1). Pin the strong tone (H10). */
-  color: var(--td-warning-strong, #7a4a00);
-  border: 1px solid var(--color-warning);
+  background: rgba(154, 91, 0, 0.12);
+  /* The banner sits on the paper form card: the soft wash stays a light
+     tone in both themes, so the text pins the strong warning tone (H10). */
+  color: var(--td-warning-strong);
+  border: 1px solid var(--td-warning);
 }
 
 .statusBannerSuccess {
-  background: var(--color-success-soft);
-  color: var(--td-success-strong, #14532d);
-  border: 1px solid var(--color-success);
+  background: rgba(21, 128, 61, 0.10);
+  color: var(--td-success-strong);
+  border: 1px solid var(--td-success);
 }
 
 .minigameItem {
@@ -37,10 +36,12 @@
   flex-direction: column;
   gap: 0.85rem;
   padding: 1.25rem;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
+  background: var(--td-paper);
+  color: var(--td-paper-text);
+  border: 1.5px solid var(--td-paper-edge);
+  border-top: 4px solid var(--td-wood-dark);
+  border-radius: var(--td-radius-wood);
+  box-shadow: var(--td-shadow-paper);
 }
 
 .itemTopRow {
@@ -50,7 +51,7 @@
   gap: 0.75rem;
   flex-wrap: wrap;
   padding-bottom: 0.75rem;
-  border-bottom: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--td-paper-edge);
 }
 
 .itemControls {
@@ -61,12 +62,18 @@
 
 .typeSelect {
   padding: 0.45rem 0.75rem;
-  border-radius: var(--radius-md);
-  border: 1px solid var(--color-border);
-  background: var(--color-surface);
-  color: var(--color-text);
+  border-radius: var(--td-radius-button);
+  border: 1.5px solid var(--td-paper-edge);
+  background: var(--td-paper);
+  color: var(--td-paper-text);
   font-weight: 700;
   font-size: 0.85rem;
+}
+
+.typeSelect:focus {
+  outline: none;
+  border-color: var(--td-gold-deep);
+  box-shadow: 0 0 0 2px rgba(233, 162, 59, 0.35);
 }
 
 .fieldGrid {
@@ -87,19 +94,27 @@
 
 .label {
   font-size: 0.8rem;
-  font-weight: 700;
-  color: var(--color-text-muted);
+  font-weight: 600;
+  color: var(--td-paper-text);
 }
 
 .input,
 .select,
 .textarea {
   padding: 0.5rem 0.75rem;
-  border-radius: var(--radius-md);
-  border: 1px solid var(--color-border);
-  background: var(--color-surface);
-  color: var(--color-text);
+  border-radius: var(--td-radius-button);
+  border: 1.5px solid var(--td-paper-edge);
+  background: var(--td-paper);
+  color: var(--td-paper-text);
   font-size: 0.9rem;
+}
+
+.input:focus,
+.select:focus,
+.textarea:focus {
+  outline: none;
+  border-color: var(--td-gold-deep);
+  box-shadow: 0 0 0 2px rgba(233, 162, 59, 0.35);
 }
 
 .textarea {
@@ -124,7 +139,7 @@
   cursor: pointer;
   width: 1.15rem;
   height: 1.15rem;
-  accent-color: var(--color-primary);
+  accent-color: var(--td-brick);
 }
 
 .actionsCheckboxGroup {
@@ -139,15 +154,15 @@
   align-items: center;
   gap: 0.35rem;
   padding: 0.35rem 0.6rem;
-  border-radius: var(--radius-sm);
-  background: var(--color-surface-alt);
-  border: 1px solid var(--color-border);
+  border-radius: var(--td-radius-button);
+  background: var(--td-paper-deep);
+  border: 1px solid var(--td-paper-edge);
   font-size: 0.85rem;
   cursor: pointer;
 }
 
 .actionCheckItem input {
-  accent-color: var(--color-primary);
+  accent-color: var(--td-brick);
 }
 
 .errorsList {
@@ -155,10 +170,10 @@
   flex-direction: column;
   gap: 0.25rem;
   padding: 0.5rem 0.75rem;
-  background: var(--color-danger-soft);
+  background: rgba(180, 35, 24, 0.08);
   /* Same paper-context pinning as the status banners (H10). */
-  color: var(--td-danger, #b42318);
-  border-radius: var(--radius-md);
+  color: var(--td-danger);
+  border-radius: var(--td-radius-paper);
   font-size: 0.85rem;
   font-weight: 600;
 }

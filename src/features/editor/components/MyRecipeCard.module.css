@@ -3,19 +3,21 @@
   flex-direction: column;
   gap: 0.5rem;
   padding: 0;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  background: var(--color-surface);
+  border: 1.5px solid var(--td-paper-edge);
+  border-top: 4px solid var(--td-wood-dark);
+  border-radius: var(--td-radius-paper);
+  background: var(--td-paper);
+  color: var(--td-paper-text);
   height: 100%;
   overflow: hidden;
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--td-shadow-paper);
   transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
 }
 
 .card:hover {
   transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
-  border-color: var(--color-primary);
+  box-shadow: var(--td-shadow-paper);
+  border-color: var(--td-brick);
 }
 
 .imageLink {
@@ -28,7 +30,8 @@
   width: 100%;
   height: 9rem;
   object-fit: cover;
-  background: var(--color-surface-muted);
+  background: var(--td-paper-deep);
+  border-radius: var(--td-radius-paper) var(--td-radius-paper) 0 0;
 }
 
 .head {
@@ -50,14 +53,14 @@
 }
 
 .titleLink:hover {
-  color: var(--color-accent);
+  color: var(--td-gold);
 }
 
 .meta {
   margin: 0;
   padding: 0 1rem;
   font-size: 0.85rem;
-  color: var(--color-text-muted);
+  color: var(--td-paper-text-muted);
 }
 
 .actions {
@@ -70,22 +73,22 @@
 
 .link {
   font-size: 0.85rem;
-  color: var(--color-primary);
+  color: var(--td-brick);
   text-decoration: none;
   font-weight: 600;
   padding: 0.35rem 0.15rem;
 }
 
 .link:hover {
-  color: var(--color-accent);
+  color: var(--td-gold);
 }
 
 .reason {
   margin: 0 1rem 0.25rem;
   padding: 0.5rem 0.65rem;
   font-size: 0.8rem;
-  color: var(--color-danger);
-  background: var(--color-danger-soft);
-  border-radius: var(--radius-md);
+  color: var(--td-danger);
+  background: rgba(180, 35, 24, 0.08);
+  border-radius: var(--td-radius-paper);
   line-height: 1.4;
 }

@@ -1,14 +1,14 @@
 .back {
   display: inline-block;
   margin-bottom: 0.75rem;
-  color: var(--td-page-text-muted, #7a6455);
+  color: var(--td-page-text-muted);
   text-decoration: none;
   font-size: 0.9rem;
   font-weight: 600;
 }
 
 .back:hover {
-  color: var(--td-brick, #b03e26);
+  color: var(--td-brick);
 }
 
 .head {
@@ -20,20 +20,20 @@
 
 .title {
   margin: 0;
-  color: var(--td-brick, #b03e26);
+  color: var(--td-brick);
 }
 
 .rejected {
-  color: var(--td-danger, #b42318);
+  color: var(--td-danger);
 }
 
 .rejectedBanner {
   margin-top: 1rem;
   padding: 0.85rem 1rem;
-  background: var(--td-brick-soft, rgba(176, 62, 38, 0.12));
-  color: var(--td-danger, #b42318);
-  border-radius: var(--td-radius-button, 10px);
-  border-left: 4px solid var(--td-danger, #b42318);
+  background: var(--td-brick-soft);
+  color: var(--td-danger);
+  border-radius: var(--td-radius-button);
+  border-left: 4px solid var(--td-danger);
 }
 
 .rejectedReason {
@@ -45,21 +45,21 @@
 .success {
   margin-top: 1rem;
   padding: 0.75rem 1rem;
-  color: var(--td-success, #15803d);
-  background: rgba(21, 128, 61, 0.12);
-  border-radius: var(--td-radius-button, 10px);
-  border-left: 4px solid var(--td-success, #15803d);
+  color: var(--td-success);
+  background: rgba(21, 128, 61, 0.10);
+  border-radius: var(--td-radius-button);
+  border-left: 4px solid var(--td-success);
   font-weight: 600;
 }
 
 [data-theme='dark'] .success {
-  color: var(--td-success-bright, #22c55e);
+  color: var(--td-success-bright);
 }
 
 .sectionTitle {
   margin: 1rem 0 0.35rem;
   font-size: 1rem;
-  color: var(--td-plum, #4a1525);
+  color: var(--td-plum);
   font-weight: 700;
 }
 
@@ -68,15 +68,18 @@
   display: flex;
   justify-content: center;
   padding: 0.5rem;
-  background: var(--td-paper-deep, #f7e8c6);
-  border-radius: var(--td-radius-paper, 12px);
+  background: var(--td-paper);
+  border: 1.5px solid var(--td-paper-edge);
+  border-top: 4px solid var(--td-wood-dark);
+  border-radius: var(--td-radius-paper);
+  box-shadow: var(--td-shadow-paper);
 }
 
 .hero {
   width: 100%;
   max-height: 20rem;
   object-fit: cover;
-  border-radius: var(--td-radius-button, 10px);
+  border-radius: var(--td-radius-button);
   box-shadow: var(--td-shadow-paper);
 }
 
@@ -86,17 +89,17 @@
   gap: 0.75rem;
   margin-top: 1rem;
   padding-top: 1rem;
-  border-top: 1px solid var(--td-paper-edge, #e8d5ae);
+  border-top: 1px solid var(--td-paper-edge);
 }
 
 .submitBtn {
-  background: var(--td-gold, #e9a23b);
-  color: var(--td-ink, #4a2c14);
-  border-color: var(--td-gold, #e9a23b);
+  background: var(--td-gold);
+  color: var(--td-ink);
+  border-color: var(--td-gold);
 }
 
 .submitBtn:hover:not(:disabled) {
-  background: var(--td-gold-deep, #c97a1f);
+  background: var(--td-gold-deep);
 }
 
 .stepsList {
@@ -113,9 +116,10 @@
   counter-increment: stepCounter;
   position: relative;
   padding: 0.75rem 0.85rem 0.75rem 3rem;
-  background: var(--td-paper-deep, #f7e8c6);
-  border-radius: var(--td-radius-button, 10px);
-  border: 1px solid var(--td-paper-edge, #e8d5ae);
+  background: var(--td-paper);
+  border-radius: var(--td-radius-button);
+  border: 1.5px solid var(--td-paper-edge);
+  border-top: 4px solid var(--td-wood-dark);
 }
 
 .stepItem::before {
@@ -125,9 +129,9 @@
   top: 0.75rem;
   width: 1.75rem;
   height: 1.75rem;
-  border-radius: 999px;
-  background: var(--td-gold, #e9a23b);
-  color: var(--td-ink, #4a2c14);
+  border-radius: var(--td-radius-full);
+  background: var(--td-gold);
+  color: var(--td-ink);
   font-weight: 700;
   font-size: 0.9rem;
   display: flex;
@@ -136,12 +140,12 @@
 }
 
 .stepTitle {
-  color: var(--td-plum, #4a1525);
+  color: var(--td-plum);
   font-size: 0.95rem;
 }
 
 .stepTime {
-  color: var(--td-paper-text-muted, #7a5c38);
+  color: var(--td-paper-text-muted);
   font-size: 0.8rem;
   font-weight: 500;
 }
@@ -149,6 +153,6 @@
 .stepDesc {
   margin: 0.25rem 0 0;
   font-size: 0.9rem;
-  color: var(--td-paper-text, #43301b);
+  color: var(--td-paper-text);
   line-height: 1.5;
 }

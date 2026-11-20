@@ -1,0 +1,152 @@
+/* Editor shell — "Bàn biên tập": wood plaque header over paper content.
+   Same class contract as the shared RoleShell (layout, header, brand,
+   brandAccent, title, nav, navLink, navLinkActive, navLinkCta,
+   badgeAccent, grid, mailList, mailItem, mailUnread, errorBanner,
+   actionsRow, pageIntro) restyled with Theme D tokens only. */
+.layout {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 2.5rem;
+}
+
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+  padding: 1rem 1.25rem;
+  background: var(--td-wood-gradient);
+  border-radius: var(--td-radius-wood);
+  border-bottom: 3px solid var(--td-gold-deep);
+  box-shadow: var(--td-shadow-wood);
+}
+
+.title {
+  margin: 0;
+  font-size: 1.5rem;
+  color: var(--td-cream);
+  font-family: var(--td-font-display);
+}
+
+.nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  align-items: center;
+}
+
+.navLink {
+  font-size: 0.9rem;
+  text-decoration: none;
+  color: var(--td-cream-muted);
+  padding: 0.35rem 0.55rem;
+  border-radius: var(--td-radius-button);
+}
+
+.navLink:hover {
+  background: rgba(250, 245, 239, 0.14);
+  color: var(--td-cream);
+}
+
+.navLinkActive {
+  color: var(--td-ink);
+  background: var(--td-paper);
+  font-weight: 700;
+}
+
+.grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  margin: 1rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.mailList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.mailItem {
+  padding: 0.65rem 0.75rem;
+  border: 1px solid var(--td-wood-light);
+  border-radius: var(--td-radius-button);
+  background: var(--td-paper);
+  color: var(--td-paper-text);
+  font-size: 0.9rem;
+}
+
+.mailUnread {
+  border-color: var(--td-brick);
+}
+
+.errorBanner {
+  margin: 0.75rem 0 0;
+  padding: 0.65rem 0.85rem;
+  border-radius: var(--td-radius-button);
+  background: var(--td-brick-soft);
+  color: var(--td-danger);
+  font-size: 0.9rem;
+}
+
+[data-theme='dark'] .errorBanner {
+  color: var(--td-cok-bright);
+}
+
+.actionsRow {
+  margin-top: 0.75rem;
+}
+
+.pageIntro {
+  margin: 0 0 1rem;
+  color: var(--td-page-text-muted);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.brandAccent {
+  font-size: 1.6rem;
+  line-height: 1;
+}
+
+.navLinkCta {
+  background: var(--td-plum);
+  color: var(--td-cream);
+  font-weight: 600;
+  border-radius: var(--td-radius-button);
+  transition: background 150ms ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.navLinkCta:hover {
+  background: var(--td-plum-active);
+  color: var(--td-cream);
+}
+
+.badgeAccent {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.25rem;
+  height: 1.25rem;
+  padding: 0 0.35rem;
+  border-radius: var(--td-radius-full);
+  background: var(--td-gold);
+  color: var(--td-plum-deep);
+  font-size: 0.7rem;
+  font-weight: 700;
+  margin-left: 0.35rem;
+}

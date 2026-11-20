@@ -7,16 +7,18 @@
 
 .stat {
   padding: 0.75rem;
-  border-radius: var(--td-radius-button, 10px);
-  background: var(--td-paper-deep, #f7e8c6);
-  border: 1px solid var(--td-paper-edge, #e8d5ae);
-  color: var(--td-paper-text, #43301b);
+  border-radius: var(--td-radius-button);
+  background: var(--td-paper);
+  border: 1.5px solid var(--td-paper-edge);
+  border-top: 4px solid var(--td-wood-dark);
+  box-shadow: var(--td-shadow-paper);
+  color: var(--td-paper-text);
 }
 
 .statLabel {
   display: block;
   font-size: 0.75rem;
-  color: var(--td-paper-text-muted, #7a5c38);
+  color: var(--td-paper-text-muted);
 }
 
 .statValue {
@@ -30,7 +32,7 @@
 
 .muted {
   margin: 0;
-  color: var(--td-paper-text-muted, #7a5c38);
+  color: var(--td-paper-text-muted);
 }
 
 .mailBody {
@@ -40,5 +42,5 @@
 .mailReason {
   margin: 0 0 0.35rem;
   font-size: 0.85rem;
-  color: var(--td-danger, #b42318);
+  color: var(--td-danger);
 }
