@@ -26,7 +26,6 @@ import { SceneShell } from '@/pages/player/SceneShell';
 import { useTranslation } from '@/i18n/useTranslation';
 import { ImageWithFallback } from '@/components/ImageWithFallback';
 
-import dishSignArt from '@/assets/theme-d/game/r4-dish-sign.webp';
 import dishFrameArt from '@/assets/theme-d/game/r4-dish-frame.webp';
 import btnPlayPinArt from '@/assets/theme-d/game/r4-btn-play-pin.webp';
 import chipTimeArt from '@/assets/theme-d/game/r4-chip-time.webp';
@@ -142,7 +141,6 @@ export default function RecipeDetailPage() {
             {/* Đợt 4: tên món khắc trên biển cổng treo dây (r4-dish-sign,
                 mặt biển đã làm trống — chữ thật đè lên vùng ván). */}
             <div className={styles.dishSign}>
-              <img className={styles.dishSignImg} src={dishSignArt} alt="" aria-hidden="true" />
               <div className={styles.dishSignText}>
                 <h1 className={styles.title}>{recipe.name}</h1>
                 <div className={styles.gradeRow}>
