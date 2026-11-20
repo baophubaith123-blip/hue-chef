@@ -28,7 +28,6 @@ import { GuestGate } from '@/pages/player/GuestGate';
 
 import journeyMap from '@/assets/theme-d/game/r4-home-journey.webp';
 import questsBoard from '@/assets/theme-d/game/r4-home-quests.webp';
-import checkinBamboo from '@/assets/theme-d/game/r4-home-checkin.webp';
 import quickAwning from '@/assets/theme-d/game/r4-home-quick-awning.webp';
 
 import styles from '@/pages/player/HomePage.module.css';
@@ -402,13 +401,10 @@ export default function HomePage() {
             </Link>
 
             {/* Điểm danh — Đợt lan 4: lịch slat tre (r4-home-checkin)
-                ôm quanh panel điểm danh; xu N1–N7 của thiết kế là mốc
-                ngày trang trí ở viền dưới khung tre. */}
+                làm khung viền quanh panel điểm danh (border-image
+                trong CSS: cọc tre + khớp nối góc của chính asset). */}
             <div className={styles.checkinScene}>
-              <img src={checkinBamboo} alt="" className={styles.checkinBg} draggable={false} />
-              <div className={styles.checkinInner}>
-                <CheckinPanel />
-              </div>
+              <CheckinPanel />
             </div>
               </>
             )}
