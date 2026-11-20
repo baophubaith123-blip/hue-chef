@@ -25,6 +25,12 @@ import { useTranslation } from '@/i18n/useTranslation';
 import { SceneShell } from '@/pages/player/SceneShell';
 
 import { GuestGate } from '@/pages/player/GuestGate';
+
+import journeyMap from '@/assets/theme-d/game/r4-home-journey.webp';
+import questsBoard from '@/assets/theme-d/game/r4-home-quests.webp';
+import checkinBamboo from '@/assets/theme-d/game/r4-home-checkin.webp';
+import quickAwning from '@/assets/theme-d/game/r4-home-quick-awning.webp';
+
 import styles from '@/pages/player/HomePage.module.css';
 
 export default function HomePage() {
@@ -272,13 +278,13 @@ export default function HomePage() {
             />
           </section>
 
-        {/* Tiếp tục hành trình */}
+        {/* Tiếp tục hành trình — Đợt lan 4: bảng bản đồ giấy cổ
+            (r4-home-journey); chữ thật nằm trên mặt giấy của bản đồ. */}
         {nextRecipe ? (
-          <WoodPanel
-            title={t('dashboard.continueJourney')}
-            titleLevel="h2"
-            className={styles.woodPanel}
-          >
+          <section className={styles.journeyScene} aria-label={t('dashboard.continueJourney')}>
+            <img src={journeyMap} alt="" className={styles.journeyBg} draggable={false} />
+            <div className={styles.journeyContent}>
+            <h2 className={styles.scenePanelTitle}>{t('dashboard.continueJourney')}</h2>
             <p className={`${styles.sectionSubtitle} ${styles.introGap}`}>
               {t('dashboard.continueJourneySubtitle')}
             </p>
@@ -334,7 +340,8 @@ export default function HomePage() {
                 </div>
               </div>
             </div>
-          </WoodPanel>
+            </div>
+          </section>
         ) : null}
 
           </div>
@@ -346,17 +353,23 @@ export default function HomePage() {
               </div>
             ) : (
               <>
-            <Link to="/quests" className={styles.todayLink}>
-              <WoodPanel title={dict.scene.todayTitle} titleLevel="h2">
-              <p className={styles.todayHint}>{dict.scene.todayHint}</p>
-              <ul className={styles.todayList}>
-                {dailyQuests.map((instance) => {
+            {/* Tóm tắt nhiệm vụ — Đợt lan 4: bảng ghim giấy + dây đỏ
+                (r4-home-quests); mỗi nhiệm vụ là chữ thật trên một tờ
+                giấy ghim của bảng. */}
+            <Link to="/quests" className={styles.questsScene}>
+              <img src={questsBoard} alt="" className={styles.questsBg} draggable={false} />
+              <div className={styles.questsHead}>
+                <h2 className={styles.questsTitle}>{dict.scene.todayTitle}</h2>
+                <p className={styles.todayHint}>{dict.scene.todayHint}</p>
+              </div>
+              <ul className={styles.questsPapers}>
+                {dailyQuests.slice(0, 3).map((instance) => {
                   const def = questDefById(instance.defId);
                   if (!def) return null;
                   const textFn = dict.events.quests.metricText[def.metric];
                   const done = instance.progress >= def.target;
                   return (
-                    <li key={instance.defId} className={styles.todayItem}>
+                    <li key={instance.defId} className={styles.questPaper}>
                       <span
                         className={`${styles.todayCheck} ${
                           instance.claimed || done ? styles.todayCheckDone : ''
@@ -386,24 +399,29 @@ export default function HomePage() {
                   );
                 })}
               </ul>
-              </WoodPanel>
             </Link>
 
-            <div className={styles.paperFrame}>
-              <CheckinPanel />
+            {/* Điểm danh — Đợt lan 4: lịch slat tre (r4-home-checkin)
+                ôm quanh panel điểm danh; xu N1–N7 của thiết kế là mốc
+                ngày trang trí ở viền dưới khung tre. */}
+            <div className={styles.checkinScene}>
+              <img src={checkinBamboo} alt="" className={styles.checkinBg} draggable={false} />
+              <div className={styles.checkinInner}>
+                <CheckinPanel />
+              </div>
             </div>
               </>
             )}
           </aside>
         </div>
 
-        {/* Chế độ chơi nhanh (4 link) */}
-        <WoodPanel
-          title={dict.dashboard.quickModesTitle}
-          titleLevel="h2"
-          className={styles.woodPanel}
-          bodyClassName={styles.quickModesGrid}
-        >
+        {/* Chế độ chơi nhanh — Đợt lan 4: bảng dưới mái hiên sọc
+            (r4-home-quick-awning); các thẻ chế độ treo dưới mái hiên. */}
+        <section className={styles.quickScene} aria-label={dict.dashboard.quickModesTitle}>
+          <img src={quickAwning} alt="" className={styles.quickAwningImg} draggable={false} />
+          <div className={styles.quickBody}>
+            <h2 className={styles.quickTitle}>{dict.dashboard.quickModesTitle}</h2>
+            <div className={styles.quickModesGrid}>
             <Link to="/recipes" className={styles.quickModeCard}>
               <div className={styles.quickModeIcon} aria-hidden="true">
                 {gameIcon('recipes') ? (
@@ -481,7 +499,9 @@ export default function HomePage() {
               </div>
               <span className={styles.quickModeArrow}>›</span>
             </Link>
-        </WoodPanel>
+            </div>
+          </div>
+        </section>
 
         {/* Thống kê nhanh (4 chỉ số) */}
         <section aria-label={t('dashboard.statLevel')}>

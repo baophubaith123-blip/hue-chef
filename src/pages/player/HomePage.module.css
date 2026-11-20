@@ -3,10 +3,54 @@
    remaining dashboard blocks as Án A hanging wood panels (WoodPanel)
    on the plum scene (Gói Mẫu Căn Chỉnh). */
 
+/* Đợt lan 4: the whole home page stands in the festival courtyard —
+   the approved courtyard scene (light/dark per theme) is the page
+   backdrop and every board below is a designed object on it. */
 .page {
   display: flex;
   flex-direction: column;
   gap: 22px;
+  padding: clamp(10px, 2vw, 22px);
+  border-radius: 22px;
+  border: 3px solid rgba(233, 162, 59, 0.55);
+  background: url('../../assets/theme-d/scenes/scene-courtyard-light.webp') center 18% / cover
+    no-repeat;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+}
+
+:global([data-theme='dark']) .page {
+  background-image: url('../../assets/theme-d/scenes/scene-courtyard-dark.webp');
+}
+
+/* Scene panels (Đợt lan 4) share the WoodPanel entrance sway. */
+@keyframes scenePanelSway {
+  0% {
+    transform: rotate(0.7deg);
+  }
+  55% {
+    transform: rotate(-0.3deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+.scenePanelTitle {
+  margin: 0;
+  font-family: var(--td-font-game-display);
+  font-size: clamp(1.3rem, 2.4vw, 1.8rem);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  color: #4a2410;
+  text-shadow: 0 1px 0 rgba(255, 246, 224, 0.7);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .journeyScene,
+  .questsScene,
+  .quickScene {
+    animation: none;
+  }
 }
 
 /* ---------- Sign area ---------- */
@@ -373,13 +417,67 @@
   width: 100%;
 }
 
-/* Nhiệm vụ hôm nay: toàn bộ bảng là Link tới /quests; mặt bảng là
-   WoodPanel án A — biển khắc thay băng keo và tiêu đề giấy cũ. Link
-   cấp màu mực giấy cho nội dung bên trong bảng. */
-.todayLink {
+/* Nhiệm vụ hôm nay — Đợt lan 4: the whole board is the Link to
+   /quests; its face is the approved pinboard asset (r4-home-quests):
+   title + hint sit on the top wood strip, and each daily quest is
+   real text on one of the three pinned papers (papers' zone measured
+   on the asset: x 5.5%–94.5% in three columns, y 31%–88%). */
+.questsScene {
+  position: relative;
   display: block;
+  aspect-ratio: 803 / 400;
   color: var(--td-paper-text);
   text-decoration: none;
+  transform-origin: 50% -30px;
+  animation: scenePanelSway 0.9s ease-out 1;
+  filter: drop-shadow(0 12px 22px rgba(0, 0, 0, 0.32));
+  transition: transform 0.15s ease;
+}
+
+.questsScene:hover {
+  transform: translateY(-2px);
+}
+
+.questsScene:active {
+  transform: scale(0.99);
+}
+
+.questsBg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.questsHead {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 28%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 0 8%;
+  text-align: center;
+}
+
+.questsTitle {
+  margin: 0;
+  font-family: var(--td-font-game-display);
+  font-size: clamp(1.05rem, 1.7vw, 1.35rem);
+  font-weight: 400;
+  letter-spacing: 0.03em;
+  color: #fff6e0;
+  text-shadow: 0 2px 0 rgba(58, 28, 13, 0.65);
+}
+
+.questsHead .todayHint {
+  margin: 0;
+  color: #ffe9bd;
+  text-shadow: 0 1px 0 rgba(58, 28, 13, 0.55);
 }
 
 .todayHint {
@@ -390,18 +488,44 @@
   color: var(--td-paper-text-muted);
 }
 
-.todayList {
+.questsPapers {
+  position: absolute;
+  left: 5.5%;
+  right: 5.5%;
+  top: 31%;
+  bottom: 11%;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 7%;
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
-.todayItem {
+.questPaper {
   display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  padding: 10px 2px;
-  border-top: 1px solid rgba(67, 48, 27, 0.15);
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 7% 5% 4%;
+  text-align: center;
+  overflow: hidden;
+}
+
+.questPaper .todayText {
+  font-size: 0.8rem;
+  line-height: 1.32;
+}
+
+.questPaper .todayCheck {
+  width: 20px;
+  height: 20px;
+  margin-top: 0;
+}
+
+.questPaper .todayReward {
+  font-size: 0.74rem;
+  padding: 2px 8px;
 }
 
 .todayCheck {
@@ -453,16 +577,46 @@
   white-space: nowrap;
 }
 
-.paperFrame {
+/* Điểm danh — Đợt lan 4: the bamboo-slat calendar asset
+   (r4-home-checkin) frames the check-in panel. The panel keeps its
+   own content, but its Án A wood shell is neutralised inside the
+   bamboo frame (structural selectors: the panel root is the inner
+   wrapper's only child; its first spans are the hanging ropes) so
+   the day cells sit directly on the bamboo slats and the panel's
+   carved sign rests on the top bamboo rail. */
+.checkinScene {
+  position: relative;
   flex: 1;
   display: flex;
-  border-radius: 14px;
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+  filter: drop-shadow(0 12px 22px rgba(0, 0, 0, 0.3));
 }
 
-.paperFrame > * {
+.checkinBg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.checkinInner {
+  position: relative;
+  flex: 1;
+  display: flex;
+  padding: 12% 8.5% 13%;
+}
+
+.checkinInner > div {
   flex: 1;
   min-width: 0;
+  margin-top: 0;
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+  animation: none;
+}
+
+.checkinInner > div > span {
+  display: none;
 }
 
 /* ---------- Shared wood panels (Án A) ---------- */
@@ -490,6 +644,44 @@
 
 /* ---------- Quick modes & event cards ---------- */
 
+/* Đợt lan 4: quick modes hang under the approved striped awning
+   (r4-home-quick-awning) — the awning strip caps a wooden stall body
+   and the mode cards are paper tags hanging inside it. */
+.quickScene {
+  transform-origin: 50% -30px;
+  animation: scenePanelSway 0.9s ease-out 1;
+  filter: drop-shadow(0 14px 24px rgba(0, 0, 0, 0.35));
+}
+
+.quickAwningImg {
+  position: relative;
+  z-index: 2;
+  display: block;
+  width: 100%;
+  height: auto;
+  margin-bottom: -4px;
+}
+
+.quickBody {
+  padding: 18px 18px 20px;
+  background: var(--td-wood-gradient);
+  border: 3px solid var(--td-wood-dark);
+  border-top: none;
+  border-radius: 0 0 16px 16px;
+  box-shadow: inset 0 -6px 14px rgba(40, 20, 4, 0.35);
+}
+
+.quickTitle {
+  margin: 0 0 14px;
+  text-align: center;
+  font-family: var(--td-font-game-display);
+  font-size: clamp(1.25rem, 2.4vw, 1.7rem);
+  font-weight: 400;
+  letter-spacing: 0.03em;
+  color: #fff6e0;
+  text-shadow: 0 2px 0 rgba(58, 28, 13, 0.65);
+}
+
 .quickModesGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
@@ -503,7 +695,7 @@
   gap: 12px;
   padding: 14px 16px;
   border-radius: 12px;
-  background: rgba(255, 255, 255, 0.55);
+  background: linear-gradient(180deg, #fff8e6, var(--td-paper-deep));
   border: 2px solid var(--td-paper-edge);
   color: var(--td-paper-text);
   text-decoration: none;
@@ -514,6 +706,11 @@
 .eventCard:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 16px rgba(67, 48, 27, 0.18);
+}
+
+.quickModeCard:active,
+.eventCard:active {
+  transform: scale(0.97);
 }
 
 .quickModeIcon,
@@ -608,6 +805,30 @@
 
 /* ---------- Journey ---------- */
 
+/* Đợt lan 4: the journey panel is the approved antique map asset
+   (r4-home-journey) — real text and the next dish sit on the map's
+   parchment face, inset from the frame, the right scroll roll and
+   the bottom roll (padding in % of the panel width ≈ the asset's
+   595×428 proportions). */
+.journeyScene {
+  position: relative;
+  transform-origin: 50% -30px;
+  animation: scenePanelSway 0.9s ease-out 1;
+  filter: drop-shadow(0 14px 24px rgba(0, 0, 0, 0.35));
+}
+
+.journeyBg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.journeyContent {
+  position: relative;
+  padding: 6.5% 15% 8% 7%;
+}
+
 .journeyCard {
   display: flex;
   gap: 18px;
@@ -616,7 +837,7 @@
 
 .journeyImageWrap {
   flex: none;
-  width: 240px;
+  width: 200px;
   max-width: 100%;
 }
 
@@ -903,6 +1124,27 @@
 @media (max-width: 640px) {
   .signNoiNoi {
     display: none;
+  }
+
+  .page {
+    padding: 10px;
+  }
+
+  .journeyContent {
+    padding: 8% 13% 10% 6%;
+  }
+
+  .questPaper .todayText {
+    font-size: 0.68rem;
+  }
+
+  .questPaper .todayReward {
+    font-size: 0.66rem;
+    padding: 1px 6px;
+  }
+
+  .checkinInner {
+    padding: 13% 7% 14%;
   }
 
   .dishRow {
