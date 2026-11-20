@@ -1772,7 +1772,7 @@ export default function CookingPage() {
           (r4-progress-rope nền + huy hiệu trống r4-badge-blank đè số
           thật; huy hiệu stage hiện tại phát sáng + pulse). */}
       <div className={styles.ropeRow} role="list" aria-label={stageDict.marketName}>
-        {flowSteps.map((step, i) => {
+        {flowSteps.map((step) => {
           const stepIdx = phaseOrder.indexOf(step.phase);
           const isActive = stepIdx === currentPhaseIdx;
           const isDone = stepIdx < currentPhaseIdx;
@@ -1787,7 +1787,7 @@ export default function CookingPage() {
                 className={[styles.ropeBadge, stateClass].filter(Boolean).join(' ')}
                 aria-label={step.label}
               >
-                {isDone ? '✓' : i + 1}
+                {isDone ? <span className={styles.ropeBadgeCheck}>✓</span> : null}
               </span>
               <span className={styles.ropeBadgeLabel}>
                 {step.label.replace(/^[①②③④⑤]\s*/, '')}

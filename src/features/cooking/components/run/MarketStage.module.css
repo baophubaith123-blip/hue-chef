@@ -834,7 +834,7 @@
     no-repeat;
   border: none;
   border-radius: 0;
-  padding: 30px 36px 36px;
+  padding: 38px 42px 42px;
   filter: drop-shadow(0 10px 14px rgba(32, 15, 4, 0.35));
 }
 
@@ -844,8 +844,8 @@
   border: none;
   border-radius: 0;
   box-shadow: none;
-  width: 172px;
-  height: 115px;
+  width: 148px;
+  height: 99px;
   padding: 0 12px 10px;
   display: inline-flex;
   align-items: flex-end;
