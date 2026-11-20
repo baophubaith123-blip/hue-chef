@@ -250,7 +250,10 @@
 
 .mainGrid {
   display: grid;
-  grid-template-columns: 2fr 1fr;
+  /* Slightly wider side column than the old 2fr/1fr: the bamboo
+     check-in frame eats ~32px of it, and the 7 day cells + the
+     dish-of-the-day text need the room back (Đợt lan 4). */
+  grid-template-columns: 1.9fr 1.1fr;
   gap: 22px;
   align-items: stretch;
 }
@@ -588,7 +591,7 @@
   position: relative;
   flex: 1;
   display: flex;
-  border: 22px solid transparent;
+  border: 16px solid transparent;
   border-image: url('../../assets/theme-d/game/r4-home-checkin.webp') 42 58 46 58 / 1 / 0 stretch;
   filter: drop-shadow(0 12px 22px rgba(0, 0, 0, 0.3));
 }
