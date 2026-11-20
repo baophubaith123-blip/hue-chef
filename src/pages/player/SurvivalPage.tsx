@@ -18,6 +18,8 @@ import { isRecipeOwned } from '@/features/recipes/lib/ownership';
 import { useTranslation } from '@/i18n/useTranslation';
 import { SceneShell } from '@/pages/player/SceneShell';
 
+import eventGate from '@/assets/theme-d/game/r4-event-gate.webp';
+
 import styles from '@/pages/player/SurvivalPage.module.css';
 
 export default function SurvivalPage() {
@@ -70,6 +72,14 @@ export default function SurvivalPage() {
             <p className={styles.pageSub}>{s.subtitle}</p>
           </div>
         </header>
+
+        {/* Đợt lan 4: the festival gate with red curtains (r4-event-gate)
+            is the page's stage frame — it sways gently and its chest
+            glows; the record/start panels stand beneath it. */}
+        <div className={styles.gateScene}>
+          <img className={styles.gateImg} src={eventGate} alt="" aria-hidden="true" />
+          <span className={styles.gateGlow} aria-hidden="true" />
+        </div>
 
         <p className={styles.intro}>{s.intro}</p>
 

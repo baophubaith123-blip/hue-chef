@@ -23,6 +23,8 @@ import { isRecipeOwned } from '@/features/recipes/lib/ownership';
 import { todayKey } from '@/features/stall/lib/day';
 import { CARD_KINDS } from '@/features/stall/lib/support';
 import { useTranslation } from '@/i18n/useTranslation';
+
+import eventGate from '@/assets/theme-d/game/r4-event-gate.webp';
 import { playSound } from '@/lib/sound';
 import { SceneShell } from '@/pages/player/SceneShell';
 
@@ -139,6 +141,14 @@ export default function MysteryPage() {
             <p className={styles.pageSub}>{m.subtitle}</p>
           </div>
         </header>
+
+        {/* Đợt lan 4: the festival gate with red curtains (r4-event-gate)
+            is the page's stage frame — it sways gently and its chest
+            glows; the box panels stand beneath it. */}
+        <div className={styles.gateScene}>
+          <img className={styles.gateImg} src={eventGate} alt="" aria-hidden="true" />
+          <span className={styles.gateGlow} aria-hidden="true" />
+        </div>
 
         <p className={styles.intro}>{m.intro}</p>
 
