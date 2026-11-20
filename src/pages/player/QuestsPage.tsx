@@ -12,6 +12,8 @@ import { claimChainChest, claimQuest, useEvents } from '@/features/events/store'
 import type { QuestInstance } from '@/features/events/types';
 import { grantCard } from '@/features/stall/store';
 import { useTranslation } from '@/i18n/useTranslation';
+
+import questScroll from '@/assets/theme-d/game/r4-quest-scroll.webp';
 import { buzz, celebrate } from '@/lib/juice';
 import { playSound } from '@/lib/sound';
 import { SceneShell } from '@/pages/player/SceneShell';
@@ -142,21 +144,33 @@ export default function QuestsPage() {
 
         <CheckinPanel />
 
-        <WoodPanel title={q.dailyTitle} titleLevel="h2" bodyClassName={styles.panelBody}>
+        {/* Đợt lan 4: daily/weekly boards are the royal edict scroll
+            (r4-quest-scroll) — the board title is written on the
+            scroll's face above its red seal, quest rows unroll on the
+            parchment beside it. */}
+        <section className={styles.questBoard}>
+          <div className={styles.scrollFigure}>
+            <img className={styles.scrollImg} src={questScroll} alt="" aria-hidden="true" />
+            <h2 className={styles.scrollTitle}>{q.dailyTitle}</h2>
+          </div>
           {events.daily ? (
             <ul className={styles.questList}>
               {events.daily.quests.map((instance) => renderQuestRow('daily', instance))}
             </ul>
           ) : null}
-        </WoodPanel>
+        </section>
 
-        <WoodPanel title={q.weeklyTitle} titleLevel="h2" bodyClassName={styles.panelBody}>
+        <section className={styles.questBoard}>
+          <div className={styles.scrollFigure}>
+            <img className={styles.scrollImg} src={questScroll} alt="" aria-hidden="true" />
+            <h2 className={styles.scrollTitle}>{q.weeklyTitle}</h2>
+          </div>
           {events.weekly ? (
             <ul className={styles.questList}>
               {events.weekly.quests.map((instance) => renderQuestRow('weekly', instance))}
             </ul>
           ) : null}
-        </WoodPanel>
+        </section>
 
         <WoodPanel title={q.chainTitle} titleLevel="h2" bodyClassName={styles.panelBody}>
           <p className={styles.chainIntro}>{q.chainIntro}</p>
