@@ -240,7 +240,8 @@ export default function LeaderboardPage() {
               ) : null}
             </section>
           </div>
-          {/* Own row pinned under the balanced boards when unranked */}
+        )}
+        {/* Own row pinned under the balanced boards when unranked */}
           {user && !leaderboardData.some((p) => p.id === user.id) ? (
                   <div className={`${styles.rankingRow} ${styles.ownRow} ${styles.currentUserRow}`}>
                     <div className={styles.rankIndex}>{leaderboardData.length + 1}</div>
@@ -264,7 +265,6 @@ export default function LeaderboardPage() {
                     </div>
                   </div>
                 ) : null}
-        )}
       </div>
     </SceneShell>
   );
