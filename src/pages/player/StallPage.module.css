@@ -43,9 +43,14 @@
   right: 0;
   top: 20%;
   height: 16%;
-  background: url('../../assets/theme-d/game/r4-stall-brickwall.webp') repeat left top / auto 52%;
+  /* Visual phase (audit #49): the strip is a shelf illustration,
+     not a tileable texture — draw it ONCE stretched to the band
+     and feather both edges so no seam line crosses the scene. */
+  background: url('../../assets/theme-d/game/r4-stall-brickwall.webp') no-repeat left top / 100% 100%;
   opacity: 0.95;
   pointer-events: none;
+  -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 14%, #000 86%, transparent 100%);
+  mask-image: linear-gradient(180deg, transparent 0, #000 14%, #000 86%, transparent 100%);
 }
 
 .sceneAwning {
@@ -2149,4 +2154,18 @@
   border: 2px solid #8a5a1f;
   border-radius: 10px;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6), 0 3px 8px rgba(40, 20, 4, 0.25);
+}
+
+/* ---- Visual phase (audit #54): the counter body carries a woven
+   serving mat inlay so dishes (and the empty note) rest on a mat,
+   not on the raw board. ---- */
+.counterBody {
+  margin: 10px 12px 12px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background:
+    repeating-linear-gradient(0deg, rgba(59, 32, 8, 0.16) 0 2px, rgba(59, 32, 8, 0) 2px 11px),
+    repeating-linear-gradient(90deg, rgba(59, 32, 8, 0.1) 0 2px, rgba(59, 32, 8, 0) 2px 11px),
+    linear-gradient(180deg, rgba(233, 192, 122, 0.22), rgba(233, 192, 122, 0.12));
+  box-shadow: inset 0 0 0 2px rgba(233, 192, 122, 0.25);
 }

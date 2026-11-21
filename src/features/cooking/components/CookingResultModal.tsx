@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 
 import type { Achievement } from '@/data/types';
+import { AchievementIcon } from '@/components/AchievementIcon';
 import { GoldButton } from '@/components/theme-d/GoldButton';
 import { Modal } from '@/components/theme-d/Modal';
 import resultBannerArt from '@/assets/theme-d/game/r4-result-banner.webp';
@@ -237,7 +238,7 @@ export function CookingResultModal({
                 <div className={styles.achievementGrid}>
                   {unlockedAchievements.map((a) => (
                     <div key={a.id} className={styles.achievementBadge}>
-                      <span className={styles.achievementIcon}>{a.icon}</span>
+                      <AchievementIcon badgeId={a.id} category={a.category} size="xs" />
                       <span className={styles.achievementName}>{a.name}</span>
                     </div>
                   ))}
