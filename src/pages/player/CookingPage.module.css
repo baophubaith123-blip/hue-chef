@@ -1041,3 +1041,21 @@
   font-size: 1.05rem;
   text-shadow: 0 1.5px 0 rgba(60, 35, 5, 0.6);
 }
+
+/* ---- Visual phase (audit #37, measured): the painted medallions
+   are NOT at 10/30/50/70/90 — their real centres in the rope asset
+   are 10.6/29.0/48.1/66.9/85.3% (numeral centroids). The wraps are
+   re-centred on the painting so state rings and the stage-4 cover
+   sit concentrically on the discs, and the cover now spans the
+   whole painted disc instead of floating inside it. ---- */
+.ropeBadgeWrap { width: 19%; }
+.ropeBadgeWrap:nth-child(1) { left: 1.1%; }
+.ropeBadgeWrap:nth-child(2) { left: 19.5%; }
+.ropeBadgeWrap:nth-child(3) { left: 38.6%; }
+.ropeBadgeWrap:nth-child(4) { left: 57.4%; }
+.ropeBadgeWrap:nth-child(5) { left: 75.8%; }
+.ropeBadgeWrap:nth-child(4) .ropeBadge:not(.ropeBadgeActive):not(.ropeBadgeDone)::after {
+  inset: -21%;
+  font-size: 1.5rem;
+}
+.ropeBadge { top: 50.5%; }
