@@ -22,3 +22,19 @@
   display: flex;
   justify-content: center;
 }
+
+/* ---- Visual phase: the shared empty state is a letter board —
+   fibre-paper face with a wood rim and ink text in BOTH themes
+   (the old dashed muted box flipped dark in dark theme and its
+   title all but vanished on the leaderboard). ---- */
+.wrap {
+  background:
+    repeating-linear-gradient(0deg, rgba(160, 116, 52, 0.05) 0 2px, rgba(160, 116, 52, 0) 2px 9px),
+    radial-gradient(rgba(160, 116, 52, 0.08) 1px, rgba(160, 116, 52, 0) 1.6px) 0 0 / 9px 9px,
+    linear-gradient(180deg, #fdf3d3, #f0deb2);
+  border: 3px solid #6d4520;
+  border-radius: 16px;
+  box-shadow: inset 0 0 0 2px rgba(233, 192, 122, 0.45), 0 6px 0 rgba(74, 44, 20, 0.25);
+}
+.title { color: #43301b; }
+.description { color: #7a5c38; }
