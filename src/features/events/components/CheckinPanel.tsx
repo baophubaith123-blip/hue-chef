@@ -3,8 +3,7 @@ import { Link } from 'react-router-dom';
 
 import { ImageWithFallback } from '@/components/ImageWithFallback';
 import { Badge } from '@/components/theme-d/Badge';
-import { dishArtFor } from '@/components/theme-d/dish-art';
-import { DishGradeFrame } from '@/components/theme-d/DishGradeFrame';
+import { dishArtClearFor } from '@/components/theme-d/dish-art';
 import { GoldButton } from '@/components/theme-d/GoldButton';
 import { Toast, type ToastTone } from '@/components/theme-d/Toast';
 import { WoodPanel } from '@/components/theme-d/WoodPanel';
@@ -176,14 +175,18 @@ export function CheckinPanel() {
               (the data badge beside it carries the same ×2 rule). */}
           <div className={styles.dotdStage}>
             <img className={styles.dotdPedestal} src={dailyPedestal} alt="" aria-hidden="true" />
-            <DishGradeFrame grade={dotdGrade} gradeLabel={dotdGradeLabel} className={styles.dotdFrame}>
-              <ImageWithFallback
-                src={dishArtFor(dotdRecipe)}
-                alt={dotdRecipe.name}
-                fallbackTitle={dotdRecipe.name}
-                className={styles.dotdImage}
-              />
-            </DishGradeFrame>
+            {/* The transparent-keyed dish sits INTO the pedestal: centred
+                on the counter top where the painted bowl rests, no square
+                block, no frame. The grade rides as a small seal at the
+                dish's top-right; the name is carved on the pedestal's
+                front plaque below — never captioned under the picture. */}
+            <ImageWithFallback
+              src={dishArtClearFor(dotdRecipe)}
+              alt={dotdRecipe.name}
+              fallbackTitle={dotdRecipe.name}
+              className={styles.dotdDish}
+            />
+            <span className={styles.dotdGradeSeal}>{dotdGradeLabel}</span>
             <p className={styles.dotdName}>{dotdRecipe.name}</p>
           </div>
           <div className={styles.dotdBody}>

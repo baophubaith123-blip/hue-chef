@@ -211,11 +211,36 @@
   border-radius: 14px;
 }
 
-.dotdFrame {
+/* The keyed dish art (trimmed to the dish, transparent ground) centred
+   on the pedestal's counter: its bottom edge rests on the counter top
+   (asset: bowl bottom ≈ y 66% of 443 ≈ bottom 34%), width ≈ the
+   painted bowl's span plus its steam. */
+.dotdDish {
   position: absolute;
-  left: 29.5%;
-  top: 37%;
-  width: 41%;
+  left: 50%;
+  bottom: 33.5%;
+  transform: translateX(-50%);
+  width: 47%;
+  height: auto;
+  filter: drop-shadow(0 4px 5px rgba(40, 20, 4, 0.35));
+}
+
+/* Quality grade as a small wax-seal chip pinned at the dish's
+   top-right — replaces the square grade frame on the pedestal. */
+.dotdGradeSeal {
+  position: absolute;
+  top: 24%;
+  right: 21%;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #f3d492, #e3b959 55%, #b98d45);
+  border: 1.5px solid #8a5a1f;
+  box-shadow: 0 2px 5px rgba(40, 20, 4, 0.35);
+  color: #4a2c14;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
 }
 
 .dotdTitle {
@@ -232,15 +257,7 @@
   }
 }
 
-/* The dish art is square (720×720): the frame hugs the full painting
-   at 1:1 instead of stretching to the text column's height and
-   cropping the top and bottom of the dish. */
-.dotdImage {
-  width: 100%;
-  aspect-ratio: 1 / 1;
-  object-fit: cover;
-  display: block;
-}
+
 
 .dotdBody {
   flex: 1 1 200px;
@@ -257,19 +274,21 @@
   gap: 0.5rem;
 }
 
-/* The dish name written on the pedestal's golden front face
-   (face zone measured on the asset: x 20%–80%, y 71%–87%). */
+/* The dish name CARVED on the pedestal's front name plaque — the
+   recessed rectangle on the golden front face (asset 518×443: plaque
+   ≈ x 31%–69%, y 74%–87%). The name lives on the object itself,
+   never as a caption under the picture. */
 .dotdName {
   position: absolute;
-  left: 19%;
-  right: 19%;
-  bottom: 12%;
+  left: 30%;
+  right: 30%;
+  bottom: 12.5%;
   margin: 0;
   text-align: center;
   font-family: var(--td-font-game);
-  font-size: 0.98rem;
+  font-size: 0.9rem;
   font-weight: 800;
-  line-height: 1.25;
+  line-height: 1.2;
   color: #5a3410;
   text-shadow: 0 1px 0 rgba(255, 246, 224, 0.55);
 }

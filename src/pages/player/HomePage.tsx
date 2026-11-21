@@ -5,7 +5,7 @@ import { AchievementIcon } from '@/components/AchievementIcon';
 import { Button } from '@/components/Button';
 import { EmptyState } from '@/components/EmptyState';
 import { NOI_NOI_FLAT, gameIcon } from '@/components/theme-d/game-assets';
-import { dishArtFor } from '@/components/theme-d/dish-art';
+import { dishArtClearFor, dishArtFor } from '@/components/theme-d/dish-art';
 import { WoodPanel } from '@/components/theme-d/WoodPanel';
 import { useAchievements } from '@/contexts/AchievementContext';
 import { useTaxonomy } from '@/contexts/TaxonomyContext';
@@ -283,15 +283,17 @@ export default function HomePage() {
           <section className={styles.journeyScene} aria-label={t('dashboard.continueJourney')}>
             <img src={journeyMap} alt="" className={styles.journeyBg} draggable={false} />
             <div className={styles.journeyContent}>
-            <h2 className={styles.scenePanelTitle}>{t('dashboard.continueJourney')}</h2>
-            <p className={`${styles.sectionSubtitle} ${styles.introGap}`}>
-              {t('dashboard.continueJourneySubtitle')}
-            </p>
+            <div className={styles.journeyHead}>
+              <h2 className={styles.scenePanelTitle}>{t('dashboard.continueJourney')}</h2>
+              <p className={`${styles.sectionSubtitle} ${styles.introGap}`}>
+                {t('dashboard.continueJourneySubtitle')}
+              </p>
+            </div>
 
             <div className={styles.journeyCard}>
               <div className={styles.journeyImageWrap}>
                 <img
-                  src={dishArtFor(nextRecipe)}
+                  src={dishArtClearFor(nextRecipe)}
                   alt={nextRecipe.name}
                   className={styles.journeyImage}
                 />
