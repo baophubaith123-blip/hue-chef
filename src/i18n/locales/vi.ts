@@ -532,14 +532,14 @@ export const vi: I18nDictionary = {
   journey: {
     mapTitle: 'Bản đồ hành trình Huế',
     mapSubtitle:
-      'Đi dọc sông Hương qua ba chặng: gánh hàng rong chợ Đông Ba, quán nhỏ phố cổ rồi bếp cung đình. Học hết món của một chặng để thách đấu trùm cuối — thắng trùm là được cấp giấy phép bán toàn bộ món của chặng đó tại quầy.',
+      'Đi dọc sông Hương qua ba chặng: gánh hàng rong chợ Đông Ba, quán nhỏ phố cổ rồi bếp cung đình. Học xong món nào là được thách đấu trùm của chính món đó — thắng trùm nhận giấy phép bán riêng món đó tại quầy. Học hết món của một chặng để đấu trùm chặng, ghi dấu mốc mở khu vực tiếp theo.',
     chapterLabel: (order: number) => `Chặng ${order}`,
     dishCount: (count: number) => `${count} món`,
     cookedProgress: (done: number, total: number) => `Đã học ${done}/${total} món`,
     teacherLabel: 'Thầy dạy đồng hành',
     bossTitle: 'Trùm cuối · Ngự thiện',
     bossReady: 'Đã mở thách đấu — giám khảo Ngự thiện đang chờ bạn!',
-    bossPassed: 'Đã vượt qua — giấy phép bán của chặng đã thuộc về bạn.',
+    bossPassed: 'Đã vượt qua — mốc mở khu vực của chặng đã được ghi dấu!',
     bossLockedDishes: (done: number, total: number) =>
       `Học hết món của chặng để mở màn trùm (đã học ${done}/${total}).`,
     bossLockedPrev: (chapterName: string) =>
@@ -547,10 +547,10 @@ export const vi: I18nDictionary = {
     bossEnter: 'Vào màn trùm',
     bossReplay: 'Đấu lại trùm',
     bossRule: (stars: number) =>
-      `Màn trùm chấm khắt khe hơn ván thường: phải đạt từ ${stars} sao trở lên mới được cấp phép.`,
+      `Màn trùm chặng chấm khắt khe hơn ván thường: đạt từ ${stars} sao trở lên để ghi dấu mốc mở khu vực. Giấy phép bán nay tính theo từng món — thắng trùm của chính món đó.`,
     licenseTitle: 'Giấy phép bán',
     licenseSellableList: 'Các món được phép bán tại quầy',
-    licenseNone: 'Bạn chưa có giấy phép bán nào — hãy vượt qua trùm cuối của một chặng.',
+    licenseNone: 'Bạn chưa có giấy phép bán nào — học một món rồi thắng trùm của chính món đó để nhận phép bán đầu tiên.',
     chapters: {
       'dong-ba': {
         name: 'Gánh hàng rong & chợ Đông Ba',
@@ -584,24 +584,42 @@ export const vi: I18nDictionary = {
     albumYourBest: (score: number, stars: number) => `Thành tích tốt nhất của bạn: ${score} điểm · ${stars} sao`,
     detailChapterLabel: 'Chặng hành trình',
     detailSellable: 'Đã có giấy phép — món này được bán tại quầy',
-    detailNotSellable: (chapterName: string) =>
-      `Chưa được phép bán — thắng trùm cuối của chặng "${chapterName}" để mở bán món này`,
+    detailNotSellable: () =>
+      'Chưa được phép bán — học xong món này rồi thắng trùm của chính món để nhận giấy phép bán',
     detailBossDish: 'Đây là món trùm cuối của chặng',
     detailViewMap: 'Xem trên bản đồ',
     bossBannerTitle: 'Màn trùm Ngự thiện',
     bossBannerRule: (chapterName: string, stars: number) =>
-      `Nấu món tiêu biểu của chặng "${chapterName}" đạt từ ${stars} sao trở lên để nhận giấy phép bán cả chặng.`,
+      `Nấu món tiêu biểu của chặng "${chapterName}" đạt từ ${stars} sao trở lên để ghi dấu mốc mở khu vực của chặng.`,
     bossResultPassedTitle: 'Vượt qua màn trùm!',
-    bossResultPassedBody: (chapterName: string, count: number) =>
-      `Giám khảo Ngự thiện đã gật đầu. Bạn nhận giấy phép bán ${count} món của chặng "${chapterName}" tại quầy.`,
+    bossResultPassedBody: (chapterName: string) =>
+      `Giám khảo Ngự thiện đã gật đầu. Mốc mở khu vực của chặng "${chapterName}" đã được ghi dấu. Giấy phép bán tính theo từng món: thắng trùm của chính món để bán món đó.`,
     bossResultShortTitle: 'Chưa đạt ngưỡng Ngự thiện',
     bossResultShortBody: (stars: number, needed: number) =>
       `Ván này đạt ${stars} sao — màn trùm cần từ ${needed} sao trở lên. Nấu lại món trùm khi sẵn sàng nhé!`,
     bossResultFailBody:
       'Ván trùm chưa thành công. Hãy luyện thêm các món của chặng rồi quay lại thách đấu.',
-    licenseNoticeTitle: 'Nhận giấy phép bán mới!',
-    licenseNoticeBody: (chapterName: string) =>
-      `Bạn đã được cấp phép bán toàn bộ món của chặng "${chapterName}".`,
+    bossClearNoticeTitle: 'Ghi dấu mốc mở khu vực!',
+    bossClearNoticeBody: (chapterName: string) =>
+      `Bạn đã vượt qua trùm của chặng "${chapterName}" — mốc mở khu vực đã được ghi dấu.`,
+    dishBossTitle: 'Trùm của món',
+    dishBossEnter: 'Thách đấu trùm món',
+    dishBossReplay: 'Đấu lại trùm món',
+    dishBossReady:
+      'Bạn đã học xong món này — trùm của món đang chờ! Thắng (từ 3 sao) để nhận giấy phép bán riêng món này.',
+    dishBossLocked: 'Học xong món này (nấu đạt ít nhất 1 sao) để mở màn trùm của món.',
+    dishBossLicensed: 'Đã thắng trùm món — giấy phép bán món này đã thuộc về bạn.',
+    dishBossBannerTitle: 'Màn trùm món',
+    dishBossBannerRule: (dishName: string, stars: number) =>
+      `Nấu món "${dishName}" đạt từ ${stars} sao trở lên để nhận giấy phép bán riêng món này tại quầy.`,
+    dishBossResultPassedTitle: 'Vượt qua trùm món!',
+    dishBossResultPassedBody: (dishName: string) =>
+      `Giám khảo Ngự thiện đã gật đầu. Bạn nhận giấy phép bán món "${dishName}" tại quầy.`,
+    dishLicenseNoticeTitle: 'Nhận giấy phép bán món mới!',
+    dishLicenseNoticeBody: (dishName: string) =>
+      `Bạn đã được cấp phép bán món "${dishName}" tại quầy.`,
+    bossMilestone: 'Đã mở khu vực',
+    dishLicenseCount: (done: number, total: number) => `${done}/${total} món đã có phép bán`,
     judgeAlt: 'Giám khảo Ngự thiện',
     judgeSpeech: 'Nấu cho ta nếm thử nào!',
   },
@@ -619,7 +637,7 @@ export const vi: I18nDictionary = {
     shiftClosed: 'Quầy đang nghỉ — mở ca để đón khách',
     noLicenseTitle: 'Chưa có giấy phép bán món nào',
     noLicenseBody:
-      'Hãy vào Bản đồ Huế, học hết món của một chặng và thắng màn trùm Ngự thiện để được cấp phép bán. Có phép rồi quay lại đây mở quầy nhé!',
+      'Hãy học một món bất kỳ trong mục Công thức, rồi thách đấu và thắng trùm của chính món đó (từ 3 sao) để nhận giấy phép bán món. Có phép rồi quay lại đây mở quầy nhé!',
     goToMap: 'Đến Bản đồ Huế',
     menuTitle: 'Thực đơn quầy — món đã có phép bán',
     menuEmpty: 'Chưa có món nào được phép bán.',

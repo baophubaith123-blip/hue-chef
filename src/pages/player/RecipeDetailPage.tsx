@@ -17,7 +17,7 @@ import { GESTURE_ICONS, gestureForStep } from '@/data/gesture-map';
 import { RecipeComments } from '@/features/comments/components/RecipeComments';
 import { isRecipeOwned } from '@/features/recipes/lib/ownership';
 import { bossChapterForRecipe, chapterForRecipe } from '@/features/journey/lib/chapters';
-import { isDishSellable } from '@/features/journey/lib/journey';
+import { dishBossStateFor, isDishSellable } from '@/features/journey/lib/journey';
 import { useAuth } from '@/contexts/AuthContext';
 import { useTaxonomy } from '@/contexts/TaxonomyContext';
 import { useRecipes } from '@/contexts/RecipeContext';
@@ -101,6 +101,9 @@ export default function RecipeDetailPage() {
     : '';
   const sellable = isDishSellable(user, recipe);
   const bossChapter = bossChapterForRecipe(recipe.id);
+  // Per-dish boss (luật trùm theo món): this dish's own boss state —
+  // locked until learned, ready to fight for its sell license after.
+  const dishBossState = dishBossStateFor(user, recipe);
 
   // Khung bước gọn (luật khung bổ sung 2026-11-20): panel bước chỉ hiện
   // đúng một bước tại một thời điểm + nút chuyển riêng, để cột bước không
@@ -202,7 +205,7 @@ export default function RecipeDetailPage() {
                   <span className={sellable ? styles.journeySellable : styles.journeyNotSellable}>
                     {sellable
                       ? `📜 ${dict.journey.detailSellable}`
-                      : `🔒 ${dict.journey.detailNotSellable(journeyChapterName)}`}
+                      : `🔒 ${dict.journey.detailNotSellable()}`}
                   </span>
                 </div>
               </div>
@@ -221,6 +224,30 @@ export default function RecipeDetailPage() {
                     ) : null}
                   </div>
                 ) : null}
+                {/* Luật trùm theo món: trùm của chính món này — mở ngay
+                    khi học xong món, thắng là có phép bán riêng món. */}
+                <div className={styles.journeyBossRow}>
+                  <span className={styles.journeyBossNote}>
+                    ⚔️ {dict.journey.dishBossTitle}:{' '}
+                    {dishBossState.kind === 'licensed'
+                      ? dict.journey.dishBossLicensed
+                      : dishBossState.kind === 'ready'
+                        ? dict.journey.dishBossReady
+                        : dict.journey.dishBossLocked}
+                  </span>
+                  {owned && dishBossState.kind !== 'locked' ? (
+                    <Link
+                      to={`/cooking/${recipe.id}?bossDish=${recipe.id}`}
+                      className={styles.bossLink}
+                    >
+                      <GoldButton>
+                        {dishBossState.kind === 'licensed'
+                          ? dict.journey.dishBossReplay
+                          : dict.journey.dishBossEnter}
+                      </GoldButton>
+                    </Link>
+                  ) : null}
+                </div>
               </div>
             </div>
           ) : null}

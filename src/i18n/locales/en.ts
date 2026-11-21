@@ -532,14 +532,14 @@ export const en: I18nDictionary = {
   journey: {
     mapTitle: 'The Hue Journey Map',
     mapSubtitle:
-      'Travel along the Perfume River through three chapters: street carts and Dong Ba market, old-town eateries, then the imperial kitchen. Learn every dish of a chapter to challenge its boss — beat the boss to earn the sell license for the whole chapter at your stall.',
+      'Travel along the Perfume River through three chapters: street carts and Dong Ba market, old-town eateries, then the imperial kitchen. Learn a dish and its own boss opens — beat it to earn the sell license for that dish alone. Learn every dish of a chapter to face the chapter boss and record the next area-unlock milestone.',
     chapterLabel: (order: number) => `Chapter ${order}`,
     dishCount: (count: number) => `${count} dishes`,
     cookedProgress: (done: number, total: number) => `Learned ${done}/${total} dishes`,
     teacherLabel: 'Your teacher',
     bossTitle: 'Chapter boss · Royal Kitchen Trial',
     bossReady: 'The challenge is open — the imperial judge awaits!',
-    bossPassed: 'Cleared — this chapter\u2019s sell license is yours.',
+    bossPassed: 'Cleared — this chapter\u2019s area-unlock milestone is recorded!',
     bossLockedDishes: (done: number, total: number) =>
       `Learn every dish of this chapter to unlock the boss (${done}/${total} learned).`,
     bossLockedPrev: (chapterName: string) =>
@@ -547,10 +547,10 @@ export const en: I18nDictionary = {
     bossEnter: 'Enter the boss stage',
     bossReplay: 'Fight the boss again',
     bossRule: (stars: number) =>
-      `Boss stages are judged more strictly than normal runs: reach at least ${stars} stars to earn the license.`,
+      `Chapter boss stages are judged more strictly: reach at least ${stars} stars to record the area-unlock milestone. Sell licenses are per dish now — beat a dish's own boss to sell that dish.`,
     licenseTitle: 'Sell license',
     licenseSellableList: 'Dishes you may sell at the stall',
-    licenseNone: 'You hold no sell license yet — beat a chapter boss to earn one.',
+    licenseNone: 'You hold no sell license yet — learn a dish, then beat that dish's own boss to earn your first one.',
     chapters: {
       'dong-ba': {
         name: 'Street carts & Dong Ba Market',
@@ -584,24 +584,42 @@ export const en: I18nDictionary = {
     albumYourBest: (score: number, stars: number) => `Your best: ${score} points · ${stars} stars`,
     detailChapterLabel: 'Journey chapter',
     detailSellable: 'Licensed — this dish may be sold at the stall',
-    detailNotSellable: (chapterName: string) =>
-      `Not licensed for sale yet — beat the boss of "${chapterName}" to sell this dish`,
+    detailNotSellable: () =>
+      'Not licensed for sale yet — learn this dish, then beat its own boss to earn its sell license',
     detailBossDish: 'This is the chapter\u2019s boss dish',
     detailViewMap: 'View on the map',
     bossBannerTitle: 'Royal Kitchen Boss Stage',
     bossBannerRule: (chapterName: string, stars: number) =>
-      `Cook the signature dish of "${chapterName}" at ${stars} stars or more to earn the sell license for the whole chapter.`,
+      `Cook the signature dish of "${chapterName}" at ${stars} stars or more to record this chapter's area-unlock milestone.`,
     bossResultPassedTitle: 'Boss stage cleared!',
-    bossResultPassedBody: (chapterName: string, count: number) =>
-      `The imperial judge has nodded. You receive the sell license for ${count} dishes of "${chapterName}" at the stall.`,
+    bossResultPassedBody: (chapterName: string) =>
+      `The imperial judge has nodded. The area-unlock milestone of "${chapterName}" is recorded. Sell licenses are per dish: beat a dish's own boss to sell that dish.`,
     bossResultShortTitle: 'Below the royal standard',
     bossResultShortBody: (stars: number, needed: number) =>
       `This run reached ${stars} stars — the boss needs at least ${needed}. Cook the boss dish again when you are ready!`,
     bossResultFailBody:
       'The boss run did not succeed. Practise the chapter\u2019s dishes a little more, then challenge again.',
-    licenseNoticeTitle: 'New sell license earned!',
-    licenseNoticeBody: (chapterName: string) =>
-      `You are now licensed to sell every dish of "${chapterName}".`,
+    bossClearNoticeTitle: 'Area-unlock milestone recorded!',
+    bossClearNoticeBody: (chapterName: string) =>
+      `You beat the boss of "${chapterName}" — its area-unlock milestone is recorded.`,
+    dishBossTitle: 'Dish boss',
+    dishBossEnter: 'Challenge the dish boss',
+    dishBossReplay: 'Fight the dish boss again',
+    dishBossReady:
+      'You have learned this dish — its boss awaits! Win (3 stars or more) to earn the sell license for this dish alone.',
+    dishBossLocked: 'Learn this dish first (cook it at 1 star or more) to open its boss stage.',
+    dishBossLicensed: 'Dish boss beaten — this dish\u2019s sell license is yours.',
+    dishBossBannerTitle: 'Dish Boss Stage',
+    dishBossBannerRule: (dishName: string, stars: number) =>
+      `Cook "${dishName}" at ${stars} stars or more to earn the sell license for this dish alone.`,
+    dishBossResultPassedTitle: 'Dish boss beaten!',
+    dishBossResultPassedBody: (dishName: string) =>
+      `The imperial judge has nodded. You receive the sell license for "${dishName}" at the stall.`,
+    dishLicenseNoticeTitle: 'New dish sell license earned!',
+    dishLicenseNoticeBody: (dishName: string) =>
+      `You are now licensed to sell "${dishName}" at the stall.`,
+    bossMilestone: 'Area unlocked',
+    dishLicenseCount: (done: number, total: number) => `${done}/${total} dishes licensed for sale`,
     judgeAlt: 'Imperial kitchen judge',
     judgeSpeech: 'Cook it for me to taste!',
   },
@@ -619,7 +637,7 @@ export const en: I18nDictionary = {
     shiftClosed: 'The stall is resting — open a shift to welcome customers',
     noLicenseTitle: 'No dish is licensed for selling yet',
     noLicenseBody:
-      'Open the Hue Map, learn every dish of a chapter and beat its Imperial Kitchen boss stage to earn a sell license. Come back here once you have one!',
+      'Learn any dish in Recipes, then challenge and beat that dish's own boss (3 stars or more) to earn its sell license. Come back here once you have one!',
     goToMap: 'Go to the Hue Map',
     menuTitle: 'Stall menu — licensed dishes',
     menuEmpty: 'No dish is licensed for selling yet.',

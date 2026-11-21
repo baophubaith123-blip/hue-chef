@@ -39,13 +39,22 @@ function DishNode({
   recipe,
   bestStars,
   gradeLabel,
+  licensed,
+  licenseLabel,
+  bossReadyLabel,
 }: {
   recipe: Recipe;
   bestStars: number;
   gradeLabel: string;
+  /** The dish holds its sell license (its own boss beaten / converted). */
+  licensed: boolean;
+  licenseLabel: string;
+  bossReadyLabel: string;
 }) {
   const grade = dishGradeFor(recipe);
   const cooked = bestStars > 0;
+  // Per-dish boss waiting: learned but not yet licensed.
+  const bossReady = cooked && !licensed;
   return (
     <li className={styles.pathNode}>
       <Link to={`/recipes/${recipe.id}`} className={styles.dishLink}>
@@ -61,6 +70,16 @@ function DishNode({
             alt={recipe.name}
             fallbackTitle={recipe.name}
           />
+          {licensed ? (
+            <span className={styles.dishLicenseBadge} title={licenseLabel} aria-label={licenseLabel}>
+              📜
+            </span>
+          ) : null}
+          {bossReady ? (
+            <span className={styles.dishBossBadge} title={bossReadyLabel} aria-label={bossReadyLabel}>
+              ⚔️
+            </span>
+          ) : null}
         </span>
         <span className={styles.dishName}>{recipe.name}</span>
         <span className={bestStars > 0 ? styles.dishStars : styles.dishStarsEmpty}>
@@ -96,7 +115,7 @@ function ChapterSection({ progress }: { progress: ChapterProgress }) {
           <div className={styles.chapterTitleRow}>
             <Badge tone="brick">{j.chapterLabel(chapter.order)}</Badge>
             <Badge tone="paper">{j.dishCount(progress.total)}</Badge>
-            {progress.licensed ? <Badge tone="gold">📜 {j.licenseTitle}</Badge> : null}
+            {progress.bossCleared ? <Badge tone="gold">🏆 {j.bossMilestone}</Badge> : null}
           </div>
           <p className={styles.chapterTagline}>{text?.tagline}</p>
           <p className={styles.chapterProgress}>
@@ -124,6 +143,9 @@ function ChapterSection({ progress }: { progress: ChapterProgress }) {
             recipe={dish}
             bestStars={best.get(dish.id) ?? 0}
             gradeLabel={dict.recipe.gradeNames[dishGradeFor(dish) - 1] ?? ''}
+            licensed={progress.licensedDishes.some((licensed) => licensed.id === dish.id)}
+            licenseLabel={j.detailSellable}
+            bossReadyLabel={j.dishBossTitle}
           />
         ))}
       </ol>
@@ -151,7 +173,7 @@ function ChapterSection({ progress }: { progress: ChapterProgress }) {
             ) : (
               <p className={styles.bossStateLocked}>
                 🔒{' '}
-                {state.reason === 'need-prev-license'
+                {state.reason === 'need-prev-boss'
                   ? j.bossLockedPrev(prevName)
                   : j.bossLockedDishes(progress.cookedCount, progress.total)}
               </p>
@@ -193,22 +215,28 @@ function ChapterSection({ progress }: { progress: ChapterProgress }) {
           ) : null}
         </div>
         </div>
-        {state.kind === 'passed' ? (
+        {state.kind === 'passed' || progress.licensedDishes.length > 0 ? (
           <div className={styles.steleFoot}>
-            <p className={styles.sellableLabel}>{j.licenseSellableList}:</p>
-            <div className={styles.sellableChips}>
-              {progress.dishes.map((dish) => (
-                <span key={dish.id} className={styles.sellableChip}>
-                  {dish.name}
-                </span>
-              ))}
-            </div>
-            <Link
-              className={styles.bossReplayLink}
-              to={`/cooking/${chapter.bossRecipeId}?boss=${chapter.id}`}
-            >
-              {j.bossReplay}
-            </Link>
+            {progress.licensedDishes.length > 0 ? (
+              <>
+                <p className={styles.sellableLabel}>{j.licenseSellableList}:</p>
+                <div className={styles.sellableChips}>
+                  {progress.licensedDishes.map((dish) => (
+                    <span key={dish.id} className={styles.sellableChip}>
+                      {dish.name}
+                    </span>
+                  ))}
+                </div>
+              </>
+            ) : null}
+            {state.kind === 'passed' ? (
+              <Link
+                className={styles.bossReplayLink}
+                to={`/cooking/${chapter.bossRecipeId}?boss=${chapter.id}`}
+              >
+                {j.bossReplay}
+              </Link>
+            ) : null}
           </div>
         ) : null}
         <img className={styles.judgeArt} src={BOSS_JUDGE_IMAGE} alt={j.judgeAlt} />
@@ -228,7 +256,11 @@ export default function HueMapPage() {
     () => CHAPTERS.map((chapter) => chapterProgress(user, chapter, recipes)),
     [user, recipes],
   );
-  const licenseCount = progresses.filter((progress) => progress.licensed).length;
+  const licensedDishTotal = progresses.reduce(
+    (sum, progress) => sum + progress.licensedDishes.length,
+    0,
+  );
+  const dishTotal = progresses.reduce((sum, progress) => sum + progress.total, 0);
 
   return (
     <SceneShell>
@@ -250,8 +282,8 @@ export default function HueMapPage() {
             <p className={styles.pageSub}>{j.mapSubtitle}</p>
           </div>
           <p className={styles.licenseSummary}>
-            📜 {j.licenseTitle}: {licenseCount}/{CHAPTERS.length}
-            {licenseCount === 0 ? ` — ${j.licenseNone}` : ''}
+            📜 {j.licenseTitle}: {j.dishLicenseCount(licensedDishTotal, dishTotal)}
+            {licensedDishTotal === 0 ? ` — ${j.licenseNone}` : ''}
           </p>
         </header>
 

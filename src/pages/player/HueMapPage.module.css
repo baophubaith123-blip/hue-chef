@@ -594,6 +594,38 @@
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4);
 }
 
+/* Per-dish boss law markers on a dish medallion: the sell license seal
+   (gold, bottom-right) once the dish's own boss is beaten, and the boss
+   challenge mark (brick, top-right) once the dish is learned and its
+   boss is waiting. */
+.dishLicenseBadge,
+.dishBossBadge {
+  position: absolute;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border: 2px solid var(--td-ink);
+  border-radius: var(--td-radius-full);
+  font-size: 0.8rem;
+  line-height: 1;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.35);
+}
+
+.dishLicenseBadge {
+  right: -3px;
+  bottom: -3px;
+  background: var(--td-gold);
+}
+
+.dishBossBadge {
+  top: -3px;
+  right: -3px;
+  background: var(--td-brick);
+}
+
 .bossMedalBadge {
   background: linear-gradient(180deg, var(--td-gold-bright), var(--td-gold-deep));
   border: 2.5px solid var(--td-ink);
