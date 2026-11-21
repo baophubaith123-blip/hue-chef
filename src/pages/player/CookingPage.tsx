@@ -29,11 +29,12 @@ import { NoiNoi } from '@/components/theme-d';
 import { dishArtFor } from '@/components/theme-d/dish-art';
 import clockFaceArt from '@/assets/theme-d/game/r4-clock-face.webp';
 import { BOSS_JUDGE_IMAGE } from '@/components/theme-d/assets';
-import { chapterById, dishesOfChapter } from '@/features/journey/lib/chapters';
+import { chapterById } from '@/features/journey/lib/chapters';
 import {
   BOSS_PASS_STARS,
   bestStarsByRecipe,
   bossStateFor,
+  dishBossStateFor,
   sellableRecipes,
 } from '@/features/journey/lib/journey';
 import { FeastResultPanel } from '@/features/events/components/FeastResultPanel';
@@ -132,7 +133,7 @@ export default function CookingPage() {
   const { id } = useParams<{ id: string }>();
   const { t, dict } = useTranslation();
   const { isLoading, getRecipeById, getApprovedRecipes } = useRecipes();
-  const { user, addXp, addCoins, addCookedRecipe, grantSellLicense } = useAuth();
+  const { user, addXp, addCoins, addCookedRecipe, grantDishLicense, grantBossClear } = useAuth();
   const navigate = useNavigate();
   const { checkAndUnlockForUser, allAchievements, isUnlocked } = useAchievements();
   const { push: pushNotification } = useNotification();
@@ -210,6 +211,16 @@ export default function CookingPage() {
     return chapter && chapter.bossRecipeId === id ? chapter : undefined;
   }, [isPreview, isSellMode, bossParam, id]);
   const bossGuardRef = useRef<string | null>(null);
+  // Per-dish boss mode (luật trùm theo món, Bảo chốt 2026-11-20):
+  // ?bossDish=<recipeId> turns THIS dish's run into its own boss stage.
+  // It never combines with the chapter boss — the signature dish carries
+  // both fights, and the chapter URL (?boss=) wins when both are given.
+  const dishBossParam = searchParams.get('bossDish');
+  const dishBoss = useMemo(() => {
+    if (isPreview || isSellMode || bossChapter || !dishBossParam || !id) return undefined;
+    return dishBossParam === id ? getRecipeById(id) : undefined;
+  }, [isPreview, isSellMode, bossChapter, dishBossParam, id, getRecipeById]);
+  const dishBossGuardRef = useRef<string | null>(null);
   // Event modes (Gói H7): ?survival=<runId>, ?mystery=<boxId> and
   // ?feast=1 turn the run into an event cook on the same engine. They
   // never combine with preview, sell or boss; when several params are
@@ -217,11 +228,18 @@ export default function CookingPage() {
   const survivalId = searchParams.get('survival');
   const mysteryId = searchParams.get('mystery');
   const feastParam = searchParams.get('feast') === '1';
-  const isSurvivalMode = Boolean(survivalId) && !isPreview && !isSellMode && !bossChapter;
+  const isSurvivalMode =
+    Boolean(survivalId) && !isPreview && !isSellMode && !bossChapter && !dishBoss;
   const isMysteryMode =
-    !isSurvivalMode && Boolean(mysteryId) && !isPreview && !isSellMode && !bossChapter;
+    !isSurvivalMode && Boolean(mysteryId) && !isPreview && !isSellMode && !bossChapter && !dishBoss;
   const isFeastMode =
-    !isSurvivalMode && !isMysteryMode && feastParam && !isPreview && !isSellMode && !bossChapter;
+    !isSurvivalMode &&
+    !isMysteryMode &&
+    feastParam &&
+    !isPreview &&
+    !isSellMode &&
+    !bossChapter &&
+    !dishBoss;
   const survivalGuardRef = useRef<string | null>(null);
   const mysteryGuardRef = useRef(false);
   const feastGuardRef = useRef<string | null>(null);
@@ -254,6 +272,7 @@ export default function CookingPage() {
     !isPreview &&
     !isSellMode &&
     !bossChapter &&
+    !dishBoss &&
     !isSurvivalMode &&
     !isMysteryMode &&
     !isFeastMode;
@@ -263,6 +282,7 @@ export default function CookingPage() {
     !isPreview &&
     !isSellMode &&
     !bossChapter &&
+    !dishBoss &&
     !isSurvivalMode &&
     !isMysteryMode &&
     !isFeastMode;
@@ -355,7 +375,7 @@ export default function CookingPage() {
     if (resultFxKeyRef.current === key) return;
     resultFxKeyRef.current = key;
     if (session.phase === 'success') {
-      if (bossChapter && session.stars >= BOSS_PASS_STARS) {
+      if ((bossChapter || dishBoss) && session.stars >= BOSS_PASS_STARS) {
         playSound('starup');
         celebrate('big');
         buzz([40, 40, 80]);
@@ -372,7 +392,7 @@ export default function CookingPage() {
     } else {
       playSound('lose');
     }
-  }, [isPreview, session, bossChapter, isSellMode, isFeastMode]);
+  }, [isPreview, session, bossChapter, dishBoss, isSellMode, isFeastMode]);
   const [feastBatch, setFeastBatch] = useState<CookedBatch | null>(null);
   const [feastServed, setFeastServed] = useState<{ xu: number; exp: number } | null>(null);
   // Kitchen incidents (Gói H7): a per-run plan rolled when the run
@@ -468,6 +488,20 @@ export default function CookingPage() {
       navigate('/map', { replace: true });
     }
   }, [bossChapter, user, recipe, isLoading, getApprovedRecipes, navigate]);
+
+  // Dish-boss gate: the dish boss opens only once the dish itself is
+  // learned. A locked dish-boss URL goes back to the dish's detail page,
+  // where the missing step is spelled out. A licensed dish may still
+  // replay its boss (the grant simply stays as it is).
+  useEffect(() => {
+    if (!dishBoss || !user || !recipe || isLoading) return;
+    const key = `${recipe.id}:dishboss`;
+    if (dishBossGuardRef.current === key) return;
+    dishBossGuardRef.current = key;
+    if (dishBossStateFor(user, recipe).kind === 'locked') {
+      navigate(`/recipes/${recipe.id}`, { replace: true });
+    }
+  }, [dishBoss, user, recipe, isLoading, navigate]);
 
   // Sell gate: the order must exist, belong to this dish, and still be
   // open when the page first resolves it. Checked once per order — a
@@ -667,7 +701,7 @@ export default function CookingPage() {
     recordPlayEvent(user.id, 'cook', {
       recipeId: session.recipe.id,
       stars: session.stars,
-      bossWin: Boolean(bossChapter && session.stars >= BOSS_PASS_STARS),
+      bossWin: Boolean((bossChapter || dishBoss) && session.stars >= BOSS_PASS_STARS),
     });
 
     const stored = {
@@ -704,22 +738,42 @@ export default function CookingPage() {
       });
     }
 
-    // Ngự thiện boss (Gói H3): the run is judged more strictly — at
-    // BOSS_PASS_STARS or more the chapter's sell license is granted
-    // (chốt 1). A merely-passing run still banks its normal XP and
-    // cooked entry above; only the license waits for a stronger run.
+    // Ngự thiện chapter boss (Gói H3, role changed by the per-dish law
+    // Bảo chốt 2026-11-20): the run is judged more strictly — at
+    // BOSS_PASS_STARS or more the chapter boss counts as beaten, the
+    // AREA-UNLOCK milestone of the journey. It grants no sell license
+    // any more; licenses live per dish (next block). A merely-passing
+    // run still banks its normal XP and cooked entry above.
     if (bossChapter && session.stars >= BOSS_PASS_STARS) {
-      const newlyGranted = grantSellLicense(bossChapter.id);
-      if (newlyGranted) {
+      const newlyCleared = grantBossClear(bossChapter.id);
+      if (newlyCleared) {
         pushNotification({
           userId: user.id,
           type: 'license.granted',
-          title: dict.journey.licenseNoticeTitle,
-          body: dict.journey.licenseNoticeBody(
+          title: dict.journey.bossClearNoticeTitle,
+          body: dict.journey.bossClearNoticeBody(
             dict.journey.chapters[bossChapter.id]?.name ?? bossChapter.id,
           ),
           link: '/map',
           relatedId: bossChapter.id,
+        });
+      }
+    }
+
+    // Per-dish boss (luật trùm theo món): beating THIS dish's boss at
+    // BOSS_PASS_STARS or more grants the sell license for this dish
+    // only. Losing (or a weaker pass) grants nothing — the boss can be
+    // fought again whenever the cook is ready.
+    if (dishBoss && session.stars >= BOSS_PASS_STARS) {
+      const newlyGranted = grantDishLicense(dishBoss.id);
+      if (newlyGranted) {
+        pushNotification({
+          userId: user.id,
+          type: 'license.granted',
+          title: dict.journey.dishLicenseNoticeTitle,
+          body: dict.journey.dishLicenseNoticeBody(dishBoss.name),
+          link: '/stall',
+          relatedId: dishBoss.id,
         });
       }
     }
@@ -740,7 +794,9 @@ export default function CookingPage() {
     pushNotification,
     t,
     bossChapter,
-    grantSellLicense,
+    dishBoss,
+    grantBossClear,
+    grantDishLicense,
     dict,
     isSurvivalMode,
     isMysteryMode,
@@ -1439,6 +1495,26 @@ export default function CookingPage() {
       </div>
     </div>
   ) : null;
+  // Per-dish boss framing (luật trùm theo món): same banner shell, the
+  // dish itself is the boss — its tier sets the fight's difficulty.
+  const dishBossBanner = dishBoss ? (
+    <div className={styles.bossBanner}>
+      <img
+        className={styles.bossJudge}
+        src={BOSS_JUDGE_IMAGE}
+        alt={dict.journey.judgeAlt}
+      />
+      <div className={styles.bossBannerText}>
+        <p className={styles.bossBannerTitle}>
+          ⚔️ {dict.journey.dishBossBannerTitle} — {dishBoss.name}
+        </p>
+        <p className={styles.bossBannerRule}>
+          {dict.journey.dishBossBannerRule(dishBoss.name, BOSS_PASS_STARS)}
+        </p>
+      </div>
+    </div>
+  ) : null;
+  const activeBossBanner = bossBanner ?? dishBossBanner;
   // Sell framing (Gói H4): banner over every stage of a sell run, with
   // the ordering customer's patience draining live overhead.
   const sellPatienceLeft = sellCustomer
@@ -1639,16 +1715,13 @@ export default function CookingPage() {
       </div>
     </div>
   ) : null;
-  const bossNote =
+  const chapterBossNote =
     bossChapter && showResult
       ? session.phase === 'success' && session.stars >= BOSS_PASS_STARS
         ? {
             passed: true,
             title: dict.journey.bossResultPassedTitle,
-            body: dict.journey.bossResultPassedBody(
-              bossChapterName,
-              dishesOfChapter(getApprovedRecipes(), bossChapter).length,
-            ),
+            body: dict.journey.bossResultPassedBody(bossChapterName),
           }
         : session.phase === 'success'
           ? {
@@ -1662,6 +1735,27 @@ export default function CookingPage() {
               body: dict.journey.bossResultFailBody,
             }
       : null;
+  const dishBossNote =
+    dishBoss && showResult
+      ? session.phase === 'success' && session.stars >= BOSS_PASS_STARS
+        ? {
+            passed: true,
+            title: dict.journey.dishBossResultPassedTitle,
+            body: dict.journey.dishBossResultPassedBody(dishBoss.name),
+          }
+        : session.phase === 'success'
+          ? {
+              passed: false,
+              title: dict.journey.bossResultShortTitle,
+              body: dict.journey.bossResultShortBody(session.stars, BOSS_PASS_STARS),
+            }
+          : {
+              passed: false,
+              title: dict.journey.dishBossBannerTitle,
+              body: dict.journey.bossResultFailBody,
+            }
+      : null;
+  const bossNote = chapterBossNote ?? dishBossNote;
 
   // Feast serve/discard/retry (Gói H7): serving books the village
   // payout through the stall store; the caller applies the xu and
@@ -1823,7 +1917,7 @@ export default function CookingPage() {
       </div>
       {isPreview ? <span className={styles.previewBadge}>{stageDict.previewBadge}</span> : null}
       {flowChips}
-      {bossBanner}
+      {activeBossBanner}
       {sellBanner}
       {survivalBanner}
       {mysteryBanner}
@@ -1909,7 +2003,7 @@ export default function CookingPage() {
           </div>
         </div>
         {flowChips}
-        {bossBanner}
+        {activeBossBanner}
         {sellBanner}
         {survivalBanner}
         {mysteryBanner}
@@ -1979,7 +2073,7 @@ export default function CookingPage() {
 
       {isPreview ? <span className={styles.previewBadge}>{stageDict.previewBadge}</span> : null}
       {flowChips}
-      {bossBanner}
+      {activeBossBanner}
       {sellBanner}
       {duelBanner}
       {tournamentBanner}
