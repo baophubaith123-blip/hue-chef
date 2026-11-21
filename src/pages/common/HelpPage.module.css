@@ -114,3 +114,8 @@
   border: 2.5px solid rgba(109, 69, 32, 0.75);
   box-shadow: inset 0 0 0 2px rgba(233, 192, 122, 0.4), 0 4px 0 rgba(74, 44, 20, 0.25);
 }
+
+/* ---- Contrast pass 2 (final scan, dot 1): the intro read the theme
+   muted token, which flips pale in dark mode over the page's light
+   face (measured 2.13:1). Pin deep ink in both themes. ---- */
+.intro { color: #5d4632; }

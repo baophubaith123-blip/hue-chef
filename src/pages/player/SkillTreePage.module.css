@@ -584,3 +584,13 @@
     repeating-linear-gradient(0deg, rgba(255, 214, 140, 0.05) 0 3px, rgba(59, 32, 8, 0.07) 3px 4px, rgba(59, 32, 8, 0) 4px 26px),
     linear-gradient(180deg, #8a5a2e 0%, #74471f 55%, #63391a 100%);
 }
+
+/* ---- Contrast pass: tier labels in full ink on the bamboo mat
+   (the pinned gold-brown measured 3.7:1). ---- */
+.tierLabel { color: #43301b; }
+
+/* ---- Contrast pass 2 (final scan, dot 1): the pinned gold-brown
+   #8a5a00 measured 3.98:1 on the bamboo mat — deepened to full
+   dark umber for branch effects and next-tier captions. ---- */
+.branchEffect { color: #664200; }
+.tierCaptionNext { color: #664200; }

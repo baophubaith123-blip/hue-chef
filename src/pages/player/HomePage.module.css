@@ -1323,3 +1323,12 @@
 @media (max-width: 560px) {
   .dishRow { grid-template-columns: repeat(2, 1fr); }
 }
+
+/* ---- Contrast pass 2 (final scan, dot 1): stat labels/subs on the
+   gold (brass) and woven-bamboo plaques measured 3.15-4.34:1 with the
+   muted paper token. Cells 2/4 already carry light overrides for
+   their dark plaques; pin deep ink on the two light plaques. ---- */
+.statsGrid .statCard:nth-child(1) .statLabel,
+.statsGrid .statCard:nth-child(3) .statLabel { color: #4a2c10; }
+.statsGrid .statCard:nth-child(1) .statSub,
+.statsGrid .statCard:nth-child(3) .statSub { color: #4a2c10; }

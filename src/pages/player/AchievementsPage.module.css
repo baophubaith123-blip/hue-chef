@@ -442,3 +442,30 @@
   background: radial-gradient(circle at 38% 32%, rgba(255, 240, 190, 0.85), rgba(233, 192, 110, 0.35) 70%, rgba(233, 192, 110, 0) 100%);
 }
 .laurelCount { z-index: 1; }
+
+/* ---- Contrast pass: the stat boxes' tan gradient washed the
+   cream numbers out (measured 2.1-2.4:1) — deepened wood stops
+   keep the same material with legible text. ---- */
+.statBox {
+  background:
+    radial-gradient(circle at 50% 0, rgba(255, 255, 255, 0.18), transparent 55%),
+    linear-gradient(170deg, #a97a3f, #7c5222 60%, #5f3a16);
+}
+
+/* ---- Contrast pass 2 (final scan, dot 1): stat boxes deepened one
+   more stop (labels measured 4.04:1) and every badge name now sits
+   on its own carved dark-wood name strip inside the pill card —
+   the name belongs on the object's plaque, and cream on the strip
+   measures 10+:1 instead of 2.98:1 over the card's gold band. ---- */
+.statBox {
+  background:
+    radial-gradient(circle at 50% 0, rgba(255, 255, 255, 0.14), transparent 55%),
+    linear-gradient(170deg, #96682f, #6b451c 60%, #4a2c0e);
+}
+.badgePillCard .badgeName {
+  display: inline-block;
+  background: linear-gradient(180deg, #6e4520, #54300f);
+  border-radius: 999px;
+  padding: 0.14rem 0.7rem;
+  box-shadow: inset 0 1px 0 rgba(255, 226, 170, 0.35), inset 0 -3px 6px rgba(30, 16, 2, 0.45);
+}

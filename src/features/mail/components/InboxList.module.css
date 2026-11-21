@@ -374,3 +374,8 @@
   border: 2.5px solid rgba(109, 69, 32, 0.65);
   box-shadow: 0 4px 0 rgba(74, 44, 20, 0.25);
 }
+
+/* ---- Contrast pass 2 (final scan, dot 1): the empty hint followed
+   the page muted token (4.31:1, and paler in dark mode) while the
+   empty state sits on a light letter sheet — pin deep ink. ---- */
+.emptyHint { color: #5d4632; }

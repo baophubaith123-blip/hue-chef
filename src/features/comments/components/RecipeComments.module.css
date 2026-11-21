@@ -205,3 +205,8 @@
   line-height: 28px;
   color: #43301b;
 }
+
+/* ---- Contrast pass 2 (final scan, dot 1): the empty-guestbook note
+   read the theme muted token at 3.65:1 on the lined paper — the
+   guestbook face is light in both themes, so pin deep ink. ---- */
+.empty { color: #5d4632; }

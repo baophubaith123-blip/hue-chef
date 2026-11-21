@@ -534,3 +534,21 @@
 .authorCard .authorName { color: #ffe9b8; }
 .authorCard .authorMeta { color: #f3d9ae; }
 .authorCard .authorSubject { color: #fdf3d3; }
+.authorCard .cardTitle { color: #ffe9b8; }
+.authorCard .authorRole { color: #f3d9ae; }
+.card { color: #5d4a33; }
+
+/* ---- Contrast pass 2 (final scan, dot 1): the journey title flipped
+   to a near-white plum token in dark mode while its woven mat stays
+   light (measured 1.05:1 — invisible); step descriptions and the
+   feature list sat at 4.3-4.4:1; author plaque secondary lines at
+   4.4:1. Pin deep ink on the light faces in BOTH themes and lift the
+   author plaque lines to full cream-gold. ---- */
+.journeyTitle { color: #4a1525; }
+[data-theme='dark'] .journeyTitle { color: #4a1525; }
+.journeyStepDesc { color: #5d3d1e; }
+.list li { color: #5d4632; }
+[data-theme='dark'] .list li { color: #5d4632; }
+.acknowledge { color: #5d4632; }
+.authorCard .authorMeta { color: #ffe9b8; }
+.authorCard .authorRole { color: #ffe9b8; }

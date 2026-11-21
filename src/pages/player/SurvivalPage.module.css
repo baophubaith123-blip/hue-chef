@@ -473,3 +473,12 @@
     repeating-linear-gradient(90deg, rgba(122, 84, 32, 0.1) 0 2px, rgba(122, 84, 32, 0) 2px 11px),
     linear-gradient(180deg, #efdfba 0%, #e7d3a8 100%);
 }
+
+/* ---- Contrast pass 2 (final scan, dot 1): the runs label floated
+   translucent over the gate illustration (measured 1.5:1). It is
+   now a solid carved-wood tag with cream text in both themes. ---- */
+.runsLabel {
+  background: linear-gradient(180deg, #74471f, #54300f);
+  border-color: #3c2410;
+  color: #f7e8c6;
+}
