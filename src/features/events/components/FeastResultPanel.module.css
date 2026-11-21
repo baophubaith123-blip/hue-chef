@@ -139,3 +139,15 @@
 .dishImg {
   border: 2.5px solid var(--td-ink, #4a2c14);
 }
+
+/* Modal-scroll law (Bảo, 2026-11-21): a fixed overlay taller than the
+   viewport scrolls internally; its card caps at the viewport height. */
+.overlay {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.card {
+  max-height: calc(100dvh - 2rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}

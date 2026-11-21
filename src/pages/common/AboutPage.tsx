@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 
+import noiNoiWave from '@/assets/theme-d/noi-noi-flat/noinoi-wave.webp';
 import { useTranslation } from '@/i18n/useTranslation';
 
 
@@ -22,10 +23,10 @@ export default function AboutPage() {
   ];
 
   const features = [
-    '15 món ăn Huế đặc trưng',
+    '50 món ăn Huế đặc trưng',
     'Drag & Drop cooking mode',
     'Hệ thống tính điểm + 5 sao',
-    '27 thành tích theo điều kiện',
+    '33 thành tích theo điều kiện',
     '4 vai trò phân quyền rõ ràng',
     'Mail system (6 loại thư)',
     'Support chat & khiếu nại',
@@ -59,7 +60,7 @@ export default function AboutPage() {
           </div>
 
           <div className={styles.heroArtwork} aria-hidden="true">
-            <img src="/images/noi-noi-2d.webp" alt="" className={styles.heroPotImg} />
+            <img src={noiNoiWave} alt="" className={styles.heroPotImg} />
           </div>
         </section>
 
@@ -71,7 +72,7 @@ export default function AboutPage() {
               <span className={styles.journeyIcon} aria-hidden="true">🍲</span>
               <h3 className={styles.journeyStepTitle}>Chọn món</h3>
               <p className={styles.journeyStepDesc}>
-                15 món Huế từ cấp Dễ đến Địa ngục đang chờ bạn chinh phục.
+                50 món Huế từ cấp Dễ đến Đặc biệt đang chờ bạn chinh phục.
               </p>
             </div>
             <div className={styles.journeyStep}>
@@ -134,7 +135,7 @@ export default function AboutPage() {
                 <span className={styles.statLbl}>{t('about.statRoles')}</span>
               </div>
               <div className={styles.statBox}>
-                <span className={styles.statNum}>15</span>
+                <span className={styles.statNum}>50</span>
                 <span className={styles.statLbl}>{t('about.statDishes')}</span>
               </div>
             </div>

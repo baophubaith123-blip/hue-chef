@@ -871,3 +871,14 @@
 .memorizeWrap .listItems {
   padding-right: 138px;
 }
+
+/* ---- Cart button label fit (audit #38): the label sits on the
+   painted cart's plaque — smaller, nowrap, centred in the plaque
+   zone so its edges never touch the cart's round rim. ---- */
+.goBtn {
+  font-size: 12px;
+  letter-spacing: 0;
+  white-space: nowrap;
+  padding: 0 14px 13px;
+  line-height: 1.1;
+}

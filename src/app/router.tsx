@@ -52,7 +52,6 @@ import PlayerMailDetailPage from '@/pages/player/PlayerMailDetailPage';
 import ProfilePage from '@/pages/player/ProfilePage';
 import RecipeDetailPage from '@/pages/player/RecipeDetailPage';
 import RecipeListPage from '@/pages/player/RecipeListPage';
-import ThemeDShowcasePage from '@/pages/common/ThemeDShowcasePage';
 import SupportAppealDetailPage from '@/pages/support/SupportAppealDetailPage';
 import SupportAppealsPage from '@/pages/support/SupportAppealsPage';
 import SupportChatPage from '@/pages/support/SupportChatPage';
@@ -83,10 +82,6 @@ export const router = createBrowserRouter([
   {
     path: '/about',
     element: <AboutPage />,
-  },
-  {
-    path: '/showcase',
-    element: <ThemeDShowcasePage />,
   },
   {
     path: '/',
