@@ -1,5 +1,10 @@
 import { findUserById, loadUsers, saveUsers, updateStoredUserById } from '@/features/auth/store';
 import type { CookedRecipeEntry } from '@/features/auth/types';
+import { SEED_RECIPES } from '@/data/recipes';
+import {
+  effectiveBossClears,
+  effectiveDishLicenses,
+} from '@/features/journey/lib/journey';
 import type { EventsUserState } from '@/features/events/types';
 import type { SkillTiers } from '@/features/skills/types';
 import type { StallUserState } from '@/features/stall/types';
@@ -60,6 +65,12 @@ export function buildSnapshot(localUserId: string, updatedAt: number): ProgressS
       cookedRecipes: [...(user.cookedRecipes ?? [])],
       unlockedAchievements: [...(user.unlockedAchievements ?? [])],
       sellLicenses: [...(user.sellLicenses ?? [])],
+      // The new-law fields travel MATERIALISED (legacy chapter licenses
+      // already expanded), so a peer on the new build never has to
+      // re-derive them — and a peer on the old build simply ignores
+      // them while sellLicenses keeps its progress safe.
+      dishLicenses: effectiveDishLicenses(user, SEED_RECIPES),
+      bossClears: effectiveBossClears(user),
       equippedAchievementId: user.equippedAchievementId ?? null,
     },
     stall: readByUser<StallUserState>(STORAGE_KEYS.stall, localUserId),
@@ -109,6 +120,12 @@ function unionCooked(
  * — history only grows: cookedRecipes merge by recipeId|cookedAt,
  *   ownedRecipeIds / sellLicenses / unlockedAchievements merge as
  *   sets;
+ * — licenses follow the per-dish law (Bảo chốt 2026-11-20): the new
+ *   dishLicenses / bossClears fields union like the other sets, and
+ *   the MERGED legacy sellLicenses are folded back into both — an old
+ *   payload carrying only chapter licenses converts into per-dish
+ *   licenses for every dish of those chapters plus the boss clears,
+ *   whichever side it arrived from, so old↔new sync loses nothing;
  * — updatedAt of the result is the max of both.
  */
 export function mergeSnapshots(
@@ -117,6 +134,21 @@ export function mergeSnapshots(
 ): ProgressSnapshot {
   const base = remote.updatedAt > local.updatedAt ? remote : local;
   const other = base === local ? remote : local;
+  const mergedSellLicenses = unionStrings(
+    base.profile.sellLicenses,
+    other.profile.sellLicenses,
+  );
+  const mergedDishLicenses = unionStrings(
+    unionStrings(base.profile.dishLicenses ?? [], other.profile.dishLicenses ?? []),
+    effectiveDishLicenses(
+      { dishLicenses: [], sellLicenses: mergedSellLicenses },
+      SEED_RECIPES,
+    ),
+  );
+  const mergedBossClears = unionStrings(
+    unionStrings(base.profile.bossClears ?? [], other.profile.bossClears ?? []),
+    mergedSellLicenses,
+  );
   return {
     version: 1,
     updatedAt: Math.max(local.updatedAt, remote.updatedAt),
@@ -130,7 +162,9 @@ export function mergeSnapshots(
       ),
       cookedRecipes: unionCooked(base.profile.cookedRecipes, other.profile.cookedRecipes),
       ownedRecipeIds: unionStrings(base.profile.ownedRecipeIds, other.profile.ownedRecipeIds),
-      sellLicenses: unionStrings(base.profile.sellLicenses, other.profile.sellLicenses),
+      sellLicenses: mergedSellLicenses,
+      dishLicenses: mergedDishLicenses,
+      bossClears: mergedBossClears,
       unlockedAchievements: unionStrings(
         base.profile.unlockedAchievements,
         other.profile.unlockedAchievements,
@@ -164,6 +198,20 @@ export function applySnapshot(localUserId: string, snapshot: ProgressSnapshot): 
     cookedRecipes: [...profile.cookedRecipes],
     unlockedAchievements: [...profile.unlockedAchievements],
     sellLicenses: [...profile.sellLicenses],
+    // Materialise on the way in as well: a snapshot from an old build
+    // (chapter licenses only) lands as full per-dish licenses + boss
+    // clears on this device.
+    dishLicenses: effectiveDishLicenses(
+      {
+        dishLicenses: profile.dishLicenses ?? [],
+        sellLicenses: profile.sellLicenses,
+      },
+      SEED_RECIPES,
+    ),
+    bossClears: effectiveBossClears({
+      bossClears: profile.bossClears ?? [],
+      sellLicenses: profile.sellLicenses,
+    }),
     equippedAchievementId: profile.equippedAchievementId,
   });
   saveUsers(users);

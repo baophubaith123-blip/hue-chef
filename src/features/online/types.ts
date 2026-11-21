@@ -94,7 +94,16 @@ export interface SnapshotProfile {
   ownedRecipeIds: string[];
   cookedRecipes: CookedRecipeEntry[];
   unlockedAchievements: string[];
+  /** Legacy chapter-wide sell licenses (luật H3 cũ) — kept on the wire
+   * so old payloads still convert; see journey/lib for the law. */
   sellLicenses: string[];
+  /** Per-dish sell licenses (luật trùm theo món). Optional on the type
+   * because snapshots written before the law change do not carry them;
+   * readers must default to []. */
+  dishLicenses?: string[];
+  /** Chapter boss clears — area-unlock milestones (luật mới). Optional
+   * for the same legacy reason as dishLicenses. */
+  bossClears?: string[];
   equippedAchievementId: string | null;
 }
 
