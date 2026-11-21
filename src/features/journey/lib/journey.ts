@@ -48,7 +48,7 @@ export function bestScoreByRecipe(user: PublicUser | null): Map<string, number> 
   const map = new Map<string, number>();
   for (const entry of user?.cookedRecipes ?? []) {
     if (!entry || !entry.recipeId) continue;
-    const current = map.get(entry.score ?? 0) ?? 0;
+    const current = map.get(entry.recipeId) ?? 0;
     if ((entry.score ?? 0) > current) map.set(entry.recipeId, entry.score ?? 0);
   }
   return map;

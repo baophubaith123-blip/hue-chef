@@ -550,7 +550,7 @@ export const en: I18nDictionary = {
       `Chapter boss stages are judged more strictly: reach at least ${stars} stars to record the area-unlock milestone. Sell licenses are per dish now — beat a dish's own boss to sell that dish.`,
     licenseTitle: 'Sell license',
     licenseSellableList: 'Dishes you may sell at the stall',
-    licenseNone: 'You hold no sell license yet — learn a dish, then beat that dish's own boss to earn your first one.',
+    licenseNone: 'You hold no sell license yet — learn a dish, then beat that dish\u2019s own boss to earn your first one.',
     chapters: {
       'dong-ba': {
         name: 'Street carts & Dong Ba Market',
@@ -637,7 +637,7 @@ export const en: I18nDictionary = {
     shiftClosed: 'The stall is resting — open a shift to welcome customers',
     noLicenseTitle: 'No dish is licensed for selling yet',
     noLicenseBody:
-      'Learn any dish in Recipes, then challenge and beat that dish's own boss (3 stars or more) to earn its sell license. Come back here once you have one!',
+      'Learn any dish in Recipes, then challenge and beat that dish\u2019s own boss (3 stars or more) to earn its sell license. Come back here once you have one!',
     goToMap: 'Go to the Hue Map',
     menuTitle: 'Stall menu — licensed dishes',
     menuEmpty: 'No dish is licensed for selling yet.',
