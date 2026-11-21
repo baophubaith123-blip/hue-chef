@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 
 import { ImageWithFallback } from '@/components/ImageWithFallback';
-import { dishArtFor } from '@/components/theme-d/dish-art';
+import { dishArtClearFor } from '@/components/theme-d/dish-art';
 import { gameIcon } from '@/components/theme-d/game-assets';
 import { useAuth } from '@/contexts/AuthContext';
 import { useTaxonomy } from '@/contexts/TaxonomyContext';
@@ -91,24 +91,26 @@ export function SceneDishCard({ recipe, lockedPrice }: SceneDishCardProps) {
           <div className={styles.imageWrap}>
             <ImageWithFallback
               className={styles.image}
-              src={dishArtFor(recipe)}
+              src={dishArtClearFor(recipe)}
               alt={recipe.name}
               fallbackTitle={recipe.name}
               loading="lazy"
             />
-            <div className={styles.difficultyBadge}>
-              <span className={styles.difficultyStars}>{difficultyStars(recipe.difficulty)}</span>
-              <span className={styles.difficultyName}>{tierName}</span>
-            </div>
-            <div className={styles.timeBadge}>
-              {gameIcon('clock') ? (
-                <img src={gameIcon('clock')} alt="" className={styles.badgeIcon} />
-              ) : (
-                <span aria-hidden="true">⏱</span>
-              )}{' '}
-              {formatDuration(recipe.duration)}
-            </div>
             {isLocked ? <div className={styles.lockVeil} aria-hidden="true" /> : null}
+          </div>
+          {/* Badges ride the cell's wooden FRAME edge (top corners,
+              straddling the border) — never over the dish itself. */}
+          <div className={styles.difficultyBadge}>
+            <span className={styles.difficultyStars}>{difficultyStars(recipe.difficulty)}</span>
+            <span className={styles.difficultyName}>{tierName}</span>
+          </div>
+          <div className={styles.timeBadge}>
+            {gameIcon('clock') ? (
+              <img src={gameIcon('clock')} alt="" className={styles.badgeIcon} />
+            ) : (
+              <span aria-hidden="true">⏱</span>
+            )}{' '}
+            {formatDuration(recipe.duration)}
           </div>
         </Link>
 

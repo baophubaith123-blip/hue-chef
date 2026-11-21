@@ -9,7 +9,7 @@ import { GAME_ART } from '@/components/theme-d/game-assets';
 import { GoldButton } from '@/components/theme-d/GoldButton';
 import { NoiNoi } from '@/components/theme-d/NoiNoi';
 import { WoodButton } from '@/components/theme-d/WoodButton';
-import { dishArtFor } from '@/components/theme-d/dish-art';
+import { dishArtClearFor } from '@/components/theme-d/dish-art';
 import { getIngredientById } from '@/data/ingredients';
 import { difficultyName } from '@/features/recipes/lib/difficulty';
 import { dishGradeFor } from '@/features/recipes/lib/grade';
@@ -260,7 +260,7 @@ export default function RecipeDetailPage() {
                 <div className={styles.dishFrameInner}>
                   <ImageWithFallback
                     className={styles.image}
-                    src={dishArtFor(recipe)}
+                    src={dishArtClearFor(recipe)}
                     alt={recipe.name}
                     fallbackTitle={recipe.name}
                   />
@@ -423,11 +423,14 @@ export default function RecipeDetailPage() {
           <NoiNoi pose="gioi-thieu" size={104} alt="" className={styles.noiNoiCorner} />
         </motion.article>
 
-        {/* Đợt 4: bình luận nằm trên trang giấy của sổ khách gáy tre
-            (r4-comment-book) — tiêu đề BÌNH LUẬN là chữ thiết kế trên
-            bìa, nội dung thật cuộn trong vùng trang trống. */}
+        {/* Bình luận là một MỤC RIÊNG (Bảo chốt 2026-11-21: tách mục,
+            không xoá): sổ khách mở — ảnh sổ duyệt (r4-comment-book)
+            làm băng đầu mang tên mục, còn form + danh sách nằm trọn
+            trên mặt sổ mở bên dưới, khung chảy theo nội dung nên
+            không bao giờ tràn gáy/mép ở bất kỳ bề rộng nào. */}
         <motion.section
           className={styles.commentsPanel}
+          aria-label={dict.nav.comments}
           initial={reduceMotion ? false : { opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.35, delay: reduceMotion ? 0 : 0.12 }}

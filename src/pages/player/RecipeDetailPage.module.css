@@ -1227,3 +1227,120 @@
   margin: 0;
   line-height: 1.6;
 }
+
+/* ===== Bình luận: mục sổ khách riêng (Bảo chốt tách mục 2026-11-21) =====
+   The guest book is no longer a fixed-aspect picture with the live
+   content squeezed into its painted page (cramped and spill-prone at
+   390px). The approved book art becomes the section's header band;
+   the form and the comment list live on an open-book face below it
+   whose frame grows with its content — spine, page edges and all
+   controls stay inside the face at desktop and 390px alike. */
+.commentsPanel {
+  position: relative;
+  align-self: center;
+  width: min(760px, 100%);
+  aspect-ratio: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+.commentBookImg {
+  position: relative;
+  inset: auto;
+  width: min(300px, 78%);
+  height: auto;
+  margin: 0 auto -14px;
+  z-index: 2;
+  filter: drop-shadow(0 10px 16px rgba(0, 0, 0, 0.35));
+}
+.commentBookPage {
+  position: relative;
+  left: auto;
+  right: auto;
+  top: auto;
+  bottom: auto;
+  overflow: visible;
+  padding: 2rem 1.6rem 1.4rem;
+  border: 3px solid #7a4a22;
+  border-radius: 16px;
+  background:
+    /* bamboo binding rings along the top edge */
+    repeating-linear-gradient(90deg, rgba(122, 74, 34, 0.35) 0 3px, rgba(122, 74, 34, 0) 3px 46px) top / 100% 10px no-repeat,
+    /* open-book spread: page shading with the centre spine */
+    linear-gradient(90deg, #efe0bd 0%, #fffdf4 10%, #fdf6da 46%, #e6d0a4 50%, #fdf6da 54%, #fffdf4 90%, #efe0bd 100%);
+  box-shadow:
+    inset 0 0 0 2px rgba(233, 192, 122, 0.5),
+    inset 0 0 26px rgba(122, 74, 34, 0.14),
+    0 14px 26px rgba(0, 0, 0, 0.3);
+}
+@media (max-width: 560px) {
+  .commentBookPage {
+    padding: 1.7rem 0.95rem 1.1rem;
+  }
+  .commentBookImg {
+    margin-bottom: -10px;
+  }
+}
+
+/* ---- Buy card safe zone (steer 15.3, 2026-11-21): the painted
+   bamboo card has a rope bow hanging into the top-left and a wooden
+   padlock over the bottom-right of its paper face. The live content
+   now sits in the face's true safe zone (below the bow, left of the
+   padlock) with tighter type, so price / balance / button / the red
+   "còn thiếu" hint NEVER touch the bow or the lock and never spill
+   past the frame — in every state (enough / not enough / owned). */
+.buyCardBody {
+  left: 13%;
+  right: 21%;
+  top: 23%;
+  bottom: 14%;
+  gap: 0.22rem;
+}
+.buyPrice { font-size: 1.12rem; }
+.buyBalance { font-size: 0.82rem; }
+.buyBtn { min-height: 38px; padding: 0.4rem 0.95rem; font-size: 0.92rem; }
+.buyHint { font-size: 0.78rem; line-height: 1.25; }
+
+/* ---- Dish sign re-cut (audit #27): the asset was re-cropped to the
+   board alone (foreign strip + baked scene removed, edges keyed).
+   Match the new aspect and the face's text zone. ---- */
+.dishSign { aspect-ratio: 586 / 268; }
+.dishSignText { top: 26%; bottom: 6%; }
+
+/* ---- Framed picture (audit #28/#29): the dish sits INTO the frame
+   as a transparent cut-out on a woven mat cell — no white square;
+   the grade plaque moves to the frame's bottom-left wood and the
+   category chip to the frame's top-left wood, both OFF the art. */
+.dishFrameInner {
+  background:
+    repeating-linear-gradient(45deg, rgba(122, 84, 32, 0.13) 0 2px, transparent 2px 9px),
+    repeating-linear-gradient(-45deg, rgba(122, 84, 32, 0.13) 0 2px, transparent 2px 9px),
+    linear-gradient(160deg, #d9e6c3, #b9cf9d);
+}
+.dishFrame .image {
+  object-fit: contain;
+  padding: 4%;
+  filter: drop-shadow(0 5px 5px rgba(74, 44, 20, 0.35));
+}
+.categoryBadge {
+  top: 2px;
+  left: 6px;
+  z-index: 3;
+}
+.frameGrade {
+  right: auto;
+  left: 4%;
+  bottom: 0.5%;
+  z-index: 3;
+}
+
+/* ---- Board face = woven fibre paper (audit #26): same material
+   language as the recipe board — cross-weave + fibre speckle. ---- */
+.board {
+  background:
+    radial-gradient(circle at 18% 30%, rgba(160, 120, 60, 0.07) 0 26px, transparent 27px),
+    radial-gradient(circle at 82% 68%, rgba(160, 120, 60, 0.06) 0 34px, transparent 35px),
+    repeating-linear-gradient(0deg, rgba(122, 84, 32, 0.045) 0 1px, transparent 1px 5px),
+    repeating-linear-gradient(90deg, rgba(122, 84, 32, 0.045) 0 1px, transparent 1px 5px),
+    linear-gradient(180deg, var(--td-paper) 0%, var(--td-paper-deep) 100%);
+}
