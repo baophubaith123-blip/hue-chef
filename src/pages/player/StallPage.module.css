@@ -1397,7 +1397,12 @@
   color: var(--td-paper-text);
 }
 .ordersBody {
-  padding: 2.1rem 1.05rem 1.05rem;
+  /* The hanging sign (.ordersSign, top:-33px, height = 29% of its
+     width = min(80%, 330px) of the panel) reaches up to ~63px into
+     the panel; the body must start BELOW its bottom edge at every
+     panel width — percentage padding tracks the sign's own size,
+     the clamp caps keep desktop from drifting into dư. */
+  padding: clamp(3.6rem, 17.5%, 4.6rem) 1.05rem 1.05rem;
 }
 .ordersRope {
   position: relative;
@@ -1996,4 +2001,152 @@
     left: 22%;
     width: 56%;
   }
+}
+
+/* ============ Gói trùm theo món — lát quầy: 3 modal mang hình vật ============ */
+
+/* --- Staff: the locked/empty note is a pinned sheet ON the clipboard,
+   so the clipboard covers the empty state too (not bare cream). --- */
+.staffLockedNote {
+  margin: 10px auto 4px;
+  max-width: 92%;
+  padding: 16px 14px 14px;
+  text-align: center;
+  font-weight: 700;
+  color: var(--td-paper-text);
+  background: linear-gradient(180deg, #fffef8 0%, #fdf3cf 100%);
+  border: 1.5px dashed rgba(122, 72, 32, 0.55);
+  border-radius: 8px;
+  box-shadow: 0 3px 8px rgba(40, 20, 4, 0.18);
+  transform: rotate(-0.6deg);
+  position: relative;
+}
+.staffLockedNote::before {
+  content: '';
+  position: absolute;
+  top: -9px;
+  left: 50%;
+  transform: translateX(-50%) rotate(2deg);
+  width: 64px;
+  height: 16px;
+  background: rgba(233, 200, 150, 0.75);
+  border-left: 1.5px dashed rgba(122, 72, 32, 0.4);
+  border-right: 1.5px dashed rgba(122, 72, 32, 0.4);
+  border-radius: 2px;
+}
+
+/* --- Support: a paper desk with brick-red ruling (quầy hỗ trợ) --- */
+.deskShell.deskShell {
+  width: min(560px, 100%);
+  background-color: #8a4433;
+  background-image:
+    linear-gradient(rgba(59, 32, 16, 0.3), rgba(59, 32, 16, 0.3)),
+    repeating-linear-gradient(0deg, transparent 0 22px, #e8c9a8 22px 25px),
+    repeating-linear-gradient(90deg, transparent 0 48px, #e8c9a8 48px 51px);
+  border: 3px solid #5d2a18;
+  box-shadow:
+    inset 0 0 0 2px rgba(232, 201, 168, 0.35),
+    0 24px 60px rgba(0, 0, 0, 0.5);
+}
+.deskHead.deskHead {
+  margin: 12px 12px 0;
+  padding: 16px 18px 8px;
+  background:
+    repeating-linear-gradient(0deg, transparent 0 27px, rgba(176, 62, 38, 0.13) 27px 28px),
+    linear-gradient(180deg, #fffdf4, #f9edcb);
+  border-radius: 10px 10px 0 0;
+}
+.deskTitle.deskTitle {
+  color: #4a2c14;
+  text-shadow: none;
+}
+.deskBody.deskBody {
+  margin: 0 12px 12px;
+  border-radius: 0 0 10px 10px;
+  background:
+    repeating-linear-gradient(0deg, transparent 0 27px, rgba(176, 62, 38, 0.13) 27px 28px),
+    linear-gradient(180deg, #fffdf4, #f9edcb);
+  background-color: #f9edcb;
+}
+/* The two support boxes become form sheets pinned on the desk:
+   brighter paper, a brick-red header rule and a brass pin. */
+.deskBody .supportBox {
+  position: relative;
+  background: linear-gradient(180deg, #fffef9 0%, #fdf6da 100%);
+  border: 1.5px solid rgba(122, 72, 32, 0.45);
+  border-top: 5px solid #b03e26;
+  border-radius: 8px;
+  box-shadow: 0 3px 8px rgba(40, 20, 4, 0.18);
+  padding: 12px 14px;
+}
+.deskBody .supportBox::before {
+  content: '';
+  position: absolute;
+  top: -11px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #f3d492, #8a5a1f);
+  border: 1.5px solid #5d3410;
+  z-index: 1;
+}
+
+/* --- Feast: a board around the brass pot on a brick stove --- */
+.feastShell.feastShell {
+  width: min(560px, 100%);
+  background-color: #7a3b22;
+  background-image:
+    linear-gradient(rgba(40, 18, 6, 0.35), rgba(40, 18, 6, 0.35)),
+    repeating-linear-gradient(0deg, transparent 0 22px, #e8c9a8 22px 25px),
+    repeating-linear-gradient(90deg, transparent 0 48px, #e8c9a8 48px 51px);
+  border: 3px solid #4a2412;
+  box-shadow:
+    inset 0 0 0 2px rgba(232, 201, 168, 0.3),
+    0 24px 60px rgba(0, 0, 0, 0.5);
+}
+.feastHead.feastHead {
+  margin: 12px 12px 0;
+  padding: 16px 18px 8px;
+  background: linear-gradient(180deg, #fffdf4, #f9edcb);
+  border-radius: 10px 10px 0 0;
+}
+.feastTitle.feastTitle {
+  color: #4a2c14;
+  text-shadow: none;
+}
+.feastBodyShell.feastBodyShell {
+  margin: 0 12px 12px;
+  border-radius: 0 0 10px 10px;
+  background:
+    radial-gradient(120% 90px at 50% 108%, rgba(233, 162, 59, 0.4), rgba(233, 162, 59, 0) 70%),
+    linear-gradient(180deg, #f9edcb, #f3dfae);
+  background-color: #f3dfae;
+}
+/* The feast box itself becomes the wooden board around the pot;
+   its intro line rides a brass plaque (the pot's name band). */
+.feastBodyShell .feastBox {
+  border: 9px solid transparent;
+  border-radius: 14px;
+  background:
+    linear-gradient(180deg, #fffdf4 0%, #f9edcb 100%) padding-box,
+    url('../../assets/theme-d/game/wood-texture.webp') border-box;
+  background-size: auto, 360px 270px;
+  box-shadow:
+    inset 0 0 0 2px rgba(60, 32, 8, 0.45),
+    inset 0 0 16px rgba(60, 32, 8, 0.12),
+    0 4px 10px rgba(40, 20, 4, 0.2);
+  padding: 12px;
+}
+.feastBodyShell .feastBox > p:first-of-type {
+  margin: 0 0 4px;
+  padding: 8px 12px;
+  text-align: center;
+  font-weight: 700;
+  color: #4a2c14;
+  background: linear-gradient(180deg, #f3d492, #e3b959 55%, #b98d45);
+  border: 2px solid #8a5a1f;
+  border-radius: 10px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6), 0 3px 8px rgba(40, 20, 4, 0.25);
 }

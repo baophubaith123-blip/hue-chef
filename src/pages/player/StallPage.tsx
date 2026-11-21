@@ -1276,7 +1276,7 @@ export default function StallPage() {
       >
         <div className={styles.clipboard}>
         {stallLevel < 2 ? (
-          <p>{sup.staffLocked(2)}</p>
+          <p className={styles.staffLockedNote}>{sup.staffLocked(2)}</p>
         ) : (
           <div className={styles.staffList}>
             <p className={styles.essentialLine}>
@@ -1350,7 +1350,16 @@ export default function StallPage() {
 
       {/* Support panel (Gói H6, mục 8.3 + ý 16): stall upgrade + Nồi Nồi skins.
           Gear / cards / decor / ads live at the market's support stall. */}
-      <Modal open={panel === 'support'} title={sup.supportTitle} onClose={() => setPanel(null)} closeLabel={s.summaryClose}>
+      <Modal
+        open={panel === 'support'}
+        title={sup.supportTitle}
+        onClose={() => setPanel(null)}
+        closeLabel={s.summaryClose}
+        shellClass={styles.deskShell}
+        headerClass={styles.deskHead}
+        bodyClass={styles.deskBody}
+        titleClass={styles.deskTitle}
+      >
         <div className={styles.supportBox}>
           <strong>{sup.upgradeTitle}</strong>
           <p>{sup.starsVsLevelNote}</p>
@@ -1464,6 +1473,10 @@ export default function StallPage() {
       <Modal
         open={panel === 'feast'}
         title={dict.events.feast.title}
+        shellClass={styles.feastShell}
+        headerClass={styles.feastHead}
+        bodyClass={styles.feastBodyShell}
+        titleClass={styles.feastTitle}
         onClose={() => setPanel(null)}
         closeLabel={s.summaryClose}
       >
