@@ -1292,19 +1292,19 @@
 .buyCardBody {
   left: 13%;
   right: 21%;
-  top: 23%;
-  bottom: 14%;
-  gap: 0.22rem;
+  top: 21%;
+  bottom: 9%;
+  gap: 0.16rem;
 }
-.buyPrice { font-size: 1.12rem; }
-.buyBalance { font-size: 0.82rem; }
-.buyBtn { min-height: 38px; padding: 0.4rem 0.95rem; font-size: 0.92rem; }
-.buyHint { font-size: 0.78rem; line-height: 1.25; }
+.buyPrice { font-size: 1.02rem; }
+.buyBalance { font-size: 0.78rem; }
+.buyBtn { min-height: 34px; padding: 0.32rem 0.9rem; font-size: 0.88rem; }
+.buyHint { font-size: 0.74rem; line-height: 1.18; }
 
 /* ---- Dish sign re-cut (audit #27): the asset was re-cropped to the
    board alone (foreign strip + baked scene removed, edges keyed).
    Match the new aspect and the face's text zone. ---- */
-.dishSign { aspect-ratio: 586 / 268; }
+.dishSign { aspect-ratio: 586 / 242; }
 .dishSignText { top: 26%; bottom: 6%; }
 
 /* ---- Framed picture (audit #28/#29): the dish sits INTO the frame
@@ -1343,4 +1343,27 @@
     repeating-linear-gradient(0deg, rgba(122, 84, 32, 0.045) 0 1px, transparent 1px 5px),
     repeating-linear-gradient(90deg, rgba(122, 84, 32, 0.045) 0 1px, transparent 1px 5px),
     linear-gradient(180deg, var(--td-paper) 0%, var(--td-paper-deep) 100%);
+}
+
+/* ---- Journey scroll fit (visual phase): the mini scroll's face
+   zone was too small for the chapter line + the per-dish license
+   note — lines wrapped over the scroll's rolled edges. The scroll
+   gets a taller box, the text zone widens, and the type shrinks a
+   step so both lines always sit on the parchment face. ---- */
+.journeyScroll { flex-basis: 470px; min-height: 104px; }
+.journeyScrollText { left: 11%; right: 11%; top: 12%; bottom: 19%; gap: 0.1rem; }
+.journeyLabel { font-size: 0.86rem; line-height: 1.2; }
+.journeySellable, .journeyNotSellable { font-size: 0.8rem; line-height: 1.22; }
+
+/* ---- Comment book band (visual phase): the book cover art is a
+   tall portrait — as a header it now shows as a BAND (title area)
+   overlapping the guestbook page, one object instead of a floating
+   book above a detached card. ---- */
+.commentBookImg {
+  width: min(340px, 84%);
+  height: 118px;
+  object-fit: cover;
+  object-position: top center;
+  border-radius: 12px;
+  margin-bottom: -18px;
 }
