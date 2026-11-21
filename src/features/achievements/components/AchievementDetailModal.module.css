@@ -8,6 +8,8 @@
   z-index: 1000;
   padding: 1rem;
   backdrop-filter: blur(4px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
 .modal {
@@ -16,6 +18,13 @@
   border-radius: var(--radius-xl, 16px);
   width: 100%;
   max-width: 28rem;
+  /* The modal scrolls INTERNALLY when it outgrows the viewport —
+     perk box and equip button at the foot must always be reachable
+     (1920/1440/390 alike). The laurel wreath overhangs the top edge,
+     so the cap leaves it room inside the overlay's padding box. */
+  max-height: calc(100dvh - 5.5rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
   padding: 1.75rem;
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
   display: flex;
@@ -281,3 +290,23 @@
   background: url('../../../assets/theme-d/game/r4-laurel-wreath.webp') center / contain no-repeat;
   pointer-events: none;
 }
+
+/* ---- Detail modal = the badge's own lacquer plaque, enlarged
+   (steer 15.1): face is lacquered wood like the badge cards; the
+   story and perk boxes stay as parchment notes pinned ON the
+   plaque. Text flips to cream/gold on the lacquer. ---- */
+.modal {
+  background:
+    repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.14) 0 2px, transparent 2px 26px),
+    linear-gradient(170deg, #6e4520, #54300f 58%, #3f2309);
+  border-color: #2c1704;
+  color: #f7e8c6;
+}
+.title { color: #fdf3d3; }
+.desc,
+.storyLabel,
+.progressText { color: #e8cf9e; }
+.unlockedDate { color: #d8bd82; }
+.progressBar { background: rgba(15, 6, 1, 0.55); border-color: #2c1704; }
+.perkLabel { color: #f2b544; }
+.closeBtn { background: linear-gradient(180deg, #fdf3d3, #f3dfae); }

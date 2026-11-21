@@ -1,4 +1,8 @@
+import { SEED_ACHIEVEMENTS } from '@/data/achievements';
+
 import styles from './AchievementIcon.module.css';
+
+export type AchievementRarity = 'common' | 'rare' | 'epic' | 'legendary';
 
 interface AchievementIconProps {
   badgeId: string;
@@ -6,7 +10,16 @@ interface AchievementIconProps {
   size?: 'xs' | 'sm' | 'md' | 'lg';
   locked?: boolean;
   className?: string;
+  /** Medal tier; defaults to the seeded achievement's rarity. */
+  rarity?: AchievementRarity;
 }
+
+const RARITY_CLASS: Record<AchievementRarity, string> = {
+  common: styles.rarCommon,
+  rare: styles.rarRare,
+  epic: styles.rarEpic,
+  legendary: styles.rarLegendary,
+};
 
 export function AchievementIcon({
   badgeId,
@@ -14,7 +27,19 @@ export function AchievementIcon({
   size = 'md',
   locked = false,
   className,
+  rarity,
 }: AchievementIconProps) {
+  // Medal tiers escalate with rarity (Bảo, 2026-11-21): common is a
+  // plain bronze disc; rare gains carving + a coloured stone; epic is
+  // gold with a gem row; legendary is radiant gold with a sunburst
+  // laurel ring and a soft glow. NO purple at any tier.
+  const tier: AchievementRarity =
+    rarity ??
+    (SEED_ACHIEVEMENTS.find((a) => a.id === badgeId)?.rarity as
+      | AchievementRarity
+      | undefined) ??
+    'common';
+  const showOrnaments = size === 'md' || size === 'lg';
   const getCategoryClass = () => {
     switch (category) {
       case 'bun':
@@ -292,6 +317,7 @@ export function AchievementIcon({
         styles.badgeContainer,
         styles[size],
         getCategoryClass(),
+        RARITY_CLASS[tier],
         locked ? styles.locked : '',
         className ?? '',
       ]
@@ -299,6 +325,13 @@ export function AchievementIcon({
         .join(' ')}
       title={locked ? 'LOCKED' : 'UNLOCKED'}
     >
+      {showOrnaments && tier !== 'common' ? (
+        <span className={styles.gems} aria-hidden="true">
+          <i className={styles.gemA} />
+          {tier === 'epic' || tier === 'legendary' ? <i className={styles.gemB} /> : null}
+          {tier === 'legendary' ? <i className={styles.gemC} /> : null}
+        </span>
+      ) : null}
       <svg
         className={styles.svgIcon}
         viewBox="0 0 24 24"
@@ -307,6 +340,12 @@ export function AchievementIcon({
       >
         {renderSvgPath()}
       </svg>
+      {showOrnaments && (tier === 'epic' || tier === 'legendary') ? (
+        <span className={styles.tassels} aria-hidden="true">
+          <i />
+          <i />
+        </span>
+      ) : null}
     </div>
   );
 }

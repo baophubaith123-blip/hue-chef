@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+
 import { AchievementIcon } from '@/components/AchievementIcon';
 import { Button } from '@/components/Button';
 import { useAuth } from '@/contexts/AuthContext';
@@ -43,6 +45,16 @@ export function AchievementDetailModal({
   const rarityClass = styles[RARITY_CLASS[rarity]] ?? styles.rarityCommon;
 
   const isEquipped = user?.equippedAchievementId === achievement.id;
+
+  // Modal-scroll law: the page behind never scrolls while this is open;
+  // the dialog itself scrolls internally (see the module CSS).
+  useEffect(() => {
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = prevOverflow;
+    };
+  }, []);
 
   const handleEquip = () => {
     if (!isUnlocked) return;
