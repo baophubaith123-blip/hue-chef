@@ -51,10 +51,23 @@ export interface StoredUser {
   ownedRecipeIds?: string[];
   cookedRecipes?: CookedRecipeEntry[];
   unlockedAchievements?: string[];
-  /** Chapter ids whose Ngự thiện boss was beaten — the sell licenses of
-   * the stall loop (Kế hoạch hợp nhất, chốt 1). Earned only by boss wins;
-   * absent on legacy records, which simply means "no license yet". */
+  /** LEGACY chapter-wide sell licenses (luật H3 cũ): chapter ids whose
+   * boss granted the sell license for EVERY dish of the chapter. Since
+   * the per-dish boss law (Bảo chốt 2026-11-20) no new record earns
+   * these; a stored entry is read as a conversion source — it implies
+   * the chapter boss was beaten AND a dish license for every dish of
+   * that chapter (see journey/lib). Absent = none held. */
   sellLicenses?: string[];
+  /** Per-dish sell licenses (luật trùm theo món, Bảo chốt 2026-11-20):
+   * recipe ids whose own boss stage was beaten — only these dishes may
+   * be sold at the stall. Earned only by dish-boss wins (plus the legacy
+   * conversion above). Absent on legacy records = none yet. */
+  dishLicenses?: string[];
+  /** Chapter ids whose Ngự thiện chapter boss was beaten (luật mới):
+   * the area-unlock milestone of the journey — it no longer grants any
+   * sell license by itself. Legacy sellLicenses entries also count as
+   * clears, since those players did beat the boss. Absent = none. */
+  bossClears?: string[];
   warningCount?: number;
   bio?: string;
   recipeCount?: number;
@@ -94,9 +107,12 @@ export interface PublicUser {
   ownedRecipeIds?: string[];
   cookedRecipes?: CookedRecipeEntry[];
   unlockedAchievements?: string[];
-  /** Chapter ids whose Ngự thiện boss was beaten — the sell licenses of
-   * the stall loop (Kế hoạch hợp nhất, chốt 1). */
+  /** LEGACY chapter-wide sell licenses — see StoredUser.sellLicenses. */
   sellLicenses?: string[];
+  /** Per-dish sell licenses (recipe ids) — see StoredUser.dishLicenses. */
+  dishLicenses?: string[];
+  /** Chapter boss clears (chapter ids) — see StoredUser.bossClears. */
+  bossClears?: string[];
   warningCount?: number;
   bio?: string;
   recipeCount?: number;

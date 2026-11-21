@@ -7,8 +7,10 @@ import type { NoiNoiPose, SceneKey } from '@/components/theme-d/assets';
  * and Đông Ba market, old-town eateries, then the imperial kitchen.
  * Membership follows the plan's rising-difficulty rule, so any dish
  * (seeded or editor-made) belongs to exactly one chapter by its ★ tier.
- * Each chapter ends in a Ngự thiện boss stage (mục 4.2): beating it
- * grants the sell license for the whole chapter.
+ * Each chapter ends in a Ngự thiện boss stage (mục 4.2) — since the
+ * per-dish boss law (Bảo chốt 2026-11-20) it is the chapter's
+ * area-unlock milestone; sell licenses are earned per dish, by each
+ * dish's own boss (see journey.ts).
  */
 export interface ChapterDef {
   id: string;

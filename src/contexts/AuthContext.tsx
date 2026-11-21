@@ -24,6 +24,8 @@ import type {
   UserRole,
 } from '@/features/auth/types';
 import { toPublicUser } from '@/features/auth/types';
+import { SEED_RECIPES } from '@/data/recipes';
+import { migrateLicenseFields } from '@/features/journey/lib/journey';
 import { AppError } from '@/lib/errors';
 import { calculateLevelProgress } from '@/lib/score';
 import { getJsonStorage, removeStorageItem, setJsonStorage, STORAGE_KEYS } from '@/lib/storage';
@@ -52,9 +54,13 @@ interface AuthContextValue {
   addCok: (amount: number) => number | null;
   purchaseRecipe: (recipeId: string, price: number) => boolean;
   addCookedRecipe: (entry: CookedRecipeEntry) => void;
-  /** Record a chapter's sell license after its boss stage is beaten.
-   * Returns true only when the license is newly granted. */
-  grantSellLicense: (chapterId: string) => boolean;
+  /** Record a dish's sell license after its own boss stage is beaten
+   * (luật trùm theo món). Returns true only when newly granted. */
+  grantDishLicense: (recipeId: string) => boolean;
+  /** Record a chapter boss clear — the area-unlock milestone (luật mới:
+   * the chapter boss no longer grants any sell license). Returns true
+   * only when newly recorded. */
+  grantBossClear: (chapterId: string) => boolean;
   updateProfile: (patch: Partial<Pick<StoredUser, 'name' | 'avatar' | 'password' | 'equippedAchievementId'>>) => PublicUser | null;
 }
 
@@ -109,6 +115,8 @@ function mergeGuestProgress(users: StoredUser[], target: StoredUser): StoredUser
     cookedRecipes: Array.from(cookedByKey.values()),
     unlockedAchievements: unionIds(target.unlockedAchievements, guest.unlockedAchievements),
     sellLicenses: unionIds(target.sellLicenses, guest.sellLicenses),
+    dishLicenses: unionIds(target.dishLicenses, guest.dishLicenses),
+    bossClears: unionIds(target.bossClears, guest.bossClears),
     equippedAchievementId: target.equippedAchievementId ?? guest.equippedAchievementId ?? null,
   };
   const next = users
@@ -116,6 +124,26 @@ function mergeGuestProgress(users: StoredUser[], target: StoredUser): StoredUser
     .map((u) => (u.id === target.id ? merged : u));
   saveUsers(next);
   return merged;
+}
+
+/**
+ * License migration (luật trùm theo món, Bảo chốt 2026-11-20): fold a
+ * stored record's legacy chapter licenses into the new-law fields —
+ * dishLicenses gains every dish of each legacy-licensed chapter and
+ * bossClears gains those chapters — and persist when anything changed.
+ * The legacy field itself is kept untouched (old sync payloads and the
+ * dynamic conversion in the journey lib both still read it). Expansion
+ * runs over the seed catalogue, the same seam the sync layer uses.
+ */
+function migrateStoredLicenses(users: StoredUser[], stored: StoredUser): StoredUser {
+  const migration = migrateLicenseFields(stored, SEED_RECIPES);
+  if (!migration.changed) return stored;
+  const next = updateStoredUserById(users, stored.id, {
+    dishLicenses: migration.dishLicenses,
+    bossClears: migration.bossClears,
+  });
+  saveUsers(next);
+  return next.find((u) => u.id === stored.id) ?? stored;
 }
 
 /** If a dated ban has expired, lift it in the users store and return the fresh record. */
@@ -149,6 +177,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setUser(null);
     } else {
       stored = liftExpiredBan(users, stored);
+      stored = migrateStoredLicenses(loadUsers(), stored);
       const achStore = getJsonStorage<{ byUser?: Record<string, { id: string }[]> }>(STORAGE_KEYS.achievements);
       const targetId = stored.id;
       const storeIds = achStore?.byUser?.[targetId]?.map((e) => e.id) ?? [];
@@ -231,7 +260,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       throw new AppError('Incorrect password', 'INVALID_PASSWORD');
     }
     const merged = mergeGuestProgress(users, found);
-    const fresh = liftExpiredBan(loadUsers(), merged);
+    const lifted = liftExpiredBan(loadUsers(), merged);
+    const fresh = migrateStoredLicenses(loadUsers(), lifted);
     persistSession(fresh);
     return toPublicUser(fresh);
   }, [persistSession]);
@@ -257,13 +287,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       ownedRecipeIds: [],
       cookedRecipes: [],
       unlockedAchievements: [],
+      sellLicenses: [],
+      dishLicenses: [],
+      bossClears: [],
       warningCount: 0,
     };
     const next = [...users, newUser];
     saveUsers(next);
     const merged = mergeGuestProgress(loadUsers(), newUser);
-    persistSession(merged);
-    return toPublicUser(merged);
+    const migrated = migrateStoredLicenses(loadUsers(), merged);
+    persistSession(migrated);
+    return toPublicUser(migrated);
   }, [persistSession]);
 
   const playAsGuest = useCallback(
@@ -293,6 +327,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         cookedRecipes: [],
         unlockedAchievements: [],
         sellLicenses: [],
+        dishLicenses: [],
+        bossClears: [],
         warningCount: 0,
         guest: true,
       };
@@ -404,15 +440,31 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     [user, persistStoredUser],
   );
 
-  const grantSellLicense = useCallback(
+  const grantDishLicense = useCallback(
+    (recipeId: string): boolean => {
+      if (!user) return false;
+      const users = loadUsers();
+      const stored = findUserById(users, user.id);
+      if (!stored) return false;
+      const current = stored.dishLicenses ?? [];
+      if (current.includes(recipeId)) return false;
+      persistStoredUser(user.id, { dishLicenses: [...current, recipeId] });
+      return true;
+    },
+    [user, persistStoredUser],
+  );
+
+  const grantBossClear = useCallback(
     (chapterId: string): boolean => {
       if (!user) return false;
       const users = loadUsers();
       const stored = findUserById(users, user.id);
       if (!stored) return false;
-      const current = stored.sellLicenses ?? [];
-      if (current.includes(chapterId)) return false;
-      persistStoredUser(user.id, { sellLicenses: [...current, chapterId] });
+      const current = stored.bossClears ?? [];
+      if (current.includes(chapterId) || (stored.sellLicenses ?? []).includes(chapterId)) {
+        return false;
+      }
+      persistStoredUser(user.id, { bossClears: [...current, chapterId] });
       return true;
     },
     [user, persistStoredUser],
@@ -440,10 +492,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       addCok,
       purchaseRecipe,
       addCookedRecipe,
-      grantSellLicense,
+      grantDishLicense,
+      grantBossClear,
       updateProfile,
     }),
-    [user, isLoading, login, register, playAsGuest, logout, addXp, addCoins, addCok, purchaseRecipe, addCookedRecipe, grantSellLicense, updateProfile],
+    [user, isLoading, login, register, playAsGuest, logout, addXp, addCoins, addCok, purchaseRecipe, addCookedRecipe, grantDishLicense, grantBossClear, updateProfile],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
