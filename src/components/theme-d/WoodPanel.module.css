@@ -96,8 +96,16 @@
   padding: 1rem 1.05rem 1.05rem;
 }
 
+/* The hanging sign (.sign, top:-33px) is as tall as 29% of its width —
+   min(80%, 330px) of the panel — so its bottom edge reaches up to
+   ~63px into the panel on wide boards. The body must ALWAYS start
+   below that edge: percentage padding tracks the sign's own size
+   (both scale with panel width), the clamp keeps narrow and very
+   wide panels from drifting into thiếu/dư. (Bảo's frame law, caught
+   live 2026-11-21 on six home/stall panels: a fixed 2.1rem let the
+   sign cover the first content line.) */
 .bodyWithSign {
-  padding-top: 2.1rem;
+  padding-top: clamp(2.9rem, 17%, 4.5rem);
 }
 
 @media (prefers-reduced-motion: reduce) {

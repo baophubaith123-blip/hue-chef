@@ -92,8 +92,8 @@
   --rarity-common-soft: rgba(138, 115, 100, 0.14);
   --rarity-rare: #2563eb;
   --rarity-rare-soft: rgba(37, 99, 235, 0.14);
-  --rarity-epic: #9333ea;
-  --rarity-epic-soft: rgba(147, 51, 234, 0.14);
+  --rarity-epic: #0e7a6d;
+  --rarity-epic-soft: rgba(14, 122, 109, 0.14);
   --rarity-legendary: #8a5a00;
   --rarity-legendary-soft: rgba(233, 162, 59, 0.18);
 }

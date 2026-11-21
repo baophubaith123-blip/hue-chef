@@ -637,3 +637,17 @@
     height: 84px;
   }
 }
+
+/* ---- HUD shade (steers 10.2 + 15.4, 2026-11-21): the sticky HUD is
+   transparent, so page tops sliding beneath it while scrolling read
+   as "the wallet plaque covers the text". The HUD now carries a
+   plum shade that fades downward — anything passing under it is
+   clearly BEHIND the shade — and the content gains a little more
+   air under the HUD. Top-of-page full-width lines on the scene
+   pages also keep a right-side reserve (see their modules). */
+.hud {
+  background: linear-gradient(180deg, rgba(43, 10, 22, 0.82) 0%, rgba(43, 10, 22, 0.55) 62%, rgba(43, 10, 22, 0) 100%);
+}
+.content {
+  padding-top: 12px;
+}

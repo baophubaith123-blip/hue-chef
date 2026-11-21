@@ -28,7 +28,14 @@ export function Modal({ open, title, children, onClose, closeLabel, shellClass, 
       if (e.key === 'Escape') onClose();
     };
     window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
+    // Lock the page behind the modal: wheel/touch scroll belongs to
+    // the dialog's own body, never to the page underneath.
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      window.removeEventListener('keydown', onKey);
+      document.body.style.overflow = prevOverflow;
+    };
   }, [open, onClose]);
 
   if (!open) return null;

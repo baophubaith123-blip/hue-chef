@@ -70,7 +70,7 @@
 }
 
 .catSpecial {
-  background: linear-gradient(135deg, #9333ea 0%, #6b21a8 100%);
+  background: linear-gradient(135deg, #12a594 0%, #0b6e5d 100%);
   color: #ffffff;
 }
 
@@ -90,3 +90,86 @@
   border: 2.5px solid var(--ink, #4a2c14);
   box-shadow: 0 3px 0 var(--ink-soft, rgba(74, 44, 20, 0.45));
 }
+
+/* ---- Medal tiers by rarity (Bảo, 2026-11-21): beauty and detail
+   strictly increase Thường → Hiếm → Sử thi → Huyền thoại. No purple
+   at any tier: bronze / blue steel / gold / radiant gold. ---- */
+.rarCommon {
+  background: radial-gradient(circle at 35% 30%, #c99a5b, #a06a34 55%, #7c5222);
+  border-color: #5f3a16;
+  color: #fff3d0;
+}
+.rarRare {
+  background:
+    radial-gradient(circle at 50% 0, rgba(255, 255, 255, 0.35), transparent 55%),
+    radial-gradient(circle at 35% 30%, #7fb0e6, #3f74c9 55%, #2b55a0);
+  border-color: #1d3f74;
+  color: #eef5ff;
+  box-shadow:
+    0 3px 0 rgba(29, 63, 116, 0.55),
+    inset 0 0 0 2px rgba(255, 255, 255, 0.35),
+    inset 0 0 0 4.5px rgba(29, 63, 116, 0.5);
+}
+.rarEpic {
+  background:
+    radial-gradient(circle at 50% 0, rgba(255, 255, 255, 0.4), transparent 55%),
+    radial-gradient(circle at 35% 30%, #ffd873, #e9a23b 55%, #c07f1d);
+  border-color: #8a5a10;
+  color: #5a3205;
+  box-shadow:
+    0 3px 0 rgba(138, 90, 16, 0.6),
+    inset 0 0 0 2px rgba(255, 246, 214, 0.65),
+    inset 0 0 0 4.5px rgba(138, 90, 16, 0.55);
+}
+.rarLegendary {
+  background:
+    repeating-conic-gradient(from -12deg, rgba(255, 240, 190, 0.5) 0deg 7deg, transparent 7deg 15deg),
+    radial-gradient(circle at 35% 30%, #ffe9a8, #f2b544 52%, #d18f1f);
+  border-color: #8a5a10;
+  color: #5a3205;
+  box-shadow:
+    0 3px 0 rgba(138, 90, 16, 0.6),
+    inset 0 0 0 2px rgba(255, 250, 225, 0.8),
+    inset 0 0 0 4.5px rgba(138, 90, 16, 0.5),
+    0 0 14px rgba(233, 162, 59, 0.65);
+}
+.gems {
+  position: absolute;
+  top: 6.5%;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 2.5px;
+  z-index: 2;
+}
+.gems i {
+  display: block;
+  width: 5px;
+  height: 5px;
+  border-radius: 50% 50% 50% 4px;
+  transform: rotate(45deg);
+  border: 0.75px solid rgba(60, 35, 5, 0.55);
+  box-shadow: inset 0 0 1.5px rgba(255, 255, 255, 0.8);
+}
+.gemA { background: radial-gradient(circle at 35% 30%, #ffb3a0, #d23c22 70%); }
+.gemB { background: radial-gradient(circle at 35% 30%, #a8ecdf, #12a594 70%); }
+.gemC { background: radial-gradient(circle at 35% 30%, #cfe4ff, #3f74c9 70%); width: 6.5px; height: 6.5px; }
+.tassels {
+  position: absolute;
+  bottom: -3px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 9px;
+  z-index: 2;
+}
+.tassels i {
+  display: block;
+  width: 4px;
+  height: 8px;
+  border-radius: 0 0 3px 3px;
+  background: linear-gradient(180deg, #d84f35, #a52a1c);
+  box-shadow: inset 0 0 0 0.75px rgba(90, 20, 5, 0.5);
+}
+.rarLegendary .tassels i { background: linear-gradient(180deg, #ffd873, #e9a23b); box-shadow: inset 0 0 0 0.75px rgba(138, 90, 16, 0.6); }
+.badgeContainer .svgIcon { position: relative; z-index: 1; }
