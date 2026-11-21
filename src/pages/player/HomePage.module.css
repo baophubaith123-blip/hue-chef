@@ -1291,7 +1291,7 @@
 }
 .statsGrid .statCard:nth-child(2) .statLabel,
 .statsGrid .statCard:nth-child(4) .statLabel {
-  color: rgba(255, 243, 214, 0.85);
+  color: #fff3d6; /* opaque: the alpha cream washed out on the brick lacquer (4.34:1) */
 }
 .statsGrid .statCard:nth-child(2) .statValue,
 .statsGrid .statCard:nth-child(4) .statValue {
@@ -1299,7 +1299,7 @@
 }
 .statsGrid .statCard:nth-child(2) .statSub,
 .statsGrid .statCard:nth-child(4) .statSub {
-  color: rgba(255, 243, 214, 0.8);
+  color: #ffe9b8; /* opaque: the alpha cream washed out on the brick lacquer (4.03:1) */
 }
 
 /* ---- Visual phase (audit #22): the greeting card is a lacquered

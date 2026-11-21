@@ -379,3 +379,8 @@
    the page muted token (4.31:1, and paler in dark mode) while the
    empty state sits on a light letter sheet — pin deep ink. ---- */
 .emptyHint { color: #5d4632; }
+
+/* ---- Contrast pass 2b (final scan, dot 1): in dark mode the empty
+   state's board face is deep brown, not the light letter sheet —
+   the hint flips to cream-gold there (measured 1.81:1 before). ---- */
+[data-theme='dark'] .emptyHint { color: #f3d9ae; }
