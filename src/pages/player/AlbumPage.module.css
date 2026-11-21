@@ -524,3 +524,55 @@
     height: 200px;
   }
 }
+
+/* ---- Culture cards = silk scroll miniatures (steer 8, 2026-11-21):
+   each card's face is woven brocade silk (deep red ground, gold
+   diamond weave) with a dark-wood scroll rod across the top and
+   bottom and red tassels at the rod ends; the dish picture hangs in
+   a gold-rimmed frame ON the silk. Locked cards are dark silk with
+   the lock medallion on the silk face. ---- */
+.card {
+  background:
+    radial-gradient(circle at 18% 22%, rgba(233, 162, 59, 0.16) 0 14px, transparent 15px),
+    repeating-linear-gradient(45deg, rgba(233, 162, 59, 0.13) 0 2px, transparent 2px 14px),
+    repeating-linear-gradient(-45deg, rgba(233, 162, 59, 0.13) 0 2px, transparent 2px 14px),
+    linear-gradient(165deg, #8e2f23 0%, #75241c 55%, #5f1d17 100%);
+  border: 3px solid #4a140d;
+  border-radius: 8px;
+  color: #f7e8c6;
+  padding: 14px 6px 16px;
+  box-shadow:
+    inset 0 2px 0 rgba(255, 214, 150, 0.3),
+    inset 0 -8px 14px rgba(30, 5, 2, 0.4),
+    0 5px 9px rgba(60, 20, 8, 0.35);
+}
+.card::before,
+.card::after {
+  content: '';
+  position: absolute;
+  left: -7px;
+  right: -7px;
+  height: 11px;
+  border-radius: 6px;
+  background: linear-gradient(180deg, #7a4b21, #54300f 60%, #3c2008);
+  border: 1.5px solid #2c1704;
+  box-shadow:
+    -8px 0 0 -1px #c8892a, 8px 0 0 -1px #c8892a,
+    0 2px 4px rgba(30, 15, 2, 0.5);
+  z-index: 2;
+}
+.card::before { top: -6px; }
+.card::after { bottom: -6px; }
+.imageWrap {
+  border-color: #c8892a;
+  box-shadow:
+    inset 0 0 0 2px rgba(74, 20, 13, 0.65),
+    0 3px 6px rgba(30, 5, 2, 0.5);
+  background: linear-gradient(160deg, #f3dfae, #e3c88f);
+}
+/* Silk-face text: dish name and hints sit ON the brocade — cream and
+   gold on the deep red silk, never the old paper ink. */
+.card .dishName { color: #fdf3d3; text-shadow: 0 1px 3px rgba(30, 5, 2, 0.6); }
+.card .dishStars { color: #f2b544; }
+.card .lockedHint { color: #e8cf9e; }
+.card .body { color: #f7e8c6; }

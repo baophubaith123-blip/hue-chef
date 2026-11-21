@@ -998,7 +998,7 @@ export const vi: I18nDictionary = {
         'cook-any': (target: number) => `Nấu thành công ${target} món ở vòng học`,
         'cook-star3': (target: number) => `Nấu ${target} món đạt từ 3 sao`,
         'cook-distinct': (target: number) => `Nấu đạt yêu cầu ${target} món khác nhau`,
-        'boss-win': (target: number) => `Thắng ${target} màn trùm Ngự thiện`,
+        'boss-win': (target: number) => `Thắng ${target} màn trùm (trùm món hoặc trùm Ngự thiện)`,
         'serve-any': (target: number) => `Phục vụ ${target} đơn ở quầy`,
         'serve-ok': (target: number) => `Phục vụ ${target} đơn đạt chuẩn trở lên`,
         'serve-vip': (target: number) => `Phục vụ ${target} khách VIP`,
@@ -1500,7 +1500,7 @@ export const vi: I18nDictionary = {
   },
   about: {
     title: 'Giới thiệu Hue Chef',
-    intro: 'Hue Chef biến 15 món đặc sản Cố Đô thành một hành trình chơi mà học: kéo-thả nguyên liệu, đấu trí với minigame hỏi đáp và sưu tập huy chương đầu bếp.',
+    intro: 'Hue Chef biến 50 món đặc sản Cố Đô thành một hành trình chơi mà học: kéo-thả nguyên liệu, đấu trí với minigame hỏi đáp và sưu tập huy chương đầu bếp.',
     projectName: 'Tên dự án',
     description: 'Hue Chef là game mô phỏng nấu các món ăn đặc trưng Huế qua thao tác kéo-thả nguyên liệu. Học làm món ăn yêu thích, thu thập thành tích, xây dựng thư viện công thức của riêng bạn!',
     authorTitle: 'Thông tin tác giả',

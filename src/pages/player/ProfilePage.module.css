@@ -648,3 +648,55 @@
   background: linear-gradient(180deg, #ffe9a8, #ffd873);
   box-shadow: 0 0 12px rgba(255, 190, 40, 0.75);
 }
+
+/* ---- Medal shelf (steer 6, 2026-11-21): the old shelf was a 368x90
+   painting stretched to full panel width — blurry, ragged edges, and
+   its five PAINTED medals competed with the real badge tiles above
+   it. The shelf is now built, not painted: the tiles stand on a real
+   wooden board and a solid plank runs underneath — crisp at any
+   width, no fake medals. ---- */
+.badgeTiles {
+  background:
+    repeating-linear-gradient(90deg, rgba(90, 52, 18, 0.13) 0 2px, transparent 2px 74px),
+    linear-gradient(180deg, #a9743c, #8a5a28 60%, #74491f);
+  border: 3px solid #5f3a16;
+  border-bottom-width: 5px;
+  border-radius: 14px;
+  padding: 0.85rem;
+  box-shadow:
+    inset 0 2px 0 rgba(255, 226, 170, 0.4),
+    inset 0 -8px 14px rgba(50, 28, 6, 0.35),
+    0 4px 8px rgba(60, 35, 10, 0.25);
+}
+.badgeTile {
+  position: relative;
+  background:
+    radial-gradient(circle at 50% 0, rgba(233, 162, 59, 0.16), transparent 55%),
+    linear-gradient(180deg, #fdf3d3, #f3dfae);
+  border: 2px solid #8a5a24;
+  box-shadow: 0 3px 5px rgba(50, 28, 6, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.65);
+}
+.badgeTile::before {
+  content: '';
+  position: absolute;
+  top: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #ffe9a8, #c8892a 70%, #8a5a10);
+  box-shadow: 0 1px 2px rgba(50, 28, 6, 0.5);
+}
+.shelfPlank {
+  height: 17px;
+  margin: -2px 10px 0;
+  border-radius: 4px;
+  background:
+    repeating-linear-gradient(0deg, rgba(60, 34, 8, 0.16) 0 1px, transparent 1px 5px),
+    linear-gradient(180deg, #b57e40 0%, #8a5a28 45%, #6e4520 100%);
+  border: 1.5px solid #4a2c10;
+  box-shadow:
+    inset 0 2px 0 rgba(255, 226, 170, 0.45),
+    0 9px 12px rgba(60, 35, 10, 0.35);
+}

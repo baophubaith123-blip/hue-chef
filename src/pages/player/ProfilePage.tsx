@@ -14,7 +14,6 @@ import { useTranslation } from '@/i18n/useTranslation';
 import { SceneShell } from '@/pages/player/SceneShell';
 
 import frameArt from '@/assets/theme-d/game/r4-profile-frame.webp';
-import shelfArt from '@/assets/theme-d/game/r4-medal-shelf.webp';
 
 import styles from './ProfilePage.module.css';
 
@@ -316,7 +315,7 @@ export default function ProfilePage() {
                 );
               })}
             </div>
-            <img className={styles.shelfImg} src={shelfArt} alt="" aria-hidden="true" />
+            <div className={styles.shelfPlank} aria-hidden="true" />
           </div>
         </div>
 

@@ -998,7 +998,7 @@ export const en: I18nDictionary = {
         'cook-any': (target: number) => `Cook ${target} dishes successfully in the learning loop`,
         'cook-star3': (target: number) => `Cook ${target} dishes at 3 stars or better`,
         'cook-distinct': (target: number) => `Cook ${target} different dishes well`,
-        'boss-win': (target: number) => `Win ${target} Imperial Kitchen boss stages`,
+        'boss-win': (target: number) => `Win ${target} boss stages (dish boss or Imperial Kitchen)`,
         'serve-any': (target: number) => `Serve ${target} orders at the stall`,
         'serve-ok': (target: number) => `Serve ${target} orders at Standard quality or better`,
         'serve-vip': (target: number) => `Serve ${target} VIP customers`,
@@ -1499,7 +1499,7 @@ export const en: I18nDictionary = {
   },
   about: {
     title: 'About Hue Chef',
-    intro: 'Hue Chef turns 15 Imperial-city specialties into a play-and-learn journey: drag-and-drop ingredients, battle quiz minigames and collect chef badges.',
+    intro: 'Hue Chef turns 50 Imperial-city specialties into a play-and-learn journey: drag-and-drop ingredients, battle quiz minigames and collect chef badges.',
     projectName: 'Project name',
     description: 'Hue Chef is a cooking simulation game for iconic Hue dishes using drag-and-drop ingredients. Learn to cook your favorite dishes, unlock achievements, and build your personal recipe library!',
     authorTitle: 'Author information',

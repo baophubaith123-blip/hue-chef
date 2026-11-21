@@ -2,8 +2,8 @@ import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 
 import { Button } from '@/components/Button';
-import { Card } from '@/components/Card';
 import { DishGradeFrame } from '@/components/theme-d/DishGradeFrame';
+import { DISH_ART_CLEAR, dishArtClearFor } from '@/components/theme-d/dish-art';
 import { dishGradeFor } from '@/features/recipes/lib/grade';
 import { EmptyState } from '@/components/EmptyState';
 import { ImageWithFallback } from '@/components/ImageWithFallback';
@@ -47,8 +47,11 @@ export default function CollectionPage() {
       grouped.set(entry.recipeId, list);
     }
 
+    // Collection art is ALWAYS the game's flat illustration set
+    // (transparent-cut), never the real dish photos — locked dishes
+    // are the same illustration darkened, never a B/W photo.
     const recipeImageByName = new Map<string, string>();
-    for (const r of recipes) recipeImageByName.set(r.id, r.image);
+    for (const r of recipes) recipeImageByName.set(r.id, dishArtClearFor(r));
 
     const result: CollectionItem[] = [];
     for (const [recipeId, list] of grouped.entries()) {
@@ -70,7 +73,9 @@ export default function CollectionPage() {
       }
       const recipe = recipes.find((r) => r.id === recipeId || r.name === first.recipeName);
       const name = recipe?.name ?? first.recipeName ?? recipeId;
-      const image = recipe?.image || first.image || recipeImageByName.get(recipeId) || '';
+      const image = recipe
+        ? dishArtClearFor(recipe)
+        : DISH_ART_CLEAR[recipeId] ?? recipeImageByName.get(recipeId) ?? '';
       result.push({
         recipeId,
         name,
@@ -93,7 +98,7 @@ export default function CollectionPage() {
       .map((r) => ({
         recipeId: r.id,
         name: r.name,
-        image: r.image,
+        image: dishArtClearFor(r),
         difficulty: r.difficulty,
         cooked: false,
         timesCooked: 0,
@@ -124,7 +129,7 @@ export default function CollectionPage() {
           </div>
         </div>
       </header>
-      <Card>
+      <div className={styles.shelfBoard}>
         {items.length === 0 ? (
           <EmptyState title={t('collection.empty')} />
         ) : (
@@ -206,7 +211,7 @@ export default function CollectionPage() {
             })}
           </div>
         )}
-      </Card>
+      </div>
     </PlayerShell>
   );
 }
