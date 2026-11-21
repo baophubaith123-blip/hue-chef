@@ -18,7 +18,7 @@ import { isRecipeOwned } from '@/features/recipes/lib/ownership';
 import { useTranslation } from '@/i18n/useTranslation';
 import { SceneShell } from '@/pages/player/SceneShell';
 
-import eventGate from '@/assets/theme-d/game/r4-event-gate.webp';
+import eventGate from '@/assets/theme-d/game/r4-event-gate-survival.webp';
 
 import styles from '@/pages/player/SurvivalPage.module.css';
 

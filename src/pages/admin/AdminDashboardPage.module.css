@@ -48,3 +48,14 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* ---- Visual phase: dashboard stat tiles are gold-rimmed paper
+   plaques on the command desk. ---- */
+.stat {
+  background:
+    repeating-linear-gradient(0deg, rgba(160, 116, 52, 0.05) 0 2px, rgba(160, 116, 52, 0) 2px 9px),
+    linear-gradient(180deg, #fdf3d3, #f0deb2);
+  border: 2.5px solid rgba(233, 192, 122, 0.85);
+  box-shadow: 0 4px 0 rgba(20, 4, 10, 0.4);
+  color: #43301b;
+}

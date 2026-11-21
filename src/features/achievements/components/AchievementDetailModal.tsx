@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { createPortal } from 'react-dom';
 
 import { AchievementIcon } from '@/components/AchievementIcon';
 import { Button } from '@/components/Button';
@@ -62,7 +63,7 @@ export function AchievementDetailModal({
     onClose();
   };
 
-  return (
+  return createPortal(
     <div className={styles.overlay} onClick={onClose}>
       <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
         <button className={styles.closeBtn} onClick={onClose} aria-label="Close">
@@ -144,6 +145,7 @@ export function AchievementDetailModal({
           ) : null}
         </div>
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }

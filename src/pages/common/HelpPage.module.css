@@ -103,3 +103,14 @@
 .faqA {
   color: var(--paper-text-muted, #7a5c38);
 }
+
+/* ---- Visual phase (audit #116): help cards speak the game-board
+   language — fibre-paper faces on wood rims. ---- */
+.card {
+  background:
+    repeating-linear-gradient(0deg, rgba(160, 116, 52, 0.05) 0 2px, rgba(160, 116, 52, 0) 2px 9px),
+    radial-gradient(rgba(160, 116, 52, 0.07) 1px, rgba(160, 116, 52, 0) 1.6px) 0 0 / 9px 9px,
+    linear-gradient(180deg, #fdf3d3, #f0deb2);
+  border: 2.5px solid rgba(109, 69, 32, 0.75);
+  box-shadow: inset 0 0 0 2px rgba(233, 192, 122, 0.4), 0 4px 0 rgba(74, 44, 20, 0.25);
+}

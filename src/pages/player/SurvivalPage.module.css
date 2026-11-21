@@ -451,3 +451,25 @@
 
 /* Right-side reserve for the top description line (steer 10.2). */
 .pageSub { padding-right: clamp(0.5rem, 3vw, 2.5rem); }
+
+/* ---- Visual phase: title plaque is a CARVED WOOD board (grain +
+   plank seams), not a plain cream card; intro strip is a woven
+   bamboo mat. Title/sub colours flip to cream/gold on the wood. */
+.titlePlaque {
+  background:
+    repeating-linear-gradient(93deg, rgba(59, 32, 8, 0.16) 0 2px, rgba(59, 32, 8, 0) 2px 9px),
+    repeating-linear-gradient(0deg, rgba(255, 214, 140, 0.05) 0 3px, rgba(59, 32, 8, 0.07) 3px 4px, rgba(59, 32, 8, 0) 4px 26px),
+    linear-gradient(180deg, #8a5a2e 0%, #74471f 55%, #63391a 100%);
+  box-shadow:
+    inset 0 2px 0 rgba(255, 226, 160, 0.35),
+    inset 0 -3px 0 rgba(43, 20, 4, 0.45),
+    0 6px 0 rgba(74, 44, 20, 0.3);
+}
+.pageTitle { color: #ffe9b8; text-shadow: 0 2px 0 rgba(43, 20, 4, 0.55); }
+.pageSub { color: #f3d9ae; }
+.intro {
+  background:
+    repeating-linear-gradient(0deg, rgba(122, 84, 32, 0.13) 0 2px, rgba(122, 84, 32, 0) 2px 7px),
+    repeating-linear-gradient(90deg, rgba(122, 84, 32, 0.1) 0 2px, rgba(122, 84, 32, 0) 2px 11px),
+    linear-gradient(180deg, #efdfba 0%, #e7d3a8 100%);
+}

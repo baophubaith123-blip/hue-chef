@@ -227,3 +227,23 @@
 .podiumColInfo { display: flex; flex-direction: column; min-width: 0; }
 .podiumName { font-weight: 800; color: #4a2c14; overflow-wrap: anywhere; }
 .podiumScore { font-weight: 800; color: #a03a24; }
+
+/* ---- Visual phase: page head is a carved wood board, not a flat
+   brown bar. ---- */
+.head {
+  background:
+    repeating-linear-gradient(93deg, rgba(59, 32, 8, 0.16) 0 2px, rgba(59, 32, 8, 0) 2px 9px),
+    repeating-linear-gradient(0deg, rgba(255, 214, 140, 0.05) 0 3px, rgba(59, 32, 8, 0.07) 3px 4px, rgba(59, 32, 8, 0) 4px 26px),
+    linear-gradient(180deg, #8a5a2e 0%, #74471f 55%, #63391a 100%);
+  box-shadow: inset 0 2px 0 rgba(255, 226, 160, 0.35), inset 0 -3px 0 rgba(43, 20, 4, 0.45), 0 6px 0 rgba(74, 44, 20, 0.3);
+}
+
+/* ---- Visual phase (audit #110): weekly page materials. ---- */
+.dishCard, .weekWindow {
+  background:
+    repeating-linear-gradient(93deg, rgba(122, 74, 34, 0.1) 0 2px, rgba(122, 74, 34, 0) 2px 8px),
+    linear-gradient(180deg, #f6e7c3, #ecd9ac);
+  border: 2.5px solid rgba(109, 69, 32, 0.7);
+  box-shadow: inset 0 1px 0 rgba(255, 250, 230, 0.8), 0 4px 0 rgba(74, 44, 20, 0.28);
+}
+.backLink { position: relative; z-index: 3; background: linear-gradient(180deg, #f6e7c3, #ecd9ac); box-shadow: 0 3px 0 rgba(74, 44, 20, 0.35); }

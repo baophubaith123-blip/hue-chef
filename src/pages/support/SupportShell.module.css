@@ -108,3 +108,17 @@
 [data-theme='dark'] .badgeAccent {
   color: var(--td-plum-deep);
 }
+
+/* ---- Visual phase (audit #125): the support area works on a
+   brick-counter board — woven mat over brick tones. ---- */
+.layout {
+  background:
+    repeating-linear-gradient(0deg, rgba(122, 52, 32, 0.1) 0 2px, rgba(122, 52, 32, 0) 2px 14px),
+    repeating-linear-gradient(90deg, rgba(122, 52, 32, 0.06) 0 2px, rgba(122, 52, 32, 0) 2px 14px),
+    linear-gradient(180deg, #f3ddba, #eacfa4);
+  border: 3px solid #8a4a30;
+  border-radius: 18px;
+  box-shadow: inset 0 2px 0 rgba(255, 240, 210, 0.5), 0 10px 24px rgba(90, 40, 20, 0.25);
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}

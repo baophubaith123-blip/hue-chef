@@ -104,3 +104,14 @@
 .registerBtn:active {
   transform: scale(0.96);
 }
+
+/* ---- Visual phase (audit #113/#114): gate body gets the fibre
+   face and the mascot clears the hanging sign completely. ---- */
+.gateBody {
+  background:
+    repeating-linear-gradient(0deg, rgba(160, 116, 52, 0.05) 0 2px, rgba(160, 116, 52, 0) 2px 9px),
+    radial-gradient(rgba(160, 116, 52, 0.08) 1px, rgba(160, 116, 52, 0) 1.6px) 0 0 / 9px 9px,
+    linear-gradient(180deg, rgba(253, 243, 211, 0.6), rgba(240, 222, 178, 0.6));
+  border-radius: 12px;
+}
+.inner { padding-top: 1.6rem; }

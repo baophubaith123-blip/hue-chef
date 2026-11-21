@@ -310,3 +310,16 @@
 .progressBar { background: rgba(15, 6, 1, 0.55); border-color: #2c1704; }
 .perkLabel { color: #f2b544; }
 .closeBtn { background: linear-gradient(180deg, #fdf3d3, #f3dfae); }
+
+/* ---- Visual phase (audit #92): the medal's wrap is a round ring
+   frame, not a square box behind the round medal. ---- */
+.iconWrap {
+  border-radius: 50%;
+  padding: 6px;
+  display: grid;
+  place-items: center;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+  background: radial-gradient(circle at 35% 30%, rgba(255, 233, 168, 0.5), rgba(233, 162, 59, 0.12));
+}

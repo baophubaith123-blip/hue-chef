@@ -24,7 +24,7 @@ import { todayKey } from '@/features/stall/lib/day';
 import { CARD_KINDS } from '@/features/stall/lib/support';
 import { useTranslation } from '@/i18n/useTranslation';
 
-import eventGate from '@/assets/theme-d/game/r4-event-gate.webp';
+import eventGate from '@/assets/theme-d/game/r4-event-gate-mystery.webp';
 import { playSound } from '@/lib/sound';
 import { SceneShell } from '@/pages/player/SceneShell';
 

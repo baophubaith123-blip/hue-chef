@@ -505,3 +505,32 @@
   background: linear-gradient(135deg, #b03e26, #c97a1f);
 }
 
+
+/* ---- Visual phase (audit #118): about cards get material faces —
+   fibre paper for story cards, woven mat for journey steps, a
+   lacquered plaque for the author card. ---- */
+.card {
+  background:
+    repeating-linear-gradient(0deg, rgba(160, 116, 52, 0.05) 0 2px, rgba(160, 116, 52, 0) 2px 9px),
+    radial-gradient(rgba(160, 116, 52, 0.07) 1px, rgba(160, 116, 52, 0) 1.6px) 0 0 / 9px 9px,
+    linear-gradient(180deg, #fdf3d3, #f0deb2);
+  border: 2.5px solid rgba(109, 69, 32, 0.7);
+  box-shadow: inset 0 0 0 2px rgba(233, 192, 122, 0.4), 0 4px 0 rgba(74, 44, 20, 0.22);
+}
+.journeyStep {
+  background:
+    repeating-linear-gradient(0deg, rgba(146, 108, 44, 0.12) 0 2px, rgba(146, 108, 44, 0) 2px 13px),
+    repeating-linear-gradient(90deg, rgba(146, 108, 44, 0.06) 0 2px, rgba(146, 108, 44, 0) 2px 13px),
+    linear-gradient(180deg, #f6e8c0, #eedcae);
+  border: 2.5px solid rgba(109, 69, 32, 0.7);
+}
+.authorCard {
+  background:
+    repeating-linear-gradient(93deg, rgba(59, 32, 8, 0.14) 0 2px, rgba(59, 32, 8, 0) 2px 9px),
+    linear-gradient(180deg, #a9743c, #8a5a28 60%, #74491f);
+  border: 3px solid #54300f;
+  box-shadow: inset 0 2px 0 rgba(255, 226, 170, 0.35), 0 5px 9px rgba(60, 35, 10, 0.3);
+}
+.authorCard .authorName { color: #ffe9b8; }
+.authorCard .authorMeta { color: #f3d9ae; }
+.authorCard .authorSubject { color: #fdf3d3; }
