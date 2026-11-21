@@ -375,3 +375,98 @@
     gap: 0.35rem;
   }
 }
+
+/* ===== Gói trùm theo món — pha trực quan: lịch nan tre + huy chương ===== */
+
+/* The 7-day grid becomes a BAMBOO-STRIP CALENDAR: every cell is one
+   slat of the mat — vertical bamboo grain, dark binding cords on the
+   top and bottom edges — instead of dashed cream boxes. All states
+   share one height and the text is sized to fit the narrowest cell. */
+.days {
+  gap: 0.45rem;
+  padding: 0.5rem;
+  border-radius: 12px;
+  background:
+    repeating-linear-gradient(0deg, rgba(90, 70, 30, 0.12) 0 2px, rgba(90, 70, 30, 0) 2px 9px),
+    linear-gradient(180deg, #a8bf8a 0%, #8fae72 100%);
+  border: 2px solid #5d7247;
+  box-shadow: inset 0 0 0 2px rgba(255, 246, 224, 0.35), 0 4px 10px rgba(40, 20, 4, 0.2);
+}
+.dayCell {
+  min-height: 6.6rem;
+  padding: 0.6rem 0.22rem 0.55rem;
+  border: 2px solid rgba(70, 84, 44, 0.65);
+  border-top: 5px solid #6d8148;
+  border-bottom: 5px solid #6d8148;
+  border-radius: 7px;
+  background:
+    repeating-linear-gradient(90deg, rgba(255, 255, 240, 0.13) 0 3px, rgba(60, 70, 30, 0.1) 3px 4px, rgba(0, 0, 0, 0) 4px 12px),
+    linear-gradient(180deg, #d9e6bd 0%, #c2d69e 100%);
+  color: #33431f;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 240, 0.5);
+}
+.dayLabel {
+  font-size: 0.76rem;
+  color: #33431f;
+}
+.dayReward {
+  font-size: 0.72rem;
+  color: #40512a;
+}
+/* Claimed: the day wears its GOLD MEDAL — full gold face, and the
+   check rides a struck-medal disc instead of floating bare. */
+.dayClaimed {
+  border-color: #8a5a1f;
+  border-top-color: #b98d45;
+  border-bottom-color: #b98d45;
+  background:
+    repeating-linear-gradient(90deg, rgba(255, 255, 240, 0.16) 0 3px, rgba(120, 84, 20, 0.12) 3px 4px, rgba(0, 0, 0, 0) 4px 12px),
+    linear-gradient(180deg, var(--td-gold-bright), var(--td-gold) 60%, var(--td-gold-deep));
+}
+.dayCheck {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 27px;
+  height: 27px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #fff3c4, #e9a23b 55%, #b57e1e);
+  border: 2px solid #8a5a1f;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7), 0 2px 4px rgba(40, 20, 4, 0.3);
+  font-size: 0.85rem;
+}
+/* Today: warm lit slat + a RED SEAL STAMP pinned at the corner. The
+   stamp is absolutely positioned, so it can never push the layout or
+   lean onto the neighbouring day (the old in-flow badge did both). */
+.dayToday {
+  border-color: #b03e26;
+  border-top-color: #b03e26;
+  border-bottom-color: #b03e26;
+  background:
+    repeating-linear-gradient(90deg, rgba(255, 255, 240, 0.15) 0 3px, rgba(60, 70, 30, 0.1) 3px 4px, rgba(0, 0, 0, 0) 4px 12px),
+    linear-gradient(180deg, #f7e3ac 0%, #eed493 100%);
+  box-shadow: var(--td-glow-gold), inset 0 1px 0 rgba(255, 255, 240, 0.6);
+}
+.todayStamp {
+  position: absolute;
+  top: -7px;
+  right: -5px;
+  transform: rotate(7deg);
+  padding: 1.5px 6px;
+  border-radius: 4px;
+  background: #b03e26;
+  border: 1.5px solid #7c2716;
+  box-shadow: 0 2px 4px rgba(40, 20, 4, 0.35);
+  color: #fff3d6;
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+  z-index: 2;
+}
+.dayFinal {
+  border-color: #8a5a1f;
+  background:
+    repeating-linear-gradient(90deg, rgba(255, 255, 240, 0.15) 0 3px, rgba(120, 84, 20, 0.12) 3px 4px, rgba(0, 0, 0, 0) 4px 12px),
+    linear-gradient(180deg, #fdf0cd 0%, #f3d98b 100%);
+}

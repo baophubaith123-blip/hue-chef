@@ -145,7 +145,7 @@ export function CheckinPanel() {
                   </>
                 )}
               </span>
-              {isToday ? <Badge tone="gold">{c.todayBadge}</Badge> : null}
+              {isToday ? <span className={styles.todayStamp}>{c.todayBadge}</span> : null}
               {claimed ? (
                 <span className={styles.dayCheck} aria-hidden="true">
                   ✓

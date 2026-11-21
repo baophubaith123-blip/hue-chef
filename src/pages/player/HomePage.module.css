@@ -1204,3 +1204,100 @@
     width: 100%;
   }
 }
+
+/* ===== Gói trùm theo món — pha trực quan: thẻ gỗ treo + plaque thống kê ===== */
+
+/* Quick-mode and event cards become HANGING WOODEN TAGS (the approved
+   home drawing: striped awning above, wooden tag-cards hanging under
+   it) — no plain cream cards remain on the home page. A brass pin
+   caps each quick tag; the event tags hang from a brick-red seal pin,
+   matching their festival group. */
+.quickModeCard,
+.eventCard {
+  position: relative;
+  margin-top: 8px;
+  padding: 16px 16px 13px;
+  background:
+    linear-gradient(180deg, #fffdf4 0%, #f9edcb 100%) padding-box,
+    url('../../assets/theme-d/game/wood-texture.webp') border-box;
+  background-size: auto, 360px 270px;
+  border: 4px solid transparent;
+  border-radius: 12px;
+  box-shadow:
+    inset 0 0 0 2px rgba(60, 32, 8, 0.4),
+    inset 0 0 14px rgba(60, 32, 8, 0.1),
+    0 5px 12px rgba(40, 20, 4, 0.22);
+}
+.quickModeCard::before,
+.eventCard::before {
+  content: '';
+  position: absolute;
+  top: -9px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #f3d492, #8a5a1f);
+  border: 1.5px solid #5d3410;
+  box-shadow: 0 2px 3px rgba(40, 20, 4, 0.4);
+  z-index: 1;
+}
+.eventCard::before {
+  background: radial-gradient(circle at 35% 30%, #e88a70, #b03e26);
+  border-color: #6e2413;
+}
+.quickModeCard::after,
+.eventCard::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 34px;
+  height: 5px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(122, 74, 34, 0), rgba(122, 74, 34, 0.55), rgba(122, 74, 34, 0));
+}
+
+/* The four stat cells stop being plain cream boxes: each becomes its
+   own plaque — gold for level, brick lacquer for score, woven bamboo
+   for dishes cooked, plum-wood for badges. */
+.statsGrid .statCard {
+  border-radius: 12px;
+  border: 2.5px solid rgba(60, 32, 8, 0.55);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 246, 224, 0.5),
+    inset 0 0 14px rgba(60, 32, 8, 0.12),
+    0 4px 10px rgba(40, 20, 4, 0.2);
+}
+.statsGrid .statCard:nth-child(1) {
+  background: linear-gradient(160deg, #f3d492 0%, #e3b959 55%, #c39a3f 100%);
+  color: #43301b;
+}
+.statsGrid .statCard:nth-child(2) {
+  background: linear-gradient(160deg, #c65a41 0%, #b03e26 55%, #8c2f1d 100%);
+  color: #fff3d6;
+}
+.statsGrid .statCard:nth-child(3) {
+  background:
+    repeating-linear-gradient(90deg, rgba(70, 92, 52, 0.16) 0 10px, rgba(70, 92, 52, 0) 10px 20px),
+    linear-gradient(160deg, #b9cf9d 0%, #93b374 55%, #76945a 100%);
+  color: #2e3d1f;
+}
+.statsGrid .statCard:nth-child(4) {
+  background: linear-gradient(160deg, #6e2438 0%, #4a1525 60%, #380e1c 100%);
+  color: #f3d492;
+}
+.statsGrid .statCard:nth-child(2) .statLabel,
+.statsGrid .statCard:nth-child(4) .statLabel {
+  color: rgba(255, 243, 214, 0.85);
+}
+.statsGrid .statCard:nth-child(2) .statValue,
+.statsGrid .statCard:nth-child(4) .statValue {
+  color: inherit;
+}
+.statsGrid .statCard:nth-child(2) .statSub,
+.statsGrid .statCard:nth-child(4) .statSub {
+  color: rgba(255, 243, 214, 0.8);
+}
